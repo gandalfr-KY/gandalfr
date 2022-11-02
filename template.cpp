@@ -1,10 +1,9 @@
-#include <bits/stdc++.h>
-#include <atcoder/all>
 #include "gandalfr/standard/chmaxmin.hpp"
 #include "gandalfr/standard/gcdlcm.hpp"
 #include "gandalfr/standard/power.hpp"
+#include "gandalfr/standard/io_supporter.hpp"
+#include <bits/stdc++.h>
 using namespace std;
-using namespace atcoder;
 using ll = long long;
 const int INF = 1001001001;
 const int MAXINT = std::numeric_limits<int>::max();
@@ -20,37 +19,6 @@ const ll _MOD = 998244353;
 #define fromto(a, l, r) (a).begin()+(l),(a).begin()+(r)
 #define LF cout << endl
 
-template<typename T>
-ostream &operator<<(ostream &os, const vector<T> &v) {
-    for(int i=0; i<(int)v.size(); i++) os << v[i] << (i+1 != (int)v.size() ? " " : "");
-    return os;
-}
-template<typename T>
-istream &operator>>(istream &is, vector<T> &v){
-    for(T &in : v) is >> in;
-    return is;
-}
-
-template<typename T1, typename T2>
-ostream &operator<<(ostream &os, const pair<T1, T2>& p) {
-    os << p.first << " " << p.second;
-    return os;
-}
-template<typename T1, typename T2>
-istream &operator>>(istream &is, pair<T1, T2> &p) {
-    is >> p.first >> p.second;
-    return is;
-}
-template<typename T>
-ostream &operator<<(ostream &os, queue<T> v) {
-    for(int i=0; i<(int)v.size(); i++) {
-        os << v.front() << (i+1 != (int)v.size() ? " " : "");
-        v.push(v.front());
-        v.pop();
-    }
-    return os;
-}
-
 int main(void){
 
     /*ifstream in("input.txt");
@@ -58,8 +26,6 @@ int main(void){
     ofstream fout("output.txt");*/
 
     //input
-
-
 
     //calculate
 

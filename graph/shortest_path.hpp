@@ -1,11 +1,49 @@
-#ifndef DIJKSTRA
-#define DIJKSTRA
+#ifndef SHORTEST_PATH
+#define SHORTEST_PATH
 #include <queue>
 #include "gandalfr/graph/graph.hpp"
 
+std::vector<int> shortest_path(unweighted_graph &graph, int from){
+    std::queue<int> q;
+    std::vector<int> dist(graph.N, -1);
+    q.push(from);
+    dist[from] = 0;
+    while(!q.empty()){
+        int cu = q.front();
+        q.pop();
+        for(unweighted_edge &e : graph.G[cu]){
+            if(dist[e.to] != -1) continue;
+            dist[e.to] = dist[cu] + 1;
+            q.push(e.to);
+        }
+    }
+    return dist;
+}
+
+std::vector<int> shortest_path(unweighted_graph &graph, std::vector<int> &froms){
+    std::queue<int> q;
+    std::vector<int> dist(graph.N, -1);
+    for(int from : froms){
+        q.push(from);
+        dist[from] = 0;
+    }
+    while(!q.empty()){
+        int cu = q.front();
+        q.pop();
+        for(unweighted_edge &e : graph.G[cu]){
+            if(dist[e.to] != -1) continue;
+            dist[e.to] = dist[cu] + 1;
+            q.push(e.to);
+        }
+    }
+    return dist;
+}
+
+
+
 template<typename WEIGHT>
-std::vector<WEIGHT> Dijkstra(weighted_graph<WEIGHT> &graph, int from){
-    // first = current_distance, second = next //
+std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, int from){
+    // first := current_distance, second := next
     std::priority_queue<std::pair<WEIGHT, int>, std::vector<std::pair<WEIGHT, int>>, std::greater<std::pair<WEIGHT, int>>> q;
     std::vector<WEIGHT> dist(graph.N, std::numeric_limits<WEIGHT>::max());
     q.push({0, from});
@@ -22,12 +60,14 @@ std::vector<WEIGHT> Dijkstra(weighted_graph<WEIGHT> &graph, int from){
             dist[e.to] = alt;
         }
     }
+
+    for(auto &x : dist) if(x ==  std::numeric_limits<WEIGHT>::max()) x = -1; 
     return dist;
 }
 
 template<typename WEIGHT>
-std::vector<WEIGHT> Dijkstra(weighted_graph<WEIGHT> &graph, std::vector<int> froms){
-    // first = current_distance, second = next //
+std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, std::vector<int> froms){
+    // first := current_distance, second := next
     std::priority_queue<std::pair<WEIGHT, int>, std::vector<std::pair<WEIGHT, int>>, std::greater<std::pair<WEIGHT, int>>> q;
     std::vector<WEIGHT> dist(graph.N, std::numeric_limits<WEIGHT>::max());
     for(int from : froms){
@@ -46,6 +86,8 @@ std::vector<WEIGHT> Dijkstra(weighted_graph<WEIGHT> &graph, std::vector<int> fro
             dist[e.to] = alt;
         }
     }
+    
+    for(auto &x : dist) if(x ==  std::numeric_limits<WEIGHT>::max()) x = -1; 
     return dist;
 }
 

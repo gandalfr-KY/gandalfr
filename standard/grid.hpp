@@ -11,6 +11,22 @@ struct grid{
     inline const friend grid operator/(const grid &a, long long x) { return {a.h / x, a.w / x}; }
     inline const friend bool operator==(const grid &a, const grid &b) { return (a.h == b.h && a.w == b.w); }
     inline const friend bool operator!=(const grid &a, const grid &b) { return (a.h != b.h || a.w != b.w); }
+    friend bool operator<(const grid &a, const grid &b){
+        if(a.h == b.h) return a.w < b.w;
+        return a.h < b.h;
+    }
+    friend bool operator<=(const grid &a, const grid &b){
+        if(a.h == b.h) return a.w <= b.w;
+        return a.h < b.h;
+    }
+    friend bool operator>(const grid &a, const grid &b){
+        if(a.h == b.h) return a.w > b.w;
+        return a.h > b.h;
+    }
+    friend bool operator>=(const grid &a, const grid &b){
+        if(a.h == b.h) return a.w >= b.w;
+        return a.h > b.h;
+    }
     friend std::ostream &operator<<(std::ostream &os, const grid& p) {
         os << p.h << " " << p.w;
         return os;

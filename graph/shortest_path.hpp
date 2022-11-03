@@ -3,6 +3,9 @@
 #include <queue>
 #include "gandalfr/graph/graph.hpp"
 
+/* ノードfromから全てのノードに対しての最短経路の長さを返す
+ * 到達不能ならば、-1で返る
+ */
 std::vector<int> shortest_path(unweighted_graph &graph, int from){
     std::queue<int> q;
     std::vector<int> dist(graph.N, -1);
@@ -20,6 +23,9 @@ std::vector<int> shortest_path(unweighted_graph &graph, int from){
     return dist;
 }
 
+/* 複数のノードfromsから全てのノードに対しての最短経路の長さを返す
+ * 到達不能ならば、-1で返る
+ */
 std::vector<int> shortest_path(unweighted_graph &graph, std::vector<int> &froms){
     std::queue<int> q;
     std::vector<int> dist(graph.N, -1);
@@ -39,8 +45,9 @@ std::vector<int> shortest_path(unweighted_graph &graph, std::vector<int> &froms)
     return dist;
 }
 
-
-
+/* ノードfromから全てのノードに対しての最短経路の長さを返す
+ * 到達不能ならば、-1で返る
+ */
 template<typename WEIGHT>
 std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, int from){
     // first := current_distance, second := next
@@ -65,6 +72,9 @@ std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, int from){
     return dist;
 }
 
+/* 複数のノードfromsから全てのノードに対しての最短経路の長さを返す
+ * 到達不能ならば、-1で返る
+ */
 template<typename WEIGHT>
 std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, std::vector<int> froms){
     // first := current_distance, second := next

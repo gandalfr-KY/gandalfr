@@ -149,7 +149,7 @@ struct weighted_graph{
             bool same = true;
             for(int i=0; i<N; i++) for(int j=0; j<N; j++) if(adjacency_matrix[0][i][j] != adjacency_matrix[1][nodes_id[i]][nodes_id[j]]) same = false;
             if(same) return true;
-        }while(next_permutation(nodes_id.begin(), nodes_id.end()));
+        }while(std::next_permutation(nodes_id.begin(), nodes_id.end()));
         return false;
     }
 

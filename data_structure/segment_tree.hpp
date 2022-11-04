@@ -19,18 +19,19 @@ struct segment_tree{
         for(int i=0; i<sz; i++) node[i+n-1] = vec[i];
         for(int i=n-2; i>=0; i--) node[i] = op(node[2*i+1], node[2*i+2]);
     }
-    explicit segment_tree(int N, std::function< T(T, T) > f, T _e) : segment_tree(std::vector<T>(N, _e), f, _e) {}
+    segment_tree(int N, std::function< T(T, T) > f, T _e) : segment_tree(std::vector<T>(N, _e), f, _e) {}
 
-    void update(int x, int val){
-        x += n - 1;
-        node[x] = val;
-        while(x > 0){
-            x = (x - 1) / 2;
-            node[x] = op(node[2*x+1], node[2*x+2]);
+    // pos番目の値をvalに更新
+    void update(int pos, int val){
+        pos += n - 1;
+        node[pos] = val;
+        while(pos > 0){
+            pos = (pos - 1) / 2;
+            node[pos] = op(node[2*pos+1], node[2*pos+2]);
         }
     }
 
-    //[a, b) 
+    // [a, b)の演算結果を得る 
     T get(int a, int b, int k=0, int l = 0, int r = -1){
         if(r < 0) r = n;
         if(r <= a || b <= l) return e;

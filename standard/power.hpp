@@ -13,6 +13,16 @@ T power(T x, long long n) {
     return ret;
 }
 
+long long power(long long x, long long n) {
+    long long ret = 1;
+    while (n > 0) {
+        if (n & 1) ret = ret * x;
+        x = x * x;
+        n >>= 1;
+    }
+    return ret;
+}
+
 long long power(long long x, long long n, long long MOD) {
     long long ret = 1;
     while (n > 0) {

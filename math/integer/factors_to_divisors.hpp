@@ -17,7 +17,7 @@ void _dfs_for_facs_to_divs(const std::vector<std::pair<long long, int>> &facs, s
     }
 }
 
-// 素因数 => 約数列挙
+// 素因数のリスト => 約数列挙
 // factors_to_divisors({}) => return 1
 std::vector<long long> factors_to_divisors(const std::vector<std::pair<long long, int>> &facs){
     std::vector<long long> ret;

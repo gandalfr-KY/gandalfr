@@ -8,7 +8,7 @@
  * B(n) := ベルヌーイ数の第n項
  */
 template<class T>
-class Bernoulli_number : public binomial_coefficients<T>{
+class Bernoulli_number : protected binomial_coefficients<T>{
   private:
     std::vector<T> B = {1, (T)1 / 2};
 

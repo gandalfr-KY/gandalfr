@@ -78,19 +78,41 @@ class fraction{
     }
 
   public:
-    template<class INT> fraction(const INT &n) : num(n), den(1) {}
+    template<class INT> fraction(const INT &n) : num(n), den(0) {}
     fraction(const fraction &a) : num(a.num), den(a.den) {}
-    template<class INT1, class INT2> fraction(const INT1 &numerator, const INT2 &denominator) : num(numerator), den(denominator) {
+    template<class INT1, class INT2>
+    fraction(const INT1 &numerator, const INT2 &denominator) : num(numerator), den(denominator) {
         assert(den != 0);
         simplify();
     }
+    fraction(const std::string &s) : num(0), den(0) {
+        int i = 0;
+        bool mns = false;
+        if(s[0]=='-'){
+            mns = true;
+            i++;
+        }
+        for(i; i<s.size() && s[i]!='/'; i++) num = num * 10 + s[i] - '0'; 
+        for(i=i+1; i<s.size(); i++) den = den * 10 + s[i] - '0';
+        if(mns) num *= -1;
+        if(den == 0) den = 1;
+        simplify();
+    }
+    fraction(const char s[]) : fraction(std::string(s)) {}
     fraction() : num(0), den(1) {}
 
     bint numerator(){ return num; }
     bint denomitnator(){ return den; }
     double value(){ return num.convert_to<double>() / den.convert_to<double>(); }
     const fraction abs(){ return {boost::multiprecision::abs(num), den}; } 
-    const fraction inverse(){ return {den, num}; } 
+    const fraction inverse(){ return {den, num}; }
+    const bint mod_value(const bint &mod){
+        assert(mod > 0);
+        bint ret = num % mod;
+        if(ret < 0) ret += mod;
+        ret = ret * mod_inverse<bint>(den, mod) % mod;
+        return ret;
+    }
 
     fraction &operator=(const fraction &a){
         num = a.num;
@@ -114,7 +136,7 @@ class fraction{
 
     void operator*=(const fraction &a){
         bint gcd_tmp1 = _gcd((num >= 0 ? num : -num), (a.den >= 0 ? a.den : -a.den)),
-                                       gcd_tmp2 = _gcd((a.num >= 0 ? a.num : -a.num), (den >= 0 ? den : -den));
+             gcd_tmp2 = _gcd((a.num >= 0 ? a.num : -a.num), (den >= 0 ? den : -den));
         num = (num / gcd_tmp1) * (a.num / gcd_tmp2);
         den = (den / gcd_tmp2) * (a.den / gcd_tmp1);
     }
@@ -128,7 +150,20 @@ class fraction{
     }
 
     friend std::istream &operator>>(std::istream &is, fraction &a){
-        is >> a.num >> a.den;
+        std::string tmp;
+        is >> tmp;
+        a.num = a.den = 0;
+        bool mns = false;
+        int i = 0;
+        if(tmp[0]=='-'){
+            mns = true;
+            i++;
+        }
+        for(i; i<tmp.size() && tmp[i]!='/'; i++) a.num = a.num * 10 + tmp[i] - '0'; 
+        for(i=i+1; i<tmp.size(); i++) a.den = a.den * 10 + tmp[i] - '0';
+        if(mns) a.num *= -1;
+        if(a.den == 0) a.den = 1;
+        a.simplify();
         return is;
     }
 

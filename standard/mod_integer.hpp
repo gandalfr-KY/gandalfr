@@ -3,11 +3,11 @@
 #include <iostream>
 #include "gandalfr/math/integer/mod_inverse.hpp"
 
-/* mod_integer<P> := Pを法とするときの整数型;
- */
+// mod_integer<P> a := Pを法とするときの整数型;
 template<int mod>
 class mod_integer{
   private:
+    // 値は必ず 0 <= val < mod に保たれる
     long long val;
     friend const mod_integer operator+(const mod_integer &a){
         return a;
@@ -33,7 +33,6 @@ class mod_integer{
 
     friend const mod_integer operator/(const mod_integer &a, const mod_integer &b){
         return a.val * mod_inverse<long long>(b.val, mod) % mod;
-
     }
 
     friend bool operator==(const mod_integer &a, const mod_integer &b){ return a.val == b.val; }
@@ -52,7 +51,7 @@ class mod_integer{
     }
     mod_integer(const mod_integer &a) : val(a.val) {}
     mod_integer() : val(0) {}
-
+    // 値を返す
     double value(){ return val; }
 
     mod_integer &operator=(const mod_integer &a){
@@ -74,7 +73,7 @@ class mod_integer{
     }
 
     void operator/=(const mod_integer &a){
-        val = val * mod_inverse<long long>(a.val, mod);
+        val = val * mod_inverse<long long>(a.val, mod) % mod;
     }
 
     friend std::istream &operator>>(std::istream &is, mod_integer &a){

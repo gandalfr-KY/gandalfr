@@ -4,6 +4,7 @@
 #include "gandalfr/math/integer/prime_factorize.hpp"
 
 /* オイラー関数
+ * O(√N)
  */
 long long totient(long long n){
 	std::vector<std::pair<long long, int>> facs = prime_factorize(n);

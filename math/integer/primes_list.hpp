@@ -2,7 +2,7 @@
 #define PRIMES_LIST
 #include "gandalfr/math/integer/is_prime.hpp"
 
-/* primes[n] := n番目の素数(n:0-indexed)
+/* primes_list[n] := n番目の素数(n:0-indexed)
  * リストは必要に応じて自動的に拡張される
  */
 class {

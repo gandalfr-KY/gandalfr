@@ -53,6 +53,8 @@ std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, int from){
     // first := current_distance, second := next
     std::priority_queue<std::pair<WEIGHT, int>, std::vector<std::pair<WEIGHT, int>>, std::greater<std::pair<WEIGHT, int>>> q;
     std::vector<WEIGHT> dist(graph.N, std::numeric_limits<WEIGHT>::max());
+    std::vector<bool> vis(graph.N, false);
+
     q.push({0, from});
     dist[from] = 0;
 
@@ -60,11 +62,15 @@ std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, int from){
         WEIGHT cur_dist = q.top().first;
         int cu = q.top().second;
         q.pop();
+
+        if(vis[cu]) continue;
+        vis[cu] = true;
+
         for(weighted_edge<WEIGHT> &e : graph.G[cu]){
             WEIGHT alt = cur_dist + e.cost;
             if(dist[e.to] <= alt) continue;
-            q.push(std::pair<WEIGHT, int>{alt, e.to});
             dist[e.to] = alt;
+            q.push({alt, e.to});
         }
     }
 
@@ -80,6 +86,7 @@ std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, std::vector<int
     // first := current_distance, second := next
     std::priority_queue<std::pair<WEIGHT, int>, std::vector<std::pair<WEIGHT, int>>, std::greater<std::pair<WEIGHT, int>>> q;
     std::vector<WEIGHT> dist(graph.N, std::numeric_limits<WEIGHT>::max());
+    std::vector<bool> vis(graph.N, false);
     for(int from : froms){
         q.push({0, from});
         dist[from] = 0;
@@ -89,11 +96,15 @@ std::vector<WEIGHT> shortest_path(weighted_graph<WEIGHT> &graph, std::vector<int
         WEIGHT cur_dist = q.top().first;
         int cu = q.top().second;
         q.pop();
+
+        if(vis[cu]) continue;
+        vis[cu] = true;
+
         for(weighted_edge<WEIGHT> &e : graph.G[cu]){
             WEIGHT alt = cur_dist + e.cost;
             if(dist[e.to] <= alt) continue;
-            q.push(std::pair<WEIGHT, int>{alt, e.to});
             dist[e.to] = alt;
+            q.push({alt, e.to});
         }
     }
     

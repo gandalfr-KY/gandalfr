@@ -4,7 +4,7 @@
 #include "gandalfr/math/integer/Bernoulli_number.hpp"
 
 template<class T>
-class Faulharber : public Bernoulli_number<T>{
+class Faulharber : protected Bernoulli_number<T>{
   public:
     std::vector<polynomial<T>> result;
 

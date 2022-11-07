@@ -4,36 +4,43 @@
 #include "gandalfr/math/integer/binomial_coefficients.hpp"
 #include "gandalfr/math/integer/mod_inverse.hpp"
 
-template<int mod>
-class Bernoulli_number{
-  public:
-    Bernoulli_number(){}
+/* Bernoulli_number<value_type> B;
+ * B(n) := ベルヌーイ数の第n項
+ */
+template<class T>
+class Bernoulli_number : public binomial_coefficients<T>{
+  private:
+    std::vector<T> B = {1, (T)1 / 2};
 
-    const long long &operator()(int n){
-        if(n >= Bernoulli.size()){
-            Bernoulli.reserve(n + 1);
-            for(int m=Bernoulli.size(); m<=n; m++){
-                if(m % 2 == 1) Bernoulli.emplace_back(0);
-                else{
-                    long long res = 0;
-                    for(int i=0; i<=n; i++){
-                        long long tmp = 0;
-                        for(int j=i; j<=n; j++) tmp = (tmp + nCk(j, i) * mod_inverse(j + 1, mod)) % mod;
-                        if(i % 2 == 0) res += tmp * power(i, n, mod);
-                        else           res -= tmp * power(i, n, mod);
-                        res %= mod;
-                        if(res < 0) res += mod;
-                    }
-                    Bernoulli.emplace_back(res);
-                }   
-            }
+    // テ－ブルを長さ n + 1 まで拡張 ( = B[n] にアクセスできるようにする)
+    void expand(int n){
+        B.reserve(n + 1);
+        for(int m=B.size(); m<=n; m++){
+            if(m % 2 == 1) B.emplace_back(0);
+            else{
+                T res = 0;
+                for(int i=0; i<=n; i++){
+                    T tmp = 0;
+                    for(int j=i; j<=n; j++) tmp += binomial_coefficients<T>::get(j, i) / (j + 1);
+                    if(i % 2 == 0) res += tmp * power<T>(i, n);
+                    else           res -= tmp * power<T>(i, n);
+                }
+                B.emplace_back(res);
+            }   
         }
-        return Bernoulli[n];
     }
 
-  private:
-    std::vector<long long> Bernoulli = {1, mod_inverse(2, mod)};
-    binomial_coefficients<mod> nCk;
+  protected:
+    T get(int n){
+        if(n >= B.size()) expand(n);
+        return B[n];
+    }
+
+  public:
+    T operator()(int n){
+        assert(n >= 0);
+        return get(n);
+    }
     
 };
 

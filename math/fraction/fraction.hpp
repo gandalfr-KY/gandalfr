@@ -6,11 +6,14 @@
 #include "gandalfr/standard/gcdlcm.hpp"
 
 class fraction{
+
+    using bint = boost::multiprecision::cpp_int;
+
   private:
-    boost::multiprecision::cpp_int num, den;
+    bint num, den;
 
     void simplify(){
-        boost::multiprecision::cpp_int gcd_tmp = _gcd((num >= 0 ? num : -num), (den >= 0 ? den : -den));
+        bint gcd_tmp = _gcd((num >= 0 ? num : -num), (den >= 0 ? den : -den));
         num /= gcd_tmp;
         den /= gcd_tmp;
         if(den < 0){
@@ -28,24 +31,24 @@ class fraction{
     }
 
     friend const fraction operator+(const fraction &a, const fraction &b){
-        boost::multiprecision::cpp_int lcm_tmp = _lcm((a.den >= 0 ? a.den : -a.den), (b.den >= 0 ? b.den : -b.den));
+        bint lcm_tmp = _lcm((a.den >= 0 ? a.den : -a.den), (b.den >= 0 ? b.den : -b.den));
         return {lcm_tmp / a.den * a.num + lcm_tmp / b.den * b.num, lcm_tmp};
     }
 
     friend const fraction operator-(const fraction &a, const fraction &b){
-        boost::multiprecision::cpp_int lcm_tmp = _lcm((a.den >= 0 ? a.den : -a.den), (b.den >= 0 ? b.den : -b.den));
+        bint lcm_tmp = _lcm((a.den >= 0 ? a.den : -a.den), (b.den >= 0 ? b.den : -b.den));
         return {lcm_tmp / a.den * a.num - lcm_tmp / b.den * b.num, lcm_tmp};
     }
 
     friend const fraction operator*(const fraction &a, const fraction &b){
-        boost::multiprecision::cpp_int gcd_tmp1 = _gcd((a.num >= 0 ? a.num : -a.num), (b.den >= 0 ? b.den : -b.den)),
+        bint gcd_tmp1 = _gcd((a.num >= 0 ? a.num : -a.num), (b.den >= 0 ? b.den : -b.den)),
                                        gcd_tmp2 = _gcd((b.num >= 0 ? b.num : -b.num), (a.den >= 0 ? a.den : -a.den));
         return {(a.num / gcd_tmp1) * (b.num / gcd_tmp2), (a.den / gcd_tmp2) * (b.den / gcd_tmp1)};
     }
 
     friend const fraction operator/(const fraction &a, const fraction &b){
         assert(b.num != 0);
-        boost::multiprecision::cpp_int gcd_tmp1 = _gcd((a.num >= 0 ? a.num : -a.num), (b.num >= 0 ? b.num : -b.num)),
+        bint gcd_tmp1 = _gcd((a.num >= 0 ? a.num : -a.num), (b.num >= 0 ? b.num : -b.num)),
                                        gcd_tmp2 = _gcd((b.den >= 0 ? b.den : -b.den), (a.den >= 0 ? a.den : -a.den));
         return {(a.num / gcd_tmp1) * (b.den / gcd_tmp2), (a.den / gcd_tmp2) * (b.num / gcd_tmp1)};
     }
@@ -83,8 +86,8 @@ class fraction{
     }
     fraction() : num(0), den(1) {}
 
-    boost::multiprecision::cpp_int numerator(){ return num; }
-    boost::multiprecision::cpp_int denomitnator(){ return den; }
+    bint numerator(){ return num; }
+    bint denomitnator(){ return den; }
     double value(){ return num.convert_to<double>() / den.convert_to<double>(); }
     const fraction abs(){ return {boost::multiprecision::abs(num), den}; } 
     const fraction inverse(){ return {den, num}; } 
@@ -96,21 +99,21 @@ class fraction{
     }
 
     void operator+=(const fraction &a){
-        boost::multiprecision::cpp_int lcm_tmp = _lcm((den >= 0 ? den : -den), (a.den >= 0 ? a.den : -a.den));
+        bint lcm_tmp = _lcm((den >= 0 ? den : -den), (a.den >= 0 ? a.den : -a.den));
         num = lcm_tmp / den * num + lcm_tmp / a.den * a.num;
         den = lcm_tmp;
         simplify();
     }
 
     void operator-=(const fraction &a){
-        boost::multiprecision::cpp_int lcm_tmp = _lcm((den >= 0 ? den : -den), (a.den >= 0 ? a.den : -a.den));
+        bint lcm_tmp = _lcm((den >= 0 ? den : -den), (a.den >= 0 ? a.den : -a.den));
         num = lcm_tmp / den * num - lcm_tmp / a.den * a.num;
         den = lcm_tmp;
         simplify();
     }
 
     void operator*=(const fraction &a){
-        boost::multiprecision::cpp_int gcd_tmp1 = _gcd((num >= 0 ? num : -num), (a.den >= 0 ? a.den : -a.den)),
+        bint gcd_tmp1 = _gcd((num >= 0 ? num : -num), (a.den >= 0 ? a.den : -a.den)),
                                        gcd_tmp2 = _gcd((a.num >= 0 ? a.num : -a.num), (den >= 0 ? den : -den));
         num = (num / gcd_tmp1) * (a.num / gcd_tmp2);
         den = (den / gcd_tmp2) * (a.den / gcd_tmp1);
@@ -118,7 +121,7 @@ class fraction{
 
     void operator/=(const fraction &a){
         assert(a.num != 0);
-        boost::multiprecision::cpp_int gcd_tmp1 = _gcd((num >= 0 ? num : -num), (a.num >= 0 ? a.num : -a.num)),
+        bint gcd_tmp1 = _gcd((num >= 0 ? num : -num), (a.num >= 0 ? a.num : -a.num)),
                                        gcd_tmp2 = _gcd((a.den >= 0 ? a.den : -a.den), (den >= 0 ? den : -den));
         num = (num / gcd_tmp1) * (a.den / gcd_tmp2);
         den = (den / gcd_tmp2) * (a.num / gcd_tmp1);

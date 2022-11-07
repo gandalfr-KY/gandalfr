@@ -1,5 +1,5 @@
-#ifndef FRACTION
-#define FRACTION
+#ifndef MOD_INTEGER
+#define MOD_INTEGER
 #include <iostream>
 #include "gandalfr/math/integer/mod_inverse.hpp"
 
@@ -32,7 +32,7 @@ class mod_integer{
     }
 
     friend const mod_integer operator/(const mod_integer &a, const mod_integer &b){
-        return a.val * mod_inverse(b.val, mod) % mod;
+        return a.val * mod_inverse<long long>(b.val, mod) % mod;
 
     }
 
@@ -74,7 +74,7 @@ class mod_integer{
     }
 
     void operator/=(const mod_integer &a){
-        val = val * mod_inverse(a.val, mod);
+        val = val * mod_inverse<long long>(a.val, mod);
     }
 
     friend std::istream &operator>>(std::istream &is, mod_integer &a){

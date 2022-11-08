@@ -4,7 +4,7 @@
 #include <algorithm>
 
 template<class T>
-std::vector<int> compress(std::vector<T> &v, int a = 0){
+std::vector<int> compress(const std::vector<T> &v, int a = 0){
     int N = v.size();
     std::vector<T> w = v;
     std::vector<int> ret(N);

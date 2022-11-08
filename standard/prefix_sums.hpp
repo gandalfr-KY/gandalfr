@@ -1,5 +1,5 @@
-#ifndef COMPRESS
-#define COMPRESS
+#ifndef PREFIX_SUMS
+#define PREFIX_SUMS
 #include <vector>
 
 /* 長さ v.size() + 1 の累積和vectorを返す

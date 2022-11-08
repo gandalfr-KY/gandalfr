@@ -3,6 +3,7 @@
 #include "gandalfr/graph/graph.hpp"
 #include "gandalfr/data_structure/union_find.hpp"
 
+// グラフを連結成分ごとにvectorに入れて返す
 template<typename GRAPH>
 std::vector<GRAPH> separate(GRAPH &graph){
     union_find uf(graph.N);

@@ -9,8 +9,8 @@ class Faulharber : protected Bernoulli_number<T>{
     std::vector<polynomial<T>> result;
 
   public:
-    Faulharber() {}
 
+    // ΣP(x) (= P(1) + P(2) + ... + P(x)) を返す
     polynomial<T> operator()(const polynomial<T> &a){
         if(a.max_order() + 1 >= result.size()){
             result.resize(a.max_order() + 2);

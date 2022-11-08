@@ -78,7 +78,7 @@ class fraction{
     }
 
   public:
-    template<class INT> fraction(const INT &n) : num(n), den(0) {}
+    template<class INT> fraction(const INT &n) : num(n), den(1) {}
     fraction(const fraction &a) : num(a.num), den(a.den) {}
     template<class INT1, class INT2>
     fraction(const INT1 &numerator, const INT2 &denominator) : num(numerator), den(denominator) {

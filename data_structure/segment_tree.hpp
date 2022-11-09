@@ -22,7 +22,7 @@ struct segment_tree{
     segment_tree(int N, std::function< T(T, T) > f, T _e) : segment_tree(std::vector<T>(N, _e), f, _e) {}
 
     // pos番目の値をvalに更新
-    void update(int pos, int val){
+    void update(int pos, T val){
         pos += n - 1;
         node[pos] = val;
         while(pos > 0){

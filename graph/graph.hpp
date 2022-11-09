@@ -5,11 +5,16 @@
 #include <iostream>
 #include <bits/stl_numeric.h>
 #include <assert.h>
+#include <iostream>
 
 struct unweighted_edge{
     int from;
     int to;
     int id;
+    friend std::ostream &operator<<(std::ostream &os, const unweighted_edge &e) {
+        std::cout << e.from << " " << e.to << " " << e.id;
+        return os;
+    }
 };
 
 struct unweighted_graph{
@@ -75,7 +80,7 @@ struct unweighted_graph{
 
     void print(){
         std::cout << N << " " << M << std::endl;
-        for(unweighted_edge &e : E) std::cout << e.from << " " << e.to << std::endl;
+        for(unweighted_edge &e : E) std::cout << e << std::endl;
     }
 };
 
@@ -89,6 +94,10 @@ struct weighted_edge{
     friend bool operator>=(const weighted_edge &e1, const weighted_edge &e2){ return e1.cost >= e2.cost; }
     friend bool operator<(const weighted_edge &e1, const weighted_edge &e2){ return e1.cost < e2.cost; }
     friend bool operator<=(const weighted_edge &e1, const weighted_edge &e2){ return e1.cost <= e2.cost; }
+    friend std::ostream &operator<<(std::ostream &os, const weighted_edge &e) {
+        os << e.from << " " << e.to << " " << e.cost << " " << e.id;
+        return os;
+    }
 };
 
 template<typename WEIGHT>
@@ -155,7 +164,7 @@ struct weighted_graph{
 
     void print(){
         std::cout << N << " " << M << std::endl;
-        for(weighted_edge<WEIGHT> &e : E) std::cout << e.from << " " << e.to << " " << e.cost << " " << e.id << std::endl;
+        for(weighted_edge<WEIGHT> &e : E) std::cout << e << std::endl;
     }
 };
 

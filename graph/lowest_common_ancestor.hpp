@@ -48,41 +48,4 @@ class lowest_common_ancestor{
 
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-template<class WEIGHT>
-class lowest_common_ancestor<weighted_graph<WEIGHT>>{
-  private:
-    weighted_graph<WEIGHT> graph;
-    std::vector<int> order;
-    int root;
-
-    void Euler_tour(int cu, int pa, int cnt){
-        order[cu] = cnt;
-        for(const unweighted_edge &e : graph[cu]){
-            if(e.to == pa) continue;
-            Euler_tour(e.to, cu, cnt + 1, 0);
-        }
-    }
-    
-  public:
-    lowest_common_ancestor(const weighted_graph<WEIGHT> &G, int root_node = 0) : graph(G), order(G.N), root(root_node) {
-        int tmp = 0;
-        Euler_tour(root, -1, tmp);
-    }
-};
-
-
-
-
 #endif

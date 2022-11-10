@@ -22,22 +22,19 @@ class sparse_table{
 
     // 要素の配列 vec で初期化
     void init(const std::vector<T> &vec){
-        
-        table.clear();
+
+        table = {vec};
         log_table.clear();
-
-        int siz = vec.size();
-        table.resize(vec.size());
-
-        for(int i=0; i<siz; i++) table[i].push_back(vec[i]);
-        for(int j=1; j<siz; j*=2){
-            for(int i=0; i<=siz-j*2; i++){
-                table[i].push_back(op(table[i].back(), table[i+j].back()));
+        
+        for(int i = 0; (1 << i) < table[i].size(); i++){
+            table.push_back({});
+            for(int j = 0; j + (1 << i) < table[i].size(); j++){
+                table[i + 1].push_back(op(table[i][j], table[i][j + (1 << i)]));
             }
         }
 
-        log_table.resize(siz + 1, 0);
-        for(int i=2; i<=siz; i++){
+        log_table.resize(vec.size() + 1, 0);
+        for(int i=2; i<=vec.size(); i++){
             log_table[i] = log_table[i>>1] + 1;
         }
 
@@ -47,7 +44,7 @@ class sparse_table{
     // l >= r のとき未定義
     T get(int l, int r){
         int k = log_table[r - l];
-        return op(table[l][k], table[r - (1 << k)][k]);
+        return op(table[k][l], table[k][r - (1 << k)]);
     }
 
 };

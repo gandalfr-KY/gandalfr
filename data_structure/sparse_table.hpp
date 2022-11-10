@@ -14,7 +14,7 @@ class sparse_table{
     const std::function< T(T, T) > op;
     std::vector<std::vector<T>> table;
     // log_table[n] := 2^k < n である最大の k
-    std::vector<int> log_table;
+    std::vector<short> log_table;
 
     
   public:

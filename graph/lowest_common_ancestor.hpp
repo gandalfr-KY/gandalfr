@@ -20,7 +20,7 @@ class lowest_common_ancestor{
     void Euler_tour(int cu, int pa, int dep, int &cnt){
         idx[cu] = cnt;
 
-        for(const unweighted_edge &e : graph[cu]){
+        for(auto &e : graph[cu]){
             if(e.to == pa) continue;
             
             depth.push_back({dep, cu});

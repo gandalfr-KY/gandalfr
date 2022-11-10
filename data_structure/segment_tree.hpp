@@ -8,20 +8,28 @@ struct segment_tree{
   private:
     int n;
     const T e;
-    std::function< T(T, T) > op;
+    const std::function< T(T, T) > op;
     std::vector<T> node;
 
   public:
-    segment_tree(const std::vector<T> &vec, std::function< T(T, T) > f, T _e) : op(f), e(_e) {
-        int sz = vec.size();
-        n = 1; while(n < sz) n *= 2;
+    segment_tree(std::function< T(T, T) > f, T _e) : op(f), e(_e) {}
+    
+    // 要素の配列 vec で初期化
+    void init(const std::vector<T> &vec){
+        node.clear();
+
+        int siz = vec.size();
+        n = 1; while(n < siz) n *= 2;
         node.resize(2*n-1,e);
-        for(int i=0; i<sz; i++) node[i+n-1] = vec[i];
+        
+        for(int i=0; i<siz; i++) node[i+n-1] = vec[i];
         for(int i=n-2; i>=0; i--) node[i] = op(node[2*i+1], node[2*i+2]);
     }
-    segment_tree(int N, std::function< T(T, T) > f, T _e) : segment_tree(std::vector<T>(N, _e), f, _e) {}
 
-    // pos番目の値をvalに更新
+    // 長さ n の単位元の配列で初期化
+    void init(int n){ init(std::vector<T>(n, e)); }
+
+    // pos 番目の値を val に更新
     void update(int pos, T val){
         pos += n - 1;
         node[pos] = val;
@@ -31,7 +39,8 @@ struct segment_tree{
         }
     }
 
-    // [a, b)の演算結果を得る 
+    // [a, b) の演算結果を得る 
+    // a >= b のとき未定義
     T get(int a, int b, int k=0, int l = 0, int r = -1){
         if(r < 0) r = n;
         if(r <= a || b <= l) return e;

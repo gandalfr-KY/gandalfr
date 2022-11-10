@@ -2,7 +2,7 @@
 #define BINARY_INDEXED_TREE
 #include <vector>
 
-template<typename T>
+template<class T>
 struct binary_indexed_tree{
   private:
     int N;

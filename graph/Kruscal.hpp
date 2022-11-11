@@ -2,9 +2,9 @@
 #define KRUSCAL
 #include "gandalfr/graph/graph.hpp"
 #include "gandalfr/data_structure/union_find.hpp"
-
+/*
 template<typename WEIGHT>
-weighted_graph<WEIGHT> Kruscal(weighted_graph<WEIGHT> &graph){
+weighted_graph<WEIGHT> Kruscal(const weighted_graph<WEIGHT> &graph){
     union_find uf(graph.N);
     weighted_graph<WEIGHT> ret(graph.N);
     std::vector<weighted_edge<WEIGHT>> E = graph.E;
@@ -17,5 +17,6 @@ weighted_graph<WEIGHT> Kruscal(weighted_graph<WEIGHT> &graph){
     }
     return ret;
 }
+*/
 
 #endif

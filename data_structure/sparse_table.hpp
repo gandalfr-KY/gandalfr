@@ -9,8 +9,7 @@
  */
 template<class T>
 class sparse_table{
-  //private:
-  public:
+  private:
     const std::function< T(T, T) > op;
     std::vector<std::vector<T>> table;
     // log_table[n] := 2^k < n である最大の k

@@ -7,165 +7,171 @@
 #include <assert.h>
 #include <iostream>
 
+template<class EDGE_TYPE>
+class _base_graph{
+  protected:
+    int N, M = 0;
+    std::vector<std::vector<EDGE_TYPE>> G;
+    std::vector<EDGE_TYPE> E;
+
+  public:
+    _base_graph(): N(0), G(0) {};
+    _base_graph(int n): N(n), G(n) {};
+
+    // ノードの数を返す
+    int nodes() const { return N; }
+
+    // 辺の数を返す
+    int edges() const { return M; }
+    
+    // ノードの数を変更
+    void resize(int n){
+        N = n;
+        G.resize(n);
+    }
+
+    // ノード n に接続した辺集合にアクセス
+    const std::vector<EDGE_TYPE> &operator[](int n) const { return G[n]; }
+
+    // グラフ全体の辺集合にアクセス
+    const std::vector<EDGE_TYPE> &edge_set() const { return E; }
+
+    void print() const {
+        std::cout << N << " " << M << std::endl;
+        for(EDGE_TYPE &e : E) std::cout << e << std::endl;
+    }
+
+};
+
 struct unweighted_edge{
     int from;
     int to;
     int id;
+    friend bool operator>(const unweighted_edge &e1, const unweighted_edge &e2){
+        if(e1.from == e2.from){
+            return e1.to > e2.to;
+        }
+        return e1.from > e2.from;
+    }
+    friend bool operator>=(const unweighted_edge &e1, const unweighted_edge &e2){
+        if(e1.from == e2.from){
+            return e1.to >= e2.to;
+        }
+        return e1.from > e2.from;
+    }
+    friend bool operator<(const unweighted_edge &e1, const unweighted_edge &e2){
+        if(e1.from == e2.from){
+            return e1.to < e2.to;
+        }
+        return e1.from < e2.from;
+    }
+    friend bool operator<=(const unweighted_edge &e1, const unweighted_edge &e2){
+        if(e1.from == e2.from){
+            return e1.to <= e2.to;
+        }
+        return e1.from < e2.from;
+    }
     friend std::ostream &operator<<(std::ostream &os, const unweighted_edge &e) {
-        std::cout << e.from << " " << e.to << " " << e.id;
+        os << e.from << " " << e.to << " " << e.id;
         return os;
     }
 };
 
-struct unweighted_graph{
-    int N, M = 0;
-    std::vector<std::vector<unweighted_edge>> G;
-    std::vector<unweighted_edge> E;
-    const bool is_directed;
-    
-    unweighted_graph() : N(0), is_directed(false) {}
-    unweighted_graph(bool _is_directed): N(0), G(0), is_directed(_is_directed) {};
-    unweighted_graph(int _n, bool _is_directed): N(_n), G(_n), is_directed(_is_directed) {};
-
-    void resize(int _n){
-        N = _n;
-        G.resize(_n);
-    }
-
-    void add_edge(int from, int to){
-        if(is_directed){
-            G[from].emplace_back(unweighted_edge{from, to, M});
-            E.emplace_back(unweighted_edge{from, to, M++});
-        }
-        else{
-            G[from].emplace_back(unweighted_edge{from, to, M});
-            G[to].emplace_back(unweighted_edge{to, from, M});
-            E.emplace_back(unweighted_edge{std::min(from, to), std::max(from, to), M++});
-        }
-    }
-
-    const std::vector<unweighted_edge> &operator[](int _n){ return G[_n]; }
-
-    const unweighted_graph &operator=(const unweighted_graph &graph){
-        N = graph.N;
-        M = graph.M;
-        G = graph.G;
-        E = graph.E;
-        return *this;
-    }
-
-    bool operator==(const unweighted_graph &graph){
-        assert(is_directed == graph.is_directed);
-        if(N != graph.N) return false;
-        if(M != graph.M) return false;
-        std::vector<std::vector<std::vector<int>>> adjacency_matrix(2, std::vector<std::vector<int>>(N, std::vector<int>(N, false)));
-        for(unweighted_edge &e : E){
-            adjacency_matrix[0][e.from][e.to] = true;
-            if(!is_directed) adjacency_matrix[0][e.to][e.from] = true;
-        }
-        for(const unweighted_edge &e : graph.E){
-            adjacency_matrix[1][e.from][e.to] = true;
-            if(!is_directed) adjacency_matrix[1][e.to][e.from] = true;
-        }
-
-        std::vector<int> nodes_id(N);
-        std::iota(nodes_id.begin(), nodes_id.end(), 0);
-        do{
-            bool same = true;
-            for(int i=0; i<N; i++) for(int j=0; j<N; j++) if(adjacency_matrix[0][i][j] != adjacency_matrix[1][nodes_id[i]][nodes_id[j]]) same = false;
-            if(same) return true;
-        }while(std::next_permutation(nodes_id.begin(), nodes_id.end()));
-        return false;
-    }
-
-    void print(){
-        std::cout << N << " " << M << std::endl;
-        for(unweighted_edge &e : E) std::cout << e << std::endl;
-    }
-};
-
-template<typename WEIGHT>
+template<class WEIGHT>
 struct weighted_edge{
     int from;
     int to;
     WEIGHT cost;
     int id;
-    friend bool operator>(const weighted_edge &e1, const weighted_edge &e2){ return e1.cost > e2.cost; }
-    friend bool operator>=(const weighted_edge &e1, const weighted_edge &e2){ return e1.cost >= e2.cost; }
-    friend bool operator<(const weighted_edge &e1, const weighted_edge &e2){ return e1.cost < e2.cost; }
-    friend bool operator<=(const weighted_edge &e1, const weighted_edge &e2){ return e1.cost <= e2.cost; }
+    friend bool operator>(const weighted_edge &e1, const weighted_edge &e2){
+        if(e1.cost == e2.cost){
+            if(e1.from == e2.from){
+                return e1.to > e2.to;
+            }
+            return e1.from > e2.from;
+        }
+        return e1.cost > e2.cost;
+    }
+    friend bool operator>=(const weighted_edge &e1, const weighted_edge &e2){
+        if(e1.cost == e2.cost){
+            if(e1.from == e2.from){
+                return e1.to >= e2.to;
+            }
+            return e1.from > e2.from;
+        }
+        return e1.cost > e2.cost;
+    }
+    friend bool operator<(const weighted_edge &e1, const weighted_edge &e2){
+        if(e1.cost == e2.cost){
+            if(e1.from == e2.from){
+                return e1.to < e2.to;
+            }
+            return e1.from < e2.from;
+        }
+        return e1.cost < e2.cost;
+    }
+    friend bool operator<=(const weighted_edge &e1, const weighted_edge &e2){
+        if(e1.cost == e2.cost){
+            if(e1.from == e2.from){
+                return e1.to <= e2.to;
+            }
+            return e1.from < e2.from;
+        }
+        return e1.cost < e2.cost;
+    }
     friend std::ostream &operator<<(std::ostream &os, const weighted_edge &e) {
         os << e.from << " " << e.to << " " << e.cost << " " << e.id;
         return os;
     }
 };
 
-template<typename WEIGHT>
-struct weighted_graph{
-    int N, M = 0;
-    std::vector<std::vector<weighted_edge<WEIGHT>>> G;
-    std::vector<weighted_edge<WEIGHT>> E;
-    const bool is_directed;
+template<bool is_directed>
+class unweighted_graph : public _base_graph<unweighted_edge>{
+  private:
+    using UWE = unweighted_edge;
+    using BG = _base_graph<UWE>;
+  public:
+    // コンストラクタ
+    using BG::_base_graph;
 
-    weighted_graph() : N(0), is_directed(false) {}
-    weighted_graph(bool _is_directed): N(0), G(0), is_directed(_is_directed) {};
-    weighted_graph(int _n, bool _is_directed): N(_n), G(_n), is_directed(_is_directed) {};
-
-    void resize(int _n){
-        N = _n;
-        G.resize(_n);
-    }
-
-    void add_edge(int from, int to, WEIGHT weight){
+    // 辺の追加
+    void add_edge(int from, int to){
         if(is_directed){
-            G[from].emplace_back(weighted_edge<WEIGHT>{from, to, weight, M});
-            E.emplace_back(weighted_edge<WEIGHT>{from, to, weight, M++});
+            BG::G[from].emplace_back(unweighted_edge{from, to, BG::M});
+            BG::E.emplace_back(unweighted_edge{from, to, BG::M++});
         }
         else{
-            G[from].emplace_back(weighted_edge<WEIGHT>{from, to, weight, M});
-            G[to].emplace_back(weighted_edge<WEIGHT>{to, from, weight, M});
-            E.emplace_back(weighted_edge<WEIGHT>{std::min(from, to), std::max(from, to), weight, M++});
+            BG::G[from].emplace_back(unweighted_edge{from, to, BG::M});
+            BG::G[to].emplace_back(unweighted_edge{to, from, BG::M});
+            BG::E.emplace_back(unweighted_edge{std::min(from, to), std::max(from, to), M++});
         }
     }
 
-    std::vector<weighted_edge<WEIGHT>> &operator[](int _n){ return G[_n]; }
+};
 
-    const weighted_graph<WEIGHT> &operator=(const weighted_graph<WEIGHT> &graph){
-        N = graph.N;
-        M = graph.M;
-        G = graph.G;
-        E = graph.E;
-        return *this;
-    }
+template<class WEIGHT, bool is_directed>
+class weighted_graph : public _base_graph<weighted_edge<WEIGHT>>{
+  private:
+    using WE = weighted_edge<WEIGHT>;
+    using BG = _base_graph<WE>;
+  public:
+    // コンストラクタ
+    using BG::_base_graph;
 
-    bool operator==(const weighted_graph<WEIGHT> &graph){
-        assert(is_directed == graph.is_directed);
-        if(N != graph.N) return false;
-        if(M != graph.M) return false;
-        std::vector<std::vector<std::vector<WEIGHT>>> adjacency_matrix(2, std::vector<std::vector<WEIGHT>>(N, std::vector<WEIGHT>(N, 0)));
-        for(weighted_edge<WEIGHT> &e : E){
-            adjacency_matrix[0][e.from][e.to] = e.cost;
-            if(!is_directed) adjacency_matrix[0][e.to][e.from] = e.cost;
+    // 辺の追加
+    void add_edge(int from, int to, WEIGHT weight){
+        if(is_directed){
+            BG::G[from].emplace_back(WE{from, to, weight, BG::M});
+            BG::E.emplace_back(WE{from, to, weight, BG::M++});
         }
-        for(const weighted_edge<WEIGHT> &e : graph.E){
-            adjacency_matrix[1][e.from][e.to] = e.cost;
-            if(!is_directed) adjacency_matrix[1][e.to][e.from] = e.cost;
+        else{
+            BG::G[from].emplace_back(WE{from, to, weight, BG::M});
+            BG::G[to].emplace_back(WE{to, from, weight, BG::M});
+            BG::E.emplace_back(WE{std::min(from, to), std::max(from, to), weight, BG::M++});
         }
-
-        std::vector<int> nodes_id(N);
-        std::iota(nodes_id.begin(), nodes_id.end(), 0);
-        do{
-            bool same = true;
-            for(int i=0; i<N; i++) for(int j=0; j<N; j++) if(adjacency_matrix[0][i][j] != adjacency_matrix[1][nodes_id[i]][nodes_id[j]]) same = false;
-            if(same) return true;
-        }while(std::next_permutation(nodes_id.begin(), nodes_id.end()));
-        return false;
     }
 
-    void print(){
-        std::cout << N << " " << M << std::endl;
-        for(weighted_edge<WEIGHT> &e : E) std::cout << e << std::endl;
-    }
+
 };
 
 #endif

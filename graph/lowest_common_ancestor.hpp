@@ -6,27 +6,28 @@
 /* 最小共通祖先を求める
  * 構築   O(NlogN)
  * 値取得 O(1)
+ * verify : https://atcoder.jp/contests/abc070/submissions/36387992
  */
 template<typename GRAPH>
 class lowest_common_ancestor{
   private:
     using PAIR = std::pair<int, int>;
     
-    GRAPH graph;
     std::vector<int> idx;
     std::vector<PAIR> depth;
     sparse_table<PAIR> sps;
 
-    void Euler_tour(int cu, int pa, int dep, int &cnt){
+    template<typename GRAPH_TYPE>
+    void Euler_tour(const GRAPH_TYPE &G, int cu, int pa, int dep, int &cnt){
         idx[cu] = cnt;
 
-        for(auto &e : graph[cu]){
+        for(auto &e : G[cu]){
             if(e.to == pa) continue;
             
             depth.push_back({dep, cu});
             cnt++;
 
-            Euler_tour(e.to, cu, dep + 1, cnt);
+            Euler_tour(G, e.to, cu, dep + 1, cnt);
         }
 
         depth.push_back({dep, cu});
@@ -35,10 +36,10 @@ class lowest_common_ancestor{
     
   public:
     lowest_common_ancestor(const GRAPH &G, int root_node = 0) : 
-    graph(G), idx(G.N), sps([](const PAIR &a, const PAIR &b){ return std::min(a, b); })
+    idx(G.nodes()), sps([](PAIR a, PAIR b){ return std::min(a, b); })
     {
         int cnt = 0;
-        Euler_tour(root_node, -1, 0, cnt);
+        Euler_tour(G, root_node, -1, 0, cnt);
         sps.init(depth);
     }
 

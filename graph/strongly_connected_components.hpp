@@ -2,35 +2,54 @@
 #define STRONGLY_CONNECTED_COMPONENTS
 #include "gandalfr/graph/reversed_graph.hpp"
 
-template<typename GRAPH>
-void _dfs_for_scc(GRAPH &graph, int cu, std::vector<int> &ord, std::vector<int> &used){
-    if(used[cu]) return;
-    used[cu] = true;
-    for(auto &e : graph.G[cu]) _dfs_for_scc(graph, e.to, ord, used);
-    ord.emplace_back(cu);
-}
+/* 強連結成分分解
+ * groups() := 同一連結成分をまとめた二次元配列を返す
+ * O(N)
+ * verify : https://atcoder.jp/contests/practice2/submissions/36388906
+ */
+template<typename GRAPH_TYPE>
+class strongly_connected_components{
+  private:
+    
+    std::vector<int> grp_id;
+    std::vector<std::vector<int>> grps;
 
-template<typename GRAPH>
-void _rdfs_for_scc(GRAPH &graph, int cu, int id, std::vector<int> &group_id){
-    if(group_id[cu] != -1) return;
-    group_id[cu] = id;
-    for(auto &e : graph.G[cu]) _rdfs_for_scc(graph, e.to, id, group_id);
-}
+    void dfs1(const GRAPH_TYPE &G, int cu, std::vector<int> &ord, std::vector<bool> &used){
+        if(used[cu]) return;
+        used[cu] = true;
+        for(auto &e : G[cu]) dfs1(G, e.to, ord, used);
+        ord.push_back(cu);
+    }
 
-template<typename GRAPH>
-std::vector<std::vector<int>> strongly_conected_components(GRAPH &graph){
-    GRAPH rev = reversed_graph(graph);
-    std::vector<int> group_id(graph.N, -1), ord, used(graph.N, false);
+    void dfs2(const GRAPH_TYPE &G, int cu, int id){
+        if(grp_id[cu] != -1) return;
+        grp_id[cu] = id;
+        for(auto &e : G[cu]) dfs2(G, e.to, id);
+    }
 
-    for(int i=0; i<graph.N; i++) _dfs_for_scc(graph, i, ord, used);
-    std::reverse(ord.begin(), ord.end());
+  public:
+    strongly_connected_components(const GRAPH_TYPE &G) : grp_id(G.nodes(), -1) {
+        std::vector<bool> used(G.nodes(), false);
+        std::vector<int> ord;
+        GRAPH_TYPE R(reversed_graph(G));
 
-    int id = 0;
-    for(int i : ord) if(group_id[i] == -1) _rdfs_for_scc(rev, i, id, group_id), id++;
+        for(int i=0; i<G.nodes(); i++) dfs1(G, i, ord, used);
+        std::reverse(ord.begin(), ord.end());
 
-    std::vector<std::vector<int>> ret(id);
-    for(int i=0; i<graph.N; i++) ret[group_id[i]].push_back(i);
-    return ret;
-}
+        int id = 0;
+        for(int i : ord) if(grp_id[i] == -1){
+            dfs2(R, i, id);
+            id++;
+        }
+
+        grps.resize(id);
+        for(int i=0; i<G.nodes(); i++) grps[grp_id[i]].push_back(i);
+    }
+
+    const std::vector<std::vector<int>> &groups(){ return grps; }
+    const std::vector<int> &group_id(){ return grp_id; }
+
+};
+
 
 #endif

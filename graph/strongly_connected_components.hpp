@@ -5,7 +5,8 @@
 /* 強連結成分分解
  * groups() := 同一連結成分をまとめた二次元配列を返す
  * group_id()[i] := ノード i が groups() のどのインデックスに格納されているか
- * O(N)
+ * simplified_graph() := 強連結成分を簡約したグラフを返す。ただし、自己ループ無し、多重辺あり
+ * 前処理 O(N)
  * verify : https://atcoder.jp/contests/practice2/submissions/36388906
  */
 template<typename GRAPH_TYPE>

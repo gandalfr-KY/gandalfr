@@ -2,12 +2,15 @@
 #define KRUSCAL
 #include "gandalfr/graph/graph.hpp"
 #include "gandalfr/data_structure/union_find.hpp"
-/*
-template<typename WEIGHT>
-weighted_graph<WEIGHT> Kruscal(const weighted_graph<WEIGHT> &graph){
-    union_find uf(graph.N);
-    weighted_graph<WEIGHT> ret(graph.N);
-    std::vector<weighted_edge<WEIGHT>> E = graph.E;
+
+/* 単純無向グラフの最小全域木を求める
+ * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7094624
+ */
+template<typename WEIGHT, bool is_directed>
+weighted_graph<WEIGHT, is_directed> Kruscal(const weighted_graph<WEIGHT, is_directed> &graph){
+    union_find uf(graph.nodes());
+    weighted_graph<WEIGHT, is_directed> ret(graph.nodes());
+    std::vector<weighted_edge<WEIGHT>> E(graph.edge_set());
     std::sort(E.begin(), E.end());
     for(weighted_edge<WEIGHT> &e : E){
         if(!uf.same(e.from, e.to)){
@@ -17,6 +20,5 @@ weighted_graph<WEIGHT> Kruscal(const weighted_graph<WEIGHT> &graph){
     }
     return ret;
 }
-*/
 
 #endif

@@ -3,7 +3,7 @@
 #include "gandalfr/graph/graph.hpp"
 #include "gandalfr/data_structure/sparse_table.hpp"
 
-/* 最小共通祖先を求める
+/* 無向単純木の最小共通祖先を求める
  * 構築   O(NlogN)
  * 値取得 O(1)
  * verify : https://atcoder.jp/contests/abc070/submissions/36387992

@@ -38,7 +38,7 @@ class _base_graph{
 
     void print() const {
         std::cout << N << " " << M << std::endl;
-        for(EDGE_TYPE &e : E) std::cout << e << std::endl;
+        for(const EDGE_TYPE &e : E) std::cout << e << std::endl;
     }
 
 };
@@ -72,7 +72,7 @@ struct unweighted_edge{
         return e1.from < e2.from;
     }
     friend std::ostream &operator<<(std::ostream &os, const unweighted_edge &e) {
-        os << e.from << " " << e.to << " " << e.id;
+        os << e.from << " " << e.to;
         return os;
     }
 };
@@ -120,7 +120,7 @@ struct weighted_edge{
         return e1.cost < e2.cost;
     }
     friend std::ostream &operator<<(std::ostream &os, const weighted_edge &e) {
-        os << e.from << " " << e.to << " " << e.cost << " " << e.id;
+        os << e.from << " " << e.to << " " << e.cost;
         return os;
     }
 };

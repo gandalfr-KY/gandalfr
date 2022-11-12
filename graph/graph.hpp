@@ -147,6 +147,13 @@ class unweighted_graph : public _base_graph<unweighted_edge>{
         }
     }
 
+    // 辺を直接追加する場合、有向辺として追加する
+    // 辺 id の扱いに注意
+    void add_edge(const UWE &e){
+        BG::G[e.from].emplace_back(e);
+        BG::E.emplace_back(e);
+    }
+
 };
 
 template<class WEIGHT, bool is_directed>
@@ -171,6 +178,12 @@ class weighted_graph : public _base_graph<weighted_edge<WEIGHT>>{
         }
     }
 
+    // 辺を直接追加する場合、有向辺として追加することに注意
+    // 辺 id の扱いに注意
+    void add_edge(const WE &e){
+        BG::G[e.from].emplace_back(e);
+        BG::E.emplace_back(e);
+    }
 
 };
 

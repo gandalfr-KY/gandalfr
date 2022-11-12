@@ -13,8 +13,7 @@ weighted_graph<WEIGHT, is_directed> Kruscal(const weighted_graph<WEIGHT, is_dire
     std::vector<weighted_edge<WEIGHT>> E(graph.edge_set());
     std::sort(E.begin(), E.end());
     for(weighted_edge<WEIGHT> &e : E){
-        if(!uf.same(e.from, e.to)){
-            uf.merge(e.from, e.to);
+        if(uf.merge(e.from, e.to)){ 
             ret.add_edge(e.from, e.to, e.cost);
         }
     }

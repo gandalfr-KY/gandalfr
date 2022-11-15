@@ -18,7 +18,7 @@ std::vector<int> shortest_path(const unweighted_graph<is_directed> &graph, int f
     while(!q.empty()){
         int cu = q.front();
         q.pop();
-        for(unweighted_edge &e : graph[cu]){
+        for(const unweighted_edge &e : graph[cu]){
             if(dist[e.to] != -1) continue;
             dist[e.to] = dist[cu] + 1;
             q.push(e.to);
@@ -38,7 +38,7 @@ std::vector<int> shortest_path(const unweighted_graph<is_directed> &graph, const
     while(!q.empty()){
         int cu = q.front();
         q.pop();
-        for(unweighted_edge &e : graph[cu]){
+        for(const unweighted_edge &e : graph[cu]){
             if(dist[e.to] != -1) continue;
             dist[e.to] = dist[cu] + 1;
             q.push(e.to);

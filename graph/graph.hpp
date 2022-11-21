@@ -137,13 +137,14 @@ class unweighted_graph : public _base_graph<unweighted_edge>{
     // 辺の追加
     void add_edge(int from, int to){
         if(is_directed){
-            BG::G[from].emplace_back(unweighted_edge{from, to, BG::M});
-            BG::E.emplace_back(unweighted_edge{from, to, BG::M++});
+            BG::G[from].emplace_back(UWE{from, to, BG::M});
+            BG::E.emplace_back(UWE{from, to, BG::M++});
         }
         else{
-            BG::G[from].emplace_back(unweighted_edge{from, to, BG::M});
-            BG::G[to].emplace_back(unweighted_edge{to, from, BG::M});
-            BG::E.emplace_back(unweighted_edge{std::min(from, to), std::max(from, to), M++});
+            BG::G[from].emplace_back(UWE{from, to, BG::M});
+            BG::G[to].emplace_back(UWE{to, from, BG::M});
+            // 無向辺のときは from, to が昇順になる
+            BG::E.emplace_back(UWE{std::min(from, to), std::max(from, to), M++});
         }
     }
 
@@ -174,6 +175,7 @@ class weighted_graph : public _base_graph<weighted_edge<WEIGHT>>{
         else{
             BG::G[from].emplace_back(WE{from, to, weight, BG::M});
             BG::G[to].emplace_back(WE{to, from, weight, BG::M});
+            // 無向辺のときは from, to が昇順になる
             BG::E.emplace_back(WE{std::min(from, to), std::max(from, to), weight, BG::M++});
         }
     }

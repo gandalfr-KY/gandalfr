@@ -44,7 +44,7 @@ class mod_integer{
     friend bool operator<=(const mod_integer &a, const mod_integer &b){ return a.val <= b.val; }
 
   public:
-    template<class INT> mod_integer(INT n) {
+    mod_integer(long long n) {
         n %= mod;
         if(n < 0) n += mod;
         val = n;

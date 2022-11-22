@@ -49,8 +49,8 @@ class strongly_connected_components{
 
         S.resize(grps.size());
         for(auto e : G.edge_set()){
-            e.from = group_id[e.from];
-            e.to = group_id[e.to];
+            e.from = grp_id[e.from];
+            e.to = grp_id[e.to];
             if(e.from != e.to) S.add_edge(e);
         }
 

@@ -1,16 +1,13 @@
-#ifndef GRAPH_STRUCTURE
-#define GRAPH_STRUCTURE
+#ifndef GRAPH_STRUCT
+#define GRAPH_STRUCT
 #include <vector>
 #include <algorithm>
-#include <iostream>
-#include <bits/stl_numeric.h>
-#include <assert.h>
-#include <iostream>
+#include "gandalfr/graph/edge.hpp"
 
 template<class EDGE_TYPE>
 class _base_graph{
   protected:
-    int N, M = 0;
+    int N;
     std::vector<std::vector<EDGE_TYPE>> G;
     std::vector<EDGE_TYPE> E;
 
@@ -22,7 +19,7 @@ class _base_graph{
     int nodes() const { return N; }
 
     // 辺の数を返す
-    int edges() const { return M; }
+    int edges() const { return E.size(); }
     
     // ノードの数を変更
     void resize(int n){
@@ -37,92 +34,10 @@ class _base_graph{
     const std::vector<EDGE_TYPE> &edge_set() const { return E; }
 
     void print() const {
-        std::cout << N << " " << M << std::endl;
+        std::cout << N << " " << E.size() << std::endl;
         for(const EDGE_TYPE &e : E) std::cout << e << std::endl;
     }
 
-};
-
-struct unweighted_edge{
-    int from;
-    int to;
-    int id;
-    friend bool operator>(const unweighted_edge &e1, const unweighted_edge &e2){
-        if(e1.from == e2.from){
-            return e1.to > e2.to;
-        }
-        return e1.from > e2.from;
-    }
-    friend bool operator>=(const unweighted_edge &e1, const unweighted_edge &e2){
-        if(e1.from == e2.from){
-            return e1.to >= e2.to;
-        }
-        return e1.from > e2.from;
-    }
-    friend bool operator<(const unweighted_edge &e1, const unweighted_edge &e2){
-        if(e1.from == e2.from){
-            return e1.to < e2.to;
-        }
-        return e1.from < e2.from;
-    }
-    friend bool operator<=(const unweighted_edge &e1, const unweighted_edge &e2){
-        if(e1.from == e2.from){
-            return e1.to <= e2.to;
-        }
-        return e1.from < e2.from;
-    }
-    friend std::ostream &operator<<(std::ostream &os, const unweighted_edge &e) {
-        os << e.from << " " << e.to;
-        return os;
-    }
-};
-
-template<class WEIGHT>
-struct weighted_edge{
-    int from;
-    int to;
-    WEIGHT cost;
-    int id;
-    friend bool operator>(const weighted_edge &e1, const weighted_edge &e2){
-        if(e1.cost == e2.cost){
-            if(e1.from == e2.from){
-                return e1.to > e2.to;
-            }
-            return e1.from > e2.from;
-        }
-        return e1.cost > e2.cost;
-    }
-    friend bool operator>=(const weighted_edge &e1, const weighted_edge &e2){
-        if(e1.cost == e2.cost){
-            if(e1.from == e2.from){
-                return e1.to >= e2.to;
-            }
-            return e1.from > e2.from;
-        }
-        return e1.cost > e2.cost;
-    }
-    friend bool operator<(const weighted_edge &e1, const weighted_edge &e2){
-        if(e1.cost == e2.cost){
-            if(e1.from == e2.from){
-                return e1.to < e2.to;
-            }
-            return e1.from < e2.from;
-        }
-        return e1.cost < e2.cost;
-    }
-    friend bool operator<=(const weighted_edge &e1, const weighted_edge &e2){
-        if(e1.cost == e2.cost){
-            if(e1.from == e2.from){
-                return e1.to <= e2.to;
-            }
-            return e1.from < e2.from;
-        }
-        return e1.cost < e2.cost;
-    }
-    friend std::ostream &operator<<(std::ostream &os, const weighted_edge &e) {
-        os << e.from << " " << e.to << " " << e.cost;
-        return os;
-    }
 };
 
 template<bool is_directed>
@@ -136,22 +51,20 @@ class unweighted_graph : public _base_graph<unweighted_edge>{
 
     // 辺の追加
     void add_edge(int from, int to){
-        if(is_directed){
-            BG::G[from].emplace_back(UWE{from, to, BG::M});
-            BG::E.emplace_back(UWE{from, to, BG::M++});
+        int id = BG::E.size();
+        BG::G[from].emplace_back(UWE{from, to, id});
+        if(!is_directed && from != to) {
+            BG::G[to].emplace_back(UWE{to, from, id});
+            // 無向辺のときは from < to で統一する
+            if(from > to) std::swap(from, to);
         }
-        else{
-            BG::G[from].emplace_back(UWE{from, to, BG::M});
-            BG::G[to].emplace_back(UWE{to, from, BG::M});
-            // 無向辺のときは from, to が昇順になる
-            BG::E.emplace_back(UWE{std::min(from, to), std::max(from, to), M++});
-        }
+        BG::E.emplace_back(UWE{from, to, id});
     }
 
-    // 辺を直接追加する場合、有向辺として追加する
     // 辺 id の扱いに注意
     void add_edge(const UWE &e){
         BG::G[e.from].emplace_back(e);
+        if(!is_directed && e.from != e.to) BG::G[e.to].emplace_back(UWE{e.to, e.from, e.id});
         BG::E.emplace_back(e);
     }
 
@@ -167,23 +80,22 @@ class weighted_graph : public _base_graph<weighted_edge<WEIGHT>>{
     using BG::_base_graph;
 
     // 辺の追加
-    void add_edge(int from, int to, WEIGHT weight){
-        if(is_directed){
-            BG::G[from].emplace_back(WE{from, to, weight, BG::M});
-            BG::E.emplace_back(WE{from, to, weight, BG::M++});
+    void add_edge(int from, int to, WEIGHT cost){
+        int id = BG::E.size();
+        BG::G[from].emplace_back(WE{from, to, cost, id});
+        if(!is_directed && from != to) {
+            BG::G[to].emplace_back(WE{to, from, cost, id});
+            // 無向辺のときは from < to で統一する
+            if(from > to) std::swap(from, to);
         }
-        else{
-            BG::G[from].emplace_back(WE{from, to, weight, BG::M});
-            BG::G[to].emplace_back(WE{to, from, weight, BG::M});
-            // 無向辺のときは from, to が昇順になる
-            BG::E.emplace_back(WE{std::min(from, to), std::max(from, to), weight, BG::M++});
-        }
+        BG::E.emplace_back(WE{from, to, cost, id});
     }
 
     // 辺を直接追加する場合、有向辺として追加することに注意
     // 辺 id の扱いに注意
     void add_edge(const WE &e){
         BG::G[e.from].emplace_back(e);
+        if(!is_directed && e.from != e.to) BG::G[e.to].emplace_back(WE{e.to, e.from, e.cost, e.id});
         BG::E.emplace_back(e);
     }
 

@@ -13,8 +13,7 @@ class lowlink{
   private:
     std::vector<int> ord, low, apts;
     std::vector<EDGE_TYPE> brids;
-
-    template<typename GRAPG_TYPE>
+    
     void dfs(const GRAPH_TYPE &G, int cu, int pa, int &cnt){
         ord[cu] = low[cu] = cnt++;
         bool is_apt = false;

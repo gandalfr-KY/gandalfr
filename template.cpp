@@ -15,8 +15,9 @@ const ll MOD  = 1000000007;
 const ll _MOD = 998244353;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
 #define rrep(i, j, n) for(ll i = (ll)(n-1); i >= (ll)(j); i--)
+#define fore(i,a) for(auto &i : a)
 #define all(a) (a).begin(),(a).end()
-#define fromto(a, l, r) (a).begin()+(l),(a).begin()+(r)
+#define lr(a, l, r) (a).begin()+(l),(a).begin()+(r)
 #define LF cout << endl
 
 int main(void){
@@ -26,6 +27,7 @@ int main(void){
     ofstream fout("output.txt");*/
 
     //input
+
 
     //calculate
 

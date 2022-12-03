@@ -1,5 +1,6 @@
 #ifndef PRIMES_LIST
 #define PRIMES_LIST
+#include <assert.h>
 #include "gandalfr/math/integer/is_prime.hpp"
 
 /* primes_list[n] := n番目の素数(n:0-indexed)

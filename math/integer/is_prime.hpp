@@ -9,13 +9,14 @@ class {
   private:
     std::vector<bool> table = {false, false};
 
-    void expand(int nex){
+    // table のサイズをnxtに拡張 (= nxt - 1 まで判定可能にする)
+    void expand(int nxt){
         int cur = table.size();
-        table.resize(nex, true);
+        table.resize(nxt, true);
         for(int i=2; i<cur; i++){
             if(!table[i]) continue;
             int from = (cur + i - 1) / i * i;
-            for(int j=from; j<nex; j+=i) table[j] = false;
+            for(int j=from; j<nxt; j+=i) table[j] = false;
         }
     }
 

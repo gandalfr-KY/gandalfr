@@ -2,7 +2,7 @@
 #define PREFIX_SUMS
 #include <vector>
 
-/* 長さ v.size() + 1 の累積和vectorを返す
+/* 長さ v.size() + 1 の累積和 vector を返す
  * Σv[l, r) = prf[r] - prf[l] が成立
  */
 template<class T>

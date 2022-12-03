@@ -4,6 +4,7 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include "gandalfr/standard/power.hpp"
 #include "gandalfr/standard/gcdlcm.hpp"
+#include "gandalfr/math/integer/mod_inverse.hpp"
 
 class fraction{
 

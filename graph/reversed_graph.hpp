@@ -9,11 +9,20 @@ unweighted_graph<true> reversed_graph(const unweighted_graph<true> &graph){
     return ret;
 }
 
+unweighted_graph<false> reversed_graph(const unweighted_graph<false> &graph){
+    return graph;
+}
+
 template<typename WEIGHT>
 weighted_graph<WEIGHT, true> reversed_graph(const weighted_graph<WEIGHT, true> &graph){
     weighted_graph<WEIGHT, true> ret(graph.nodes());
     for(const weighted_edge<WEIGHT> &e : graph.edge_set()) ret.add_edge(e.to, e.from, e.cost);
     return ret;
+}
+
+template<typename WEIGHT>
+weighted_graph<WEIGHT, false> reversed_graph(const weighted_graph<WEIGHT, false> &graph){
+    return graph;
 }
 
 #endif

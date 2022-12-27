@@ -44,28 +44,27 @@ template<bool is_directed>
 class unweighted_graph : public _base_graph<unweighted_edge>{
   private:
     using UWE = unweighted_edge;
-    using BG = _base_graph<UWE>;
   public:
     // コンストラクタ
-    using BG::_base_graph;
+    using _base_graph<UWE>::_base_graph;
 
     // 辺の追加
     void add_edge(int from, int to){
-        int id = BG::E.size();
-        BG::G[from].emplace_back(UWE{from, to, id});
+        int id = this->E.size();
+        this->G[from].emplace_back(UWE{from, to, id});
         if(!is_directed && from != to) {
-            BG::G[to].emplace_back(UWE{to, from, id});
+            this->G[to].emplace_back(UWE{to, from, id});
             // 無向辺のときは from < to で統一する
             if(from > to) std::swap(from, to);
         }
-        BG::E.emplace_back(UWE{from, to, id});
+        this->E.emplace_back(UWE{from, to, id});
     }
 
     // 辺 id の扱いに注意
     void add_edge(const UWE &e){
-        BG::G[e.from].emplace_back(e);
-        if(!is_directed && e.from != e.to) BG::G[e.to].emplace_back(UWE{e.to, e.from, e.id});
-        BG::E.emplace_back(e);
+        this->G[e.from].emplace_back(e);
+        if(!is_directed && e.from != e.to) this->G[e.to].emplace_back(UWE{e.to, e.from, e.id});
+        this->E.emplace_back(e);
     }
 
 };
@@ -74,29 +73,28 @@ template<class WEIGHT, bool is_directed>
 class weighted_graph : public _base_graph<weighted_edge<WEIGHT>>{
   private:
     using WE = weighted_edge<WEIGHT>;
-    using BG = _base_graph<WE>;
   public:
     // コンストラクタ
-    using BG::_base_graph;
+    using _base_graph<WE>::_base_graph;
 
     // 辺の追加
     void add_edge(int from, int to, WEIGHT cost){
-        int id = BG::E.size();
-        BG::G[from].emplace_back(WE{from, to, cost, id});
+        int id = this->E.size();
+        this->G[from].emplace_back(WE{from, to, cost, id});
         if(!is_directed && from != to) {
-            BG::G[to].emplace_back(WE{to, from, cost, id});
+            this->G[to].emplace_back(WE{to, from, cost, id});
             // 無向辺のときは from < to で統一する
             if(from > to) std::swap(from, to);
         }
-        BG::E.emplace_back(WE{from, to, cost, id});
+        this->E.emplace_back(WE{from, to, cost, id});
     }
 
     // 辺を直接追加する場合、有向辺として追加することに注意
     // 辺 id の扱いに注意
     void add_edge(const WE &e){
-        BG::G[e.from].emplace_back(e);
-        if(!is_directed && e.from != e.to) BG::G[e.to].emplace_back(WE{e.to, e.from, e.cost, e.id});
-        BG::E.emplace_back(e);
+        this->G[e.from].emplace_back(e);
+        if(!is_directed && e.from != e.to) this->G[e.to].emplace_back(WE{e.to, e.from, e.cost, e.id});
+        this->E.emplace_back(e);
     }
 
 };

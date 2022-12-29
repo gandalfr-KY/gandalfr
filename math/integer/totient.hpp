@@ -5,6 +5,7 @@
 
 /* オイラー関数
  * O(√N)
+ * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874
  */
 long long totient(long long n){
 	std::vector<std::pair<long long, int>> facs = prime_factorize(n);

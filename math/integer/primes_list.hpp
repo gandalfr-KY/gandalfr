@@ -3,28 +3,44 @@
 #include <assert.h>
 #include "gandalfr/math/integer/is_prime.hpp"
 
-/* primes_list[n] := n番目の素数(n:0-indexed)
- * リストは必要に応じて自動的に拡張される
- */
-class {
-  private:
-    std::vector<int> nums = {2};
+// 昇順の素数リスト
+class primes_list{
+  protected:
+    static std::vector<int> primes;
 
-    void expand(int nex){
-        int i = nums.back() + 1;
-        while(nums.size() < nex){
-            if(is_prime(i)) nums.push_back(i);
+  private:
+    static void expand(int nex){
+        int i = (primes.empty() ? 2 : primes.back() + 1);
+        while(primes.size() < nex){
+            if(is_prime::judge(i)) primes.push_back(i);
             i++;
         }
     }
 
   public:
-    int operator[](int n){
-        assert(n >= 0);
-        while(n >= nums.size()) { expand(nums.size() * 2); } 
-        return nums[n];
-    }
+    primes_list() = delete;
+    ~primes_list() = delete;
 
-} static primes_list;
+	static void resize(int siz){
+		if(primes.size() > siz){
+			while(primes.size() - siz > 0){
+				primes.pop_back();
+			}
+		}
+		else{
+			expand(siz);
+		}
+	}
+
+	// primes.back() が lim を超えるまで拡張
+	static void set_lower_limit(int lim){
+		while(primes.empty() || primes.back() < lim){
+			expand(primes.size() + 1);
+		}
+	}
+
+    static const std::vector<int> &list(){ return primes; }
+};
+std::vector<int> primes_list::primes;
 
 #endif

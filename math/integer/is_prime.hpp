@@ -2,31 +2,39 @@
 #define IS_PRIME
 #include <vector>
 
-/* is_prime[n] := |n|が素数かどうか
+/* is_prime::judge(n) := |n|が素数かどうか
  * 判定表をならし時間 O(NloglogN) で構成して判定
  */
-class {
-  private:
-    std::vector<bool> table = {false, false};
 
-    // table のサイズをnxtに拡張 (= nxt - 1 まで判定可能にする)
-    void expand(int nxt){
-        int cur = table.size();
-        table.resize(nxt, true);
+class is_prime{
+  protected:
+    static std::vector<bool> sieve;
+
+  private:
+    // sieve のサイズをnxtに拡張 (= nxt - 1 まで判定可能にする)
+    static void expand(int nxt){
+        int cur = sieve.size();
+        sieve.resize(nxt, true);
         for(int i=2; i<cur; i++){
-            if(!table[i]) continue;
+            if(!sieve[i]) continue;
             int from = (cur + i - 1) / i * i;
-            for(int j=from; j<nxt; j+=i) table[j] = false;
+            for(int j=from; j<nxt; j+=i) sieve[j] = false;
         }
     }
 
   public:
-    bool operator()(int n){
+    is_prime() = delete;
+    ~is_prime() = delete;
+
+    static bool judge(int n){
         if(n < 0) n *= -1;
-        while(n >= table.size()) { expand(table.size() * 2); } 
-        return table[n];
+        while(n >= sieve.size()) { expand(sieve.size() * 2); } 
+        return sieve[n];
     }
-    
-} static is_prime;
+
+    static const std::vector<bool> &table(){ return sieve; }
+};
+std::vector<bool> is_prime::sieve = {false, false};
+
 
 #endif

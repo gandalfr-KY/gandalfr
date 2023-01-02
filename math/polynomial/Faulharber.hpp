@@ -4,14 +4,14 @@
 #include "gandalfr/math/integer/Bernoulli_number.hpp"
 
 template<class T>
-class Faulharber : protected Bernoulli_number<T>{
+class Faulharber {
   public:
     std::vector<polynomial<T>> result;
 
   public:
 
     // ΣP(x) (= P(1) + P(2) + ... + P(x)) を返す
-    polynomial<T> operator()(const polynomial<T> &a){
+    polynomial<T> get(const polynomial<T> &a){
         if(a.max_order() + 1 >= result.size()){
             result.resize(a.max_order() + 2);
             for(int n=0; n<=a.max_order(); n++){

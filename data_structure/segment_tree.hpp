@@ -41,8 +41,11 @@ class segment_tree{
     }
 
     // [a, b) の演算結果を得る 
-    // a >= b のとき未定義
-    T get(int l, int r){ return get(l, r, 0, 0, n); }
+    T get(int l, int r){
+        assert(l < r);
+        if(l == r) return e;      
+        return get(l, r, 0, 0, n);
+    }
 
   private:
     T get(int a, int b, int k, int l, int r){
@@ -50,7 +53,7 @@ class segment_tree{
         if(a <= l && r <= b) return dat[k];
         T vl = get(a, b, 2 * k + 1, l, (l + r) / 2);
         T vr = get(a, b, 2 * k + 2, (l + r) / 2, r);
-        return op(vl, vr, 0, 0, -1);
+        return op(vl, vr);
     }
 
 };

@@ -4,25 +4,27 @@
 
 template<class T>
 class binomial_coefficients{
-  public:
-    std::vector<T> fact = {1,1};
+  private:
+    static std::vector<T> fact;
 
-    // テーブルを n+1 行まで拡張 ( = pascal[n][k] にアクセスできるようにする)
-    void expand(int n){
-		while(n >= fact.size()) fact.push_back(fact.back() * fact.size());
+    static void expand(int n){
+		    while(n >= fact.size()) {
+            fact.push_back(fact.back() * fact.size());
+        }
     }
 
-  protected:
-    T get(int n, int k){
+  public:
+    binomial_coefficients() = delete;
+    ~binomial_coefficients() = delete;
+
+    static T get(int n, int k){
+		    assert(0 <= k && k <= n);
         if(n >= fact.size()) expand(n);
         return fact[n] / fact[k] / fact[n - k];
     }
 
-  public:
-    T operator()(int n, int k){
-        assert(0 <= k && k <= n);
-		return get(n, k);
-    }
 };
+template<class T>
+std::vector<T> binomial_coefficients<T>::fact = {1};
 
 #endif

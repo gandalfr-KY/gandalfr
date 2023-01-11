@@ -15,7 +15,8 @@ class is_prime{
     static void expand(int nxt){
         int cur = sieve.size();
         sieve.resize(nxt, true);
-        for(int i=2; i<cur; i++){
+
+        for(int i=2; i<=(cur>>1); i++){
             if(!sieve[i]) continue;
             int from = (cur + i - 1) / i * i;
             for(int j=from; j<nxt; j+=i) sieve[j] = false;

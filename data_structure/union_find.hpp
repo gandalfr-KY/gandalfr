@@ -4,9 +4,23 @@
 #include <algorithm>
 #include <assert.h>
 
-struct union_find{
+class union_find{
+  private:
+    int N;
+    std::vector<int> par, group_siz;
+    int group_num; // 集合の数
+
+  public:
     union_find() : N(0) {}
     union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n) {}
+
+    void expand(int n){
+        if(n <= N) return;
+        N = n;
+        par.resize(n, -1);
+        group_siz.resize(n, 1);
+        group_num += n - N;
+    }
 
     int leader(int x){
         if(par[x] == -1) return x;
@@ -28,6 +42,7 @@ struct union_find{
         return true;
     }
 
+    // x の属するグループのサイズを返す
     int size(int x){
         return group_siz[leader(x)];
     }
@@ -37,29 +52,14 @@ struct union_find{
     }
 
     std::vector<std::vector<int>> groups(){
-        std::vector<int> leader_buf(N), group_size(N);
-        for(int i=0; i<N; i++){
-            leader_buf[i] = leader(i);
-            group_size[leader_buf[i]]++;
-        }
         std::vector<std::vector<int>> result(N);
-        for(int i=0; i<N; i++){
-            result[i].reserve(group_size[i]);
-        }
-        for(int i=0; i<N; i++){
-            result[leader_buf[i]].push_back(i);
-        }
+        for(int i=0; i<N; i++) result[i].reserve(size(i));
+        for(int i=0; i<N; i++) result[leader(i)].push_back(i);
         result.erase(
-            std::remove_if(result.begin(), result.end(),
-                           [&](const std::vector<int>& v) { return v.empty(); }),
+            std::remove_if(result.begin(), result.end(), [&](const std::vector<int>& v) { return v.empty(); }),
             result.end());
         return result;
     }
-
-  private:
-    int N;
-    std::vector<int> par, group_siz;
-    int group_num; // 集合の数
 };
 
 #endif

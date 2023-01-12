@@ -47,7 +47,7 @@ class strongly_connected_components{
         grps.resize(id);
         for(int i=0; i<G.nodes(); i++) grps[grp_id[i]].push_back(i);
 
-        S.resize(grps.size());
+        S.expand(grps.size());
         for(auto e : G.edge_set()){
             e.from = grp_id[e.from];
             e.to = grp_id[e.to];

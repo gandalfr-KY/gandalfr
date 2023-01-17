@@ -5,7 +5,7 @@
 // 単純有向グラフが非巡回であるか
 template<typename GRAPH>
 bool is_directed_acyclic_graph(const GRAPH &graph){
-    return topological_sort(graph).size() == graph.N;
+    return topological_sort(graph).size() == graph.nodes();
 }
 
 #endif

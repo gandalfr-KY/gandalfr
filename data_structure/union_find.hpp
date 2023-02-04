@@ -34,8 +34,8 @@ class union_find{
     bool merge(int x, int y){
         x = leader(x); y = leader(y);
         if(x == y) return false;
+        // 小さいほうに統合
         if(group_siz[x] < group_siz[y]) std::swap(x, y);
-        ///// xに統合 /////
         par[y] = x;
         group_siz[x] += group_siz[y];
         group_num--;
@@ -53,7 +53,6 @@ class union_find{
 
     std::vector<std::vector<int>> groups(){
         std::vector<std::vector<int>> result(N);
-        for(int i=0; i<N; i++) result[i].reserve(size(i));
         for(int i=0; i<N; i++) result[leader(i)].push_back(i);
         result.erase(
             std::remove_if(result.begin(), result.end(), [&](const std::vector<int>& v) { return v.empty(); }),

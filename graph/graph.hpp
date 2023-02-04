@@ -40,6 +40,9 @@ class _base_graph{
 	// x, y が連結かどうか
 	bool is_connected(int x, int y){ return uf.same(x, y); }
 
+    // 連結なグラフの数を返す
+    int count_connected_graph(){ return uf.count_groups(); }
+
     void print() const {
         std::cout << N << " " << E.size() << std::endl;
         for(const EDGE_TYPE &e : E) std::cout << e << std::endl;

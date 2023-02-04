@@ -2,6 +2,7 @@
 #define INVERSION
 #include "gandalfr/standard/compress.hpp"
 #include "gandalfr/data_structure/binary_indexed_tree.hpp"
+#include <string>
 
 /* 転倒数 
  */
@@ -18,5 +19,6 @@ long long inversion(std::vector<T> vec){
     }
     return ret;
 }
+
 
 #endif

@@ -8,7 +8,7 @@
  * 値取得 O(1)
  * verify : https://atcoder.jp/contests/abc070/submissions/36387992
  */
-template<typename GRAPH>
+template<typename GRAPH_TYPE>
 class lowest_common_ancestor{
   private:
     using PAIR = std::pair<int, int>;
@@ -16,8 +16,8 @@ class lowest_common_ancestor{
     std::vector<int> idx;
     std::vector<PAIR> depth;
     sparse_table<PAIR> sps;
+    GRAPH_TYPE graph;
 
-    template<typename GRAPH_TYPE>
     void Euler_tour(const GRAPH_TYPE &G, int cu, int pa, int dep, int &cnt){
         idx[cu] = cnt;
 
@@ -35,9 +35,8 @@ class lowest_common_ancestor{
     }
     
   public:
-    lowest_common_ancestor(const GRAPH &G, int root_node = 0) : 
-    idx(G.nodes()), sps([](PAIR a, PAIR b){ return std::min(a, b); })
-    {
+    lowest_common_ancestor(const GRAPH_TYPE &G, int root_node = 0) : 
+    graph(G), idx(G.nodes()), sps([](PAIR a, PAIR b){ return std::min(a, b); }){
         int cnt = 0;
         Euler_tour(G, root_node, -1, 0, cnt);
         sps.init(depth);

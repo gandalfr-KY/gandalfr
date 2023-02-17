@@ -58,7 +58,7 @@ class matrix{
 
   public:
     matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}
-    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()) {
+    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(vv[0].size()), vv.size()) {
         for(int i=0; i<H; i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];
     }
     matrix(const std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv) {}

@@ -2,6 +2,8 @@
 #define SEGMENT_TREE
 #include <vector>
 #include <functional>
+#include <assert.h>
+#include <iostream>
 
 template<class T>
 class segment_tree{
@@ -9,48 +11,60 @@ class segment_tree{
     int n;
     const T e;
     const std::function< T(T, T) > op;
-    std::vector<T> dat;
+    std::vector<T> v;
 
   public:
-    segment_tree(const std::function< T(T, T) > &f, T _e) : op(f), e(_e) {}
-    
     // 要素の配列 vec で初期化
-    void init(const std::vector<T> &vec){
-        dat.clear();
-
+    segment_tree(const std::vector<T> &vec, const std::function< T(T, T) > &f, T _e) : op(f), e(_e) {
         int siz = vec.size();
         n = 1;
         while(n < siz) n *= 2;
-        dat.resize(2 * n - 1, e);
+        v.resize(2 * n - 1, e);
         
-        for(int i =0; i < siz; i++) dat[i + n - 1] = vec[i];
-        for(int i = n - 2; i >= 0; i--) dat[i] = op(dat[2 * i + 1], dat[2 * i + 2]);
+        for(int i = 0; i < siz; i++) v[i + n - 1] = vec[i];
+        for(int i = n - 2; i >= 0; i--) v[i] = op(v[2 * i + 1], v[2 * i + 2]);
     }
 
-    // 長さ n の単位元の配列で初期化
-    void init(int n){ init(std::vector<T>(n, e)); }
+    // 長さ siz の単位元の配列で初期化
+    segment_tree(std::size_t siz, const std::function< T(T, T) > &f, T _e) : op(f), e(_e) {
+        n = 1;
+        while(n < siz) n *= 2;
+        v.resize(2 * n - 1, e);
+    }
 
     // pos 番目の値を val に更新
     void update(int pos, T val){
         pos += n - 1;
-        dat[pos] = val;
+        v[pos] = val;
         while(pos > 0){
             pos = (pos - 1) / 2;
-            dat[pos] = op(dat[2 * pos + 1], dat[2 * pos + 2]);
+            v[pos] = op(v[2 * pos + 1], v[2 * pos + 2]);
         }
     }
 
     // [a, b) の演算結果を得る 
     T get(int l, int r){
-        assert(l < r);
-        if(l == r) return e;      
+        assert(0 <= l && l < r && r <= n);
         return get(l, r, 0, 0, n);
+    }
+
+    // pos 番目の値を得る 
+    T get(int pos){
+        assert(0 <= pos && pos < n);
+        return v[pos + n - 1];
+    }
+
+    void print(){
+        for(int i = 0; i < n; i++){
+            std::cout << v[i + n - 1] << (i == n - 1 ? "" : " ");
+        }
+        std::cout << std::endl;
     }
 
   private:
     T get(int a, int b, int k, int l, int r){
         if(r <= a || b <= l) return e;
-        if(a <= l && r <= b) return dat[k];
+        if(a <= l && r <= b) return v[k];
         T vl = get(a, b, 2 * k + 1, l, (l + r) / 2);
         T vr = get(a, b, 2 * k + 2, (l + r) / 2, r);
         return op(vl, vr);

@@ -42,9 +42,11 @@ class segment_tree{
         }
     }
 
-    // [a, b) の演算結果を得る 
+    // [l, r) の演算結果を得る 
+    // l == r のとき e を返す
     T get(int l, int r){
-        assert(0 <= l && l < r && r <= n);
+        assert(0 <= l && l <= r && r <= n);
+        if(l == r) return e;
         return get(l, r, 0, 0, n);
     }
 

@@ -25,13 +25,13 @@ class prefix_sums{
         }
     }
 
-    T get_sum(int l, int r){
+    T get(int l, int r){
         assert(0 <= l && l <= r && r <= n);
         if(l == r) return e;
         return f_inv(acm[r], acm[l]);
     }
 
-    const std::vector<T> &get_result(){ return acm; }
+    const std::vector<T> &result(){ return acm; }
 };
 
 template<class T>
@@ -59,7 +59,7 @@ class prefix_sums_2d{
         }
     }
 
-    T get_sum(int h_begin, int h_end, int w_begin, int w_end){
+    T get(int h_begin, int h_end, int w_begin, int w_end){
         assert(0 <= h_begin && h_begin <= h_end && h_end <= h);
         assert(0 <= w_begin && w_begin <= w_end && w_end <= w);
         if(h_begin == h_end || w_begin == w_end) return e;
@@ -67,7 +67,7 @@ class prefix_sums_2d{
         return f(f_inv(f_inv(acm[h_end][w_end], acm[h_end][w_begin]), acm[h_begin][w_end]), acm[h_begin][w_begin]);
     }
 
-    const std::vector<std::vector<T>> &get_result(){ return acm; }
+    const std::vector<std::vector<T>> &result(){ return acm; }
 };
 
 

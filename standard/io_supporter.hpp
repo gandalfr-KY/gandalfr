@@ -92,4 +92,13 @@ std::ostream &operator<<(std::ostream &os, const std::set<T> &st) {
     return os;
 }
 
+template<typename T>
+std::ostream &operator<<(std::ostream &os, const std::multiset<T> &st) {
+    for(const T &x : st){
+        std::cout << x << " ";
+    }
+    return os;
+}
+
+
 #endif

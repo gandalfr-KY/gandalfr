@@ -1,6 +1,5 @@
 #ifndef LOWLINK
 #define LOWLINK
-#include "gandalfr/standard/chmaxmin.hpp"
 #include "gandalfr/graph/graph.hpp"
 
 /* 単純連結無向グラフの関節点・橋を求める

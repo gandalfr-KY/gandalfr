@@ -16,11 +16,12 @@ struct random_utility{
         return distribution(mt);
     }
 
-    std::vector<int> shuffled_array(const size_t size, int rand_min, int rand_max){
+    template<typename T>
+    std::vector<T> shuffled_array(const size_t size, T rand_min, T rand_max){
         assert(rand_max - rand_min + 1 >= size);
 
-        std::vector<int> tmp;
-        std::uniform_int_distribution<int> distribution(rand_min, rand_max);
+        std::vector<T> tmp;
+        std::uniform_int_distribution<T> distribution(rand_min, rand_max);
 
         if(rand_max - rand_min + 1 >= size * 4){
             const size_t make_size = static_cast<size_t>(size*1.2);

@@ -4,7 +4,7 @@
 #include "gandalfr/math/matrix/matrix.hpp"
 
 template<class T>
-matrix<T> warshall_floyd(const matrix<T> &mt, T invalid = -1) {
+matrix<T> Warshall_Floyd(const matrix<T> &mt, T invalid = -1) {
     int n = mt.size_H();
     matrix<T> ret(mt);
     for(int k = 0; k < n; k++){ // 経由する頂点

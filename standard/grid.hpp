@@ -16,6 +16,13 @@ struct grid{
     inline const friend grid operator/(const grid &a, long long x) { return {a.h / x, a.w / x}; }
     inline const friend bool operator==(const grid &a, const grid &b) { return (a.h == b.h && a.w == b.w); }
     inline const friend bool operator!=(const grid &a, const grid &b) { return (a.h != b.h || a.w != b.w); }
+    void operator+=(const grid &a) { h += a.h, w += a.w; }
+    void operator-=(const grid &a) { h -= a.h, w -= a.w; }
+    void operator*=(long long a) { h *= a, w *= a; }
+    void operator/=(long long a) { h /= a, w /= a; }
+    void operator%=(long long a) { h %= a, w %= a; }
+    inline const friend grid operator+(const grid &a) { return {a.h, a.w}; }
+    inline const friend grid operator-(const grid &a) { return {-a.h, -a.w}; }
     friend bool operator<(const grid &a, const grid &b){
         if(a.h == b.h) return a.w < b.w;
         return a.h < b.h;

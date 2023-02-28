@@ -93,7 +93,7 @@ class fraction{
             mns = true;
             i++;
         }
-        for(i; i<s.size() && s[i]!='/'; i++) num = num * 10 + s[i] - '0'; 
+        for(; i<s.size() && s[i]!='/'; i++) num = num * 10 + s[i] - '0'; 
         for(i=i+1; i<s.size(); i++) den = den * 10 + s[i] - '0';
         if(mns) num *= -1;
         if(den == 0) den = 1;
@@ -160,7 +160,7 @@ class fraction{
             mns = true;
             i++;
         }
-        for(i; i<tmp.size() && tmp[i]!='/'; i++) a.num = a.num * 10 + tmp[i] - '0'; 
+        for(; i<tmp.size() && tmp[i]!='/'; i++) a.num = a.num * 10 + tmp[i] - '0'; 
         for(i=i+1; i<tmp.size(); i++) a.den = a.den * 10 + tmp[i] - '0';
         if(mns) a.num *= -1;
         if(a.den == 0) a.den = 1;

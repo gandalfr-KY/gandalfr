@@ -91,7 +91,7 @@ class matrix{
         return ret;
     }
 
-    const matrix<T> &operator=(const matrix<T> &a){ table = a.table; return table; }
+    const matrix<T> &operator=(const matrix<T> &a){ table = a.table; return *this; }
     void operator+=(const matrix<T> &a){ *this = operator+(*this, a); }
     void operator-=(const matrix<T> &a){ *this = operator-(*this, a); }
     template<class U>

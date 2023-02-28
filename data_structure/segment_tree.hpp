@@ -15,7 +15,7 @@ class segment_tree{
 
   public:
     // 要素の配列 vec で初期化
-    segment_tree(const std::vector<T> &vec, const std::function< T(T, T) > &f, T _e) : op(f), e(_e) {
+    segment_tree(const std::vector<T> &vec, const std::function< T(T, T) > &f = [](T a, T b){ return a + b; }, T _e = 0) : op(f), e(_e) {
         int siz = vec.size();
         n = 1;
         while(n < siz) n *= 2;
@@ -26,7 +26,7 @@ class segment_tree{
     }
 
     // 長さ siz の単位元の配列で初期化
-    segment_tree(std::size_t siz, const std::function< T(T, T) > &f, T _e) : op(f), e(_e) {
+    segment_tree(std::size_t siz, const std::function< T(T, T) > &f = [](T a, T b){ return a + b; }, T _e = 0) : op(f), e(_e) {
         n = 1;
         while(n < siz) n *= 2;
         v.resize(2 * n - 1, e);

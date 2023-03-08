@@ -38,10 +38,14 @@ class _base_graph{
     const std::vector<EDGE_TYPE> &edge_set() const { return E; }
 
 	// x, y が連結かどうか
-	bool is_connected(int x, int y){ return uf.same(x, y); }
+	bool is_connected(int x, int y) { return uf.same(x, y); }
 
     // 連結なグラフの数を返す
-    int count_connected_graph(){ return uf.count_groups(); }
+    int count_connected_components() { return uf.count_groups(); }
+
+	// 連結成分をまとめたやつ
+	// O(N)なので注意
+	std::vector<std::vector<int>> connected_groups() { return uf.groups(); }
 
     void print() const {
         std::cout << N << " " << E.size() << std::endl;

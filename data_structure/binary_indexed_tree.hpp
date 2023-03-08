@@ -2,6 +2,7 @@
 #define BINARY_INDEXED_TREE
 #include <vector>
 
+// ! 1-indexであることに注意 ! //
 template<class T>
 struct binary_indexed_tree{
   private:
@@ -9,13 +10,14 @@ struct binary_indexed_tree{
     std::vector<T> bit;
 
   public:
-    binary_indexed_tree(std::size_t siz) : bit(siz + 1, 0), N(siz) {}
+    binary_indexed_tree(int siz) : bit(siz+1, 0), N(siz) {}
 
     void add(int a, T w){
         for(int x = a; x <= N; x += x & -x) bit[x] += w;
     }
 
-    T sum(int a){
+    // [1, a] の計算結果
+    T get(int a){
         T ret = 0;
         for(int x = a; x > 0; x -= x & -x) ret += bit[x];
         return ret;

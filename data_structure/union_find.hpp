@@ -55,8 +55,8 @@ class union_find{
         std::vector<std::vector<int>> result(N);
         for(int i=0; i<N; i++) result[leader(i)].push_back(i);
         result.erase(
-            std::remove_if(result.begin(), result.end(), [&](const std::vector<int>& v) { return v.empty(); }),
-            result.end());
+            std::remove_if(result.begin(), result.end(),
+            [&](const std::vector<int>& v) { return v.empty(); }), result.end());
         return result;
     }
 };

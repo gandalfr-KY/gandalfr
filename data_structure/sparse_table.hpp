@@ -33,7 +33,7 @@ class sparse_table{
         }
 
         log_table.resize(vec.size() + 1, 0);
-        for(int i=2; i<=vec.size(); i++){
+        for(int i = 2; i <= vec.size(); i++){
             log_table[i] = log_table[i>>1] + 1;
         }
 

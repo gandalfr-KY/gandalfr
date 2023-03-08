@@ -13,9 +13,9 @@ long long inversion(std::vector<T> vec){
     std::vector<int> cmp = compress(vec, 1);
     binary_indexed_tree<long long> bit(*std::max_element(cmp.begin(), cmp.end()));
     long long ret = 0;
-    for(int i=1; i<=N; i++){
+    for(int i = 1; i <= N; i++){
         bit.add(cmp[i-1], 1);
-        ret += i - bit.sum(cmp[i-1]);
+        ret += i - bit.get(cmp[i-1]);
     }
     return ret;
 }

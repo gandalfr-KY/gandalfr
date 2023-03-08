@@ -5,64 +5,49 @@
 #include "gandalfr/standard/power.hpp"
 #include "gandalfr/standard/gcdlcm.hpp"
 #include "gandalfr/math/integer/mod_inverse.hpp"
+#include "gandalfr/other/io_supporter.hpp"
 
-#include "gandalfr/standard/io_supporter.hpp"
-
+// 分子・分母がともに64bit整数の範囲でのみ動作を保証
 class fraction{
   private:
     __int128_t num, den;
 
     void simplify(){
-        __int128_t gcd_tmp = _gcd((num >= 0 ? num : -num), (den >= 0 ? den : -den));
-        num /= gcd_tmp;
-        den /= gcd_tmp;
-        if(den < 0){
-            num *= -1;
-            den *= -1;
-        }
+        __int128_t d = _gcd(num, den);
+        num /= (den >= 0 ? d : -d);
+        den /= (den >= 0 ? d : -d);
     }
 
     friend const fraction operator+(const fraction &a){ return a; }
     friend const fraction operator-(const fraction &a){ return {-a.num, a.den, false}; }
 
     friend const fraction operator+(const fraction &a, const fraction &b){
-        __int128_t lcm_tmp = _lcm((a.den >= 0 ? a.den : -a.den), (b.den >= 0 ? b.den : -b.den));
+        __int128_t lcm_tmp = _lcm(a.den, b.den);
         return {lcm_tmp / a.den * a.num + lcm_tmp / b.den * b.num, lcm_tmp};
     }
-
     friend const fraction operator-(const fraction &a, const fraction &b){
-        __int128_t lcm_tmp = _lcm((a.den >= 0 ? a.den : -a.den), (b.den >= 0 ? b.den : -b.den));
+        __int128_t lcm_tmp = _lcm(a.den, b.den);
         return {lcm_tmp / a.den * a.num - lcm_tmp / b.den * b.num, lcm_tmp};
     }
-
     friend const fraction operator*(const fraction &a, const fraction &b){
-        __int128_t gcd_tmp1 = _gcd((a.num >= 0 ? a.num : -a.num), (b.den >= 0 ? b.den : -b.den)),
-            gcd_tmp2 = _gcd((b.num >= 0 ? b.num : -b.num), (a.den >= 0 ? a.den : -a.den));
+        __int128_t gcd_tmp1 = _gcd(a.num, b.den), gcd_tmp2 = _gcd(b.num, a.den);
         return {(a.num / gcd_tmp1) * (b.num / gcd_tmp2), (a.den / gcd_tmp2) * (b.den / gcd_tmp1), false};
     }
-
     friend const fraction operator/(const fraction &a, const fraction &b){
         assert(b.num != 0);
-        __int128_t gcd_tmp1 = _gcd((a.num >= 0 ? a.num : -a.num), (b.num >= 0 ? b.num : -b.num)),
-            gcd_tmp2 = _gcd((b.den >= 0 ? b.den : -b.den), (a.den >= 0 ? a.den : -a.den));
+        __int128_t gcd_tmp1 = _gcd(a.num, b.num), gcd_tmp2 = _gcd(b.den, a.den);
         return {(a.num / gcd_tmp1) * (b.den / gcd_tmp2), (a.den / gcd_tmp2) * (b.num / gcd_tmp1), false};
     }
 
-    friend bool operator==(const fraction &a, const fraction &b){
-        return a.num == b.num && a.den == b.den;
-    }
-
-    friend bool operator!=(const fraction &a, const fraction &b){
-        return a.num != b.num || a.den != b.den;
-    }   
-
-    // 64bit整数の範囲でのみ正しく判定可能
+    friend bool operator==(const fraction &a, const fraction &b){ return a.num == b.num && a.den == b.den; }
+    friend bool operator!=(const fraction &a, const fraction &b){ return a.num != b.num || a.den != b.den; }
     friend bool operator>(const fraction &a, const fraction &b) { return a.num * b.den >  b.num * a.den; }
     friend bool operator>=(const fraction &a, const fraction &b){ return a.num * b.den >= b.num * a.den; }
     friend bool operator<(const fraction &a, const fraction &b) { return a.num * b.den <  b.num * a.den; }
     friend bool operator<=(const fraction &a, const fraction &b){ return a.num * b.den <= b.num * a.den; }
 
   public:
+    fraction(const fraction &a){ num = a.num, den = a.den; }
     fraction(__int128_t n) : num(n), den(1) {}
     // false を添えると約分されない
     fraction(__int128_t numerator, __int128_t denominator, bool with_simplify = true) : num(numerator), den(denominator) {
@@ -98,49 +83,46 @@ class fraction{
         den = a.den;
         return *this;
     }
-
-    void operator+=(const fraction &a){
-        __int128_t lcm_tmp = _lcm((den >= 0 ? den : -den), (a.den >= 0 ? a.den : -a.den));
+    fraction &operator+=(const fraction &a){
+        __int128_t lcm_tmp = _lcm(den, a.den);
         num = lcm_tmp / den * num + lcm_tmp / a.den * a.num;
         den = lcm_tmp;
         simplify();
+        return *this;
     }
-
-    void operator-=(const fraction &a){
-        __int128_t lcm_tmp = _lcm((den >= 0 ? den : -den), (a.den >= 0 ? a.den : -a.den));
+    fraction &operator-=(const fraction &a){
+        __int128_t lcm_tmp = _lcm(den, a.den);
         num = lcm_tmp / den * num - lcm_tmp / a.den * a.num;
         den = lcm_tmp;
         simplify();
+        return *this;
     }
-
-    void operator*=(const fraction &a){
-        __int128_t gcd_tmp1 = _gcd((num >= 0 ? num : -num), (a.den >= 0 ? a.den : -a.den)),
-             gcd_tmp2 = _gcd((a.num >= 0 ? a.num : -a.num), (den >= 0 ? den : -den));
+    fraction &operator*=(const fraction &a){
+        __int128_t gcd_tmp1 = _gcd(num, a.den), gcd_tmp2 = _gcd(a.num, den);
         num = (num / gcd_tmp1) * (a.num / gcd_tmp2);
         den = (den / gcd_tmp2) * (a.den / gcd_tmp1);
+        return *this;
     }
-
-    void operator/=(const fraction &a){
+    fraction &operator/=(const fraction &a){
         assert(a.num != 0);
-        __int128_t gcd_tmp1 = _gcd((num >= 0 ? num : -num), (a.num >= 0 ? a.num : -a.num)),
-            gcd_tmp2 = _gcd((a.den >= 0 ? a.den : -a.den), (den >= 0 ? den : -den));
+        __int128_t gcd_tmp1 = _gcd(num, a.num), gcd_tmp2 = _gcd(a.den, den);
         num = (num / gcd_tmp1) * (a.den / gcd_tmp2);
         den = (den / gcd_tmp2) * (a.num / gcd_tmp1);
+        return *this;
     }
 
     friend std::istream &operator>>(std::istream &is, fraction &a){
-        std::string tmp;
-        is >> tmp;
+        std::string buf;
+        is >> buf;
         a.num = a.den = 0;
-        int i = (tmp[0] == '-');
-        for(; i < tmp.size() && tmp[i] != '/'; i++) a.num = a.num * 10 + tmp[i] - '0'; 
-        for(i = i + 1; i < tmp.size(); i++) a.den = a.den * 10 + tmp[i] - '0';
-        if(tmp[0] == '-') a.num *= -1;
+        int i = (buf[0] == '-');
+        for(; i < buf.size() && buf[i] != '/'; i++) a.num = a.num * 10 + buf[i] - '0'; 
+        for(i = i + 1; i < buf.size(); i++) a.den = a.den * 10 + buf[i] - '0';
+        if(buf[0] == '-') a.num *= -1;
         if(a.den == 0) a.den = 1;
         a.simplify();
         return is;
     }
-
     friend std::ostream &operator<<(std::ostream &os, const fraction &a) {
         os << a.num;
         if(a.den != 1) os << '/' << a.den;

@@ -4,7 +4,7 @@
 #include "gandalfr/math/integer/mod_inverse.hpp"
 
 // verify : https://atcoder.jp/contests/abc168/submissions/39533747
-// 分子・分母がともに 64bit 整数の範囲でのみ動作を保証
+// 演算結果の分子・分母がともに 64bit 整数の範囲でのみ動作を保証
 class fraction{
   private:
     __int128_t num, den;

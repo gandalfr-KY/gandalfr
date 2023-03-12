@@ -6,8 +6,9 @@
 namespace internal{
     template<typename GRAPH_TYPE>
     std::vector<int> count_indegree(const GRAPH_TYPE &graph){
-        std::vector<int> cnt(graph.nodes(), 0);
-        for(auto &e : graph.edge_set()) cnt[e.to]++;
+        int N = graph.nodes();
+        std::vector<int> cnt(N, 0);
+        for(int i = 0; i < N; i++) for(auto &e : graph[i]) cnt[e.to]++;
         return cnt;
     }
 }

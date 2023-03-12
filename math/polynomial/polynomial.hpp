@@ -12,7 +12,9 @@ class polynomial{
     }
 
     const friend polynomial operator-(const polynomial &a){
-        return operator*(a, -1);
+        polynomial<coef> ret(a);
+        for(coef &c : ret) c *= -1;
+        return ret;
     }
 
     friend const polynomial operator+(const polynomial &a, const polynomial &b){
@@ -49,6 +51,7 @@ class polynomial{
 
     friend const polynomial operator/(const polynomial &a, const polynomial &b){
         int siz1 = a.p.size(), siz2 = b.p.size();
+        if(siz1 < siz2) return {0};
         polynomial ret, remain(a);
         ret.p.resize(siz1 - siz2 + 1, 0);
         for(int i=siz1-siz2; i>=0; i--){
@@ -63,6 +66,7 @@ class polynomial{
 
     friend const polynomial operator%(const polynomial &a, const polynomial &b){
         int siz1 = a.p.size(), siz2 = b.p.size();
+        if(siz1 < siz2) return {0};
         polynomial ret, remain(a);
         ret.p.resize(siz1 - siz2 + 1, 0);
         for(int i=siz1-siz2; i>=0; i--){
@@ -116,19 +120,18 @@ class polynomial{
         while(p.back() == 0 && p.size() != 1) p.pop_back();
     }
     polynomial(const coef &n)  : polynomial(std::vector<coef>{n}) {}
-    polynomial(long long n) : polynomial(std::vector<coef>{n}) {}
     polynomial()            : polynomial(std::vector<coef>{0}) {}
 
-    int max_order() const{
+    int max_order() const {
         return p.size() - 1;
     }
     
-    coef get_coefficient(int n) const{
+    coef get(int n) const {
         assert(0 <= n);
         return (n < p.size() ? p[n] : 0);
     }
 
-    void set_coefficient(int n, const coef &x){
+    void set(int n, const coef &x){
         assert(0 <= n);
         if(n >= p.size()) p.resize(n + 1, 0);
         p[n] = x;

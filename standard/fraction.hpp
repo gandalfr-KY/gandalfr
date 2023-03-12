@@ -1,6 +1,8 @@
 #ifndef FRACTION
 #define FRACTION
-#include "gandalfr/standard/gcdlcm.hpp"
+#include <numeric>
+#include <iostream>
+#include <assert.h>
 #include "gandalfr/math/integer/mod_inverse.hpp"
 
 // verify : https://atcoder.jp/contests/abc168/submissions/39533747
@@ -10,7 +12,7 @@ class fraction{
     __int128_t num, den;
 
     void simplify(){
-        __int128_t d = _gcd(num, den);
+        __int128_t d = std::gcd(num, den);
         num /= (den >= 0 ? d : -d);
         den /= (den >= 0 ? d : -d);
     }
@@ -19,21 +21,40 @@ class fraction{
     friend const fraction operator-(const fraction &a){ return {-a.num, a.den, false}; }
 
     friend const fraction operator+(const fraction &a, const fraction &b){
-        __int128_t lcm_tmp = _lcm(a.den, b.den);
-        return {lcm_tmp / a.den * a.num + lcm_tmp / b.den * b.num, lcm_tmp};
+        if(a.den == 0) {
+            assert(!(b.den == 0 && a.num * b.num == -1)); // 不定形はダメ
+            return a;
+        }
+        else if(b.den == 0) {
+            return b;
+        }
+        else {
+            return {a.num * b.den + b.num * a.den, a.den * b.den};
+        }
     }
     friend const fraction operator-(const fraction &a, const fraction &b){
-        __int128_t lcm_tmp = _lcm(a.den, b.den);
-        return {lcm_tmp / a.den * a.num - lcm_tmp / b.den * b.num, lcm_tmp};
+        if(a.den == 0) {
+            assert(!(b.den == 0 && a.num * b.num == 1)); // 不定形はダメ
+            return a;
+        }
+        else if(b.den == 0) {
+            return {-b.num, 0, false};
+        }
+        else {
+            return {a.num * b.den - b.num * a.den, a.den * b.den};
+        }
     }
     friend const fraction operator*(const fraction &a, const fraction &b){
-        __int128_t gcd_tmp1 = _gcd(a.num, b.den), gcd_tmp2 = _gcd(b.num, a.den);
+        assert(a.num != 0 || b.den != 0);
+        assert(a.den != 0 || b.num != 0);
+        __int128_t gcd_tmp1 = std::gcd(a.num, b.den), gcd_tmp2 = std::gcd(b.num, a.den);
         return {(a.num / gcd_tmp1) * (b.num / gcd_tmp2), (a.den / gcd_tmp2) * (b.den / gcd_tmp1), false};
     }
     friend const fraction operator/(const fraction &a, const fraction &b){
-        //assert(b.num != 0);
-        __int128_t gcd_tmp1 = _gcd(a.num, b.num), gcd_tmp2 = _gcd(b.den, a.den);
-        return {(a.num / gcd_tmp1) * (b.den / gcd_tmp2), (a.den / gcd_tmp2) * (b.num / gcd_tmp1), false};
+        assert(a.num != 0 || b.num != 0);
+        assert(a.den != 0 || b.den != 0);
+        __int128_t gcd_tmp1 = std::gcd(a.num, b.num), gcd_tmp2 = std::gcd(b.den, a.den);
+        return {(b.num < 0 ? -1 : 1) * (a.num / gcd_tmp1) * (b.den / gcd_tmp2), (b.num < 0 ? -1 : 1) * (a.den / gcd_tmp2) * (b.num / gcd_tmp1), false};
     }
 
     friend bool operator==(const fraction &a, const fraction &b){ return a.num == b.num && a.den == b.den; }
@@ -68,29 +89,45 @@ class fraction{
         return *this;
     }
     fraction &operator+=(const fraction &a){
-        __int128_t lcm_tmp = _lcm(den, a.den);
-        num = lcm_tmp / den * num + lcm_tmp / a.den * a.num;
-        den = lcm_tmp;
-        simplify();
+        assert(!(den == 0 && a.den == 0 && num * a.num == -1)); // 不定形はダメ
+        if(a.den == 0) {
+            num = a.num;
+            den = 0;
+        }
+        else{
+            num = num * a.den + a.num * den;
+            den *= a.den;
+            simplify();    
+        }
         return *this;
     }
     fraction &operator-=(const fraction &a){
-        __int128_t lcm_tmp = _lcm(den, a.den);
-        num = lcm_tmp / den * num - lcm_tmp / a.den * a.num;
-        den = lcm_tmp;
-        simplify();
+        assert(!(den == 0 && a.den == 0 && num * a.num == 1)); // 不定形はダメ
+        if(a.den == 0) {
+            num = -a.num;
+            den = 0;
+        }
+        else{
+            num = num * a.den - a.num * den;
+            den *= a.den;
+            simplify();    
+        }
         return *this;
     }
     fraction &operator*=(const fraction &a){
-        __int128_t gcd_tmp1 = _gcd(num, a.den), gcd_tmp2 = _gcd(a.num, den);
+        assert(num != 0 || a.den != 0);
+        assert(den != 0 || a.num != 0);
+        __int128_t gcd_tmp1 = std::gcd(num, a.den), gcd_tmp2 = std::gcd(a.num, den);
         num = (num / gcd_tmp1) * (a.num / gcd_tmp2);
         den = (den / gcd_tmp2) * (a.den / gcd_tmp1);
         return *this;
     }
     fraction &operator/=(const fraction &a){
-        __int128_t gcd_tmp1 = _gcd(num, a.num), gcd_tmp2 = _gcd(a.den, den);
-        num = (num / gcd_tmp1) * (a.den / gcd_tmp2);
-        den = (den / gcd_tmp2) * (a.num / gcd_tmp1);
+        assert(num != 0 || a.num != 0);
+        assert(den != 0 || a.den != 0);
+        __int128_t gcd_tmp1 = std::gcd(num, a.num), gcd_tmp2 = std::gcd(a.den, den);
+        num = (a.num < 0 ? -1 : 1) * (num / gcd_tmp1) * (a.den / gcd_tmp2);
+        den = (a.num < 0 ? -1 : 1) * (den / gcd_tmp2) * (a.num / gcd_tmp1);
         return *this;
     }
 

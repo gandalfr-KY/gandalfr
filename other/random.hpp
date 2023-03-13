@@ -54,24 +54,6 @@ struct random_utility{
         return tmp;
     }
 
-    unweighted_graph<false> generate_unweighted_graph(int N, int M, bool is_connected = true){
-        assert(M <= N * (N - 1) / 2);
-        if(is_connected) M -= N - 1;
-        assert(M >= 0);
-        unweighted_graph<false> ret(N);
-        if(is_connected) {
-            for(int i=1; i<N; i++) ret.add_edge(i, random_int(0, i-1));
-        }
-        std::vector<std::vector<int>> from_to(N, std::vector<int>(N, true));
-        std::vector<std::pair<int, int>> edges;
-
-        for(const unweighted_edge &e : ret.edge_set()) from_to[e.from][e.to] = false;
-        for(int i=0; i<N; i++) for(int j=i+1; j<N; j++) if(from_to[i][j]) edges.push_back({i, j});
-        std::vector<int> selected_edge = sorted_array(M, 0, edges.size() - 1);
-        for(int x : selected_edge) ret.add_edge(edges[x].first, edges[x].second);
-        return ret;
-    }
-
   private:
     std::mt19937 mt;
 

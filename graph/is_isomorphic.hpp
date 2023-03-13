@@ -4,13 +4,13 @@
 
 // 多分あってるくらいの気持ちで...
 // 同型判定
-template<class GRAPH_TYPE>
-bool is_isomorphic(const GRAPH_TYPE &graph1, const GRAPH_TYPE &graph2){
-    if(graph1.nodes() != graph2.nodes()) return false;
-    if(graph1.edges() != graph2.edges()) return false;
+template<typename WEIGHT, bool is_directed>
+bool is_isomorphic(const internal::_base_graph<WEIGHT, is_directed> &G1, const internal::_base_graph<WEIGHT, is_directed> &G2){
+    if(G1.nodes() != G2.nodes()) return false;
+    if(G1.edges() != G2.edges()) return false;
 
-    int N = graph1.nodes();
-    auto adj1(adjacency_matrix(graph1)), adj2(adjacency_matrix(graph2));
+    int N = G1.nodes();
+    matrix<WEIGHT> adj1(adjacency_matrix(G1)), adj2(adjacency_matrix(G2));
 
     std::vector<int> nodes_id(N);
     std::iota(nodes_id.begin(), nodes_id.end(), 0);

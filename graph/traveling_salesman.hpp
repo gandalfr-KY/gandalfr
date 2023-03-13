@@ -3,10 +3,10 @@
 #include "gandalfr/graph/adjacency_matrix.hpp"
 
 template<class WEIGHT, bool is_directed>
-WEIGHT traveling_salesman(const weighted_graph<WEIGHT, is_directed> &graph){
-    matrix<WEIGHT> adj = adjacency_matrix(graph);
+WEIGHT traveling_salesman(const internal::_base_graph<WEIGHT, is_directed> &G){
+    matrix<WEIGHT> adj = adjacency_matrix(G);
     WEIGHT ma = std::numeric_limits<WEIGHT>::max() / 2;
-    int N = graph.nodes();
+    int N = G.nodes();
 
     std::vector<std::vector<WEIGHT>> dp((1 << N), std::vector<WEIGHT>(N, ma));
     dp[0][0] = 0;

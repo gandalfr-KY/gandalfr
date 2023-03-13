@@ -1,17 +1,21 @@
 #ifndef DOUBLING
 #define DOUBLING
-#include "gandalfr/graph/graph.hpp"
-template<typename T>
+#include "gandalfr/graph/Kruscal.hpp"
+
+/*
+ * verify : https://atcoder.jp/contests/abc235/submissions/39688316
+*/
+template<typename WEIGHT>
 class doubling{
   private:
     int N;
-	T MIN = std::numeric_limits<T>::min();
+	WEIGHT MIN = std::numeric_limits<WEIGHT>::min();
     std::vector<int> depth;
 	std::vector<short> log_table;
     std::vector<std::vector<int>> par;
-    std::vector<std::vector<T>> max_cost;
+    std::vector<std::vector<WEIGHT>> max_cost;
 
-	void dfs(const weighted_graph<T, false> &G, int cu, int pa){
+	void dfs(const internal::_base_graph<WEIGHT, false> &G, int cu, int pa){
 		par[cu][0] = pa;
 		for(auto &e : G[cu]){
 			if(e.to == pa) continue;
@@ -22,11 +26,11 @@ class doubling{
 	}
 
   public:
-    doubling(const weighted_graph<T, false> &G, int root) : N(G.nodes()), depth(G.nodes(), 0),
+    doubling(const internal::_base_graph<WEIGHT, false> &G) : N(G.nodes()), depth(G.nodes(), 0),
         par(G.nodes(), std::vector<int>(1)), max_cost(G.nodes()) {
 
-		max_cost[root] = {MIN};
-        dfs(G, root, -1);
+		max_cost[0] = {MIN};
+        dfs(G, 0, -1);
 
 		log_table.resize(N + 1);
 		log_table[0] = 1;
@@ -58,8 +62,8 @@ class doubling{
 		}
     }
 
-	T get_max_cost(int a, int b){
-		T ret = MIN;
+	WEIGHT get_max_cost(int a, int b){
+		WEIGHT ret = MIN;
 		if(depth[a] < depth[b]) std::swap(a, b);
 		for(int i = 0, d = depth[a] - depth[b]; d > 0; d >>= 1, i++){
 			if(d & 1){

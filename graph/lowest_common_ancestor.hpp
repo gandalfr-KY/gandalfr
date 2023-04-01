@@ -6,7 +6,7 @@
 /* 無向単純木の最小共通祖先を求める
  * 構築   O(NlogN)
  * 値取得 O(1)
- * verify : https://atcoder.jp/contests/abc070/submissions/36387992
+ * verify : https://atcoder.jp/contests/abc070/submissions/39891502
  */
 template<typename WEIGHT>
 class lowest_common_ancestor{
@@ -15,7 +15,7 @@ class lowest_common_ancestor{
     
     std::vector<int> idx;
     std::vector<PAIR> depth;
-    sparse_table<PAIR> sps;
+    RmQ_sparse_table<PAIR> sps;
     std::vector<WEIGHT> dist;
 
     void Euler_tour(const internal::_base_graph<WEIGHT, false> &G, int cu, int pa, int dep, int &cnt){
@@ -35,8 +35,7 @@ class lowest_common_ancestor{
     }
     
   public:
-    lowest_common_ancestor(const internal::_base_graph<WEIGHT, false> &G) : 
-    idx(G.nodes()), sps([](PAIR a, PAIR b){ return std::min(a, b); }), dist(shortest_path(G, 0)){
+    lowest_common_ancestor(const internal::_base_graph<WEIGHT, false> &G) : idx(G.nodes()), dist(shortest_path(G, 0)){
         int cnt = 0;
         Euler_tour(G, 0, -1, 0, cnt);
         sps.init(depth);

@@ -8,7 +8,7 @@ class binomial_coefficients{
     static std::vector<T> fact;
 
     static void expand(int n){
-		    while(n >= fact.size()) {
+		while(n >= fact.size()) {
             fact.push_back(fact.back() * fact.size());
         }
     }
@@ -18,7 +18,7 @@ class binomial_coefficients{
     ~binomial_coefficients() = delete;
 
     static T get(int n, int k){
-		    assert(0 <= k && k <= n);
+		assert(0 <= k && k <= n);
         if(n >= fact.size()) expand(n);
         return fact[n] / fact[k] / fact[n - k];
     }

@@ -10,12 +10,12 @@ struct grid{
         return (0 <= h && h < H && 0 <= w && w < W);
     }
 
-    inline const friend grid operator+(const grid &a, const grid &b) { return {a.h + b.h, a.w + b.w}; }
-    inline const friend grid operator-(const grid &a, const grid &b) { return {a.h - b.h, a.w - b.w}; }
-    inline const friend grid operator*(const grid &a, long long x) { return {a.h * x, a.w * x}; }
-    inline const friend grid operator/(const grid &a, long long x) { return {a.h / x, a.w / x}; }
-    inline const friend bool operator==(const grid &a, const grid &b) { return (a.h == b.h && a.w == b.w); }
-    inline const friend bool operator!=(const grid &a, const grid &b) { return (a.h != b.h || a.w != b.w); }
+    inline friend grid operator+(const grid &a, const grid &b) { return {a.h + b.h, a.w + b.w}; }
+    inline friend grid operator-(const grid &a, const grid &b) { return {a.h - b.h, a.w - b.w}; }
+    inline friend grid operator*(const grid &a, long long x) { return {a.h * x, a.w * x}; }
+    inline friend grid operator/(const grid &a, long long x) { return {a.h / x, a.w / x}; }
+    inline friend bool operator==(const grid &a, const grid &b) { return (a.h == b.h && a.w == b.w); }
+    inline friend bool operator!=(const grid &a, const grid &b) { return (a.h != b.h || a.w != b.w); }
     void operator+=(const grid &a) { h += a.h, w += a.w; }
     void operator-=(const grid &a) { h -= a.h, w -= a.w; }
     void operator*=(long long a) { h *= a, w *= a; }

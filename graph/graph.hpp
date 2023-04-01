@@ -42,7 +42,7 @@ namespace internal{
         bool is_connected(int x, int y) { return uf.same(x, y); }
 
         // 連結なグラフの数を返す
-        int count_connected_components() { return uf.count_groups(); }
+        int count_connected_components() const { return uf.count_groups(); }
 
         // 連結成分をまとめたやつ
         // O(N)なので注意

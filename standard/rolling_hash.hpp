@@ -10,9 +10,9 @@ class rolling_hash{
 	std::vector<__uint128_t> hashes, bases; 
 
   public:
-	rolling_hash(const std::string &s) : hashes(s.size() + 1, 0), bases(s.size() + 1, 0), len(s.size()) {
+	rolling_hash(const std::string &s) : len(s.size()), hashes(len + 1, 0), bases(len + 1, 0)  {
 		bases[0] = 1;
-		for(int i = 0; i < s.size(); i++){
+		for(int i = 0; i < len; i++){
 			hashes[i + 1] = (hashes[i] * _base + s[i]) % _mod;
 			bases[i + 1] = (bases[i] * _base) % _mod;
 		}

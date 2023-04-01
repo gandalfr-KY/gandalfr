@@ -74,4 +74,24 @@ class segment_tree{
 
 };
 
+
+template<class T>
+struct RAQ_segment_tree : public segment_tree<T>{
+    RAQ_segment_tree(int size) : RAQ_segment_tree<T>::segment_tree(size, [](T a, T b){ return a + b; }, 0) {};
+    RAQ_segment_tree(const std::vector<T> &vec) : RAQ_segment_tree<T>::segment_tree(vec, [](T a, T b){ return a + b; }, 0) {};
+};
+
+template<class T>
+struct RmQ_segment_tree : public segment_tree<T>{
+    RmQ_segment_tree(int size) : RmQ_segment_tree<T>::segment_tree(size, [](T a, T b){ return (a < b ? a : b); }, 0) {};
+    RmQ_segment_tree(const std::vector<T> &vec) : RmQ_segment_tree<T>::segment_tree(vec, [](T a, T b){ return (a < b ? a : b); }, 0) {};
+
+};
+
+template<class T>
+struct RMQ_segment_tree : public segment_tree<T>{
+    RMQ_segment_tree(int size) : RMQ_segment_tree<T>::segment_tree(size, [](T a, T b){ return (a > b ? a : b); }, 0) {};
+    RMQ_segment_tree(const std::vector<T> &vec) : RMQ_segment_tree<T>::segment_tree(vec, [](T a, T b){ return (a > b ? a : b); }, 0) {};
+};
+
 #endif

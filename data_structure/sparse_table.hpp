@@ -48,4 +48,15 @@ class sparse_table{
 
 };
 
+template<typename T>
+struct RmQ_sparse_table : public sparse_table<T>{
+    RmQ_sparse_table() : RmQ_sparse_table<T>::sparse_table([](T a, T b){ return (a < b ? a : b); }) {}
+};
+
+template<typename T>
+struct RMQ_sparse_table : public sparse_table<T>{
+    RMQ_sparse_table() : RMQ_sparse_table<T>::sparse_table([](T a, T b){ return (a > b ? a : b); }) {}
+};
+
+
 #endif

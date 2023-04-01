@@ -1,7 +1,7 @@
 #ifndef PRIMES_LIST
 #define PRIMES_LIST
 #include <assert.h>
-#include "gandalfr/math/integer/is_prime.hpp"
+#include "gandalfr/math/integer/prime_number_utility.hpp"
 
 // 昇順の素数リスト
 class primes_list{
@@ -11,8 +11,8 @@ class primes_list{
   private:
     static void expand(int nex){
         int i = (primes.empty() ? 2 : primes.back() + 1);
-        while(primes.size() < nex){
-            if(is_prime::judge(i)) primes.push_back(i);
+        while((int)primes.size() < nex){
+            if(prime_number_utility::is_prime(i)) primes.push_back(i);
             i++;
         }
     }
@@ -22,7 +22,7 @@ class primes_list{
     ~primes_list() = delete;
 
 	static void resize(int siz){
-		if(primes.size() > siz){
+		if((int)primes.size() > siz){
 			while(primes.size() - siz > 0){
 				primes.pop_back();
 			}

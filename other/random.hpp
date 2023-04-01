@@ -18,7 +18,7 @@ struct random_utility{
 
     template<typename T>
     std::vector<T> shuffled_array(const size_t size, T rand_min, T rand_max){
-        assert(rand_max - rand_min + 1 >= size);
+        assert(rand_max - rand_min + 1 >= (T)size);
 
         std::vector<T> tmp;
         std::uniform_int_distribution<T> distribution(rand_min, rand_max);
@@ -47,9 +47,10 @@ struct random_utility{
         return tmp;
     }
 
-    std::vector<int> sorted_array(const size_t size, int rand_min, int rand_max){
-        assert(rand_max - rand_min + 1 >= size);
-        std::vector<int> tmp = shuffled_array(size, rand_min, rand_max);
+    template<typename T>
+    std::vector<int> sorted_array(const size_t size, T rand_min, T rand_max){
+        assert(rand_max - rand_min + 1 >= (T)size);
+        std::vector<T> tmp = shuffled_array(size, rand_min, rand_max);
         std::sort(tmp.begin(), tmp.end());
         return tmp;
     }

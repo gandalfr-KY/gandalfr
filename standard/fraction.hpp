@@ -135,10 +135,10 @@ class fraction{
         std::string buf;
         is >> buf;
         a.num = a.den = 0;
-        int i = (buf[0] == '-');
-        for(; i < buf.size() && buf[i] != '/'; i++) a.num = a.num * 10 + buf[i] - '0';
-        if(i == buf.size()) a.den = 1;
-        else for(i = i + 1; i < buf.size(); i++) a.den = a.den * 10 + buf[i] - '0';
+        int i = (buf[0] == '-'), sz = buf.size();
+        for(; i < sz && buf[i] != '/'; i++) a.num = a.num * 10 + buf[i] - '0';
+        if(i == sz) a.den = 1;
+        else for(i = i + 1; i < sz; i++) a.den = a.den * 10 + buf[i] - '0';
         if(buf[0] == '-') a.num *= -1;
         a.simplify();
         return is;

@@ -47,7 +47,7 @@ class union_find{
         return group_siz[leader(x)];
     }
 
-    int count_groups(){
+    int count_groups() const {
         return group_num;
     }
 

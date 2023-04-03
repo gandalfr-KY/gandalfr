@@ -50,6 +50,10 @@ namespace internal{
             os << e.from << " " << e.to << " " << e.cost;
             return os;
         }
+        const _base_edge &operator=(const _base_edge &e){
+            from = e.from, to = e.to, cost = e.cost, id = e.id;
+            return *this;
+        } 
     };
 
     template<>
@@ -87,6 +91,10 @@ namespace internal{
             os << e.from << " " << e.to;
             return os;
         }
+        const _base_edge &operator=(const _base_edge &e){
+            from = e.from, to = e.to, id = e.id;
+            return *this;
+        } 
     };
 }
 

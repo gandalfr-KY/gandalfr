@@ -8,14 +8,14 @@
 template<class T>
 class segment_tree{
   private:
-    int n;
+    int n, vec_size;
     const T e;
     const std::function< T(T, T) > op;
     std::vector<T> v;
 
   public:
     // 要素の配列 vec で初期化
-    segment_tree(const std::vector<T> &vec, const std::function< T(T, T) > &f = [](T a, T b){ return a + b; }, T _e = 0) : op(f), e(_e) {
+    segment_tree(const std::vector<T> &vec, const std::function< T(T, T) > &f, T _e) : vec_size(vec.size()), op(f), e(_e) {
         int siz = vec.size();
         n = 1;
         while(n < siz) n *= 2;
@@ -26,7 +26,7 @@ class segment_tree{
     }
 
     // 長さ siz の単位元の配列で初期化
-    segment_tree(std::size_t siz, const std::function< T(T, T) > &f = [](T a, T b){ return a + b; }, T _e = 0) : op(f), e(_e) {
+    segment_tree(int siz, const std::function< T(T, T) > &f, T _e) : vec_size(siz), op(f), e(_e) {
         n = 1;
         while(n < siz) n *= 2;
         v.resize(2 * n - 1, e);
@@ -45,19 +45,19 @@ class segment_tree{
     // [l, r) の演算結果を得る 
     // l == r のとき e を返す
     T get(int l, int r){
-        assert(0 <= l && l <= r && r <= n);
+        assert(0 <= l && l <= r && r <= vec_size);
         if(l == r) return e;
         return get(l, r, 0, 0, n);
     }
 
     // pos 番目の値を得る 
     T get(int pos){
-        assert(0 <= pos && pos < n);
+        assert(0 <= pos && pos < vec_size);
         return v[pos + n - 1];
     }
 
     void print(){
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < vec_size; i++){
             std::cout << v[i + n - 1] << (i == n - 1 ? "" : " ");
         }
         std::cout << std::endl;
@@ -76,9 +76,9 @@ class segment_tree{
 
 
 template<class T>
-struct RAQ_segment_tree : public segment_tree<T>{
-    RAQ_segment_tree(int size) : RAQ_segment_tree<T>::segment_tree(size, [](T a, T b){ return a + b; }, 0) {};
-    RAQ_segment_tree(const std::vector<T> &vec) : RAQ_segment_tree<T>::segment_tree(vec, [](T a, T b){ return a + b; }, 0) {};
+struct RSQ_segment_tree : public segment_tree<T>{
+    RSQ_segment_tree(int size) : RSQ_segment_tree<T>::segment_tree(size, [](T a, T b){ return a + b; }, 0) {};
+    RSQ_segment_tree(const std::vector<T> &vec) : RSQ_segment_tree<T>::segment_tree(vec, [](T a, T b){ return a + b; }, 0) {};
 };
 
 template<class T>

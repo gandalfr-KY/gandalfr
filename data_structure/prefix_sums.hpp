@@ -15,9 +15,9 @@ class prefix_sums{
 
   public:
     prefix_sums(const std::vector<T> &v,
-                 const std::function< T(T, T) > &_f = [](T a, T b){ return a + b; },
-                 const std::function< T(T, T) > &_f_inv = [](T a, T b){ return a - b; },
-                 const T &_e = 0) : n(v.size()), f(_f), f_inv(_f_inv), e(_e) {
+                const std::function< T(T, T) > &_f = [](T a, T b){ return a + b; },
+                const std::function< T(T, T) > &_f_inv = [](T a, T b){ return a - b; },
+                const T &_e = 0) : n(v.size()), f(_f), f_inv(_f_inv), e(_e) {
         acm.reserve(n + 1);
         acm.push_back(e);
         for(const T &x : v){

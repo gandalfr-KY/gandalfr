@@ -1,8 +1,9 @@
 #ifndef LOWLINK
 #define LOWLINK
+#include <utility>
 #include "gandalfr/graph/topological_sort.hpp"
 
-/* 単純連結無向グラフの関節点・橋を求める
+/* 単純無向グラフの関節点・橋を求める
  * 前処理 O(N)
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093344
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093485
@@ -30,12 +31,22 @@ class lowlink{
     }
 
   public:
-    lowlink(const internal::_base_graph<WEIGHT, false> &G) : ord(G.nodes(), -1), low(G.nodes(), -1) {
-        int cnt = 0, root, min_deg = std::numeric_limits<int>::max();
+    lowlink(internal::_base_graph<WEIGHT, false> &G) : ord(G.nodes(), -1), low(G.nodes(), -1) {
         // 次数が最小のノードは必ず関節点でない
         // そこからDFSすれば、根ノードの関節点判定を行わなくてよい
-        std::vector<int> indeg(internal::count_indegree(G));
-        dfs(G, min_element(indeg.begin(), indeg.end()) - indeg.begin(), -1, cnt);
+        std::vector<int> deg(internal::count_indegree(G));
+        
+        const std::vector<std::vector<int>> groups = G.connected_groups();
+        int sz = groups.size();
+        std::vector<std::pair<int, int>> group_min_deg(sz, {std::numeric_limits<int>::max(), -1});
+        for(int i = 0; i < sz; i++) for(int x : groups[i]) if(group_min_deg[i].first > deg[x]){
+            group_min_deg[i] = {deg[x], x};
+        }
+
+        for(auto[ign, x] : group_min_deg){
+            int cnt = 0;
+            dfs(G, x, -1, cnt);
+        }
     }
 
     // unsorted であることに注意

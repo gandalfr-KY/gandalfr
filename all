@@ -16,6 +16,7 @@
 #include "gandalfr/graph/adjacency_matrix.hpp"
 #include "gandalfr/graph/graph.hpp"
 #include "gandalfr/data_structure/segment_tree.hpp"
+#include "gandalfr/data_structure/dual_segment_tree.hpp"
 #include "gandalfr/data_structure/prefix_sums.hpp"
 #include "gandalfr/data_structure/sparse_table.hpp"
 #include "gandalfr/data_structure/binary_indexed_tree.hpp"

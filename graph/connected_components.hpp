@@ -28,7 +28,7 @@ class connected_components{
         }
     }
     
-    const std::vector<internal::_base_graph<WEIGHT, is_directed>> &get_decomposed_graphs(){ return Gs; }
+    std::vector<internal::_base_graph<WEIGHT, is_directed>> &get_decomposed_graphs(){ return Gs; }
     // {<グループ番号, ノード番号>}
     const std::vector<std::pair<int, int>> get_mapping_table(){ return group_and_node_id; } 
 

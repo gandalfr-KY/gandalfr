@@ -34,7 +34,7 @@ class dual_segment_tree{
         v.resize(2 * n - 1, e);
     }
 
-    // pos 番目の値を val に更新
+    // pos 番目の値を得る
     T get(int pos){
         pos += n - 1;
         T ret = v[pos];
@@ -105,7 +105,7 @@ class RUQ_dual_segment_tree{
         for(auto &x : v) x.first = -1;
     }
 
-    // pos 番目の値を val に更新
+    // pos 番目の値を得る
     T get(int pos){
         pos += n - 1;
         std::pair<int, T> ret = v[pos];

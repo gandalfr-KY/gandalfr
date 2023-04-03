@@ -58,7 +58,7 @@ class segment_tree{
 
     void print(){
         for(int i = 0; i < vec_size; i++){
-            std::cout << v[i + n - 1] << (i == n - 1 ? "" : " ");
+            std::cout << v[i + n - 1] << (i == vec_size - 1 ? "" : " ");
         }
         std::cout << std::endl;
     }

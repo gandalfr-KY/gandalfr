@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <assert.h>
+#include "gandalfr/graph/graph.hpp"
 
 template<class T>
 class matrix{
@@ -63,6 +64,15 @@ class matrix{
     }
     matrix(const std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv) {}
     matrix(const matrix<T> &mt) : H(mt.H), W(mt.W), table(mt.table) {}
+    // グラフ=>隣接行列
+    template<bool is_directed>
+    matrix(const internal::_base_graph<T, is_directed> &G, T invalid)
+         : H(G.nodes()), W(G.nodes()), table(std::valarray<T>(invalid, W), H){
+        for(const internal::_base_edge<T> &e : G.edge_set()){
+            table[e.from][e.to] = e.cost;
+            if(!is_directed) table[e.to][e.from] = e.cost;
+        }
+    }
 
     int size_H() const { return H; }
     int size_W() const { return W; }
@@ -94,8 +104,8 @@ class matrix{
     const matrix<T> &operator=(const matrix<T> &a){ table = a.table; return *this; }
     void operator+=(const matrix<T> &a){ *this = operator+(*this, a); }
     void operator-=(const matrix<T> &a){ *this = operator-(*this, a); }
-    template<class U>
-    void operator*=(const U &a){ *this = operator*(*this, a); }
+    void operator*=(const T &a){ *this = operator*(*this, a); }
+    void operator*=(const matrix<T> &a){ *this = operator*(*this, a); }
     void operator/=(const T &a){ *this = operator/(*this, a); }
     void operator%=(const T &a){ *this = operator%(*this, a); }
 

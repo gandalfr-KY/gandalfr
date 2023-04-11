@@ -36,7 +36,7 @@ class lowlink{
         // そこからDFSすれば、根ノードの関節点判定を行わなくてよい
         std::vector<int> deg(internal::count_indegree(G));
         
-        const std::vector<std::vector<int>> groups = G.connected_groups();
+        const std::vector<std::vector<int>> groups = G.connected_components();
         int sz = groups.size();
         std::vector<std::pair<int, int>> group_min_deg(sz, {std::numeric_limits<int>::max(), -1});
         for(int i = 0; i < sz; i++) for(int x : groups[i]) if(group_min_deg[i].first > deg[x]){

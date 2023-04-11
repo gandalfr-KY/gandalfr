@@ -11,8 +11,8 @@ class connected_components{
     std::vector<internal::_base_graph<WEIGHT, is_directed>> Gs;
 
   public:
-    connected_components(internal::_base_graph<WEIGHT, is_directed> &G) : 
-    groups(G.connected_groups()), group_and_node_id(G.nodes()), Gs(G.count_connected_components()) {
+    connected_components(internal::_base_graph<WEIGHT, is_directed> &G)
+         : groups(G.connected_groups()), group_and_node_id(G.nodes()), Gs(G.count_connected_components()) {
         for(int i = 0; i < groups.size(); i++){
             Gs[i].expand(groups[i].size());
             for(int j = 0; j < groups[i].size(); j++){

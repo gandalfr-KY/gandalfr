@@ -1,6 +1,7 @@
 #ifndef IS_ISOMORPHIC
 #define IS_ISOMORPHIC
-#include "gandalfr/graph/adjacency_matrix.hpp"
+#include "gandalfr/graph/graph.hpp"
+#include "gandalfr/math/matrix/matrix.hpp"
 
 // 多分あってるくらいの気持ちで...
 // 同型判定
@@ -10,7 +11,8 @@ bool is_isomorphic(const internal::_base_graph<WEIGHT, is_directed> &G1, const i
     if(G1.edges() != G2.edges()) return false;
 
     int N = G1.nodes();
-    matrix<WEIGHT> adj1(adjacency_matrix(G1)), adj2(adjacency_matrix(G2));
+    WEIGHT MIN = std::numeric_limits<WEIGHT>::min();
+    matrix<WEIGHT> adj1(G1, MIN), adj2(G2, MIN);
 
     std::vector<int> nodes_id(N);
     std::iota(nodes_id.begin(), nodes_id.end(), 0);

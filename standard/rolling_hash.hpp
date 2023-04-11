@@ -25,6 +25,12 @@ class rolling_hash{
 		return (hashes[r] + _mod - (hashes[l] * bases[r-l]) % _mod) % _mod;
 	}
 
+    __uint128_t get(int l1, int r1, int l2, int r2){
+        __uint128_t hsh1 = get(l1, r1), hsh2 = get(l2, r2);
+        return (hsh1 * bases[r2 - l2] + hsh2) % _mod;
+	}
+
+
     /* s[l1, r1), s[l2, r2) の最長共通接頭辞
      * O(logN)
      */

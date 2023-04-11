@@ -5,10 +5,8 @@
 
 struct grid{
     long long h, w;
-
-    bool is_valid(int H, int W){
-        return (0 <= h && h < H && 0 <= w && w < W);
-    }
+    
+    bool is_valid(int H, int W) const{ return (0 <= h && h < H && 0 <= w && w < W); }
 
     inline friend grid operator+(const grid &a, const grid &b) { return {a.h + b.h, a.w + b.w}; }
     inline friend grid operator-(const grid &a, const grid &b) { return {a.h - b.h, a.w - b.w}; }

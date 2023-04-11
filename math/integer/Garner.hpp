@@ -1,26 +1,13 @@
-#ifndef CHINESE_REMAINDER_THEOREM
-#define CHINESE_REMAINDER_THEOREM
+#ifndef GARNER
+#define GARNER
 #include <vector>
 #include "gandalfr/math/integer/mod_inverse.hpp"
-
-// gcd(all(m)) must be 1
-long long Chinese_remainder_theorem(std::vector<long long> x, std::vector<long long> m){
-    int n = x.size();
-    long long mlt = 1;
-    for(int i = 0; i < n; i++) mlt *= m[i];
-    
-    long long ret = 0;
-    for(int i = 0; i < n; i++){
-        ret = (ret + x[i] * (mlt / m[i]) * mod_inverse(mlt / m[i], m[i])) % mlt;
-    }
-    return ret;
-}
 
 /*
  * O(N)
  * from : https://kopricky.github.io/code/Computation_Advanced/garner.html
  */
-long long garner(std::vector<long long> a, std::vector<long long> p, const int mod){
+long long Garner(std::vector<long long> a, std::vector<long long> p, const int mod){
     for(long long &x : a) x %= mod;
     int sz = a.size();
     std::vector<long long> kp(sz + 1, 0), rmult(sz + 1, 1);

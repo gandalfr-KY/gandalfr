@@ -14,6 +14,7 @@ namespace internal{
         std::vector<std::vector<internal::_base_edge<WEIGHT>>> G;
         std::vector<internal::_base_edge<WEIGHT>> E;
         union_find uf;
+        WEIGHT W = 0;
 
       public:
         _empty_graph(): N(0), G(0), uf(0) {};
@@ -47,6 +48,8 @@ namespace internal{
 
         std::vector<std::vector<int>> connected_components(){ return uf.groups(); }
 
+        WEIGHT weight() const { return W; }
+
         // id は保たれる
         void add_edge(internal::_base_edge<WEIGHT> e){
             E.emplace_back(e);
@@ -54,8 +57,9 @@ namespace internal{
             this->G[e.from].emplace_back(e);
             if(!is_directed && e.from != e.to) {
                 std::swap(e.from, e.to);
-                G[e.to].emplace_back(e);
+                G[e.from].emplace_back(e);
             }
+            W += e.cost;
         }
 
         void print() const {
@@ -104,6 +108,7 @@ namespace internal{
                 if (from > to) std::swap(from, to);
             }
             this->E.emplace_back(edge_type{from, to, cost, id});
+            this->W += cost;
         }
 
         void add_edge(int from, int to) {
@@ -115,6 +120,7 @@ namespace internal{
                 if (from > to) std::swap(from, to);
             }
             this->E.emplace_back(edge_type{from, to, id});
+            this->W++;
         }
 
         using _empty_graph<WEIGHT, is_directed>::add_edge;

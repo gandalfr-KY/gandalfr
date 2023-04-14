@@ -5,14 +5,30 @@
 #include <assert.h>
 #include "gandalfr/math/integer/mod_inverse.hpp"
 
+namespace internal{
+    // こっちは呼び出さない
+    template<class T> inline T internal_gcd(T a, T b){
+            if(a % b == 0) return b;
+            return internal_gcd(b, a % b); 
+    }
+
+    // __int128_t に対して std:gcd の実装されていない処理系があるっぽいので、ここに定義する。
+    // 絶対値の GCD を返す。片方が 0 ならもう一方の引数の絶対値を返す。
+    template<class T> inline T gcd(T a, T b){
+        if(b == 0) return (a >= 0 ? a : -a);
+        return internal::internal_gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));
+    }
+}
+
 // verify : https://atcoder.jp/contests/abc168/submissions/39533747
 // 演算結果の分子・分母がともに 64bit 整数の範囲でのみ動作を保証
 class fraction{
   private:
     __int128_t num, den;
 
-    void simplify(){
-        __int128_t d = std::gcd(num, den);
+
+    inline void simplify(){
+        __int128_t d = internal::gcd(num, den);
         num /= (den >= 0 ? d : -d);
         den /= (den >= 0 ? d : -d);
     }
@@ -47,13 +63,13 @@ class fraction{
     friend const fraction operator*(const fraction &a, const fraction &b){
         assert(a.num != 0 || b.den != 0);
         assert(a.den != 0 || b.num != 0);
-        __int128_t gcd_tmp1 = std::gcd(a.num, b.den), gcd_tmp2 = std::gcd(b.num, a.den);
+        __int128_t gcd_tmp1 = internal::gcd(a.num, b.den), gcd_tmp2 = internal::gcd(b.num, a.den);
         return {(a.num / gcd_tmp1) * (b.num / gcd_tmp2), (a.den / gcd_tmp2) * (b.den / gcd_tmp1), false};
     }
     friend const fraction operator/(const fraction &a, const fraction &b){
         assert(a.num != 0 || b.num != 0);
         assert(a.den != 0 || b.den != 0);
-        __int128_t gcd_tmp1 = std::gcd(a.num, b.num), gcd_tmp2 = std::gcd(b.den, a.den);
+        __int128_t gcd_tmp1 = internal::gcd(a.num, b.num), gcd_tmp2 = internal::gcd(b.den, a.den);
         return {(b.num < 0 ? -1 : 1) * (a.num / gcd_tmp1) * (b.den / gcd_tmp2), (b.num < 0 ? -1 : 1) * (a.den / gcd_tmp2) * (b.num / gcd_tmp1), false};
     }
 
@@ -117,7 +133,7 @@ class fraction{
     fraction &operator*=(const fraction &a){
         assert(num != 0 || a.den != 0);
         assert(den != 0 || a.num != 0);
-        __int128_t gcd_tmp1 = std::gcd(num, a.den), gcd_tmp2 = std::gcd(a.num, den);
+        __int128_t gcd_tmp1 = internal::gcd(num, a.den), gcd_tmp2 = internal::gcd(a.num, den);
         num = (num / gcd_tmp1) * (a.num / gcd_tmp2);
         den = (den / gcd_tmp2) * (a.den / gcd_tmp1);
         return *this;
@@ -125,7 +141,7 @@ class fraction{
     fraction &operator/=(const fraction &a){
         assert(num != 0 || a.num != 0);
         assert(den != 0 || a.den != 0);
-        __int128_t gcd_tmp1 = std::gcd(num, a.num), gcd_tmp2 = std::gcd(a.den, den);
+        __int128_t gcd_tmp1 = internal::gcd(num, a.num), gcd_tmp2 = internal::gcd(a.den, den);
         num = (a.num < 0 ? -1 : 1) * (num / gcd_tmp1) * (a.den / gcd_tmp2);
         den = (a.num < 0 ? -1 : 1) * (den / gcd_tmp2) * (a.num / gcd_tmp1);
         return *this;

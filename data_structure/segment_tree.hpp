@@ -19,7 +19,7 @@ class segment_tree{
     segment_tree(const std::vector<T> &vec, const std::function< T(T, T) > &f, T _e) : vec_size(vec.size()), op(f), e(_e) {
         int siz = vec.size();
         n = 1;
-        while(n < siz) n *= 2;
+        while(n < siz) n <<= 1;
         v.resize(2 * n - 1, e);
         
         for(int i = 0; i < siz; i++) v[i + n - 1] = vec[i];
@@ -47,8 +47,12 @@ class segment_tree{
     // l == r のとき e を返す
     T get(int l, int r){
         assert(0 <= l && l <= r && r <= vec_size);
-        if(l == r) return e;
-        return get(l, r, 0, 0, n);
+        T vl = e, vr = e;
+        for(l += n, r += n; l < r; l >>= 1, r >>= 1){
+            if(l & 1) vl = op(vl, v[l - 1]), l++;
+            if(r & 1) r--, vr = op(v[r - 1], vr);
+        }
+        return op(vl, vr);
     }
 
     // pos 番目の値を得る 
@@ -58,19 +62,15 @@ class segment_tree{
     }
 
     void print(){
-        for(int i = 0; i < vec_size; i++){
-            std::cout << v[i + n - 1] << (i == vec_size - 1 ? "" : " ");
+        int prv = 0;
+        for(int sz = 1; ; sz *= 2){
+            for(int i = 0; i < sz; i++){
+                std::cout << v[i + prv] << " ";
+            }
+            std::cout << std::endl;
+            prv += sz;
+            if(prv >= 2 * n - 1) break;
         }
-        std::cout << std::endl;
-    }
-
-  private:
-    T get(int a, int b, int k, int l, int r){
-        if(r <= a || b <= l) return e;
-        if(a <= l && r <= b) return v[k];
-        T vl = get(a, b, 2 * k + 1, l, (l + r) / 2);
-        T vr = get(a, b, 2 * k + 2, (l + r) / 2, r);
-        return op(vl, vr);
     }
 
 };
@@ -90,8 +90,8 @@ struct RmQ_segment_tree : public segment_tree<T>{
 
 template<class T>
 struct RMQ_segment_tree : public segment_tree<T>{
-    RMQ_segment_tree(int size) : RMQ_segment_tree<T>::segment_tree(size, [](T a, T b){ return (a > b ? a : b); }, std::numeric_limits<T>::min()) {};
-    RMQ_segment_tree(const std::vector<T> &vec) : RMQ_segment_tree<T>::segment_tree(vec, [](T a, T b){ return (a > b ? a : b); }, std::numeric_limits<T>::min()) {};
+    RMQ_segment_tree(int size) : RMQ_segment_tree<T>::segment_tree(size, [](T a, T b){ return (a > b ? a : b); }, std::numeric_limits<T>::lowest()) {};
+    RMQ_segment_tree(const std::vector<T> &vec) : RMQ_segment_tree<T>::segment_tree(vec, [](T a, T b){ return (a > b ? a : b); }, std::numeric_limits<T>::lowest()) {};
 };
 
 #endif

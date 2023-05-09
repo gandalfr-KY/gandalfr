@@ -10,9 +10,7 @@ class Manhattan_minimum_spanning_tree {
 
   public:
 
-    Manhattan_minimum_spanning_tree(std::vector<WEIGHT> xs, std::vector<WEIGHT> ys)
-         : mst(xs.size()) {
-        
+    Manhattan_minimum_spanning_tree(std::vector<WEIGHT> xs, std::vector<WEIGHT> ys) : mst(xs.size()) {
         int N = xs.size();
         std::vector<internal::_base_edge<WEIGHT>> E;
         std::vector<int> idx(N);
@@ -31,11 +29,16 @@ class Manhattan_minimum_spanning_tree {
                 }
                 std::swap(xs, ys);
             }
-            for (auto &x : xs) x = -x;
+            for(auto &x : xs) x = -x;
         }
 
+        int cnt_id = 0;
         sort(E.begin(), E.end());
-        for(auto &e : E) if(!mst.is_connected(e.from, e.to)) mst.add_edge(e);
+        for(auto &e : E) if(!mst.is_connected(e.from, e.to)) {
+            e.id = cnt_id;
+            mst.add_edge(e);
+            cnt_id++;
+        }
     }
 
     const internal::_base_graph<WEIGHT, false> &graph(){ return mst; }

@@ -24,8 +24,9 @@ long long power(long long x, long long n) {
     return ret;
 }
 
-long long power(long long x, long long n, long long MOD) {
+long long power(long long x, long long n, int MOD) {
     long long ret = 1;
+    x %= MOD;
     while (n > 0) {
         if (n & 1) ret = ret * x % MOD;
         x = x * x % MOD;
@@ -48,7 +49,7 @@ matrix<T> power(matrix<T> x, long long n) {
     return ret;
 }
 
-matrix<long long> power(matrix<long long> x, long long n, long long MOD) {
+matrix<long long> power(matrix<long long> x, long long n, int MOD) {
     assert(x.size_H() == x.size_W());
     int H = x.size_H();
     matrix<long long> ret(H, H);

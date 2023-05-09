@@ -18,21 +18,19 @@ class mod_integer{
     }
 
     friend const mod_integer operator+(const mod_integer &a, const mod_integer &b){
-        return (a.val + b.val) % mod; 
+        return a.val + b.val; 
     }
 
     friend const mod_integer operator-(const mod_integer &a, const mod_integer &b){
-        long long ret = a.val - b.val;
-        if(ret < 0) ret += mod;
-        return ret;
+        return a.val - b.val;
     }
 
     friend const mod_integer operator*(const mod_integer &a, const mod_integer &b){
-        return a.val * b.val % mod;
+        return a.val * b.val;
     }
 
     friend const mod_integer operator/(const mod_integer &a, const mod_integer &b){
-        return a.val * mod_inverse<long long>(b.val, mod) % mod;
+        return a.val * mod_inverse<long long>(b.val, mod);
     }
 
     friend bool operator==(const mod_integer &a, const mod_integer &b){ return a.val == b.val; }
@@ -61,11 +59,12 @@ class mod_integer{
     }
 
     void operator+=(const mod_integer &a){
-        val = (val + a.val) % mod;
+        val += a.val;
+        if(val >= mod) val -= mod;
     }
 
     void operator-=(const mod_integer &a){
-        val = (val - a.val) % mod;
+        val -= a.val;
         if(val < 0) val += mod;
     }
 

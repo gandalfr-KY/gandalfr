@@ -5,7 +5,7 @@
 #include <utility>
 #include <queue>
 
-std::ostream &operator<<(std::ostream &dest, __uint128_t value) {
+/*std::ostream &operator<<(std::ostream &dest, __uint128_t value) {
 	std::ostream::sentry s(dest);
 	if (s) {
 		__uint128_t tmp = value;
@@ -45,7 +45,7 @@ std::ostream &operator<<(std::ostream &dest, __int128_t value) {
 		}
 	}
 	return dest;
-}
+}*/
 
 template<typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {

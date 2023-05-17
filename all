@@ -44,7 +44,7 @@
 #include "gandalfr/math/integer/primes_list.hpp"
 #include "gandalfr/math/integer/Fibonacci.hpp"
 #include "gandalfr/math/integer/binomial_coefficients.hpp"
-#include "gandalfr/math/integer/Bernoulli_number.hpp"
+//#include "gandalfr/math/integer/Bernoulli_number.hpp"
 #include "gandalfr/math/integer/Bezout_coefficients.hpp"
 #include "gandalfr/math/integer/divisors.hpp"
 #include "gandalfr/math/integer/Garner.hpp"

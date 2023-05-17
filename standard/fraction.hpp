@@ -65,7 +65,7 @@ class fraction{
     friend const fraction operator*(const fraction &a, const fraction &b){
         assert(a.num != 0 || b.den != 0);
         assert(a.den != 0 || b.num != 0);
-        __int128_t gcd_tmp1 = std::gcd(a.num, b.den), gcd_tmp2 = std::gcd(b.num, a.den);
+        long long gcd_tmp1 = std::gcd(a.num, b.den), gcd_tmp2 = std::gcd(b.num, a.den);
         fraction ret;
         ret.raw_assign((a.num / gcd_tmp1) * (b.num / gcd_tmp2),
             (a.den / gcd_tmp2) * (b.den / gcd_tmp1));
@@ -74,7 +74,7 @@ class fraction{
     friend const fraction operator/(const fraction &a, const fraction &b){
         assert(a.num != 0 || b.num != 0);
         assert(a.den != 0 || b.den != 0);
-        __int128_t gcd_tmp1 = std::gcd(a.num, b.num), gcd_tmp2 = std::gcd(b.den, a.den);
+        long long gcd_tmp1 = std::gcd(a.num, b.num), gcd_tmp2 = std::gcd(b.den, a.den);
         fraction ret;
         ret.raw_assign((b.num >= 0 ? 1 : -1) * (a.num / gcd_tmp1) * (b.den / gcd_tmp2),
             (b.num < 0 ? -1 : 1) * (a.den / gcd_tmp2) * (b.num / gcd_tmp1));
@@ -166,7 +166,7 @@ class fraction{
         assert(_mod > 0);
         __int128_t ret = num % _mod;
         if(ret < 0) ret += _mod;
-        ret = ret * mod_inverse<__int128_t>(den, _mod) % _mod;
+        ret = ret * mod_inverse(den, _mod) % _mod;
         return ret;
     }
     bool is_infinity() const { return (den == 0); }

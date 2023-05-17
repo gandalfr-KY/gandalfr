@@ -5,17 +5,31 @@
 #include <assert.h>
 #include "gandalfr/math/integer/mod_inverse.hpp"
 
+namespace internal{
+
+    template<class T> T _gcd(T a, T b){
+        if(a % b == 0) return b;
+        return _gcd(b, a % b); 
+    }
+
+    // 絶対値の GCD を返す。片方が 0 ならもう一方の絶対値。
+    template<class T> T gcd(T a, T b){
+        if(b == 0) return (a >= 0 ? a : -a);
+        return internal::_gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));
+    }
+
+    inline void simplify(__int128_t &num, __int128_t &den){
+        __int128_t d = internal::gcd(num, den);
+        num /= (den >= 0 ? d : -d);
+        den /= (den >= 0 ? d : -d);
+    }
+};
+
 // verify : https://atcoder.jp/contests/abc168/submissions/39533747
 // 演算結果の分子・分母がともに 64bit 整数の範囲でのみ動作を保証
 class fraction{
   private:
     long long num, den;
-
-    inline void simplify(){
-        long long d = std::gcd(num, den);
-        num /= (den >= 0 ? d : -d);
-        den /= (den >= 0 ? d : -d);
-    }
 
     friend fraction operator+(const fraction &a){ return a; }
     friend fraction operator-(const fraction &a){
@@ -89,8 +103,10 @@ class fraction{
   public:
     fraction(const fraction &a){ num = a.num, den = a.den; }
     fraction(long long n) : num(n), den(1) {}
-    fraction(__int128_t numerator, __int128_t denominator)
-        : num(numerator), den(denominator) { simplify(); }
+    fraction(__int128_t numerator, __int128_t denominator){
+        internal::simplify(numerator, denominator);
+        num = numerator, den = denominator;
+    }
     fraction() : num(0), den(1) {}
 
     fraction &operator=(const fraction &a){
@@ -113,13 +129,14 @@ class fraction{
     friend std::istream &operator>>(std::istream &is, fraction &a){
         std::string buf;
         is >> buf;
-        a.num = a.den = 0;
+        __int128_t num_tmp = 0, den_tmp = 0;
         int i = (buf[0] == '-'), sz = buf.size();
-        for(; i < sz && buf[i] != '/'; i++) a.num = a.num * 10 + buf[i] - '0';
-        if(i == sz) a.den = 1;
-        else for(i = i + 1; i < sz; i++) a.den = a.den * 10 + buf[i] - '0';
-        if(buf[0] == '-') a.num *= -1;
-        a.simplify();
+        for(; i < sz && buf[i] != '/'; i++) num_tmp = num_tmp * 10 + buf[i] - '0';
+        if(i == sz) den_tmp = 1;
+        else for(i = i + 1; i < sz; i++) den_tmp = den_tmp * 10 + buf[i] - '0';
+        if(buf[0] == '-') num_tmp *= -1;
+        internal::simplify(num_tmp, den_tmp);
+        a.num = num_tmp, a.den = den_tmp;
         return is;
     }
     friend std::ostream &operator<<(std::ostream &os, const fraction &a) {

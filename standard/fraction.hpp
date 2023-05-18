@@ -7,15 +7,15 @@
 
 namespace internal{
 
-    template<class T> T _gcd(T a, T b){
+    template<class T> T __gcd(T a, T b){
         if(a % b == 0) return b;
-        return _gcd(b, a % b); 
+        return __gcd(b, a % b); 
     }
 
     // 絶対値の GCD を返す。片方が 0 ならもう一方の絶対値。
     template<class T> T gcd(T a, T b){
         if(b == 0) return (a >= 0 ? a : -a);
-        return internal::_gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));
+        return internal::__gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));
     }
 
     inline void simplify(__int128_t &num, __int128_t &den){
@@ -77,7 +77,7 @@ class fraction{
         long long gcd_tmp1 = std::gcd(a.num, b.num), gcd_tmp2 = std::gcd(b.den, a.den);
         fraction ret;
         ret.raw_assign((b.num >= 0 ? 1 : -1) * (a.num / gcd_tmp1) * (b.den / gcd_tmp2),
-            (b.num < 0 ? -1 : 1) * (a.den / gcd_tmp2) * (b.num / gcd_tmp1));
+            (b.num >= 0 ? 1 : -1) * (a.den / gcd_tmp2) * (b.num / gcd_tmp1));
         return ret;
     }
 
@@ -164,9 +164,9 @@ class fraction{
     }
     long long mod(long long _mod) const {
         assert(_mod > 0);
-        __int128_t ret = num % _mod;
+        long long ret = num % _mod;
         if(ret < 0) ret += _mod;
-        ret = ret * mod_inverse(den, _mod) % _mod;
+        ret = (__int128_t)ret * mod_inverse(den, _mod) % _mod;
         return ret;
     }
     bool is_infinity() const { return (den == 0); }

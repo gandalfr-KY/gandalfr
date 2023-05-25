@@ -1,5 +1,6 @@
 #ifndef MATRIX
 #define MATRIX
+#include <omp.h>
 #include <valarray>
 #include <vector>
 #include <iostream>
@@ -37,6 +38,7 @@ class matrix{
     friend const matrix<T> operator*(const matrix<T> &a, const matrix<T> &b){
         assert(a.W == b.H);
         matrix<T> _b(b.transpose()), ret(a.H, b.W);
+#pragma omp parallel for collapse(2)
         for(int i=0; i<a.H; i++){
             for(int j=0; j<b.W; j++){
                 ret[i][j] = (a.table[i] * _b.table[j]).sum();
@@ -46,20 +48,19 @@ class matrix{
     }
 
     friend matrix<T> operator/(const matrix<T> &a, const T &b){
-        matrix<T> ret(a);
-        for(int i=0; i<ret.size_H(); i++) ret.table[i] /= b;
-        return ret;
+        return matrix<T>(a.table / b);
     }
     
     friend matrix<T> operator%(const matrix<T> &a, const T &b){
         matrix<T> ret(a);
-        for(int i=0; i<ret.size_H(); i++) ret.table[i] %= b;
+        for(int i = 0; i < a.H; i++) for(int j = 0; j < a.W; j++)
+            ret[i][j] %= b;
         return ret;
     }
 
   public:
     matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}
-    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(vv[0].size()), vv.size()) {
+    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H) {
         for(int i=0; i<H; i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];
     }
     matrix(const std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv) {}
@@ -77,7 +78,7 @@ class matrix{
     int size_H() const { return H; }
     int size_W() const { return W; }
 
-    matrix<T> transpose() const{
+    matrix<T> transpose() const {
         matrix<T> ret(W, H);
         for(int i=0; i<H; i++) for(int j=0; j<W; j++) ret[j][i] = table[i][j];
         return ret;
@@ -112,11 +113,11 @@ class matrix{
     std::valarray<T> &operator[](int h){ return table[h]; }
 
     friend std::istream &operator>>(std::istream &is, matrix<T> &mt){
-        for(int i=0; i<mt.size_H(); i++) is >> mt.table[i];
+        for(int i=0; i<mt.H; i++) is >> mt.table[i];
         return is;
     }
 
-    void print(){
+    void print() const {
         for(int i=0; i<H; i++){
             for(int j=0; j<W; j++){
                 std::cout << table[i][j] << (j == W - 1 ? "" : " ");

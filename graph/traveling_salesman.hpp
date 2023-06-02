@@ -2,6 +2,7 @@
 #define TRAVELING_SALESMAN
 #include "gandalfr/graph/graph.hpp"
 #include "gandalfr/math/matrix/matrix.hpp"
+#include <omp.h>
 
 /*
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1
@@ -16,6 +17,7 @@ WEIGHT traveling_salesman(const internal::_base_graph<WEIGHT, is_directed> &G){
     dp[0][0] = 0;
 
     for(long long cuS = 0; cuS < (1 << N); cuS++){
+#pragma omp for collapse(2)
         for(int cu = 0; cu < N; cu++){
             for(int ne = 0; ne < N; ne++){
                 if(cuS & (1 << ne) || adj[cu][ne] == -1) continue;

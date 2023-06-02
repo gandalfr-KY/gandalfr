@@ -119,8 +119,7 @@ class polynomial{
     polynomial(const std::vector<coef> &vec) : p(vec) {
         while(p.back() == 0 && p.size() != 1) p.pop_back();
     }
-    polynomial(const coef &n)  : polynomial(std::vector<coef>{n}) {}
-    polynomial()            : polynomial(std::vector<coef>{0}) {}
+    polynomial(const coef &n = 0)  : polynomial(std::vector<coef>{n}) {}
 
     int max_order() const {
         return p.size() - 1;
@@ -161,6 +160,10 @@ class polynomial{
 
     void operator%=(const polynomial &a){
         *this = operator%(*this, a);
+    }
+
+    coef operator[](int n) const{
+        return get(n);
     }
     
     coef operator()(const coef &x) const{

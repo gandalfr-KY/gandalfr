@@ -20,7 +20,7 @@ class graph{
         G[e.from].emplace_back(e);
         if (!is_directed && e.from != e.to) {
             std::swap(e.from, e.to);
-            G[e.to].emplace_back(e);
+            G[e.from].emplace_back(e);
         }
         if (!is_directed && e.from > e.to) std::swap(e.from, e.to);
         E.emplace_back(e);

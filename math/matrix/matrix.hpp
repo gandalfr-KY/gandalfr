@@ -95,8 +95,8 @@ class matrix{
                 if(piv == H) return 0;
                 std::swap(dfm[i], dfm[piv]);
                 ret *= -1;
-            }
-            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i] / dfm[i][i] * dfm[j][i];
+            }            
+            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i] * (dfm[j][i] / dfm[i][i]) ;
             ret *= dfm[i][i];
         }
         return ret;

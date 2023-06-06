@@ -10,7 +10,7 @@ template<class T>
 long long inversion(std::vector<T> vec){
     int N = vec.size();
     if(!N) return 0;
-    std::vector<int> cmp = compress(vec, 1);
+    std::vector<int> cmp = compress(vec, 0);
     binary_indexed_tree<long long> bit(*std::max_element(cmp.begin(), cmp.end()));
     long long ret = 0;
     for(int i = 1; i <= N; i++){

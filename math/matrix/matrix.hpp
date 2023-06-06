@@ -22,6 +22,7 @@ class matrix{
     template<bool is_directed>
     matrix(const graph<T, is_directed> &G, T invalid)
          : H(G.count_nodes()), W(G.count_nodes()), table(std::valarray<T>(invalid, W), H){
+        for(int i = 0; i < H; i++) table[i][i] = 0; 
         for(auto &e : G.edges()){
             table[e.from][e.to] = e.cost;
             if(!is_directed) table[e.to][e.from] = e.cost;

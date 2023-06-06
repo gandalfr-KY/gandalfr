@@ -1,6 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_A"
 #include <bits/stdc++.h>
-#include "gandalfr/graph/Kruscal.hpp"
+#include "../graph/Kruscal.hpp"
 using namespace std;
 using ll = long long;
 const int INF = 1001001001;

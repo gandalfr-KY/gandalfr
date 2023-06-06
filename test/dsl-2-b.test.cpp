@@ -1,7 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/DSL_2_B"
 #include <bits/stdc++.h>
 #include "../data_structure/binary_indexed_tree.hpp"
-#include "../other/io_supporter.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)

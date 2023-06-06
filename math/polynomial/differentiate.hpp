@@ -1,6 +1,6 @@
 #ifndef DIFFERENTIATE
 #define DIFFERENTIATE
-#include "gandalfr/math/polynomial/polynomial.hpp"
+#include "polynomial.hpp"
 
 template<class T>
 polynomial<T> differentiate(polynomial<T> a){

@@ -1,6 +1,6 @@
 #ifndef INTEGRATE
 #define INTEGRATE
-#include "gandalfr/math/polynomial/polynomial.hpp"
+#include "polynomial.hpp"
 
 template<class T>
 polynomial<T> integrate(polynomial<T> a){

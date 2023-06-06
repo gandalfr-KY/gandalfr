@@ -33,7 +33,6 @@ int main(void){
         rep(j,0,N){
             cout << (dist[i][j] == -1 ? "INF" : to_string(dist[i][j])) << (j == N - 1 ? '\n' : ' ');
         }
-        cout << endl;
     }
  
 }

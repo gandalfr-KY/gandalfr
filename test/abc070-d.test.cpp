@@ -1,4 +1,4 @@
-#define PROBLEM "https://atcoder.jp/contests/abc070_d"
+#define PROBLEM "https://atcoder.jp/contests/abc070/tasks/abc070_d"
 #include <bits/stdc++.h>
 #include "../graph/lowest_common_ancestor.hpp"
 #include "../graph/shortest_path.hpp"

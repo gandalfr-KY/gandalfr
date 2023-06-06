@@ -13,7 +13,7 @@ struct binary_indexed_tree{
     std::vector<T> bit;
 
   public:
-    binary_indexed_tree(int siz) : bit(siz, 0), N(siz) {}
+    binary_indexed_tree(int siz) : N(siz), bit(N, 0) {}
 
     /** 
      * @return a の位置に w を加算

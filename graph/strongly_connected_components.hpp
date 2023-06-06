@@ -30,8 +30,8 @@ class strongly_connected_components{
     }
 
   public:
-    strongly_connected_components(const graph<WEIGHT, true> &G) : grp_id(G.num_nodes(), -1) {
-        int N = G.num_nodes();
+    strongly_connected_components(const graph<WEIGHT, true> &G) : grp_id(G.count_nodes(), -1) {
+        int N = G.count_nodes();
         std::vector<bool> used(N, false);
         std::vector<int> ord;
         graph<WEIGHT, true> R(reversed_graph(G));
@@ -50,7 +50,7 @@ class strongly_connected_components{
         for(int i=0; i < N; i++) grps[grp_id[i]].push_back(i);
 
         S.expand(grps.size());
-        for(auto e : G.edge_set()){
+        for(auto e : G.edges()){
             e.from = grp_id[e.from];
             e.to = grp_id[e.to];
             if(e.from != e.to) S.add_edge(e);

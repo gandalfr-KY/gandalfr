@@ -26,8 +26,8 @@ class doubling{
 	}
 
   public:
-    doubling(const graph<WEIGHT, false> &G) : N(G.nodes()), depth(G.nodes(), 0),
-        par(G.nodes(), std::vector<int>(1)), max_cost(G.nodes()) {
+    doubling(const graph<WEIGHT, false> &G) : N(G.count_nodes()), depth(G.count_nodes(), 0),
+        par(G.count_nodes(), std::vector<int>(1)), max_cost(G.count_nodes()) {
 
 		max_cost[0] = {MIN};
         dfs(G, 0, -1);

@@ -46,12 +46,12 @@ class graph{
     /**
      * @return ノードの数
      */
-    int num_nodes() const { return N; }
+    int count_nodes() const { return N; }
 
     /**
      * @return 辺の数
      */
-    int num_edges() const { return E.size(); }
+    int count_edges() const { return E.size(); }
 
     /** 
      * @param n ノード番号
@@ -62,7 +62,7 @@ class graph{
     /** 
      * @return グラフ全体の辺のリストの const 参照
      */
-    const std::vector<edge<WEIGHT>> &edge_set() const { return E; }
+    const std::vector<edge<WEIGHT>> &edges() const { return E; }
 
     /**
      * @param x ノード番号
@@ -74,7 +74,7 @@ class graph{
     /**
      * @return 連結成分の数
      */
-    int num_connected_components() const { return uf.count_groups(); }
+    int count_connected_components() const { return uf.count_groups(); }
 
     /**
      * @return 連結成分のリストのリスト

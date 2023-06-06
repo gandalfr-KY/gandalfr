@@ -23,7 +23,7 @@ namespace internal{
         std::vector<std::pair<WEIGHT, int>>, 
         std::greater<std::pair<WEIGHT, int>>> &q){
 
-        std::vector<bool> vis(G.num_nodes(), false);
+        std::vector<bool> vis(G.count_nodes(), false);
         while(!q.empty()){
             WEIGHT cur_dist = q.top().first;
             int cu = q.top().second;
@@ -51,7 +51,7 @@ namespace internal{
 template<bool is_directed>
 std::vector<int> shortest_path(const graph<int, is_directed> &G, int start_point){
     std::queue<int> q;
-    std::vector<int> dist(G.nodes(), -1);
+    std::vector<int> dist(G.count_nodes(), -1);
     q.push(start_point);
     dist[start_point] = 0;
     internal::bfs(G, dist, q);
@@ -61,7 +61,7 @@ std::vector<int> shortest_path(const graph<int, is_directed> &G, int start_point
 template<bool is_directed>
 std::vector<int> shortest_path(const graph<int, is_directed> &G, const std::vector<int> &start_points){
     std::queue<int> q;
-    std::vector<int> dist(G.nodes(), -1);
+    std::vector<int> dist(G.count_nodes(), -1);
     for(int start_point : start_points){
         q.push(start_point);
         dist[start_point] = 0;
@@ -77,7 +77,7 @@ std::vector<WEIGHT> shortest_path(const graph<WEIGHT, is_directed> &G, int start
     using PAIR = std::pair<WEIGHT, int>;
     WEIGHT ma = std::numeric_limits<WEIGHT>::max();
     std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>> q;
-    std::vector<WEIGHT> dist(G.nodes(), ma);
+    std::vector<WEIGHT> dist(G.count_nodes(), ma);
     q.push({0, start_point});
     dist[start_point] = 0;
 
@@ -92,7 +92,7 @@ std::vector<WEIGHT> shortest_path(const graph<WEIGHT, is_directed> &G, const std
     using PAIR = std::pair<WEIGHT, int>;
     WEIGHT ma = std::numeric_limits<WEIGHT>::max();
     std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>> q;
-    std::vector<WEIGHT> dist(G.nodes(), ma);
+    std::vector<WEIGHT> dist(G.count_nodes(), ma);
     for(int start_point : start_points){
         q.push({0, start_point});
         dist[start_point] = 0;

@@ -7,10 +7,10 @@
 // 同型判定
 template<typename WEIGHT, bool is_directed>
 bool is_isomorphic(const graph<WEIGHT, is_directed> &G1, const graph<WEIGHT, is_directed> &G2){
-    if(G1.num_nodes() != G2.num_nodes()) return false;
-    if(G1.num_nodes() != G2.num_nodes()) return false;
+    if(G1.count_nodes() != G2.count_nodes()) return false;
+    if(G1.count_nodes() != G2.count_nodes()) return false;
 
-    int N = G1.num_nodes();
+    int N = G1.count_nodes();
     WEIGHT MIN = std::numeric_limits<WEIGHT>::min();
     matrix<WEIGHT> adj1(G1, MIN), adj2(G2, MIN);
 

@@ -31,11 +31,11 @@ class lowlink{
     }
 
   public:
-    lowlink(graph<WEIGHT, false> &G) : ord(G.nodes(), -1), low(G.nodes(), -1) {
+    lowlink(graph<WEIGHT, false> &G) : ord(G.count_nodes(), -1), low(G.count_nodes(), -1) {
         // 次数が最小のノードは必ず関節点でない
         // そこからDFSすれば、根ノードの関節点判定を行わなくてよい
-        std::vector<int> deg(G.num_nodes(), 0);
-        for(int i = 0; i < G.num_nodes(); i++) deg[i] = G[i].size(); 
+        std::vector<int> deg(G.count_nodes(), 0);
+        for(int i = 0; i < G.count_nodes(); i++) deg[i] = G[i].size(); 
         
         const std::vector<std::vector<int>> groups = G.connected_components();
         int sz = groups.size();

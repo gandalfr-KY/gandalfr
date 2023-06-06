@@ -9,11 +9,11 @@
  */
 template<typename WEIGHT>
 std::vector<int> topological_sort(const graph<WEIGHT, true> &G){
-    std::vector<int> indeg(G.nodes(), 0), sorted;
-    for(auto &e : G.edge_set()) indeg[e.to]++;
+    std::vector<int> indeg(G.count_nodes(), 0), sorted;
+    for(auto &e : G.edges()) indeg[e.to]++;
 
     std::queue<int> q;
-    for(int i=0; i < G.nodes(); i++) if(!indeg[i]) q.push(i);
+    for(int i=0; i < G.count_nodes(); i++) if(!indeg[i]) q.push(i);
     while(!q.empty()){
         int cu = q.front();
         q.pop();

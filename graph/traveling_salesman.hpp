@@ -11,7 +11,7 @@ template<class WEIGHT, bool is_directed>
 WEIGHT traveling_salesman(const graph<WEIGHT, is_directed> &G){
     matrix<WEIGHT> adj(G, -1);
     const WEIGHT MAX = std::numeric_limits<WEIGHT>::max() / 2;
-    int N = G.nodes();
+    int N = G.count_nodes();
 
     std::vector<std::vector<WEIGHT>> dp((1 << N), std::vector<WEIGHT>(N, MAX));
     dp[0][0] = 0;

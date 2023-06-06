@@ -35,7 +35,7 @@ class lowest_common_ancestor{
     }
     
   public:
-    lowest_common_ancestor(const graph<WEIGHT, false> &G) : idx(G.num_nodes()), dist(shortest_path(G, 0)){
+    lowest_common_ancestor(const graph<WEIGHT, false> &G) : idx(G.count_nodes()), dist(shortest_path(G, 0)){
         int cnt = 0;
         Euler_tour(G, 0, -1, 0, cnt);
         sps.init(depth);

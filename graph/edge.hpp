@@ -1,6 +1,7 @@
 #ifndef EDGE_STRUCT
 #define EDGE_STRUCT
 #include <iostream>
+
 namespace internal{
     template<class DERIVED, class WEIGHT>
     struct _base_edge{
@@ -33,36 +34,36 @@ namespace internal{
     };
 }
 
-    template<class WEIGHT>
-    struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{
-        using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;
-        int compare(const internal::_base_edge<edge<WEIGHT>, WEIGHT>& e2) const{
-            if(this->cost == e2.cost){
-                if(this->from == e2.from){
-                    return this->to - e2.to;
-                }
-                return this->from - e2.from;
-            }
-            return this->cost - e2.cost;
-        }
-        void print(std::ostream &os) const {
-            os << this->from << " " << this->to << " " << this->cost;
-        }
-    };
-
-    template<>
-    struct edge<int> : public internal::_base_edge<edge<int>, int>{
-        const int cost = 1;
-        edge(int _from, int _to, int _id) : _base_edge<edge<int>, int>(_from, _to, 0, _id) {}
-        int compare(const internal::_base_edge<edge<int>, int>& e2) const{
+template<class WEIGHT>
+struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{
+    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;
+    int compare(const internal::_base_edge<edge<WEIGHT>, WEIGHT>& e2) const{
+        if(this->cost == e2.cost){
             if(this->from == e2.from){
                 return this->to - e2.to;
             }
             return this->from - e2.from;
         }
-        void print(std::ostream &os) const {
-            os << this->from << " " << this->to;
+        return this->cost - e2.cost;
+    }
+    void print(std::ostream &os) const {
+        os << this->from << " " << this->to << " " << this->cost;
+    }
+};
+
+template<>
+struct edge<int> : public internal::_base_edge<edge<int>, int>{
+    const int cost = 1;
+    edge(int _from, int _to, int _id) : _base_edge<edge<int>, int>(_from, _to, 0, _id) {}
+    int compare(const internal::_base_edge<edge<int>, int>& e2) const{
+        if(this->from == e2.from){
+            return this->to - e2.to;
         }
-    };
+        return this->from - e2.from;
+    }
+    void print(std::ostream &os) const {
+        os << this->from << " " << this->to;
+    }
+};
 
 #endif

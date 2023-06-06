@@ -5,11 +5,11 @@
 
 namespace internal{
     template<bool is_directed>
-    void bfs(const internal::_base_graph<int, is_directed> &G, std::vector<int> &dist, std::queue<int> &q){
+    void bfs(const graph<int, is_directed> &G, std::vector<int> &dist, std::queue<int> &q){
         while(!q.empty()){
             int cu = q.front();
             q.pop();
-            for(const unweighted_edge &e : G[cu]){
+            for(auto &e : G[cu]){
                 if(dist[e.to] != -1) continue;
                 dist[e.to] = dist[cu] + 1;
                 q.push(e.to);
@@ -18,12 +18,12 @@ namespace internal{
     }
 
     template<typename WEIGHT, bool is_directed>
-    void dijkstra(const internal::_base_graph<WEIGHT, is_directed> &G, std::vector<WEIGHT> &dist, 
+    void dijkstra(const graph<WEIGHT, is_directed> &G, std::vector<WEIGHT> &dist, 
         std::priority_queue<std::pair<WEIGHT, int>,
         std::vector<std::pair<WEIGHT, int>>, 
         std::greater<std::pair<WEIGHT, int>>> &q){
 
-        std::vector<bool> vis(G.nodes(), false);
+        std::vector<bool> vis(G.num_nodes(), false);
         while(!q.empty()){
             WEIGHT cur_dist = q.top().first;
             int cu = q.top().second;
@@ -32,7 +32,7 @@ namespace internal{
             if(vis[cu]) continue;
             vis[cu] = true;
 
-            for(const internal::_base_edge<WEIGHT> &e : G[cu]){
+            for(auto &e : G[cu]){
                 WEIGHT alt = cur_dist + e.cost;
                 if(dist[e.to] <= alt) continue;
                 dist[e.to] = alt;
@@ -49,7 +49,7 @@ namespace internal{
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7443620
  */
 template<bool is_directed>
-std::vector<int> shortest_path(const internal::_base_graph<int, is_directed> &G, int start_point){
+std::vector<int> shortest_path(const graph<int, is_directed> &G, int start_point){
     std::queue<int> q;
     std::vector<int> dist(G.nodes(), -1);
     q.push(start_point);
@@ -59,7 +59,7 @@ std::vector<int> shortest_path(const internal::_base_graph<int, is_directed> &G,
 }
 
 template<bool is_directed>
-std::vector<int> shortest_path(const internal::_base_graph<int, is_directed> &G, const std::vector<int> &start_points){
+std::vector<int> shortest_path(const graph<int, is_directed> &G, const std::vector<int> &start_points){
     std::queue<int> q;
     std::vector<int> dist(G.nodes(), -1);
     for(int start_point : start_points){
@@ -72,7 +72,7 @@ std::vector<int> shortest_path(const internal::_base_graph<int, is_directed> &G,
 
 
 template<typename WEIGHT, bool is_directed>
-std::vector<WEIGHT> shortest_path(const internal::_base_graph<WEIGHT, is_directed> &G, int start_point){
+std::vector<WEIGHT> shortest_path(const graph<WEIGHT, is_directed> &G, int start_point){
     // first := current_distance, second := next
     using PAIR = std::pair<WEIGHT, int>;
     WEIGHT ma = std::numeric_limits<WEIGHT>::max();
@@ -87,7 +87,7 @@ std::vector<WEIGHT> shortest_path(const internal::_base_graph<WEIGHT, is_directe
 }
 
 template<typename WEIGHT, bool is_directed>
-std::vector<WEIGHT> shortest_path(const internal::_base_graph<WEIGHT, is_directed> &G, const std::vector<int> &start_points){
+std::vector<WEIGHT> shortest_path(const graph<WEIGHT, is_directed> &G, const std::vector<int> &start_points){
     // first := current_distance, second := next
     using PAIR = std::pair<WEIGHT, int>;
     WEIGHT ma = std::numeric_limits<WEIGHT>::max();

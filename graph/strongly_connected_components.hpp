@@ -14,27 +14,27 @@ class strongly_connected_components{
   private:
     std::vector<int> grp_id;
     std::vector<std::vector<int>> grps;
-    internal::_base_graph<WEIGHT, true> S;
+    graph<WEIGHT, true> S;
 
-    void dfs1(const internal::_base_graph<WEIGHT, true> &G, int cu, std::vector<int> &ord, std::vector<bool> &used){
+    void dfs1(const graph<WEIGHT, true> &G, int cu, std::vector<int> &ord, std::vector<bool> &used){
         if(used[cu]) return;
         used[cu] = true;
-        for(const internal::_base_edge<WEIGHT> &e : G[cu]) dfs1(G, e.to, ord, used);
+        for(auto &e : G[cu]) dfs1(G, e.to, ord, used);
         ord.push_back(cu);
     }
 
-    void dfs2(const internal::_base_graph<WEIGHT, true> &G, int cu, int id){
+    void dfs2(const graph<WEIGHT, true> &G, int cu, int id){
         if(grp_id[cu] != -1) return;
         grp_id[cu] = id;
-        for(const internal::_base_edge<WEIGHT> &e : G[cu]) dfs2(G, e.to, id);
+        for(auto &e : G[cu]) dfs2(G, e.to, id);
     }
 
   public:
-    strongly_connected_components(const internal::_base_graph<WEIGHT, true> &G) : grp_id(G.nodes(), -1) {
-        int N = G.nodes();
+    strongly_connected_components(const graph<WEIGHT, true> &G) : grp_id(G.num_nodes(), -1) {
+        int N = G.num_nodes();
         std::vector<bool> used(N, false);
         std::vector<int> ord;
-        internal::_base_graph<WEIGHT, true> R(reversed_graph(G));
+        graph<WEIGHT, true> R(reversed_graph(G));
 
         for(int i = 0; i < N; i++) {
             dfs1(G, i, ord, used);
@@ -50,7 +50,7 @@ class strongly_connected_components{
         for(int i=0; i < N; i++) grps[grp_id[i]].push_back(i);
 
         S.expand(grps.size());
-        for(internal::_base_edge<WEIGHT> e : G.edge_set()){
+        for(auto e : G.edge_set()){
             e.from = grp_id[e.from];
             e.to = grp_id[e.to];
             if(e.from != e.to) S.add_edge(e);
@@ -60,7 +60,7 @@ class strongly_connected_components{
 
     const std::vector<std::vector<int>> &groups(){ return grps; }
     const std::vector<int> &group_id(){ return grp_id; }
-    const internal::_base_graph<WEIGHT, true> &simplified_graph(){ return S; };
+    const graph<WEIGHT, true> &simplified_graph(){ return S; };
 
 };
 

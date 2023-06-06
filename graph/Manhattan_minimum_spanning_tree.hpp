@@ -34,14 +34,14 @@ class Manhattan_minimum_spanning_tree {
 
         int cnt_id = 0;
         sort(E.begin(), E.end());
-        for(auto &e : E) if(!mst.is_connected(e.from, e.to)) {
+        for(auto &e : E) if(!mst.are_connected(e.from, e.to)) {
             e.id = cnt_id;
             mst.add_edge(e);
             cnt_id++;
         }
     }
 
-    const graph<WEIGHT, false> &graph(){ return mst; }
+    const graph<WEIGHT, false> &get_tree(){ return mst; }
 
 };
 

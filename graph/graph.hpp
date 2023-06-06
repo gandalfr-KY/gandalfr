@@ -3,8 +3,8 @@
 #include <vector>
 #include <algorithm>
 #include <tuple>
-#include "gandalfr/graph/edge.hpp"
-#include "gandalfr/data_structure/union_find.hpp"
+#include "../graph/edge.hpp"
+#include "../data_structure/union_find.hpp"
 
 template <typename WEIGHT, bool is_directed>
 class graph{

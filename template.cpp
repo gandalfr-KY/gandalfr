@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "gandalfr/all"
+//#include "gandalfr/all"
 using namespace std;
 using ll = long long;
 const int INF = 1001001001;

@@ -6,13 +6,13 @@
 template<typename WEIGHT>
 class Manhattan_minimum_spanning_tree {
   private:
-    internal::_base_graph<WEIGHT, false> mst;
+    graph<WEIGHT, false> mst;
 
   public:
 
-    Manhattan_minimum_spanning_tree(std::vector<WEIGHT> xs, std::vector<WEIGHT> ys) : mst(xs.size()) {
+    Manhattan_minimum_spanning_tree(const std::vector<WEIGHT> &xs, const std::vector<WEIGHT> &ys) : mst(xs.size()) {
         int N = xs.size();
-        std::vector<internal::_base_edge<WEIGHT>> E;
+        std::vector<edge<WEIGHT>> E;
         std::vector<int> idx(N);
         std::iota(idx.begin(), idx.end(), 0);
         for (int s = 0; s < 2; s++) {
@@ -23,7 +23,7 @@ class Manhattan_minimum_spanning_tree {
                     for (auto it = sweep.lower_bound(-ys[i]); it != sweep.end(); it = sweep.erase(it)) {
                         int j = it->second;
                         if (xs[i] - xs[j] < ys[i] - ys[j]) break;
-                        E.emplace_back(internal::_base_edge<WEIGHT>{i, j, std::abs(xs[i] - xs[j]) + std::abs(ys[i] - ys[j]), -1});
+                        E.emplace_back(edge<WEIGHT>{i, j, std::abs(xs[i] - xs[j]) + std::abs(ys[i] - ys[j]), -1});
                     }
                     sweep[-ys[i]] = i;
                 }
@@ -34,14 +34,14 @@ class Manhattan_minimum_spanning_tree {
 
         int cnt_id = 0;
         sort(E.begin(), E.end());
-        for(auto &e : E) if(!mst.is_connected(e.from, e.to)) {
+        for(auto &e : E) if(!mst.are_connected(e.from, e.to)) {
             e.id = cnt_id;
             mst.add_edge(e);
             cnt_id++;
         }
     }
 
-    const internal::_base_graph<WEIGHT, false> &graph(){ return mst; }
+    const graph<WEIGHT, false> &get_tree(){ return mst; }
 
 };
 

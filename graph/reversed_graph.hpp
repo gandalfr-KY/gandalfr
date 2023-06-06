@@ -4,9 +4,9 @@
 
 // 有向グラフの辺の向きを逆にしたグラフを作る
 template<typename WEIGHT>
-internal::_base_graph<WEIGHT, true> reversed_graph(const internal::_base_graph<WEIGHT, true> &G){
-    internal::_base_graph<WEIGHT, true> ret(G.nodes());
-    for(internal::_base_edge<WEIGHT> e : G.edge_set()) {
+graph<WEIGHT, true> reversed_graph(const graph<WEIGHT, true> &G){
+    graph<WEIGHT, true> ret(G.count_nodes());
+    for(auto e : G.edges()) {
         std::swap(e.from, e.to);
         ret.add_edge(e);
     }

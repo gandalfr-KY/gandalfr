@@ -3,102 +3,75 @@
 #include <iostream>
 
 namespace internal{
-    template<class WEIGHT>
+    template<class DERIVED, class WEIGHT>
     struct _base_edge{
         int from;
         int to;
         WEIGHT cost;
         int id;
         _base_edge(int _from, int _to, WEIGHT _cost, int _id) : from(_from), to(_to), cost(_cost), id(_id) {}
-        friend bool operator>(const _base_edge &e1, const _base_edge &e2){
-            if(e1.cost == e2.cost){
-                if(e1.from == e2.from){
-                    return e1.to > e2.to;
-                }
-                return e1.from > e2.from;
-            }
-            return e1.cost > e2.cost;
+
+        friend bool operator>(const _base_edge &e1, const _base_edge &e){
+            return e1.compare(e) > 0;
         }
-        friend bool operator>=(const _base_edge &e1, const _base_edge &e2){
-            if(e1.cost == e2.cost){
-                if(e1.from == e2.from){
-                    return e1.to >= e2.to;
-                }
-                return e1.from > e2.from;
-            }
-            return e1.cost > e2.cost;
+        friend bool operator>=(const _base_edge &e1, const _base_edge &e){
+            return e1.compare(e) >= 0;
         }
-        friend bool operator<(const _base_edge &e1, const _base_edge &e2){
-            if(e1.cost == e2.cost){
-                if(e1.from == e2.from){
-                    return e1.to < e2.to;
-                }
-                return e1.from < e2.from;
-            }
-            return e1.cost < e2.cost;
+        friend bool operator<(const _base_edge &e1, const _base_edge &e){
+            return e1.compare(e) < 0;
         }
-        friend bool operator<=(const _base_edge &e1, const _base_edge &e2){
-            if(e1.cost == e2.cost){
-                if(e1.from == e2.from){
-                    return e1.to <= e2.to;
-                }
-                return e1.from < e2.from;
-            }
-            return e1.cost < e2.cost;
+        friend bool operator<=(const _base_edge &e1, const _base_edge &e){
+            return e1.compare(e) <= 0;
         }
-        friend std::ostream &operator<<(std::ostream &os, const _base_edge<WEIGHT> &e) {
-            os << e.from << " " << e.to << " " << e.cost;
+        friend std::ostream &operator<<(std::ostream &os, const _base_edge<DERIVED, WEIGHT> &e) {
+            e.print(os);
             return os;
         }
         const _base_edge &operator=(const _base_edge &e){
             from = e.from, to = e.to, cost = e.cost, id = e.id;
             return *this;
         } 
-    };
 
-    template<>
-    struct _base_edge<int>{
-        int from;
-        int to;
-        const int cost = 1;
-        int id;
-        _base_edge(int _from, int _to, int _id) : from(_from), to(_to), id(_id) {}
-        friend bool operator>(const _base_edge &e1, const _base_edge &e2){
-            if(e1.from == e2.from){
-                return e1.to > e2.to;
-            }
-            return e1.from > e2.from;
-        }
-        friend bool operator>=(const _base_edge &e1, const _base_edge &e2){
-            if(e1.from == e2.from){
-                return e1.to >= e2.to;
-            }
-            return e1.from > e2.from;
-        }
-        friend bool operator<(const _base_edge &e1, const _base_edge &e2){
-            if(e1.from == e2.from){
-                return e1.to < e2.to;
-            }
-            return e1.from < e2.from;
-        }
-        friend bool operator<=(const _base_edge &e1, const _base_edge &e2){
-            if(e1.from == e2.from){
-                return e1.to <= e2.to;
-            }
-            return e1.from < e2.from;
-        }
-        friend std::ostream &operator<<(std::ostream &os, const _base_edge<int> &e) {
-            os << e.from << " " << e.to;
-            return os;
-        }
-        const _base_edge &operator=(const _base_edge &e){
-            from = e.from, to = e.to, id = e.id;
-            return *this;
-        } 
+      protected:
+        virtual void print(std::ostream &os) const = 0;
+        virtual int compare(const _base_edge &e) const = 0;
     };
 }
 
-template<class WEIGHT> using weighted_edge = internal::_base_edge<WEIGHT>;
-using unweighted_edge = internal::_base_edge<int>;
+template<class WEIGHT>
+struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{
+    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0) {}
+    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;
+  protected:
+    void print(std::ostream &os) const override {
+        os << this->from << " " << this->to << " " << this->cost;
+    }  
+    int compare(const internal::_base_edge<edge<WEIGHT>, WEIGHT>& e) const override {
+        if(this->cost == e.cost){
+            if(this->from == e.from){
+                return this->to - e.to;
+            }
+            return this->from - e.from;
+        }
+        return this->cost - e.cost;
+    }
+};
+
+template<>
+struct edge<int> : public internal::_base_edge<edge<int>, int>{
+    const int cost = 1;
+    edge() : internal::_base_edge<edge<int>, int>(0, 0, 0, 0) {}
+    edge(int _from, int _to, int _id) : _base_edge<edge<int>, int>(_from, _to, 0, _id) {}
+  protected:
+    void print(std::ostream &os) const override {
+        os << this->from << " " << this->to;
+    }
+    int compare(const internal::_base_edge<edge<int>, int>& e) const override {
+        if(this->from == e.from){
+            return this->to - e.to;
+        }
+        return this->from - e.from;
+    }
+};
 
 #endif

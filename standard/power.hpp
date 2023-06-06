@@ -52,8 +52,7 @@ matrix<T> power(matrix<T> x, long long n) {
 matrix<long long> power(matrix<long long> x, long long n, int MOD) {
     assert(x.size_H() == x.size_W());
     int H = x.size_H();
-    matrix<long long> ret(H, H);
-    for(int i=0; i<H; i++) ret[i][i] = 1;
+    matrix<long long> ret(matrix<long long>::E(H));
     while (n > 0) {
         if (n & 1) ret = ret * x % MOD;
         x = x * x % MOD;

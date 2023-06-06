@@ -6,150 +6,170 @@
 #include "gandalfr/graph/edge.hpp"
 #include "gandalfr/data_structure/union_find.hpp"
 
-namespace internal{
-    template<typename WEIGHT, bool is_directed>
-    class _empty_graph{
-      protected:
-        int N;
-        std::vector<std::vector<internal::_base_edge<WEIGHT>>> G;
-        std::vector<internal::_base_edge<WEIGHT>> E;
-        union_find uf;
-        WEIGHT W = 0;
+template <typename WEIGHT, bool is_directed>
+class graph{
+    private:
+    int N;
+    std::vector<std::vector<edge<WEIGHT>>> G;
+    std::vector<edge<WEIGHT>> E;
+    union_find uf;
+    WEIGHT W = 0;
+
+    void internal_add_edge(edge<WEIGHT> e) {
+        uf.merge(e.from, e.to);
+        G[e.from].emplace_back(e);
+        if (!is_directed && e.from != e.to) {
+            std::swap(e.from, e.to);
+            G[e.to].emplace_back(e);
+        }
+        if (!is_directed && e.from > e.to) std::swap(e.from, e.to);
+        E.emplace_back(e);
+        W += e.cost;
+    }
+
+  public:
+    graph(): N(0), G(0), uf(0) {};
+    graph(int n): N(n), G(n), uf(n) {};
+
+    /**
+     * @brief ノードの数をn個まで増やす
+     * @param n サイズ
+     * @attention 今のノード数より小さい数を渡したとき、変化なし
+     */ 
+    void expand(int n){
+        if(n <= N) return;
+        N = n;
+        G.resize(n);
+        uf.expand(n);
+    }
+
+    /**
+     * @return ノードの数
+     */
+    int count_nodes() const { return N; }
+
+    /**
+     * @return 辺の数
+     */
+    int count_edges() const { return E.size(); }
+
+    /** 
+     * @param n ノード番号
+     * @return ノード n からの隣接頂点のリストの const 参照
+     */
+    const std::vector<edge<WEIGHT>> &operator[](int n) const { return G[n]; }
+
+    /** 
+     * @return グラフ全体の辺のリストの const 参照
+     */
+    const std::vector<edge<WEIGHT>> &edges() const { return E; }
+
+    /**
+     * @param x ノード番号
+     * @param y ノード番号
+     * @return x, y が連結かどうか
+     */
+    bool are_connected(int x, int y) { return uf.same(x, y); }
+
+    /**
+     * @return 連結成分の数
+     */
+    int count_connected_components() const { return uf.count_groups(); }
+
+    /**
+     * @return 連結成分のリストのリスト
+     */
+    std::vector<std::vector<int>> connected_components(){ return uf.groups(); }
+
+    /**
+     * @return グラフの重み
+     */
+    WEIGHT weight() const { return W; }
+
+    /**
+     * @param e 辺
+     * @attention 渡した辺の id は保持される 
+     */
+    void add_edge(const edge<WEIGHT> &e){
+        internal_add_edge(e);
+    }
+
+    /**
+     * @attention 辺の id は、(現在の辺の本数)番目 が振られる 
+     * @attention WEIGHT が int だとエラー
+     */
+    template<typename T = WEIGHT>
+    typename std::enable_if<!std::is_same<T, int>::value>::type 
+    add_edge(int from, int to, WEIGHT cost) {
+        internal_add_edge(edge<WEIGHT>(from, to, cost, E.size()));
+    }
+
+    /**
+     * @attention 辺の id は、(現在の辺の本数)番目 が振られる 
+     * @attention WEIGHT が int 以外だとエラー
+     */
+    template<typename T = WEIGHT>
+    typename std::enable_if<std::is_same<T, int>::value>::type 
+    add_edge(int from, int to) {
+        internal_add_edge(edge<int>(from, to, E.size()));
+    }
+
+    /**
+     * @brief グラフを連結なグラフに分けてリストにして返す
+     * @example auto[Gs, gr, nd] = G.decompose();
+     * @returns
+     * 1.グラフのリスト 
+     * 2.各ノードがグラフのリストの何番目に属するか 
+     * 3.各ノードがグラフのどのノードになっているか 
+    */
+    std::tuple<std::vector<graph>, std::vector<int>, std::vector<int>> decompose() {
+        std::vector<graph> Gs(uf.count_groups());
+        std::vector<std::vector<int>> groups(uf.groups());
+        std::vector<int> group_id(N), node_id(N);
+        for (int i = 0; i < groups.size(); i++) {
+            Gs[i].expand(groups[i].size());
+            for (int j = 0; j < groups[i].size(); j++) {
+                group_id[groups[i][j]] = i;
+                node_id[groups[i][j]] = j;
+            }
+        }
+        for (auto& e : E) {
+            int id = group_id[e.from];
+            e.from = node_id[e.from];
+            e.to = node_id[e.to];
+            Gs[id].add_edge(e);
+        }
+        return std::make_tuple(Gs, group_id, node_id);
+    }
+
+    void print() const {
+        std::cout << this->N << " " << this->E.size() << std::endl;
+        for(const edge<WEIGHT> &e : this->E) std::cout << e << std::endl;
+    }
+
+    class iterator {
+      private:
+        friend class graph;
+        const std::vector<std::vector<edge<WEIGHT>>>* edges;
+        std::size_t index;
+        iterator(const std::vector<std::vector<edge<WEIGHT>>>* edges, std::size_t index) : edges(edges), index(index) {}
 
       public:
-        _empty_graph(): N(0), G(0), uf(0) {};
-        _empty_graph(int n): N(n), G(n), uf(n) {};
-
-        // ノードの数を返す
-        int nodes() const { return N; }
-
-        // 辺の数を返す
-        int edges() const { return E.size(); }
-        
-        // ノードの数を変更
-        void expand(int n){
-            if(n <= N) return;
-            N = n;
-            G.resize(n);
-            uf.expand(n);
+        bool operator==(const iterator& other) const { return edges == other.edges && index == other.index; }
+        bool operator!=(const iterator& other) const { return !(*this == other); }
+        const std::vector<edge<WEIGHT>> &operator*() const { return (*edges)[index]; }
+        iterator& operator++() {
+            index++;
+            return *this;
         }
-
-        // ノード n に接続した辺集合にアクセス
-        const std::vector<internal::_base_edge<WEIGHT>> &operator[](int n) const { return G[n]; }
-
-        // グラフ全体の辺集合にアクセス
-        const std::vector<internal::_base_edge<WEIGHT>> &edge_set() const { return E; }
-
-        // x, y が連結かどうか
-        bool is_connected(int x, int y) { return uf.same(x, y); }
-
-        // 連結なグラフの数を返す
-        int count_connected_components() const { return uf.count_groups(); }
-
-        std::vector<std::vector<int>> connected_components(){ return uf.groups(); }
-
-        WEIGHT weight() const { return W; }
-
-        // id は保たれる
-        void add_edge(internal::_base_edge<WEIGHT> e){
-            E.emplace_back(e);
-            uf.merge(e.from, e.to);
-            this->G[e.from].emplace_back(e);
-            if(!is_directed && e.from != e.to) {
-                std::swap(e.from, e.to);
-                G[e.from].emplace_back(e);
-            }
-            W += e.cost;
-        }
-
-        void print() const {
-            std::cout << this->N << " " << this->E.size() << std::endl;
-            for(const internal::_base_edge<WEIGHT> &e : this->E) std::cout << e << std::endl;
-        }
-
-        class iterator {
-          private:
-            friend class _empty_graph;
-            const std::vector<std::vector<internal::_base_edge<WEIGHT>>>* edges;
-            std::size_t index;
-            iterator(const std::vector<std::vector<internal::_base_edge<WEIGHT>>>* edges, std::size_t index) : edges(edges), index(index) {}
-
-          public:
-            bool operator==(const iterator& other) const { return edges == other.edges && index == other.index; }
-            bool operator!=(const iterator& other) const { return !(*this == other); }
-            const std::vector<internal::_base_edge<WEIGHT>> &operator*() const { return (*edges)[index]; }
-            iterator& operator++() {
-                index++;
-                return *this;
-            }
-            iterator operator++(int) {
-                iterator tmp = *this;
-                ++(*this);
-                return tmp;
-            }
-        };
-        iterator begin() const { return iterator(&G, 0); }
-        iterator end() const { return iterator(&G, G.size()); }
-
-    };
-
-    template <typename WEIGHT, bool is_directed>
-    class _base_graph : public _empty_graph<WEIGHT, is_directed> {
-      public:
-        using _empty_graph<WEIGHT, is_directed>::_empty_graph;
-        using edge_type = internal::_base_edge<WEIGHT>;
-
-        void add_edge(int from, int to, WEIGHT cost) {
-            int id = this->E.size();
-            this->G[from].emplace_back(edge_type{from, to, cost, id});
-            this->uf.merge(from, to);
-            if (!is_directed && from != to) {
-                this->G[to].emplace_back(edge_type{to, from, cost, id});
-                if (from > to) std::swap(from, to);
-            }
-            this->E.emplace_back(edge_type{from, to, cost, id});
-            this->W += cost;
-        }
-
-        void add_edge(int from, int to) {
-            int id = this->E.size();
-            this->G[from].emplace_back(edge_type{from, to, id});
-            this->uf.merge(from, to);
-            if (!is_directed && from != to) {
-                this->G[to].emplace_back(edge_type{to, from, id});
-                if (from > to) std::swap(from, to);
-            }
-            this->E.emplace_back(edge_type{from, to, id});
-            this->W++;
-        }
-
-        using _empty_graph<WEIGHT, is_directed>::add_edge;
-
-        std::tuple<std::vector<_base_graph>, std::vector<int>, std::vector<int>> decompose() {
-            std::vector<_base_graph> Gs(this->uf.count_groups());
-            std::vector<std::vector<int>> groups(this->uf.groups());
-            std::vector<int> group_id(this->nodes()), node_id(this->nodes());
-            for (int i = 0; i < groups.size(); i++) {
-                Gs[i].expand(groups[i].size());
-                for (int j = 0; j < groups[i].size(); j++) {
-                    group_id[groups[i][j]] = i;
-                    node_id[groups[i][j]] = j;
-                }
-            }
-            for (edge_type& e : this->E) {
-                int id = group_id[e.from];
-                e.from = node_id[e.from];
-                e.to = node_id[e.to];
-                Gs[id].add_edge(e);
-            }
-            return std::make_tuple(Gs, group_id, node_id);
+        iterator operator++(int) {
+            iterator tmp = *this;
+            ++(*this);
+            return tmp;
         }
     };
-}
-
-using weighted_directed_graph = internal::_base_graph<long long, true>;
-using weighted_undirected_graph = internal::_base_graph<long long, false>;
-using unweighted_directed_graph = internal::_base_graph<int, true>;
-using unweighted_undirected_graph = internal::_base_graph<int, false>;
+    iterator begin() const { return iterator(&G, 0); }
+    iterator end() const { return iterator(&G, G.size()); }
+};
 
 #endif

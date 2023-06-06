@@ -9,10 +9,6 @@ using ll = long long;
 
 int main(void){
  
-    /*ifstream in("input.txt");
-    cin.rdbuf(in.rdbuf());
-    ofstream fout("output.txt");*/
- 
     //input
  
     int N;

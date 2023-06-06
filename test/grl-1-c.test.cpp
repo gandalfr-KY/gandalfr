@@ -23,6 +23,13 @@ int main(void){
     auto dist = Warshall_Floyd(matrix(G, 1000000000LL));
 
     rep(i,0,N){
+        if(dist[i][i] < 0){
+            cout << "NEGATIVE CYCLE" << endl;
+            return 0;
+        }
+    }
+
+    rep(i,0,N){
         rep(j,0,N){
             cout << (dist[i][j] == -1 ? "INF" : to_string(dist[i][j])) << (j == N - 1 ? '\n' : ' ');
         }

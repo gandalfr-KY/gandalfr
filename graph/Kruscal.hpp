@@ -2,9 +2,9 @@
 #define KRUSCAL
 #include "graph.hpp"
 
-/* 単純無向グラフの最小全域木を求める
- * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7446048
- * verify : https://atcoder.jp/contests/abc235/submissions/39688316
+/**
+ * @param G 無向グラフ
+ * @return 最小全域森
  */
 template<typename WEIGHT>
 graph<WEIGHT, false> Kruscal(const graph<WEIGHT, false> &G){

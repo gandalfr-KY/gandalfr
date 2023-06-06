@@ -30,7 +30,9 @@ namespace internal{
         const _base_edge &operator=(const _base_edge &e){
             from = e.from, to = e.to, cost = e.cost, id = e.id;
             return *this;
-        } 
+        }
+
+        virtual ~_base_edge() = default; 
 
       protected:
         virtual void print(std::ostream &os) const = 0;

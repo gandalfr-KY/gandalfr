@@ -8,7 +8,7 @@
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093593
  */
 template<typename WEIGHT>
-int diameter(const graph<WEIGHT, false> &G){
+WEIGHT diameter(const graph<WEIGHT, false> &G){
     auto dist = shortest_path(G, 0);
     int farthest_node = std::max_element(dist.begin(), dist.end()) - dist.begin();
     dist = shortest_path(G, farthest_node);

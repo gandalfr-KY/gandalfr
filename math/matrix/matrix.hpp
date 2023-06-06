@@ -13,58 +13,12 @@ class matrix{
     int H, W;
     std::valarray<std::valarray<T>> table;
 
-    friend const matrix<T> operator+(const matrix<T> &a){
-        return a;
-    }
-
-    friend const matrix<T> operator-(const matrix<T> &a){
-        return matrix<T>(a * -1);
-    }
-    
-    friend const matrix<T> operator+(const matrix<T> &a, const matrix<T> &b){
-        assert(a.H == b.H && a.W == b.W);
-        return matrix<T>(a.table + b.table);
-    }
-    
-    friend const matrix<T> operator-(const matrix<T> &a, const matrix<T> &b){
-        assert(a.H == b.H && a.W == b.W);
-        return matrix<T>(a.table - b.table);
-    }
-  
-    friend const matrix<T> operator*(const matrix<T> &a, const T &b){
-        return matrix<T>(a.table * b);
-    }
-
-    friend const matrix<T> operator*(const matrix<T> &a, const matrix<T> &b){
-        assert(a.W == b.H);
-        matrix<T> _b(b.transpose()), ret(a.H, b.W);
-#pragma omp parallel for collapse(2)
-        for(int i=0; i<a.H; i++){
-            for(int j=0; j<b.W; j++){
-                ret[i][j] = (a.table[i] * _b.table[j]).sum();
-            }
-        }
-        return ret;
-    }
-
-    friend matrix<T> operator/(const matrix<T> &a, const T &b){
-        return matrix<T>(a.table / b);
-    }
-    
-    friend matrix<T> operator%(const matrix<T> &a, const T &b){
-        matrix<T> ret(a);
-        for(int i = 0; i < a.H; i++) for(int j = 0; j < a.W; j++)
-            ret[i][j] %= b;
-        return ret;
-    }
-
   public:
     matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}
     matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H) {
         for(int i=0; i<H; i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];
     }
     matrix(const std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv) {}
-    matrix(const matrix<T> &mt) : H(mt.H), W(mt.W), table(mt.table) {}
     // グラフ=>隣接行列
     template<bool is_directed>
     matrix(const internal::_base_graph<T, is_directed> &G, T invalid)
@@ -102,13 +56,48 @@ class matrix{
         return ret;
     }
 
-    const matrix<T> &operator=(const matrix<T> &a){ table = a.table; return *this; }
-    void operator+=(const matrix<T> &a){ *this = operator+(*this, a); }
-    void operator-=(const matrix<T> &a){ *this = operator-(*this, a); }
-    void operator*=(const T &a){ *this = operator*(*this, a); }
-    void operator*=(const matrix<T> &a){ *this = operator*(*this, a); }
-    void operator/=(const T &a){ *this = operator/(*this, a); }
-    void operator%=(const T &a){ *this = operator%(*this, a); }
+    matrix<T> &operator=(const matrix<T> &a){
+        table = a.table;
+        return *this;
+    }
+    matrix<T> &operator+=(const matrix<T> &a){
+        this->table += a.table;
+        return *this;
+    }
+    matrix<T> &operator-=(const matrix<T> &a){
+        this->table -= a.table;
+        return *this;
+    }
+    matrix<T> &operator*=(const T &a){
+        this->table *= a;
+        return *this;
+    }
+    matrix<T> &operator*=(const matrix<T> &a){
+        assert(this->W == a.H);
+        matrix<T> a_t(a.transpose()), ret(this->H, a.W);
+        for(int i=0; i<this->H; i++){
+            for(int j=0; j<a.W; j++){
+                ret[i][j] = (this->table[i] * a_t.table[j]).sum();
+            }
+        }
+        std::swap(*this, ret);
+        return *this;
+    }
+    matrix<T> &operator/=(const T &a){
+        this->table /= a;
+        return *this;
+    }
+    matrix<T> &operator%=(const T &a){
+        for(int i=0; i<this->H; i++) this->table[i] %= a;
+        return *this;
+    }
+    matrix<T> operator+(){ return *this; }
+    matrix<T> operator-(){ return matrix<T>(*this) *= -1; }
+    matrix<T> operator+(const matrix<T> &a){ return matrix<T>(*this) += a; }
+    matrix<T> operator-(const matrix<T> &a){ return matrix<T>(*this) -= a; }
+    template<typename S> matrix<T> operator*(const S &a){ return matrix<T>(*this) *= a; }
+    matrix<T> operator/(const T &a){ return matrix<T>(*this) /= a; }
+    matrix<T> operator%(const T &a){ return matrix<T>(*this) %= a; }
 
     std::valarray<T> &operator[](int h){ return table[h]; }
 
@@ -124,9 +113,7 @@ class matrix{
             }
             std::cout << std::endl;
         }
-    }
-    
+    }  
 };
-
 
 #endif

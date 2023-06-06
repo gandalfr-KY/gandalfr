@@ -1,7 +1,7 @@
 #ifndef RANDOM
 #define RANDOM
 #include <random>
-#include "gandalfr/graph/graph.hpp"
+#include "../graph/graph.hpp"
 
 struct random_utility{
     random_utility(int seed = 0) { mt.seed(seed); }

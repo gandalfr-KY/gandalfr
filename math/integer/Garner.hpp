@@ -1,7 +1,7 @@
 #ifndef GARNER
 #define GARNER
 #include <vector>
-#include "gandalfr/math/integer/mod_inverse.hpp"
+#include "mod_inverse.hpp"
 
 /*
  * O(N)

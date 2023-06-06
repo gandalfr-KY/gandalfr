@@ -2,7 +2,7 @@
 #define FACTORIZE
 #include <utility>
 #include <cmath>
-#include "gandalfr/math/integer/primes_list.hpp"
+#include "primes_list.hpp"
 
 /* 素因数分解
  * prime_factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...}

@@ -1,7 +1,7 @@
 #ifndef LOWLINK
 #define LOWLINK
 #include <utility>
-#include "gandalfr/graph/topological_sort.hpp"
+#include "graph.hpp"
 
 /* 単純無向グラフの関節点・橋を求める
  * 前処理 O(N)

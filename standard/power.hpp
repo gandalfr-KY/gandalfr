@@ -1,7 +1,7 @@
 #ifndef POWER
 #define POWER
 #include <assert.h>
-#include "gandalfr/math/matrix/matrix.hpp"
+#include "../math/matrix/matrix.hpp"
 
 template<class T>
 T power(T x, long long n) {

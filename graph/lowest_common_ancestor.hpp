@@ -1,7 +1,7 @@
 #ifndef LOWEST_COMMON_ANCESTOR
 #define LOWEST_COMMON_ANCESTOR
-#include "gandalfr/graph/shortest_path.hpp"
-#include "gandalfr/data_structure/sparse_table.hpp"
+#include "shortest_path.hpp"
+#include "../data_structure/sparse_table.hpp"
 
 /* 無向単純木の最小共通祖先を求める
  * 構築   O(NlogN)

@@ -1,7 +1,7 @@
 #ifndef SHORTEST_PATH
 #define SHORTEST_PATH
 #include <queue>
-#include "gandalfr/graph/graph.hpp"
+#include "graph.hpp"
 
 namespace internal{
     template<bool is_directed>

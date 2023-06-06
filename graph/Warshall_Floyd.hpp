@@ -1,7 +1,6 @@
 #ifndef WARSHALL_FLOYD
 #define WARSHALL_FLOYD
-#include "gandalfr/graph/graph.hpp"
-#include "gandalfr/math/matrix/matrix.hpp"
+#include "../math/matrix/matrix.hpp"
 
 template<class T>
 matrix<T> Warshall_Floyd(matrix<T> mt) {

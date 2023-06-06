@@ -1,7 +1,7 @@
 #ifndef IS_ISOMORPHIC
 #define IS_ISOMORPHIC
-#include "gandalfr/graph/graph.hpp"
-#include "gandalfr/math/matrix/matrix.hpp"
+#include "graph.hpp"
+#include "../math/matrix/matrix.hpp"
 
 // 多分あってるくらいの気持ちで...
 // 同型判定

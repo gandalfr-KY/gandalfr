@@ -1,8 +1,8 @@
 #ifndef FIBONACCI
 #define FIBONACCI
 #include <bits/stdc++.h>
-#include "gandalfr/math/matrix/matrix.hpp"
-#include "gandalfr/standard/power.hpp"
+#include "../matrix/matrix.hpp"
+#include "../../standard/power.hpp"
 
 long long Fibonacci(long long n){
     if(n == 0) return 0;

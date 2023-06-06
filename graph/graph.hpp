@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <tuple>
-#include "../graph/edge.hpp"
+#include "edge.hpp"
 #include "../data_structure/union_find.hpp"
 
 template <typename WEIGHT, bool is_directed>

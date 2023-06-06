@@ -1,6 +1,6 @@
 #ifndef DIAMETER
 #define DIAMETER
-#include "gandalfr/graph/shortest_path.hpp" 
+#include "shortest_path.hpp" 
 
 /* 木の直径
  * 重み無し : O(N)

@@ -1,6 +1,6 @@
 #ifndef STRONGLY_CONNECTED_COMPONENTS
 #define STRONGLY_CONNECTED_COMPONENTS
-#include "gandalfr/graph/reversed_graph.hpp"
+#include "reversed_graph.hpp"
 
 /* 強連結成分分解
  * groups() := 同一連結成分をまとめた二次元配列を返す

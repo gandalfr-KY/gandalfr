@@ -1,6 +1,6 @@
 #ifndef DOUBLING
 #define DOUBLING
-#include "gandalfr/graph/Kruscal.hpp"
+#include "graph.hpp"
 
 /*
  * verify : https://atcoder.jp/contests/abc235/submissions/39688316

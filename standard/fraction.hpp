@@ -3,7 +3,7 @@
 #include <numeric>
 #include <iostream>
 #include <assert.h>
-#include "gandalfr/math/integer/mod_inverse.hpp"
+#include "../math/integer/mod_inverse.hpp"
 
 namespace internal{
 

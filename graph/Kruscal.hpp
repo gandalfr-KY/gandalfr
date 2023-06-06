@@ -1,6 +1,6 @@
 #ifndef KRUSCAL
 #define KRUSCAL
-#include "./graph.hpp"
+#include "graph.hpp"
 
 /* 単純無向グラフの最小全域木を求める
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7446048

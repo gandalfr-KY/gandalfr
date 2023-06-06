@@ -1,6 +1,6 @@
 #ifndef MANHATTAN_MST
 #define MANHATTAN_MST
-#include "gandalfr/graph/graph.hpp"
+#include "graph.hpp"
 
 // from : https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp
 template<typename WEIGHT>

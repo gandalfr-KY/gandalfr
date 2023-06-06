@@ -1,7 +1,7 @@
 #ifndef TOTIENT
 #define TOTIENT
-#include "gandalfr/standard/power.hpp"
-#include "gandalfr/math/integer/factorize.hpp"
+#include "../../standard/power.hpp"
+#include "factorize.hpp"
 
 /* オイラー関数
  * O(√N)

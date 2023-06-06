@@ -1,7 +1,7 @@
 #ifndef TOPOLOGICAL_SORT
 #define TOPOLOGICAL_SORT
 #include <queue>
-#include "gandalfr/graph/graph.hpp"
+#include "graph.hpp"
 
 /* 単純連結有向グラフをトポロジカルソート
  * O(N)

@@ -1,7 +1,7 @@
 #ifndef MOD_INTEGER
 #define MOD_INTEGER
 #include <iostream>
-#include "gandalfr/math/integer/mod_inverse.hpp"
+#include "../math/integer/mod_inverse.hpp"
 
 // mod_integer<P> a := Pを法とするときの整数型;
 template<int mod>

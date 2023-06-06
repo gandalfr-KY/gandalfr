@@ -1,6 +1,6 @@
 #ifndef REVERSED_GRAPH
 #define REVERSED_GRAPH
-#include "gandalfr/graph/graph.hpp"
+#include "graph.hpp"
 
 // 有向グラフの辺の向きを逆にしたグラフを作る
 template<typename WEIGHT>

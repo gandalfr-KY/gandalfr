@@ -1,7 +1,7 @@
 #ifndef MOD_INVERSE
 #define MOD_INVERSE
 #include <assert.h>
-#include "gandalfr/math/integer/Bezout_coefficients.hpp"
+#include "Bezout_coefficients.hpp"
 
 template<typename T>
 T mod_inverse(T x, T mod){

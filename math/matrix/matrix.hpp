@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <assert.h>
-#include "gandalfr/graph/graph.hpp"
+#include "../../graph/graph.hpp"
 
 template<class T>
 class matrix{

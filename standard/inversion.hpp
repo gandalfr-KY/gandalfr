@@ -1,7 +1,7 @@
 #ifndef INVERSION
 #define INVERSION
-#include "gandalfr/standard/compress.hpp"
-#include "gandalfr/data_structure/binary_indexed_tree.hpp"
+#include "compress.hpp"
+#include "../data_structure/binary_indexed_tree.hpp"
 #include <string>
 
 /* 転倒数 

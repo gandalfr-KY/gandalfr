@@ -1,7 +1,7 @@
 #ifndef PRIMES_LIST
 #define PRIMES_LIST
 #include <assert.h>
-#include "gandalfr/math/integer/prime_number_utility.hpp"
+#include "prime_number_utility.hpp"
 
 // 昇順の素数リスト
 class primes_list{

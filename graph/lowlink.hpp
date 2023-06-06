@@ -12,12 +12,12 @@ template<typename WEIGHT>
 class lowlink{
   private:
     std::vector<int> ord, low, apts;
-    std::vector<internal::_base_edge<WEIGHT>> brids;
+    std::vector<edge<WEIGHT>> brids;
     
-    void dfs(const internal::_base_graph<WEIGHT, false> &G, int cu, int pa, int &cnt){
+    void dfs(const graph<WEIGHT, false> &G, int cu, int pa, int &cnt){
         ord[cu] = low[cu] = cnt++;
         bool is_apt = false;
-        for(const internal::_base_edge<WEIGHT> &e : G[cu]){
+        for(auto &e : G[cu]){
             if(e.to == pa) continue;
             if(ord[e.to] == -1){
                 dfs(G, e.to, cu, cnt);
@@ -31,10 +31,11 @@ class lowlink{
     }
 
   public:
-    lowlink(internal::_base_graph<WEIGHT, false> &G) : ord(G.nodes(), -1), low(G.nodes(), -1) {
+    lowlink(graph<WEIGHT, false> &G) : ord(G.nodes(), -1), low(G.nodes(), -1) {
         // 次数が最小のノードは必ず関節点でない
         // そこからDFSすれば、根ノードの関節点判定を行わなくてよい
-        std::vector<int> deg(internal::count_indegree(G));
+        std::vector<int> deg(G.num_nodes(), 0);
+        for(int i = 0; i < G.num_nodes(); i++) deg[i] = G[i].size(); 
         
         const std::vector<std::vector<int>> groups = G.connected_components();
         int sz = groups.size();
@@ -51,7 +52,7 @@ class lowlink{
 
     // unsorted であることに注意
     const std::vector<int> &articulation_points(){ return apts; }
-    const std::vector<internal::_base_edge<WEIGHT>> &bridges(){ return brids; }
+    const std::vector<edge<WEIGHT>> &bridges(){ return brids; }
 
 };
 

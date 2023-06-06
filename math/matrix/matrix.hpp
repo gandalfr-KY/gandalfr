@@ -1,6 +1,5 @@
 #ifndef MATRIX
 #define MATRIX
-#include <omp.h>
 #include <valarray>
 #include <vector>
 #include <iostream>
@@ -22,8 +21,8 @@ class matrix{
     // グラフ=>隣接行列
     template<bool is_directed>
     matrix(const graph<T, is_directed> &G, T invalid)
-         : H(G.num_nodes()), W(G.num_nodes()), table(std::valarray<T>(invalid, W), H){
-        for(auto &e : G.edge_set()){
+         : H(G.count_nodes()), W(G.count_nodes()), table(std::valarray<T>(invalid, W), H){
+        for(auto &e : G.edges()){
             table[e.from][e.to] = e.cost;
             if(!is_directed) table[e.to][e.from] = e.cost;
         }

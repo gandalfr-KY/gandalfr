@@ -4,6 +4,7 @@
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
+const ll INFLL = 1001001001001001001;
 
 int main(void){
 
@@ -19,8 +20,9 @@ int main(void){
     }
  
     //calculate
-    
-    auto dist = Warshall_Floyd(matrix(G, 1000000000LL));
+    auto mt = matrix(G, INFLL);
+    rep(i,0,N) mt[i][i] = 0;
+    auto dist = Warshall_Floyd(mt);
 
     rep(i,0,N){
         if(dist[i][i] < 0){
@@ -31,7 +33,7 @@ int main(void){
 
     rep(i,0,N){
         rep(j,0,N){
-            cout << (dist[i][j] == -1 ? "INF" : to_string(dist[i][j])) << (j == N - 1 ? '\n' : ' ');
+            cout << (dist[i][j] >= INFLL / 2 ? "INF" : to_string(dist[i][j])) << (j == N - 1 ? '\n' : ' ');
         }
     }
  

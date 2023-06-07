@@ -3,11 +3,11 @@
 #include <assert.h>
 #include "Bezout_coefficients.hpp"
 
-template<typename T>
-T mod_inverse(T x, T mod){
+long long mod_inverse(long long x, int mod){
     assert(mod > 0);
+    x %= mod;
     auto [a, b] = Bezout_coefficients(x, mod);
-    assert(a * x + b * mod == 1);
+    assert(a * x == -b * mod + 1);
     return (a >= 0 ? a : a + mod);
 }
 

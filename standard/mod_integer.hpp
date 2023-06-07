@@ -12,25 +12,20 @@ class mod_integer{
     friend const mod_integer operator+(const mod_integer &a){
         return a;
     }
-
     friend const mod_integer operator-(const mod_integer &a){
-        return -a.val + mod;
+        return -a.val;
     }
-
     friend const mod_integer operator+(const mod_integer &a, const mod_integer &b){
         return a.val + b.val; 
     }
-
     friend const mod_integer operator-(const mod_integer &a, const mod_integer &b){
         return a.val - b.val;
     }
-
     friend const mod_integer operator*(const mod_integer &a, const mod_integer &b){
         return a.val * b.val;
     }
-
     friend const mod_integer operator/(const mod_integer &a, const mod_integer &b){
-        return a.val * mod_inverse<long long>(b.val, mod);
+        return a.val * mod_inverse(b.val, mod);
     }
 
     friend bool operator==(const mod_integer &a, const mod_integer &b){ return a.val == b.val; }
@@ -43,37 +38,34 @@ class mod_integer{
     friend bool operator<=(const mod_integer &a, const mod_integer &b){ return a.val <= b.val; }
 
   public:
-    mod_integer(long long n) {
-        n %= mod;
-        if(n < 0) n += mod;
-        val = n;
+    mod_integer(long long n) : val(n) {
+        val %= mod;
+        if(val < 0) val += mod;
     }
-    mod_integer(const mod_integer &a) : val(a.val) {}
     mod_integer() : val(0) {}
-    // 値を返す
-    long long value() const{ return val; }
+    int value() const{ return (int)val; }
 
-    mod_integer &operator=(const mod_integer &a){
+    const mod_integer &operator=(const mod_integer &a){
         val = a.val;
         return *this;
     }
-
-    void operator+=(const mod_integer &a){
+    const mod_integer &operator+=(const mod_integer &a){
         val += a.val;
         if(val >= mod) val -= mod;
+        return *this;
     }
-
-    void operator-=(const mod_integer &a){
+    const mod_integer &operator-=(const mod_integer &a){
         val -= a.val;
         if(val < 0) val += mod;
+        return *this;
     }
-
-    void operator*=(const mod_integer &a){
-        val = val * a.val % mod;
+    const mod_integer &operator*=(const mod_integer &a){
+        (val *= a.val) %= mod;
+        return *this;
     }
-
-    void operator/=(const mod_integer &a){
-        val = val * mod_inverse<long long>(a.val, mod) % mod;
+    const mod_integer &operator/=(const mod_integer &a){
+        (val *= mod_inverse(a.val, mod)) %= mod;
+        return *this;
     }
 
     friend std::istream &operator>>(std::istream &is, mod_integer &a){
@@ -82,7 +74,6 @@ class mod_integer{
         if(a.val < 0) a.val += mod;
         return is;
     }
-
     friend std::ostream &operator<<(std::ostream &os, const mod_integer &a) {
         os << a.val;
         return os;

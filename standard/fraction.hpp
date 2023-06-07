@@ -7,13 +7,13 @@
 
 namespace internal{
 
-    template<class T> T __gcd(T a, T b){
+    __int128_t __gcd(__int128_t a, __int128_t b){
         if(a % b == 0) return b;
         return __gcd(b, a % b); 
     }
 
     // 絶対値の GCD を返す。片方が 0 ならもう一方の絶対値。
-    template<class T> T gcd(T a, T b){
+    __int128_t gcd(__int128_t a, __int128_t b){
         if(b == 0) return (a >= 0 ? a : -a);
         return internal::__gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));
     }
@@ -39,8 +39,8 @@ class fraction{
     }
 
     friend fraction operator+(const fraction &a, const fraction &b){
+        assert(!(a.is_infinity() && b.is_infinity() && a.num * b.num == -1)); // 不定形はダメ
         if(a.is_infinity()) {
-            assert(!(b.is_infinity() && a.num * b.num == -1)); // 不定形はダメ
             return a;
         }
         else if(b.is_infinity()) {
@@ -51,8 +51,8 @@ class fraction{
         }
     }
     friend fraction operator-(const fraction &a, const fraction &b){
+        assert(!(a.is_infinity() && b.is_infinity() && a.num * b.num == 1)); // 不定形はダメ
         if(a.is_infinity()) {
-            assert(!(b.is_infinity() && a.num * b.num == 1)); // 不定形はダメ
             return a;
         }
         else if(b.is_infinity()) {
@@ -83,25 +83,21 @@ class fraction{
 
     friend bool operator==(const fraction &a, const fraction &b){ return a.num == b.num && a.den == b.den; }
     friend bool operator!=(const fraction &a, const fraction &b){ return a.num != b.num || a.den != b.den; }
-    friend bool operator>(const fraction &a, const fraction &b) {
-        if((a.num >= 0) ^ (b.num >= 0)) return (a.num > b.num);
-        return (__int128_t)a.num * b.den > (__int128_t)b.num * a.den;
-    }
-    friend bool operator>=(const fraction &a, const fraction &b) {
-        if((a.num >= 0) ^ (b.num >= 0)) return (a.num >= b.num);
-        return (__int128_t)a.num * b.den >= (__int128_t)b.num * a.den;
-    }
-    friend bool operator<(const fraction &a, const fraction &b) {
-        if((a.num >= 0) ^ (b.num >= 0)) return (a.num < b.num);
-        return (__int128_t)a.num * b.den < (__int128_t)b.num * a.den;
-    }
-    friend bool operator<=(const fraction &a, const fraction &b){
-        if((a.num >= 0) ^ (b.num >= 0)) return (a.num <= b.num);
-        return (__int128_t)a.num * b.den <= (__int128_t)b.num * a.den;
+
+    friend int compare_to(const fraction &a, const fraction &b) {
+        if((a.num >= 0) ^ (b.num >= 0)) return a.num > b.num ? 1 : -1;
+        __int128_t lhs = (__int128_t)a.num * b.den;
+        __int128_t rhs = (__int128_t)b.num * a.den;
+        if (lhs == rhs) return 0;
+        return lhs > rhs ? 1 : -1;
     }
 
+    friend bool operator>(const fraction &a, const fraction &b) { return compare_to(a, b) > 0; }
+    friend bool operator>=(const fraction &a, const fraction &b) { return compare_to(a, b) >= 0; }
+    friend bool operator<(const fraction &a, const fraction &b) { return compare_to(a, b) < 0; }
+    friend bool operator<=(const fraction &a, const fraction &b) { return compare_to(a, b) <= 0; }
+
   public:
-    fraction(const fraction &a){ num = a.num, den = a.den; }
     fraction(long long n) : num(n), den(1) {}
     fraction(__int128_t numerator, __int128_t denominator){
         internal::simplify(numerator, denominator);
@@ -109,20 +105,20 @@ class fraction{
     }
     fraction() : num(0), den(1) {}
 
-    fraction &operator=(const fraction &a){
+    const fraction &operator=(const fraction &a){
         num = a.num, den = a.den;
         return *this;
     }
-    fraction &operator+=(const fraction &a){
-        return *this = *this + a;
+    const fraction &operator+=(const fraction &a){
+        return *this= *this + a;
     }
-    fraction &operator-=(const fraction &a){
+    const fraction &operator-=(const fraction &a){
         return *this = *this - a;
     }
-    fraction &operator*=(const fraction &a){
+    const fraction &operator*=(const fraction &a){
         return *this = *this * a;
     }
-    fraction &operator/=(const fraction &a){
+    const fraction &operator/=(const fraction &a){
         return *this = *this / a;
     }
 
@@ -162,12 +158,11 @@ class fraction{
         ret.raw_assign((num >= 0 ? den : -den), (num >= 0 ? num : -num));
         return ret;
     }
-    long long mod(long long _mod) const {
+    int mod(int _mod) const {
         assert(_mod > 0);
         long long ret = num % _mod;
         if(ret < 0) ret += _mod;
-        ret = (__int128_t)ret * mod_inverse(den, _mod) % _mod;
-        return ret;
+        return (ret *= mod_inverse(den, _mod)) %= _mod;
     }
     bool is_infinity() const { return (den == 0); }
 

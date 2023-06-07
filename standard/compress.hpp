@@ -1,17 +1,22 @@
 #ifndef COMPRESS
 #define COMPRESS
-#include <vector>
 #include <algorithm>
+#include <iterator>
+#include <type_traits>
 
-template<class T>
-std::vector<int> compress(const std::vector<T> &v, int a = 0){
-    int N = v.size();
-    std::vector<T> w = v;
-    std::vector<int> ret(N);
+/**
+ * @brief コンテナの要素を半開区間で指定し、破壊的に座標圧縮する
+ * @param __begin 座圧する左端のイテレータ
+ * @param __end 右端のイテレータ
+ * @attention 0 はじまりで圧縮する。
+ */
+template<typename InputIterator>
+void compress(InputIterator __begin, InputIterator __end){
+    using T = typename std::iterator_traits<InputIterator>::value_type;
+    std::vector<T> w(__begin, __end);
     std::sort(w.begin(), w.end());
     w.erase(std::unique(w.begin(), w.end()), w.end());
-    for(int i=0; i<N; i++) ret[i] = std::lower_bound(w.begin(), w.end(), v[i]) - w.begin() + a;
-    return ret;
+    for(auto it = __begin; it != __end; it++) *it = static_cast<T>(std::lower_bound(w.begin(), w.end(), *it) - w.begin());
 }
 
 #endif

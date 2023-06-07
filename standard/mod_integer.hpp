@@ -31,7 +31,7 @@ class mod_integer{
     friend bool operator==(const mod_integer &a, const mod_integer &b){ return a.val == b.val; }
     friend bool operator!=(const mod_integer &a, const mod_integer &b){ return a.val != b.val; }
     
-    // map にのせたいので便宜的に定義してます
+    // 便宜的な定義であることに注意
     friend bool operator>(const mod_integer &a, const mod_integer &b){ return a.val > b.val; }
     friend bool operator>=(const mod_integer &a, const mod_integer &b){ return a.val >= b.val; }
     friend bool operator<(const mod_integer &a, const mod_integer &b){ return a.val < b.val; }
@@ -44,6 +44,11 @@ class mod_integer{
     }
     mod_integer() : val(0) {}
     int value() const{ return (int)val; }
+
+    /**
+     * @attention 暗黙的な整数型への変換は禁止 
+     */
+    explicit operator int() const { return (int)val; }
 
     const mod_integer &operator=(const mod_integer &a){
         val = a.val;

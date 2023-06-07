@@ -1,20 +1,25 @@
 #ifndef INVERSION
 #define INVERSION
+#include <vector>
 #include "compress.hpp"
 #include "../data_structure/binary_indexed_tree.hpp"
-#include <string>
 
-template<class T>
-long long inversion(typename std::vector<T>::const_iterator begin, typename std::vector<T>::const_iterator end){
-    int N = std::distance(begin, end);
+/**
+ * @brief コンテナの要素を半開区間で指定し、転倒数を求める
+ * @param __begin 左端のイテレータ
+ * @param __end 右端のイテレータ
+ */
+template<typename InputIterator>
+long long inversion(const InputIterator &__begin, const InputIterator &__end){
+    int N = std::distance(__begin, __end);
     if(!N) return 0;
-    std::vector<T> vec(begin, end);  // vectorを作成
-    std::vector<int> cmp = compress(vec, 0);
-    binary_indexed_tree<long long> bit(*std::max_element(cmp.begin(), cmp.end()));
-    long long ret = 0;
-    for(int i = 0; i < N; i++){
-        bit.add(cmp[i], 1);
-        ret += i - bit.get(cmp[i]) + 1;
+    std::vector<typename std::iterator_traits<InputIterator>::value_type> cmp(__begin, __end);  // vectorを作成
+    compress(cmp.begin(), cmp.end());
+    binary_indexed_tree<long long> bit(static_cast<int>(*std::max_element(cmp.begin(), cmp.end())));
+    long long ret = (long long)N * (N - 1) / 2;
+    for(auto &x : cmp){
+        bit.add(static_cast<int>(x), 1);
+        ret -= bit.get(static_cast<int>(x));
     }
     return ret;
 }

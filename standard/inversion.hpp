@@ -15,7 +15,7 @@ long long inversion(const InputIterator &__begin, const InputIterator &__end){
     int N = std::distance(__begin, __end);
     if(!N) return 0;
     std::vector<int> cmp = compress(__begin, __end);
-    binary_indexed_tree<long long> bit(static_cast<int>(*std::max_element(cmp.begin(), cmp.end())) + 1);
+    binary_indexed_tree<long long> bit(*std::max_element(cmp.begin(), cmp.end()) + 1);
     long long ret = (long long)N * (N + 1) / 2;
     for(auto &x : cmp){
         bit.add(x, 1);

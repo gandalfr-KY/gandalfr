@@ -36,11 +36,6 @@ std::ostream &operator<<(std::ostream &os, std::queue<T> v) {
     }
     return os;
 }
-template<typename T>
-std::istream &operator>>(std::istream &is, std::queue<T> &v) {
-    for(T &in : is) v.push(is);
-    return is;
-}
 
 template<typename T>
 std::ostream &operator<<(std::ostream &os, const std::set<T> &st) {

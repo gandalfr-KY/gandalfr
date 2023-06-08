@@ -6,7 +6,7 @@ data:
     - icon: ':warning:'
       path: data_structure/Kth_hold_multiset.hpp
       title: data_structure/Kth_hold_multiset.hpp
-    - icon: ':question:'
+    - icon: ':heavy_check_mark:'
       path: data_structure/binary_indexed_tree.hpp
       title: "\u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97"
     - icon: ':warning:'
@@ -129,7 +129,7 @@ data:
       title: math/polynomial/polynomial.hpp
   - name: other
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: other/io_supporter.hpp
       title: other/io_supporter.hpp
     - icon: ':warning:'
@@ -140,7 +140,7 @@ data:
       title: other/stopwatch.hpp
   - name: standard
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: standard/compress.hpp
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
         \u3067\u6307\u5B9A\u3057\u3001\u7834\u58CA\u7684\u306B\u5EA7\u6A19\u5727\u7E2E\
@@ -151,7 +151,7 @@ data:
     - icon: ':warning:'
       path: standard/grid.hpp
       title: standard/grid.hpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: standard/inversion.hpp
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
         \u3067\u6307\u5B9A\u3057\u3001\u8EE2\u5012\u6570\u3092\u6C42\u3081\u308B"
@@ -170,7 +170,7 @@ data:
   verificationCategories:
   - name: test
     pages:
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test/alds1-5-d.test.cpp
       title: test/alds1-5-d.test.cpp
     - icon: ':heavy_check_mark:'

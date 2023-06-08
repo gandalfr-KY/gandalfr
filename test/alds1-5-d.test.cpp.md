@@ -1,26 +1,26 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/binary_indexed_tree.hpp
     title: "\u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97"
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: other/io_supporter.hpp
     title: other/io_supporter.hpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: standard/compress.hpp
     title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
       \u3067\u6307\u5B9A\u3057\u3001\u7834\u58CA\u7684\u306B\u5EA7\u6A19\u5727\u7E2E\
       \u3059\u308B"
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: standard/inversion.hpp
     title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
       \u3067\u6307\u5B9A\u3057\u3001\u8EE2\u5012\u6570\u3092\u6C42\u3081\u308B"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/ALDS1_5_D
@@ -73,20 +73,19 @@ data:
     \ {\n    is >> p.first >> p.second;\n    return is;\n}\n\ntemplate<typename T>\n\
     std::ostream &operator<<(std::ostream &os, std::queue<T> v) {\n    int N = v.size();\n\
     \    for(int i=0; i<N; i++) {\n        os << v.front() << (i+1 != N ? \" \" :\
-    \ \"\");\n        v.pop();\n    }\n    return os;\n}\ntemplate<typename T>\nstd::istream\
-    \ &operator>>(std::istream &is, std::queue<T> &v) {\n    for(T &in : is) v.push(is);\n\
-    \    return is;\n}\n\ntemplate<typename T>\nstd::ostream &operator<<(std::ostream\
-    \ &os, const std::set<T> &st) {\n    for(const T &x : st){\n        std::cout\
-    \ << x << \" \";\n    }\n    return os;\n}\n\ntemplate<typename T>\nstd::ostream\
-    \ &operator<<(std::ostream &os, const std::multiset<T> &st) {\n    for(const T\
-    \ &x : st){\n        std::cout << x << \" \";\n    }\n    return os;\n}\n\n\n\n\
-    #line 5 \"test/alds1-5-d.test.cpp\"\nusing namespace std;\nusing ll = long long;\n\
-    #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\
-    void Yes(bool ok){ cout << (ok ? \"Yes\" : \"No\") << endl; }\n\nint main(void){\n\
-    \ \n    /*ifstream in(\"input.txt\");\n    cin.rdbuf(in.rdbuf());\n    ofstream\
-    \ fout(\"output.txt\");*/\n \n \n    //input\n \n    int N;\n    cin >> N;\n \
-    \   vector<int> A(N);\n    cin >> A;\n\n    //calculate\n    \n    cout << inversion(A.begin(),\
-    \ A.end()) << endl;\n \n}\n"
+    \ \"\");\n        v.pop();\n    }\n    return os;\n}\n\ntemplate<typename T>\n\
+    std::ostream &operator<<(std::ostream &os, const std::set<T> &st) {\n    for(const\
+    \ T &x : st){\n        std::cout << x << \" \";\n    }\n    return os;\n}\n\n\
+    template<typename T>\nstd::ostream &operator<<(std::ostream &os, const std::multiset<T>\
+    \ &st) {\n    for(const T &x : st){\n        std::cout << x << \" \";\n    }\n\
+    \    return os;\n}\n\n\n\n#line 5 \"test/alds1-5-d.test.cpp\"\nusing namespace\
+    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
+    \ i++)\n#define all(a) (a).begin(),(a).end()\nvoid Yes(bool ok){ cout << (ok ?\
+    \ \"Yes\" : \"No\") << endl; }\n\nint main(void){\n \n    /*ifstream in(\"input.txt\"\
+    );\n    cin.rdbuf(in.rdbuf());\n    ofstream fout(\"output.txt\");*/\n \n \n \
+    \   //input\n \n    int N;\n    cin >> N;\n    vector<int> A(N);\n    cin >> A;\n\
+    \n    //calculate\n    \n    cout << inversion(A.begin(), A.end()) << endl;\n\
+    \ \n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ALDS1_5_D\"\n\
     #include <bits/stdc++.h>\n#include \"../standard/inversion.hpp\"\n#include \"\
     ../other/io_supporter.hpp\"\nusing namespace std;\nusing ll = long long;\n#define\
@@ -104,8 +103,8 @@ data:
   isVerificationFile: true
   path: test/alds1-5-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-08 21:00:42+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2023-06-08 21:09:04+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/alds1-5-d.test.cpp
 layout: document

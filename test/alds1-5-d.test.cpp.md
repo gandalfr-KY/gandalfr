@@ -57,8 +57,8 @@ data:
     \u9577\u304C 0 \u306A\u3089\u3070 0\n */\ntemplate<typename InputIterator>\nlong\
     \ long inversion(const InputIterator &__begin, const InputIterator &__end){\n\
     \    int N = std::distance(__begin, __end);\n    if(!N) return 0;\n    std::vector<int>\
-    \ cmp = compress(__begin, __end);\n    binary_indexed_tree<long long> bit(static_cast<int>(*std::max_element(cmp.begin(),\
-    \ cmp.end())) + 1);\n    long long ret = (long long)N * (N + 1) / 2;\n    for(auto\
+    \ cmp = compress(__begin, __end);\n    binary_indexed_tree<long long> bit(*std::max_element(cmp.begin(),\
+    \ cmp.end()) + 1);\n    long long ret = (long long)N * (N + 1) / 2;\n    for(auto\
     \ &x : cmp){\n        bit.add(x, 1);\n        ret -= bit.get(x + 1);\n    }\n\
     \    return ret;\n}\n\n/**\n * @brief \u8981\u7D20\u306E\u96C6\u5408\u304C\u7B49\
     \u3057\u3044\u534A\u958B\u533A\u9593\u30922\u3064\u6307\u5B9A\u3002\u4E00\u65B9\
@@ -118,7 +118,7 @@ data:
   isVerificationFile: true
   path: test/alds1-5-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-09 00:34:42+09:00'
+  timestamp: '2023-06-09 02:03:10+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/alds1-5-d.test.cpp

@@ -80,14 +80,9 @@ data:
     \    fraction(long long n) : num(n), den(1) {}\n    fraction(__int128_t numerator,\
     \ __int128_t denominator){\n        internal::simplify(numerator, denominator);\n\
     \        num = numerator, den = denominator;\n    }\n    fraction() : num(0),\
-    \ den(1) {}\n\n    /**\n     * @attention \u6697\u9ED9\u7684\u306A\u6574\u6570\
-    \u578B\u3078\u306E\u5909\u63DB\u306F\u7981\u6B62 \n     */\n    explicit operator\
-    \ long long() const { return floor(); }\n    /**\n     * @attention \u6697\u9ED9\
-    \u7684\u306A\u6574\u6570\u578B\u3078\u306E\u5909\u63DB\u306F\u7981\u6B62 \n  \
-    \   */\n    explicit operator int() const { return (int)floor(); }\n\n    const\
-    \ fraction &operator=(const fraction &a){\n        num = a.num, den = a.den;\n\
-    \        return *this;\n    }\n    const fraction &operator+=(const fraction &a){\n\
-    \        return *this= *this + a;\n    }\n    const fraction &operator-=(const\
+    \ den(1) {}\n\n    const fraction &operator=(const fraction &a){\n        num\
+    \ = a.num, den = a.den;\n        return *this;\n    }\n    const fraction &operator+=(const\
+    \ fraction &a){\n        return *this= *this + a;\n    }\n    const fraction &operator-=(const\
     \ fraction &a){\n        return *this = *this - a;\n    }\n    const fraction\
     \ &operator*=(const fraction &a){\n        return *this = *this * a;\n    }\n\
     \    const fraction &operator/=(const fraction &a){\n        return *this = *this\
@@ -170,14 +165,9 @@ data:
     \    fraction(long long n) : num(n), den(1) {}\n    fraction(__int128_t numerator,\
     \ __int128_t denominator){\n        internal::simplify(numerator, denominator);\n\
     \        num = numerator, den = denominator;\n    }\n    fraction() : num(0),\
-    \ den(1) {}\n\n    /**\n     * @attention \u6697\u9ED9\u7684\u306A\u6574\u6570\
-    \u578B\u3078\u306E\u5909\u63DB\u306F\u7981\u6B62 \n     */\n    explicit operator\
-    \ long long() const { return floor(); }\n    /**\n     * @attention \u6697\u9ED9\
-    \u7684\u306A\u6574\u6570\u578B\u3078\u306E\u5909\u63DB\u306F\u7981\u6B62 \n  \
-    \   */\n    explicit operator int() const { return (int)floor(); }\n\n    const\
-    \ fraction &operator=(const fraction &a){\n        num = a.num, den = a.den;\n\
-    \        return *this;\n    }\n    const fraction &operator+=(const fraction &a){\n\
-    \        return *this= *this + a;\n    }\n    const fraction &operator-=(const\
+    \ den(1) {}\n\n    const fraction &operator=(const fraction &a){\n        num\
+    \ = a.num, den = a.den;\n        return *this;\n    }\n    const fraction &operator+=(const\
+    \ fraction &a){\n        return *this= *this + a;\n    }\n    const fraction &operator-=(const\
     \ fraction &a){\n        return *this = *this - a;\n    }\n    const fraction\
     \ &operator*=(const fraction &a){\n        return *this = *this * a;\n    }\n\
     \    const fraction &operator/=(const fraction &a){\n        return *this = *this\
@@ -212,7 +202,7 @@ data:
   isVerificationFile: false
   path: standard/fraction.hpp
   requiredBy: []
-  timestamp: '2023-06-07 18:29:03+09:00'
+  timestamp: '2023-06-09 00:16:47+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: standard/fraction.hpp

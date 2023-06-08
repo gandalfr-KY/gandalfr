@@ -105,15 +105,6 @@ class fraction{
     }
     fraction() : num(0), den(1) {}
 
-    /**
-     * @attention 暗黙的な整数型への変換は禁止 
-     */
-    explicit operator long long() const { return floor(); }
-    /**
-     * @attention 暗黙的な整数型への変換は禁止 
-     */
-    explicit operator int() const { return (int)floor(); }
-
     const fraction &operator=(const fraction &a){
         num = a.num, den = a.den;
         return *this;

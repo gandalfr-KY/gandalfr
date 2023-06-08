@@ -23,10 +23,10 @@ data:
   _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://atcoder.jp/contests/abc296/tasks/abc296_f
+    PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/ALDS1_5_D
     links:
-    - https://atcoder.jp/contests/abc296/tasks/abc296_f
-  bundledCode: "#line 1 \"test/abc296-f.test.cpp\"\n#define PROBLEM \"https://atcoder.jp/contests/abc296/tasks/abc296_f\"\
+    - https://onlinejudge.u-aizu.ac.jp/problems/ALDS1_5_D
+  bundledCode: "#line 1 \"test/alds1-5-d.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ALDS1_5_D\"\
     \n#include <bits/stdc++.h>\n#line 1 \"standard/inversion.hpp\"\n\n\n#line 1 \"\
     standard/compress.hpp\"\n\n\n#line 5 \"standard/compress.hpp\"\n#include <type_traits>\n\
     \n/**\n * @brief \u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\
@@ -80,44 +80,37 @@ data:
     \ << x << \" \";\n    }\n    return os;\n}\n\ntemplate<typename T>\nstd::ostream\
     \ &operator<<(std::ostream &os, const std::multiset<T> &st) {\n    for(const T\
     \ &x : st){\n        std::cout << x << \" \";\n    }\n    return os;\n}\n\n\n\n\
-    #line 5 \"test/abc296-f.test.cpp\"\nusing namespace std;\nusing ll = long long;\n\
+    #line 5 \"test/alds1-5-d.test.cpp\"\nusing namespace std;\nusing ll = long long;\n\
     #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\
     void Yes(bool ok){ cout << (ok ? \"Yes\" : \"No\") << endl; }\n\nint main(void){\n\
     \ \n    /*ifstream in(\"input.txt\");\n    cin.rdbuf(in.rdbuf());\n    ofstream\
     \ fout(\"output.txt\");*/\n \n \n    //input\n \n    int N;\n    cin >> N;\n \
-    \   vector<int> A(N), B(N);\n    cin >> A;\n    cin >> B;\n    vector<int> _A(A),\
-    \ _B(B);\n    sort(all(_A));\n    sort(all(_B));\n    if(_A != _B){\n        Yes(false);\n\
-    \        return 0;\n    }\n \n    //calculate\n    \n    rep(i,0,N-1){\n     \
-    \   if(_A[i] == _A[i+1]){\n            Yes(true);\n            return 0;\n   \
-    \     }\n    }\n \n    Yes(inversion(all(A)) % 2 == inversion(all(B)) % 2);\n\
-    \ \n}\n"
-  code: "#define PROBLEM \"https://atcoder.jp/contests/abc296/tasks/abc296_f\"\n#include\
-    \ <bits/stdc++.h>\n#include \"../standard/inversion.hpp\"\n#include \"../other/io_supporter.hpp\"\
-    \nusing namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i =\
-    \ (ll)(j); i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\nvoid Yes(bool\
-    \ ok){ cout << (ok ? \"Yes\" : \"No\") << endl; }\n\nint main(void){\n \n    /*ifstream\
-    \ in(\"input.txt\");\n    cin.rdbuf(in.rdbuf());\n    ofstream fout(\"output.txt\"\
-    );*/\n \n \n    //input\n \n    int N;\n    cin >> N;\n    vector<int> A(N), B(N);\n\
-    \    cin >> A;\n    cin >> B;\n    vector<int> _A(A), _B(B);\n    sort(all(_A));\n\
-    \    sort(all(_B));\n    if(_A != _B){\n        Yes(false);\n        return 0;\n\
-    \    }\n \n    //calculate\n    \n    rep(i,0,N-1){\n        if(_A[i] == _A[i+1]){\n\
-    \            Yes(true);\n            return 0;\n        }\n    }\n \n    Yes(inversion(all(A))\
-    \ % 2 == inversion(all(B)) % 2);\n \n}"
+    \   vector<int> A(N);\n    cin >> A;\n\n    //calculate\n    \n    cout << inversion(A.begin(),\
+    \ A.end()) << endl;\n \n}\n"
+  code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ALDS1_5_D\"\n\
+    #include <bits/stdc++.h>\n#include \"../standard/inversion.hpp\"\n#include \"\
+    ../other/io_supporter.hpp\"\nusing namespace std;\nusing ll = long long;\n#define\
+    \ rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\
+    void Yes(bool ok){ cout << (ok ? \"Yes\" : \"No\") << endl; }\n\nint main(void){\n\
+    \ \n    /*ifstream in(\"input.txt\");\n    cin.rdbuf(in.rdbuf());\n    ofstream\
+    \ fout(\"output.txt\");*/\n \n \n    //input\n \n    int N;\n    cin >> N;\n \
+    \   vector<int> A(N);\n    cin >> A;\n\n    //calculate\n    \n    cout << inversion(A.begin(),\
+    \ A.end()) << endl;\n \n}"
   dependsOn:
   - standard/inversion.hpp
   - standard/compress.hpp
   - data_structure/binary_indexed_tree.hpp
   - other/io_supporter.hpp
   isVerificationFile: true
-  path: test/abc296-f.test.cpp
+  path: test/alds1-5-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-07 21:12:57+09:00'
+  timestamp: '2023-06-08 21:00:42+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
-documentation_of: test/abc296-f.test.cpp
+documentation_of: test/alds1-5-d.test.cpp
 layout: document
 redirect_from:
-- /verify/test/abc296-f.test.cpp
-- /verify/test/abc296-f.test.cpp.html
-title: test/abc296-f.test.cpp
+- /verify/test/alds1-5-d.test.cpp
+- /verify/test/alds1-5-d.test.cpp.html
+title: test/alds1-5-d.test.cpp
 ---

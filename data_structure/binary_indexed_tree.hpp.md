@@ -8,8 +8,8 @@ data:
       \u3067\u6307\u5B9A\u3057\u3001\u8EE2\u5012\u6570\u3092\u6C42\u3081\u308B"
   _extendedVerifiedWith:
   - icon: ':x:'
-    path: test/abc296-f.test.cpp
-    title: test/abc296-f.test.cpp
+    path: test/alds1-5-d.test.cpp
+    title: test/alds1-5-d.test.cpp
   - icon: ':heavy_check_mark:'
     path: test/dsl-2-b.test.cpp
     title: test/dsl-2-b.test.cpp
@@ -47,8 +47,8 @@ data:
   timestamp: '2023-06-07 01:31:26+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
+  - test/alds1-5-d.test.cpp
   - test/dsl-2-b.test.cpp
-  - test/abc296-f.test.cpp
 documentation_of: data_structure/binary_indexed_tree.hpp
 layout: document
 redirect_from:

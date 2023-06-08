@@ -4,8 +4,8 @@ data:
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':x:'
-    path: test/abc296-f.test.cpp
-    title: test/abc296-f.test.cpp
+    path: test/alds1-5-d.test.cpp
+    title: test/alds1-5-d.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
   _verificationStatusIcon: ':x:'
@@ -58,7 +58,7 @@ data:
   timestamp: '2023-05-17 17:02:34+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
-  - test/abc296-f.test.cpp
+  - test/alds1-5-d.test.cpp
 documentation_of: other/io_supporter.hpp
 layout: document
 redirect_from:

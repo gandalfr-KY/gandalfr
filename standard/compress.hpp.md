@@ -8,8 +8,8 @@ data:
       \u3067\u6307\u5B9A\u3057\u3001\u8EE2\u5012\u6570\u3092\u6C42\u3081\u308B"
   _extendedVerifiedWith:
   - icon: ':x:'
-    path: test/abc296-f.test.cpp
-    title: test/abc296-f.test.cpp
+    path: test/alds1-5-d.test.cpp
+    title: test/alds1-5-d.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
   _verificationStatusIcon: ':x:'
@@ -50,7 +50,7 @@ data:
   timestamp: '2023-06-07 18:29:03+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
-  - test/abc296-f.test.cpp
+  - test/alds1-5-d.test.cpp
 documentation_of: standard/compress.hpp
 layout: document
 redirect_from:

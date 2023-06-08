@@ -171,8 +171,8 @@ data:
   - name: test
     pages:
     - icon: ':x:'
-      path: test/abc296-f.test.cpp
-      title: test/abc296-f.test.cpp
+      path: test/alds1-5-d.test.cpp
+      title: test/alds1-5-d.test.cpp
     - icon: ':heavy_check_mark:'
       path: test/dsl-2-b.test.cpp
       title: test/dsl-2-b.test.cpp

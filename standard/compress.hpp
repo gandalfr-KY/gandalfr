@@ -5,7 +5,7 @@
 #include <type_traits>
 
 /**
- * @brief コンテナの要素を半開区間で指定し、破壊的に座標圧縮する
+ * @brief コンテナの要素を半開区間で指定し、座標圧縮する
  * @param __begin 座圧する左端のイテレータ
  * @param __end 右端のイテレータ
  * @attention 0 はじまりで圧縮する。

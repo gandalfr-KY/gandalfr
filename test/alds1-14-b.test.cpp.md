@@ -43,8 +43,8 @@ data:
     using namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j);\
     \ i < (ll)(n); i++)\n\nint main(void){\n\n    //ifstream in(\"in\");\n    //cin.rdbuf(in.rdbuf());\n\
     \    //ofstream fout(\"out\");\n\n    // input\n\n\tstring s, t;\n\tcin >> s >>\
-    \ t;\n\trolling_hash rh(s), _rh(t);\n    ll t_hash = _rh.get(0, t.size());\n\n\
-    \t// calculate\n\n\tvector<int> ans;\n    rep(i,0,(int)s.size() - (int)t.size()\
+    \ t;\n\trolling_hash rh(s), _rh(t);\n    auto t_hash = _rh.get(0, t.size());\n\
+    \n\t// calculate\n\n\tvector<int> ans;\n    rep(i,0,(int)s.size() - (int)t.size()\
     \ + 1){\n        if(rh.get(i, i + t.size()) == t_hash) cout << i << endl;\n  \
     \  }\n    \n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ALDS1_14_B\"\n\
@@ -52,8 +52,8 @@ data:
     \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
     \ i++)\n\nint main(void){\n\n    //ifstream in(\"in\");\n    //cin.rdbuf(in.rdbuf());\n\
     \    //ofstream fout(\"out\");\n\n    // input\n\n\tstring s, t;\n\tcin >> s >>\
-    \ t;\n\trolling_hash rh(s), _rh(t);\n    ll t_hash = _rh.get(0, t.size());\n\n\
-    \t// calculate\n\n\tvector<int> ans;\n    rep(i,0,(int)s.size() - (int)t.size()\
+    \ t;\n\trolling_hash rh(s), _rh(t);\n    auto t_hash = _rh.get(0, t.size());\n\
+    \n\t// calculate\n\n\tvector<int> ans;\n    rep(i,0,(int)s.size() - (int)t.size()\
     \ + 1){\n        if(rh.get(i, i + t.size()) == t_hash) cout << i << endl;\n  \
     \  }\n    \n}\n"
   dependsOn:
@@ -61,7 +61,7 @@ data:
   isVerificationFile: true
   path: test/alds1-14-b.test.cpp
   requiredBy: []
-  timestamp: '2023-06-10 03:00:12+09:00'
+  timestamp: '2023-06-10 03:01:50+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/alds1-14-b.test.cpp

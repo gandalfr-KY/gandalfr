@@ -12,14 +12,13 @@
  */
 template<typename InputIterator>
 std::vector<int> compress(const InputIterator &__begin,  const InputIterator &__end){
-    using T = typename std::iterator_traits<InputIterator>::value_type;
     std::vector<int> ret;
     ret.reserve(std::distance(__begin, __end));
-    std::vector<T> w(__begin, __end);
+    std::vector<typename std::iterator_traits<InputIterator>::value_type> w(__begin, __end);
     std::sort(w.begin(), w.end());
     w.erase(std::unique(w.begin(), w.end()), w.end());
     for(auto it = __begin; it != __end; it++)
-        ret.push_back(static_cast<T>(std::lower_bound(w.begin(), w.end(), *it) - w.begin()));
+        ret.push_back(std::lower_bound(w.begin(), w.end(), *it) - w.begin());
     return ret;
 }
 

@@ -16,7 +16,7 @@ int main(void){
 	string s, t;
 	cin >> s >> t;
 	rolling_hash rh(s), _rh(t);
-    ll t_hash = _rh.get(0, t.size());
+    auto t_hash = _rh.get(0, t.size());
 
 	// calculate
 

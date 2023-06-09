@@ -1,6 +1,6 @@
 #define PROMLEM "https://onlinejudge.u-aizu.ac.jp/problems/DPL_1_D"
 #include <bits/stdc++.h>
-#include "gandalfr/standard/longest_increasing_subsequence.hpp"
+#include "../standard/longest_increasing_subsequence.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)

@@ -255,8 +255,8 @@ data:
   isVerificationFile: false
   path: graph/shortest_path.hpp
   requiredBy:
-  - graph/lowest_common_ancestor.hpp
   - graph/diameter.hpp
+  - graph/lowest_common_ancestor.hpp
   timestamp: '2023-06-07 00:47:15+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

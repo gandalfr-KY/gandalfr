@@ -286,8 +286,8 @@ data:
   - math/integer/totient.hpp
   - standard/power.hpp
   - graph/Warshall_Floyd.hpp
-  - graph/traveling_salesman.hpp
   - graph/is_isomorphic.hpp
+  - graph/traveling_salesman.hpp
   timestamp: '2023-06-07 01:06:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

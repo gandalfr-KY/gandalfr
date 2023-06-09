@@ -10,8 +10,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: standard/compress.hpp
     title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
-      \u3067\u6307\u5B9A\u3057\u3001\u7834\u58CA\u7684\u306B\u5EA7\u6A19\u5727\u7E2E\
-      \u3059\u308B"
+      \u3067\u6307\u5B9A\u3057\u3001\u5EA7\u6A19\u5727\u7E2E\u3059\u308B"
   - icon: ':heavy_check_mark:'
     path: standard/inversion.hpp
     title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
@@ -31,19 +30,19 @@ data:
     standard/inversion.hpp\"\n#include <type_traits>\n#line 1 \"standard/compress.hpp\"\
     \n\n\n#line 6 \"standard/compress.hpp\"\n\n/**\n * @brief \u30B3\u30F3\u30C6\u30CA\
     \u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\u3067\u6307\u5B9A\u3057\u3001\
-    \u7834\u58CA\u7684\u306B\u5EA7\u6A19\u5727\u7E2E\u3059\u308B\n * @param __begin\
-    \ \u5EA7\u5727\u3059\u308B\u5DE6\u7AEF\u306E\u30A4\u30C6\u30EC\u30FC\u30BF\n *\
-    \ @param __end \u53F3\u7AEF\u306E\u30A4\u30C6\u30EC\u30FC\u30BF\n * @attention\
-    \ 0 \u306F\u3058\u307E\u308A\u3067\u5727\u7E2E\u3059\u308B\u3002\n */\ntemplate<typename\
-    \ InputIterator>\nstd::vector<int> compress(const InputIterator &__begin,  const\
-    \ InputIterator &__end){\n    using T = typename std::iterator_traits<InputIterator>::value_type;\n\
-    \    std::vector<int> ret;\n    ret.reserve(std::distance(__begin, __end));\n\
-    \    std::vector<T> w(__begin, __end);\n    std::sort(w.begin(), w.end());\n \
-    \   w.erase(std::unique(w.begin(), w.end()), w.end());\n    for(auto it = __begin;\
-    \ it != __end; it++)\n        ret.push_back(static_cast<T>(std::lower_bound(w.begin(),\
-    \ w.end(), *it) - w.begin()));\n    return ret;\n}\n\n\n#line 1 \"data_structure/binary_indexed_tree.hpp\"\
-    \n\n\n#line 4 \"data_structure/binary_indexed_tree.hpp\"\n\n/**\n * @brief \u4E00\
-    \u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97\n * @attention 0-indexed\n\
+    \u5EA7\u6A19\u5727\u7E2E\u3059\u308B\n * @param __begin \u5EA7\u5727\u3059\u308B\
+    \u5DE6\u7AEF\u306E\u30A4\u30C6\u30EC\u30FC\u30BF\n * @param __end \u53F3\u7AEF\
+    \u306E\u30A4\u30C6\u30EC\u30FC\u30BF\n * @attention 0 \u306F\u3058\u307E\u308A\
+    \u3067\u5727\u7E2E\u3059\u308B\u3002\n */\ntemplate<typename InputIterator>\n\
+    std::vector<int> compress(const InputIterator &__begin,  const InputIterator &__end){\n\
+    \    using T = typename std::iterator_traits<InputIterator>::value_type;\n   \
+    \ std::vector<int> ret;\n    ret.reserve(std::distance(__begin, __end));\n   \
+    \ std::vector<T> w(__begin, __end);\n    std::sort(w.begin(), w.end());\n    w.erase(std::unique(w.begin(),\
+    \ w.end()), w.end());\n    for(auto it = __begin; it != __end; it++)\n       \
+    \ ret.push_back(static_cast<T>(std::lower_bound(w.begin(), w.end(), *it) - w.begin()));\n\
+    \    return ret;\n}\n\n\n#line 1 \"data_structure/binary_indexed_tree.hpp\"\n\n\
+    \n#line 4 \"data_structure/binary_indexed_tree.hpp\"\n\n/**\n * @brief \u4E00\u70B9\
+    \u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97\n * @attention 0-indexed\n\
     */\ntemplate<class T>\nstruct binary_indexed_tree{\n  private:\n    int N;\n \
     \   std::vector<T> bit;\n\n  public:\n    binary_indexed_tree(int siz) : N(siz),\
     \ bit(N, 0) {}\n\n    /** \n     * @return a \u306E\u4F4D\u7F6E\u306B w \u3092\
@@ -118,7 +117,7 @@ data:
   isVerificationFile: true
   path: test/alds1-5-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-09 02:03:10+09:00'
+  timestamp: '2023-06-09 12:20:55+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/alds1-5-d.test.cpp

@@ -63,9 +63,9 @@ data:
   isVerificationFile: false
   path: math/integer/prime_number_utility.hpp
   requiredBy:
-  - math/integer/primes_list.hpp
   - math/integer/factorize.hpp
   - math/integer/totient.hpp
+  - math/integer/primes_list.hpp
   timestamp: '2023-04-01 20:47:10+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []

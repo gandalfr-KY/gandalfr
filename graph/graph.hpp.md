@@ -306,28 +306,28 @@ data:
   - math/integer/totient.hpp
   - math/matrix/matrix.hpp
   - standard/power.hpp
+  - graph/diameter.hpp
   - graph/Warshall_Floyd.hpp
   - graph/lowest_common_ancestor.hpp
-  - graph/topological_sort.hpp
-  - graph/diameter.hpp
-  - graph/shortest_path.hpp
-  - graph/reversed_graph.hpp
-  - graph/doubling.hpp
-  - graph/Kruscal.hpp
-  - graph/traveling_salesman.hpp
-  - graph/traveling_salesman.hpp
-  - graph/strongly_connected_components.hpp
   - graph/lowlink.hpp
+  - graph/shortest_path.hpp
+  - graph/Kruscal.hpp
+  - graph/reversed_graph.hpp
+  - graph/strongly_connected_components.hpp
+  - graph/is_isomorphic.hpp
+  - graph/is_isomorphic.hpp
+  - graph/traveling_salesman.hpp
+  - graph/traveling_salesman.hpp
+  - graph/doubling.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
-  - graph/is_isomorphic.hpp
-  - graph/is_isomorphic.hpp
+  - graph/topological_sort.hpp
   timestamp: '2023-06-07 00:47:15+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp
-  - test/grl-1-c.test.cpp
   - test/grl-5-a.test.cpp
+  - test/grl-1-c.test.cpp
 documentation_of: graph/graph.hpp
 layout: document
 redirect_from:

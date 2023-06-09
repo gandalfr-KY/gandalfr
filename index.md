@@ -143,8 +143,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: standard/compress.hpp
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
-        \u3067\u6307\u5B9A\u3057\u3001\u7834\u58CA\u7684\u306B\u5EA7\u6A19\u5727\u7E2E\
-        \u3059\u308B"
+        \u3067\u6307\u5B9A\u3057\u3001\u5EA7\u6A19\u5727\u7E2E\u3059\u308B"
     - icon: ':warning:'
       path: standard/fraction.hpp
       title: standard/fraction.hpp

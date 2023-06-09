@@ -26,10 +26,10 @@ data:
     \ : \u5E83\u7FA9\u5897\u52A0\n */\ntemplate<typename InputIterator>\nint longest_increasing_subsequence(const\
     \ InputIterator &__begin, const InputIterator &__end, bool strict = false) {\n\
     \    std::vector<typename std::iterator_traits<InputIterator>::value_type> dp;\n\
-    \    for(auto arg_it = __begin; arg_it != __end; ++arg_it){   \n        InputIterator\
-    \ dp_it; \n        if(strict) dp_it = std::lower_bound(dp.begin(), dp.end(), *arg_it);\n\
-    \        else dp_it = std::upper_bound(dp.begin(), dp.end(), *arg_it);\n     \
-    \   if(dp_it != dp.end()) *dp_it = *arg_it;\n        else dp.push_back(*arg_it);\n\
+    \    auto dp_it = dp.begin();\n    for(auto arg_it = __begin; arg_it != __end;\
+    \ ++arg_it){  \n        if(strict) dp_it = std::lower_bound(dp.begin(), dp.end(),\
+    \ *arg_it);\n        else dp_it = std::upper_bound(dp.begin(), dp.end(), *arg_it);\n\
+    \        if(dp_it != dp.end()) *dp_it = *arg_it;\n        else dp.push_back(*arg_it);\n\
     \    }\n    return dp.size();\n}\n\n\n#line 4 \"test/dpl-1-d.test.cpp\"\nusing\
     \ namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j);\
     \ i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\nint main(void){\n \n\
@@ -48,7 +48,7 @@ data:
   isVerificationFile: true
   path: test/dpl-1-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-09 12:53:21+09:00'
+  timestamp: '2023-06-10 01:20:19+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/dpl-1-d.test.cpp

@@ -13,8 +13,8 @@
 template<typename InputIterator>
 int longest_increasing_subsequence(const InputIterator &__begin, const InputIterator &__end, bool strict = false) {
     std::vector<typename std::iterator_traits<InputIterator>::value_type> dp;
-    for(auto arg_it = __begin; arg_it != __end; ++arg_it){   
-        InputIterator dp_it; 
+    auto dp_it = dp.begin();
+    for(auto arg_it = __begin; arg_it != __end; ++arg_it){  
         if(strict) dp_it = std::lower_bound(dp.begin(), dp.end(), *arg_it);
         else dp_it = std::upper_bound(dp.begin(), dp.end(), *arg_it);
         if(dp_it != dp.end()) *dp_it = *arg_it;

@@ -156,7 +156,9 @@ data:
         \u3067\u6307\u5B9A\u3057\u3001\u8EE2\u5012\u6570\u3092\u6C42\u3081\u308B"
     - icon: ':warning:'
       path: standard/longest_increasing_subsequence.hpp
-      title: standard/longest_increasing_subsequence.hpp
+      title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
+        \u3067\u6307\u5B9A\u3057\u3001\u6700\u9577\u90E8\u5206\u5897\u52A0\u5217\u306E\
+        \u306E\u9577\u3055\u3092\u6C42\u3081\u308B"
     - icon: ':warning:'
       path: standard/mod_integer.hpp
       title: standard/mod_integer.hpp
@@ -172,6 +174,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/alds1-5-d.test.cpp
       title: test/alds1-5-d.test.cpp
+    - icon: ':x:'
+      path: test/dpl-1-d.test.cpp
+      title: test/dpl-1-d.test.cpp
     - icon: ':heavy_check_mark:'
       path: test/dsl-2-b.test.cpp
       title: test/dsl-2-b.test.cpp

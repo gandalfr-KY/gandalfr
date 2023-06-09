@@ -1,4 +1,4 @@
-#define PROMLEM "https://onlinejudge.u-aizu.ac.jp/problems/DPL_1_D"
+#define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/DPL_1_D"
 #include <bits/stdc++.h>
 #include "../standard/longest_increasing_subsequence.hpp"
 using namespace std;

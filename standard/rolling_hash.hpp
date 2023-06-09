@@ -1,48 +1,55 @@
+#ifndef ROLLING_HASH
+#define ROLLING_HASH
 #include <string>
 #include <vector>
 
 // verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7318906#1
 
+/**
+ * @brief rolling_hashアルゴリズムで文字列を管理するクラス
+ */
 class rolling_hash{
-  private:
-    const int len;
-	const __uint128_t _base = 10007, _mod = ((__uint128_t)1<<61) - 1;
+private:
+    const __uint128_t _base = 10007, _mod = ((__uint128_t)1<<61) - 1;
 	std::vector<__uint128_t> hashes, bases; 
 
-  public:
-	rolling_hash(const std::string &s) : len(s.size()), hashes(len + 1, 0), bases(len + 1, 0)  {
+public:
+	rolling_hash(const std::string &s) : hashes(s.size() + 1, 0), bases(s.size() + 1, 0) {
 		bases[0] = 1;
-		for(int i = 0; i < len; i++){
+		for(int i = 0; i < (int)s.size(); i++){
 			hashes[i + 1] = (hashes[i] * _base + s[i]) % _mod;
 			bases[i + 1] = (bases[i] * _base) % _mod;
 		}
 	}
 
-	/* s[l, r) のハッシュ値を計算
-     * O(1)
+	/**
+     * @brief 半開区間を指定
+     * @return string[l, r) のハッシュ値
      */
 	__uint128_t get(int l, int r){
-		return (hashes[r] + _mod - (hashes[l] * bases[r-l]) % _mod) % _mod;
+		return (hashes[r] + _mod - (hashes[l] * bases[r - l]) % _mod) % _mod;
 	}
 
-    __uint128_t get(int l1, int r1, int l2, int r2){
-        __uint128_t hsh1 = get(l1, r1), hsh2 = get(l2, r2);
-        return (hsh1 * bases[r2 - l2] + hsh2) % _mod;
+	/**
+     * @brief 文字列を結合してハッシュ値を計算
+     * @return get(_l, _r) == r_hash なる string[_l, _r) に対して、[_l, _r) + [l, r) のハッシュ値
+     */
+    __uint128_t concat(__uint128_t r_hash, int l, int r){
+        return (r_hash * bases[r - l] + get(l, r)) % _mod;
 	}
 
-
-    /* s[l1, r1), s[l2, r2) の最長共通接頭辞
-     * O(logN)
+    /**
+     * @return string[l1, r1), string[l2, r2) の最長共通接頭辞の長さ
      */
     int longest_common_prefix(int l1, int r1, int l2, int r2){
-        // [ok, ng)
         int ok = 0, ng = std::min(r1 - l1, r2 - l2) + 1;
-        while(abs(ok - ng) > 1){
+        while(std::abs(ok - ng) > 1){
             int mid = (ok + ng) / 2;
             if(get(l1, l1 + mid) == get(l2, l2 + mid)) ok = mid;
             else ng = mid;
         }
         return ok;
     }
-
 };
+
+#endif

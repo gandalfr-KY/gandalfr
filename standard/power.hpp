@@ -35,30 +35,4 @@ long long power(long long x, long long n, int MOD) {
     return ret;
 }
 
-template<class T>
-matrix<T> power(matrix<T> x, long long n) {
-    assert(x.size_H() == x.size_W());
-    int H = x.size_H();
-    matrix<T> ret(H, H);
-    for(int i=0; i<H; i++) ret[i][i] = 1;
-    while (n > 0) {
-        if (n & 1) ret = ret * x;
-        x = x * x;
-        n >>= 1;
-    }
-    return ret;
-}
-
-matrix<long long> power(matrix<long long> x, long long n, int MOD) {
-    assert(x.size_H() == x.size_W());
-    int H = x.size_H();
-    matrix<long long> ret(matrix<long long>::E(H));
-    while (n > 0) {
-        if (n & 1) ret = ret * x % MOD;
-        x = x * x % MOD;
-        n >>= 1;
-    }
-    return ret;
-}
-
 #endif

@@ -73,22 +73,35 @@ class matrix{
         return *this;
     }
     matrix<T> &operator*=(const matrix<T> &a){
-        assert(this->W == a.H);
-        matrix<T> a_t(a.transpose()), ret(this->H, a.W);
-        for(int i=0; i<this->H; i++){
+        assert(W == a.H);
+        matrix<T> a_t(a.transpose()), ret(H, a.W);
+        for(int i=0; i<H; i++){
             for(int j=0; j<a.W; j++){
                 ret[i][j] = (this->table[i] * a_t.table[j]).sum();
             }
         }
-        std::swap(*this, ret);
-        return *this;
+        return *this = ret;
     }
     matrix<T> &operator/=(const T &a){
         this->table /= a;
         return *this;
     }
-    matrix<T> &operator%=(const T &a){
-        for(int i=0; i<this->H; i++) this->table[i] %= a;
+    
+    /**
+     * @brief 行列累乗
+     * @param n 指数
+     * @attention n が 0 なら単位行列が返る
+     */
+    matrix<T> operator^=(long long n) {
+        assert(H == W);
+        if(n == 0) return *this = E(H);
+        n--;
+        matrix<T> x(*this);
+        while (n) {
+            if (n & 1) *this *= x;
+            x *= x;
+            n >>= 1;
+        }
         return *this;
     }
     matrix<T> operator+(){ return *this; }
@@ -97,8 +110,7 @@ class matrix{
     matrix<T> operator-(const matrix<T> &a){ return matrix<T>(*this) -= a; }
     template<typename S> matrix<T> operator*(const S &a){ return matrix<T>(*this) *= a; }
     matrix<T> operator/(const T &a){ return matrix<T>(*this) /= a; }
-    matrix<T> operator%(const T &a){ return matrix<T>(*this) %= a; }
-
+    matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }
     std::valarray<T> &operator[](int h){ return table[h]; }
 
     friend std::istream &operator>>(std::istream &is, matrix<T> &mt){

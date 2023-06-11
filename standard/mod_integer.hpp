@@ -6,26 +6,22 @@
 // mod_integer<P> a := Pを法とするときの整数型;
 template<int mod>
 class mod_integer{
-  private:
+private:
     // 値は必ず 0 <= val < mod に保たれる
     long long val;
-    friend const mod_integer operator+(const mod_integer &a){
-        return a;
+    friend mod_integer operator+(const mod_integer &a) { return a; }
+    friend mod_integer operator-(const mod_integer &a) { return -a.val; }
+    friend mod_integer operator+(const mod_integer &a, const mod_integer &b) {
+        return mod_integer(a.val + b.val); 
     }
-    friend const mod_integer operator-(const mod_integer &a){
-        return -a.val;
+    friend mod_integer operator-(const mod_integer &a, const mod_integer &b) {
+        return mod_integer(a.val - b.val);
     }
-    friend const mod_integer operator+(const mod_integer &a, const mod_integer &b){
-        return a.val + b.val; 
+    friend mod_integer operator*(const mod_integer &a, const mod_integer &b) {
+        return mod_integer(a.val * b.val);
     }
-    friend const mod_integer operator-(const mod_integer &a, const mod_integer &b){
-        return a.val - b.val;
-    }
-    friend const mod_integer operator*(const mod_integer &a, const mod_integer &b){
-        return a.val * b.val;
-    }
-    friend const mod_integer operator/(const mod_integer &a, const mod_integer &b){
-        return a.val * mod_inverse(b.val, mod);
+    friend mod_integer operator/(const mod_integer &a, const mod_integer &b) {
+        return mod_integer(a.val * mod_inverse(b.val, mod));
     }
 
     friend bool operator==(const mod_integer &a, const mod_integer &b){ return a.val == b.val; }
@@ -44,11 +40,6 @@ class mod_integer{
     }
     mod_integer() : val(0) {}
     int value() const{ return (int)val; }
-
-    /**
-     * @attention 暗黙的な整数型への変換は禁止 
-     */
-    explicit operator int() const { return (int)val; }
 
     const mod_integer &operator=(const mod_integer &a){
         val = a.val;

@@ -110,7 +110,7 @@ class fraction{
         return *this;
     }
     const fraction &operator+=(const fraction &a){
-        return *this= *this + a;
+        return *this = *this + a;
     }
     const fraction &operator-=(const fraction &a){
         return *this = *this - a;

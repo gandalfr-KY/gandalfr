@@ -11,45 +11,42 @@ data:
     path: graph/graph.hpp
     title: "\u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059"
   - icon: ':heavy_check_mark:'
-    path: math/matrix/matrix.hpp
+    path: math/matrix.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
-  - icon: ':heavy_check_mark:'
-    path: math/matrix/matrix.hpp
-    title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
-  - icon: ':warning:'
-    path: standard/power.hpp
-    title: standard/power.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
-  _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _pathExtension: cpp
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    links: []
-  bundledCode: "#line 1 \"math/integer/Fibonacci.hpp\"\n\n\n#include <bits/stdc++.h>\n\
-    #line 1 \"math/matrix/matrix.hpp\"\n\n\n#line 1 \"graph/graph.hpp\"\n\n\n#line\
-    \ 1 \"graph/edge.hpp\"\n\n\n#line 4 \"graph/edge.hpp\"\n\nnamespace internal{\n\
-    \    template<class DERIVED, class WEIGHT>\n    struct _base_edge{\n        int\
-    \ from;\n        int to;\n        WEIGHT cost;\n        int id;\n        _base_edge(int\
-    \ _from, int _to, WEIGHT _cost, int _id) : from(_from), to(_to), cost(_cost),\
-    \ id(_id) {}\n\n        friend bool operator>(const _base_edge &e1, const _base_edge\
-    \ &e){\n            return e1.compare(e) > 0;\n        }\n        friend bool\
-    \ operator>=(const _base_edge &e1, const _base_edge &e){\n            return e1.compare(e)\
-    \ >= 0;\n        }\n        friend bool operator<(const _base_edge &e1, const\
-    \ _base_edge &e){\n            return e1.compare(e) < 0;\n        }\n        friend\
-    \ bool operator<=(const _base_edge &e1, const _base_edge &e){\n            return\
-    \ e1.compare(e) <= 0;\n        }\n        friend std::ostream &operator<<(std::ostream\
-    \ &os, const _base_edge<DERIVED, WEIGHT> &e) {\n            e.print(os);\n   \
-    \         return os;\n        }\n        const _base_edge &operator=(const _base_edge\
-    \ &e){\n            from = e.from, to = e.to, cost = e.cost, id = e.id;\n    \
-    \        return *this;\n        }\n\n        virtual ~_base_edge() = default;\
-    \ \n\n      protected:\n        virtual void print(std::ostream &os) const = 0;\n\
-    \        virtual int compare(const _base_edge &e) const = 0;\n    };\n}\n\ntemplate<class\
-    \ WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{\n\
-    \    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0) {}\n    using\
-    \ internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n    void\
-    \ print(std::ostream &os) const override {\n        os << this->from << \" \"\
-    \ << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/ITP1_7_D
+    links:
+    - https://onlinejudge.u-aizu.ac.jp/problems/ITP1_7_D
+  bundledCode: "#line 1 \"test/itp1-t-d.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ITP1_7_D\"\
+    \n#include <bits/stdc++.h>\n#line 1 \"math/matrix.hpp\"\n\n\n#line 1 \"graph/graph.hpp\"\
+    \n\n\n#line 1 \"graph/edge.hpp\"\n\n\n#line 4 \"graph/edge.hpp\"\n\nnamespace\
+    \ internal{\n    template<class DERIVED, class WEIGHT>\n    struct _base_edge{\n\
+    \        int from;\n        int to;\n        WEIGHT cost;\n        int id;\n \
+    \       _base_edge(int _from, int _to, WEIGHT _cost, int _id) : from(_from), to(_to),\
+    \ cost(_cost), id(_id) {}\n\n        friend bool operator>(const _base_edge &e1,\
+    \ const _base_edge &e){\n            return e1.compare(e) > 0;\n        }\n  \
+    \      friend bool operator>=(const _base_edge &e1, const _base_edge &e){\n  \
+    \          return e1.compare(e) >= 0;\n        }\n        friend bool operator<(const\
+    \ _base_edge &e1, const _base_edge &e){\n            return e1.compare(e) < 0;\n\
+    \        }\n        friend bool operator<=(const _base_edge &e1, const _base_edge\
+    \ &e){\n            return e1.compare(e) <= 0;\n        }\n        friend std::ostream\
+    \ &operator<<(std::ostream &os, const _base_edge<DERIVED, WEIGHT> &e) {\n    \
+    \        e.print(os);\n            return os;\n        }\n        const _base_edge\
+    \ &operator=(const _base_edge &e){\n            from = e.from, to = e.to, cost\
+    \ = e.cost, id = e.id;\n            return *this;\n        }\n\n        virtual\
+    \ ~_base_edge() = default; \n\n      protected:\n        virtual void print(std::ostream\
+    \ &os) const = 0;\n        virtual int compare(const _base_edge &e) const = 0;\n\
+    \    };\n}\n\ntemplate<class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    \ WEIGHT>{\n    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0)\
+    \ {}\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n\
+    \    void print(std::ostream &os) const override {\n        os << this->from <<\
+    \ \" \" << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT>& e) const override {\n        if(this->cost == e.cost){\n          \
     \  if(this->from == e.from){\n                return this->to - e.to;\n      \
     \      }\n            return this->from - e.from;\n        }\n        return this->cost\
@@ -157,8 +154,8 @@ data:
     \ {\n            iterator tmp = *this;\n            ++(*this);\n            return\
     \ tmp;\n        }\n    };\n    iterator begin() const { return iterator(&G, 0);\
     \ }\n    iterator end() const { return iterator(&G, G.size()); }\n};\n\n\n#line\
-    \ 8 \"math/matrix/matrix.hpp\"\n\ntemplate<class T>\nclass matrix{\n  private:\n\
-    \    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n    matrix(int\
+    \ 8 \"math/matrix.hpp\"\n\ntemplate<class T>\nclass matrix{\n  private:\n    int\
+    \ H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n    matrix(int\
     \ _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val, _W), _H)\
     \ {}\n    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()),\
     \ table(std::valarray<T>(W), H) {\n        for(int i=0; i<H; i++) for(int j=0;\
@@ -188,8 +185,8 @@ data:
     \ piv<H; piv++) if(dfm[piv][i] != 0) break;\n                if(piv == H) return\
     \ 0;\n                dfm[i].swap(dfm[piv]);\n                ret *= -1;\n   \
     \         }            \n            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i]\
-    \ * (dfm[j][i] / dfm[i][i]) ;\n            ret *= dfm[i][i];\n        }\n    \
-    \    return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
+    \ * (dfm[j][i] / dfm[i][i]);\n            ret *= dfm[i][i];\n        }\n     \
+    \   return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
     \            for(int j=0; j<W; j++){\n                std::cout << table[i][j]\
     \ << (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
     \        }\n    }\n\n\n    matrix<T> &operator+=(const matrix<T> &a){\n      \
@@ -216,49 +213,36 @@ data:
     \ *= a; }\n    matrix<T> operator/(const T &a){ return matrix<T>(*this) /= a;\
     \ }\n    matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }\n\
     \    std::valarray<T> &operator[](int h){ return table[h]; }\n    friend std::istream\
-    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(int i=0; i<mt.H;\
-    \ i++) is >> mt.table[i];\n        return is;\n    }\n    /**\n     * @brief \u30B5\
-    \u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static matrix<T>\
-    \ E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i < N; i++)\
-    \ ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 1 \"standard/power.hpp\"\
-    \n\n\n#line 5 \"standard/power.hpp\"\n\ntemplate<class T>\nT power(T x, long long\
-    \ n) {\n    T ret = T(1);\n    while (n > 0) {\n        if (n & 1) ret = ret *\
-    \ x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\nlong\
-    \ long power(long long x, long long n) {\n    long long ret = 1;\n    while (n\
-    \ > 0) {\n        if (n & 1) ret = ret * x;\n        x = x * x;\n        n >>=\
-    \ 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long long n, int\
-    \ MOD) {\n    long long ret = 1;\n    x %= MOD;\n    while (n > 0) {\n       \
-    \ if (n & 1) ret = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n\
-    \    }\n    return ret;\n}\n\n\n#line 6 \"math/integer/Fibonacci.hpp\"\n\nlong\
-    \ long Fibonacci(long long n){\n    if(n == 0) return 0;\n    matrix<long long>\
-    \ mat(2, 2, 1);\n    mat[1][1] = 0;\n    return power(mat, n - 1)[0][0];\n}\n\n\
-    long long Fibonacci(long long n, long long MOD){\n    if(n == 0) return 0;\n \
-    \   matrix<long long> mat(2, 2);\n    mat[0][0] = 1; mat[0][1] = 1;\n    mat[1][0]\
-    \ = 1; mat[1][1] = 0;\n    return power(mat, n - 1, MOD)[0][0];\n}\n\n\n"
-  code: "#ifndef FIBONACCI\n#define FIBONACCI\n#include <bits/stdc++.h>\n#include\
-    \ \"../matrix/matrix.hpp\"\n#include \"../../standard/power.hpp\"\n\nlong long\
-    \ Fibonacci(long long n){\n    if(n == 0) return 0;\n    matrix<long long> mat(2,\
-    \ 2, 1);\n    mat[1][1] = 0;\n    return power(mat, n - 1)[0][0];\n}\n\nlong long\
-    \ Fibonacci(long long n, long long MOD){\n    if(n == 0) return 0;\n    matrix<long\
-    \ long> mat(2, 2);\n    mat[0][0] = 1; mat[0][1] = 1;\n    mat[1][0] = 1; mat[1][1]\
-    \ = 0;\n    return power(mat, n - 1, MOD)[0][0];\n}\n\n#endif"
+    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(auto &arr : mt.table)\
+    \ for(auto &x : arr) is >> x;\n        return is;\n    }\n    /**\n     * @brief\
+    \ \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static\
+    \ matrix<T> E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i\
+    \ < N; i++) ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 4 \"test/itp1-t-d.test.cpp\"\
+    \nusing namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i =\
+    \ (ll)(j); i < (ll)(n); i++)\n\nint main(void){\n \n    //input\n \n    int H,\
+    \ W, L;\n    cin >> H >> W >> L;\n    matrix<ll> A(H, W), B(W, L);\n    cin >>\
+    \ A >> B;\n\n    //calculate\n \n    (A * B).print();\n \n}\n"
+  code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ITP1_7_D\"\n\
+    #include <bits/stdc++.h>\n#include \"../math/matrix.hpp\"\nusing namespace std;\n\
+    using ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
+    \nint main(void){\n \n    //input\n \n    int H, W, L;\n    cin >> H >> W >> L;\n\
+    \    matrix<ll> A(H, W), B(W, L);\n    cin >> A >> B;\n\n    //calculate\n \n\
+    \    (A * B).print();\n \n}"
   dependsOn:
-  - math/matrix/matrix.hpp
+  - math/matrix.hpp
   - graph/graph.hpp
   - graph/edge.hpp
   - data_structure/union_find.hpp
-  - standard/power.hpp
-  - math/matrix/matrix.hpp
-  isVerificationFile: false
-  path: math/integer/Fibonacci.hpp
+  isVerificationFile: true
+  path: test/itp1-t-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-12 01:26:09+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
+  timestamp: '2023-06-12 02:08:44+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: math/integer/Fibonacci.hpp
+documentation_of: test/itp1-t-d.test.cpp
 layout: document
 redirect_from:
-- /library/math/integer/Fibonacci.hpp
-- /library/math/integer/Fibonacci.hpp.html
-title: math/integer/Fibonacci.hpp
+- /verify/test/itp1-t-d.test.cpp
+- /verify/test/itp1-t-d.test.cpp.html
+title: test/itp1-t-d.test.cpp
 ---

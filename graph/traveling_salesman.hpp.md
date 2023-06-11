@@ -14,7 +14,7 @@ data:
     path: graph/graph.hpp
     title: "\u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059"
   - icon: ':heavy_check_mark:'
-    path: math/matrix/matrix.hpp
+    path: math/matrix.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
@@ -155,8 +155,8 @@ data:
     \ {\n            iterator tmp = *this;\n            ++(*this);\n            return\
     \ tmp;\n        }\n    };\n    iterator begin() const { return iterator(&G, 0);\
     \ }\n    iterator end() const { return iterator(&G, G.size()); }\n};\n\n\n#line\
-    \ 1 \"math/matrix/matrix.hpp\"\n\n\n#include <valarray>\n#line 8 \"math/matrix/matrix.hpp\"\
-    \n\ntemplate<class T>\nclass matrix{\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
+    \ 1 \"math/matrix.hpp\"\n\n\n#include <valarray>\n#line 8 \"math/matrix.hpp\"\n\
+    \ntemplate<class T>\nclass matrix{\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n  public:\n    matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val,\
     \ _W), _H) {}\n    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()),\
     \ W(vv[0].size()), table(std::valarray<T>(W), H) {\n        for(int i=0; i<H;\
@@ -186,8 +186,8 @@ data:
     \ piv<H; piv++) if(dfm[piv][i] != 0) break;\n                if(piv == H) return\
     \ 0;\n                dfm[i].swap(dfm[piv]);\n                ret *= -1;\n   \
     \         }            \n            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i]\
-    \ * (dfm[j][i] / dfm[i][i]) ;\n            ret *= dfm[i][i];\n        }\n    \
-    \    return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
+    \ * (dfm[j][i] / dfm[i][i]);\n            ret *= dfm[i][i];\n        }\n     \
+    \   return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
     \            for(int j=0; j<W; j++){\n                std::cout << table[i][j]\
     \ << (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
     \        }\n    }\n\n\n    matrix<T> &operator+=(const matrix<T> &a){\n      \
@@ -214,11 +214,11 @@ data:
     \ *= a; }\n    matrix<T> operator/(const T &a){ return matrix<T>(*this) /= a;\
     \ }\n    matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }\n\
     \    std::valarray<T> &operator[](int h){ return table[h]; }\n    friend std::istream\
-    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(int i=0; i<mt.H;\
-    \ i++) is >> mt.table[i];\n        return is;\n    }\n    /**\n     * @brief \u30B5\
-    \u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static matrix<T>\
-    \ E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i < N; i++)\
-    \ ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 5 \"graph/traveling_salesman.hpp\"\
+    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(auto &arr : mt.table)\
+    \ for(auto &x : arr) is >> x;\n        return is;\n    }\n    /**\n     * @brief\
+    \ \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static\
+    \ matrix<T> E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i\
+    \ < N; i++) ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 5 \"graph/traveling_salesman.hpp\"\
     \n\n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1\n\
     \ */\ntemplate<class WEIGHT, bool is_directed>\nWEIGHT traveling_salesman(const\
     \ graph<WEIGHT, is_directed> &G){\n    matrix<WEIGHT> adj(G, -1);\n    const WEIGHT\
@@ -232,7 +232,7 @@ data:
     \ = dp[(1 << N) - 1][0];\n    if(ret == MAX) ret = -1;\n    return ret;\n}\n\n\
     \n"
   code: "#ifndef TRAVELING_SALESMAN\n#define TRAVELING_SALESMAN\n#include \"graph.hpp\"\
-    \n#include \"../math/matrix/matrix.hpp\"\n\n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1\n\
+    \n#include \"../math/matrix.hpp\"\n\n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1\n\
     \ */\ntemplate<class WEIGHT, bool is_directed>\nWEIGHT traveling_salesman(const\
     \ graph<WEIGHT, is_directed> &G){\n    matrix<WEIGHT> adj(G, -1);\n    const WEIGHT\
     \ MAX = std::numeric_limits<WEIGHT>::max() / 2;\n    int N = G.count_nodes();\n\
@@ -248,12 +248,12 @@ data:
   - graph/graph.hpp
   - graph/edge.hpp
   - data_structure/union_find.hpp
-  - math/matrix/matrix.hpp
+  - math/matrix.hpp
   - graph/graph.hpp
   isVerificationFile: false
   path: graph/traveling_salesman.hpp
   requiredBy: []
-  timestamp: '2023-06-12 01:26:09+09:00'
+  timestamp: '2023-06-12 02:08:44+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/traveling_salesman.hpp

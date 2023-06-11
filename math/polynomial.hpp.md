@@ -1,32 +1,29 @@
 ---
 data:
   _extendedDependsOn: []
-  _extendedRequiredBy:
-  - icon: ':warning:'
-    path: math/polynomial/differentiate.hpp
-    title: math/polynomial/differentiate.hpp
-  - icon: ':warning:'
-    path: math/polynomial/integrate.hpp
-    title: math/polynomial/integrate.hpp
+  _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"math/polynomial/polynomial.hpp\"\n\n\n\ntemplate<class coef>\n\
-    class polynomial{\n  private:\n    std::vector<coef> p;\n    std::string variable_name\
-    \ = \"x\";\n\n    const friend polynomial operator+(const polynomial &a){\n  \
-    \      return a;\n    }\n\n    const friend polynomial operator-(const polynomial\
-    \ &a){\n        polynomial<coef> ret(a);\n        for(coef &c : ret) c *= -1;\n\
-    \        return ret;\n    }\n\n    friend const polynomial operator+(const polynomial\
-    \ &a, const polynomial &b){\n        int siz = std::max(a.p.size(), b.p.size());\n\
-    \        int siz1 = a.p.size(), siz2 = b.p.size();\n        polynomial ret;\n\
-    \        ret.p.resize(siz);\n        for(int i=0; i<siz; i++){\n            ret.p[i]\
-    \ = (i < siz1 ? a.p[i] : 0) + (i < siz2 ? b.p[i] : 0);\n        }\n        while(ret.p.back()\
-    \ == 0 && ret.p.size() != 1) ret.p.pop_back();\n        return ret;\n    }\n\n\
-    \    friend const polynomial operator-(const polynomial &a, const polynomial &b){\n\
+  bundledCode: "#line 1 \"math/polynomial.hpp\"\n\n\n#include <vector>\n#include <string>\n\
+    #include <algorithm>\n\n/**\n * @deprecated \u7A4D\u304CO(n^2)\u3067\u304A\u305D\
+    \u3044\u3002\u5F37\u3044\u4EBA\u306E\u30E9\u30A4\u30D6\u30E9\u30EA\u3092\u4F7F\
+    \u304A\u3046\u3002\n */\ntemplate<class coef>\nclass polynomial{\n  private:\n\
+    \    std::vector<coef> p;\n    std::string variable_name = \"x\";\n\n    const\
+    \ friend polynomial operator+(const polynomial &a){\n        return a;\n    }\n\
+    \n    const friend polynomial operator-(const polynomial &a){\n        polynomial<coef>\
+    \ ret(a);\n        for(coef &c : ret) c *= -1;\n        return ret;\n    }\n\n\
+    \    friend const polynomial operator+(const polynomial &a, const polynomial &b){\n\
     \        int siz = std::max(a.p.size(), b.p.size());\n        int siz1 = a.p.size(),\
+    \ siz2 = b.p.size();\n        polynomial ret;\n        ret.p.resize(siz);\n  \
+    \      for(int i=0; i<siz; i++){\n            ret.p[i] = (i < siz1 ? a.p[i] :\
+    \ 0) + (i < siz2 ? b.p[i] : 0);\n        }\n        while(ret.p.back() == 0 &&\
+    \ ret.p.size() != 1) ret.p.pop_back();\n        return ret;\n    }\n\n    friend\
+    \ const polynomial operator-(const polynomial &a, const polynomial &b){\n    \
+    \    int siz = std::max(a.p.size(), b.p.size());\n        int siz1 = a.p.size(),\
     \ siz2 = b.p.size();\n        polynomial ret;\n        ret.p.resize(siz);\n  \
     \      for(int i=0; i<siz; i++){\n            ret.p[i] = (i < siz1 ? a.p[i] :\
     \ 0) - (i < siz2 ? b.p[i] : 0);\n        }\n        while(ret.p.back() == 0 &&\
@@ -66,40 +63,49 @@ data:
     \ std::vector<coef> &vec) : p(vec) {\n        while(p.back() == 0 && p.size()\
     \ != 1) p.pop_back();\n    }\n    polynomial(const coef &n = 0)  : polynomial(std::vector<coef>{n})\
     \ {}\n\n    int max_order() const {\n        return p.size() - 1;\n    }\n   \
-    \ \n    coef get(int n) const {\n        assert(0 <= n);\n        return (n <\
-    \ p.size() ? p[n] : 0);\n    }\n\n    void set(int n, const coef &x){\n      \
-    \  assert(0 <= n);\n        if(n >= p.size()) p.resize(n + 1, 0);\n        p[n]\
-    \ = x;\n        while(p.back() == 0 && p.size() != 1) p.pop_back();\n    }\n\n\
-    \    polynomial &operator=(const polynomial &a){\n        p = a.p;\n        return\
-    \ *this;\n    }\n\n    void operator+=(const polynomial &a){\n        *this =\
-    \ operator+(*this, a);\n    }\n\n    void operator-=(const polynomial &a){\n \
-    \       *this = operator-(*this, a);\n    }\n\n    void operator*=(const polynomial\
-    \ &a){\n        *this = operator*(*this, a);\n    }\n\n    void operator/=(const\
+    \ \n    coef get_coef(int n) const {\n        assert(0 <= n);\n        return\
+    \ (n < p.size() ? p[n] : 0);\n    }\n\n    void set_coef(int n, const coef &x){\n\
+    \        assert(0 <= n);\n        if(n >= p.size()) p.resize(n + 1, 0);\n    \
+    \    p[n] = x;\n        while(p.back() == 0 && p.size() != 1) p.pop_back();\n\
+    \    }\n\n    polynomial &operator=(const polynomial &a){\n        p = a.p;\n\
+    \        return *this;\n    }\n\n    void operator+=(const polynomial &a){\n \
+    \       *this = operator+(*this, a);\n    }\n\n    void operator-=(const polynomial\
+    \ &a){\n        *this = operator-(*this, a);\n    }\n\n    void operator*=(const\
+    \ polynomial &a){\n        *this = operator*(*this, a);\n    }\n\n    void operator/=(const\
     \ polynomial &a){\n        *this = operator/(*this, a);\n    }\n\n    void operator%=(const\
     \ polynomial &a){\n        *this = operator%(*this, a);\n    }\n\n    coef operator[](int\
-    \ n) const{\n        return get(n);\n    }\n    \n    coef operator()(const coef\
-    \ &x) const{\n        coef ret = 0;\n        coef pwr = 1;\n        for(int i=0;\
-    \ i<p.size(); i++){\n            ret += p[i] * pwr;\n            pwr *= x;\n \
-    \       }\n        return ret;\n    }\n    \n    friend std::ostream &operator<<(std::ostream\
+    \ n) const{\n        return get_coef(n);\n    }\n    \n    coef operator()(const\
+    \ coef &x) const{\n        coef ret = 0;\n        coef pwr = 1;\n        for(int\
+    \ i=0; i<p.size(); i++){\n            ret += p[i] * pwr;\n            pwr *= x;\n\
+    \        }\n        return ret;\n    }\n    \n    friend std::ostream &operator<<(std::ostream\
     \ &os, const polynomial &a) {\n        if(a.p.size() == 1 && a.p[0] == 0) os <<\
     \ \"0\";\n        else for(int i=a.p.size()-1; i>=0; i--){\n            if(a.p[i]\
     \ == 0) continue;\n            std::string sign;\n            if(i != a.p.size()-1\
     \ && a.p[i] > 0) sign = \"+ \";\n            if(a.p[i] < 0) sign = \"- \";\n \
     \           os << sign << (a.p[i] >= 0 ? a.p[i] : a.p[i]) << ' ' << a.variable_name\
-    \ << '^' << i << ' ';\n        }\n        return os;\n    }\n\n};\n\n\n\n"
-  code: "#ifndef POLYNOMIAL\n#define POLYNOMIAL\n\ntemplate<class coef>\nclass polynomial{\n\
-    \  private:\n    std::vector<coef> p;\n    std::string variable_name = \"x\";\n\
-    \n    const friend polynomial operator+(const polynomial &a){\n        return\
-    \ a;\n    }\n\n    const friend polynomial operator-(const polynomial &a){\n \
-    \       polynomial<coef> ret(a);\n        for(coef &c : ret) c *= -1;\n      \
-    \  return ret;\n    }\n\n    friend const polynomial operator+(const polynomial\
-    \ &a, const polynomial &b){\n        int siz = std::max(a.p.size(), b.p.size());\n\
-    \        int siz1 = a.p.size(), siz2 = b.p.size();\n        polynomial ret;\n\
-    \        ret.p.resize(siz);\n        for(int i=0; i<siz; i++){\n            ret.p[i]\
-    \ = (i < siz1 ? a.p[i] : 0) + (i < siz2 ? b.p[i] : 0);\n        }\n        while(ret.p.back()\
-    \ == 0 && ret.p.size() != 1) ret.p.pop_back();\n        return ret;\n    }\n\n\
-    \    friend const polynomial operator-(const polynomial &a, const polynomial &b){\n\
+    \ << '^' << i << ' ';\n        }\n        return os;\n    }\n    \n    polynomial<coef>\
+    \ integrate(){\n        polynomial<coef> ret(*this);\n        for(int i=1; i<=max_order()+1;\
+    \ i++){\n            ret.set_coef(i, get_coef(i-1) / i);\n        }\n        return\
+    \ ret;\n    }\n\n    polynomial<coef> differentiate(){\n        polynomial<coef>\
+    \ ret;\n        for(int i=0; i<max_order(); i++){\n            ret.set_coef(i,\
+    \ get_coef(i + 1) * (i + 1));\n        }\n        return ret;\n    }\n\n};\n\n\
+    \n"
+  code: "#ifndef POLYNOMIAL\n#define POLYNOMIAL\n#include <vector>\n#include <string>\n\
+    #include <algorithm>\n\n/**\n * @deprecated \u7A4D\u304CO(n^2)\u3067\u304A\u305D\
+    \u3044\u3002\u5F37\u3044\u4EBA\u306E\u30E9\u30A4\u30D6\u30E9\u30EA\u3092\u4F7F\
+    \u304A\u3046\u3002\n */\ntemplate<class coef>\nclass polynomial{\n  private:\n\
+    \    std::vector<coef> p;\n    std::string variable_name = \"x\";\n\n    const\
+    \ friend polynomial operator+(const polynomial &a){\n        return a;\n    }\n\
+    \n    const friend polynomial operator-(const polynomial &a){\n        polynomial<coef>\
+    \ ret(a);\n        for(coef &c : ret) c *= -1;\n        return ret;\n    }\n\n\
+    \    friend const polynomial operator+(const polynomial &a, const polynomial &b){\n\
     \        int siz = std::max(a.p.size(), b.p.size());\n        int siz1 = a.p.size(),\
+    \ siz2 = b.p.size();\n        polynomial ret;\n        ret.p.resize(siz);\n  \
+    \      for(int i=0; i<siz; i++){\n            ret.p[i] = (i < siz1 ? a.p[i] :\
+    \ 0) + (i < siz2 ? b.p[i] : 0);\n        }\n        while(ret.p.back() == 0 &&\
+    \ ret.p.size() != 1) ret.p.pop_back();\n        return ret;\n    }\n\n    friend\
+    \ const polynomial operator-(const polynomial &a, const polynomial &b){\n    \
+    \    int siz = std::max(a.p.size(), b.p.size());\n        int siz1 = a.p.size(),\
     \ siz2 = b.p.size();\n        polynomial ret;\n        ret.p.resize(siz);\n  \
     \      for(int i=0; i<siz; i++){\n            ret.p[i] = (i < siz1 ? a.p[i] :\
     \ 0) - (i < siz2 ? b.p[i] : 0);\n        }\n        while(ret.p.back() == 0 &&\
@@ -139,40 +145,44 @@ data:
     \ std::vector<coef> &vec) : p(vec) {\n        while(p.back() == 0 && p.size()\
     \ != 1) p.pop_back();\n    }\n    polynomial(const coef &n = 0)  : polynomial(std::vector<coef>{n})\
     \ {}\n\n    int max_order() const {\n        return p.size() - 1;\n    }\n   \
-    \ \n    coef get(int n) const {\n        assert(0 <= n);\n        return (n <\
-    \ p.size() ? p[n] : 0);\n    }\n\n    void set(int n, const coef &x){\n      \
-    \  assert(0 <= n);\n        if(n >= p.size()) p.resize(n + 1, 0);\n        p[n]\
-    \ = x;\n        while(p.back() == 0 && p.size() != 1) p.pop_back();\n    }\n\n\
-    \    polynomial &operator=(const polynomial &a){\n        p = a.p;\n        return\
-    \ *this;\n    }\n\n    void operator+=(const polynomial &a){\n        *this =\
-    \ operator+(*this, a);\n    }\n\n    void operator-=(const polynomial &a){\n \
-    \       *this = operator-(*this, a);\n    }\n\n    void operator*=(const polynomial\
-    \ &a){\n        *this = operator*(*this, a);\n    }\n\n    void operator/=(const\
+    \ \n    coef get_coef(int n) const {\n        assert(0 <= n);\n        return\
+    \ (n < p.size() ? p[n] : 0);\n    }\n\n    void set_coef(int n, const coef &x){\n\
+    \        assert(0 <= n);\n        if(n >= p.size()) p.resize(n + 1, 0);\n    \
+    \    p[n] = x;\n        while(p.back() == 0 && p.size() != 1) p.pop_back();\n\
+    \    }\n\n    polynomial &operator=(const polynomial &a){\n        p = a.p;\n\
+    \        return *this;\n    }\n\n    void operator+=(const polynomial &a){\n \
+    \       *this = operator+(*this, a);\n    }\n\n    void operator-=(const polynomial\
+    \ &a){\n        *this = operator-(*this, a);\n    }\n\n    void operator*=(const\
+    \ polynomial &a){\n        *this = operator*(*this, a);\n    }\n\n    void operator/=(const\
     \ polynomial &a){\n        *this = operator/(*this, a);\n    }\n\n    void operator%=(const\
     \ polynomial &a){\n        *this = operator%(*this, a);\n    }\n\n    coef operator[](int\
-    \ n) const{\n        return get(n);\n    }\n    \n    coef operator()(const coef\
-    \ &x) const{\n        coef ret = 0;\n        coef pwr = 1;\n        for(int i=0;\
-    \ i<p.size(); i++){\n            ret += p[i] * pwr;\n            pwr *= x;\n \
-    \       }\n        return ret;\n    }\n    \n    friend std::ostream &operator<<(std::ostream\
+    \ n) const{\n        return get_coef(n);\n    }\n    \n    coef operator()(const\
+    \ coef &x) const{\n        coef ret = 0;\n        coef pwr = 1;\n        for(int\
+    \ i=0; i<p.size(); i++){\n            ret += p[i] * pwr;\n            pwr *= x;\n\
+    \        }\n        return ret;\n    }\n    \n    friend std::ostream &operator<<(std::ostream\
     \ &os, const polynomial &a) {\n        if(a.p.size() == 1 && a.p[0] == 0) os <<\
     \ \"0\";\n        else for(int i=a.p.size()-1; i>=0; i--){\n            if(a.p[i]\
     \ == 0) continue;\n            std::string sign;\n            if(i != a.p.size()-1\
     \ && a.p[i] > 0) sign = \"+ \";\n            if(a.p[i] < 0) sign = \"- \";\n \
     \           os << sign << (a.p[i] >= 0 ? a.p[i] : a.p[i]) << ' ' << a.variable_name\
-    \ << '^' << i << ' ';\n        }\n        return os;\n    }\n\n};\n\n\n#endif"
+    \ << '^' << i << ' ';\n        }\n        return os;\n    }\n    \n    polynomial<coef>\
+    \ integrate(){\n        polynomial<coef> ret(*this);\n        for(int i=1; i<=max_order()+1;\
+    \ i++){\n            ret.set_coef(i, get_coef(i-1) / i);\n        }\n        return\
+    \ ret;\n    }\n\n    polynomial<coef> differentiate(){\n        polynomial<coef>\
+    \ ret;\n        for(int i=0; i<max_order(); i++){\n            ret.set_coef(i,\
+    \ get_coef(i + 1) * (i + 1));\n        }\n        return ret;\n    }\n\n};\n\n\
+    #endif"
   dependsOn: []
   isVerificationFile: false
-  path: math/polynomial/polynomial.hpp
-  requiredBy:
-  - math/polynomial/integrate.hpp
-  - math/polynomial/differentiate.hpp
-  timestamp: '2023-06-02 11:10:20+09:00'
+  path: math/polynomial.hpp
+  requiredBy: []
+  timestamp: '2023-06-12 02:08:44+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
-documentation_of: math/polynomial/polynomial.hpp
+documentation_of: math/polynomial.hpp
 layout: document
 redirect_from:
-- /library/math/polynomial/polynomial.hpp
-- /library/math/polynomial/polynomial.hpp.html
-title: math/polynomial/polynomial.hpp
+- /library/math/polynomial.hpp
+- /library/math/polynomial.hpp.html
+title: math/polynomial.hpp
 ---

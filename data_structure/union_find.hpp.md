@@ -44,21 +44,12 @@ data:
   - icon: ':warning:'
     path: graph/traveling_salesman.hpp
     title: graph/traveling_salesman.hpp
-  - icon: ':warning:'
-    path: math/integer/Fibonacci.hpp
-    title: math/integer/Fibonacci.hpp
-  - icon: ':warning:'
-    path: math/integer/totient.hpp
-    title: math/integer/totient.hpp
   - icon: ':heavy_check_mark:'
-    path: math/matrix/matrix.hpp
+    path: math/matrix.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
   - icon: ':warning:'
     path: other/random.hpp
     title: other/random.hpp
-  - icon: ':warning:'
-    path: standard/power.hpp
-    title: standard/power.hpp
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: test/grl-1-a.test.cpp
@@ -72,6 +63,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/itp1-t-d.test.cpp
+    title: test/itp1-t-d.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -126,10 +120,7 @@ data:
   path: data_structure/union_find.hpp
   requiredBy:
   - other/random.hpp
-  - math/integer/Fibonacci.hpp
-  - math/integer/totient.hpp
-  - math/matrix/matrix.hpp
-  - standard/power.hpp
+  - math/matrix.hpp
   - graph/diameter.hpp
   - graph/Warshall_Floyd.hpp
   - graph/lowest_common_ancestor.hpp
@@ -147,6 +138,7 @@ data:
   timestamp: '2023-04-01 20:47:10+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/itp1-t-d.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp
   - test/grl-5-a.test.cpp

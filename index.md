@@ -71,62 +71,41 @@ data:
     - icon: ':warning:'
       path: graph/traveling_salesman.hpp
       title: graph/traveling_salesman.hpp
-  - name: .
+  - name: math
     pages:
     - icon: ':warning:'
-      path: make_library_united.cpp
-      title: make_library_united.cpp
+      path: math/Bezout_coefficients.hpp
+      title: math/Bezout_coefficients.hpp
     - icon: ':warning:'
-      path: template.cpp
-      title: template.cpp
-  - name: math/integer
-    pages:
+      path: math/Garner.hpp
+      title: math/Garner.hpp
     - icon: ':warning:'
-      path: math/integer/Bezout_coefficients.hpp
-      title: math/integer/Bezout_coefficients.hpp
+      path: math/binomial_coefficients.hpp
+      title: math/binomial_coefficients.hpp
     - icon: ':warning:'
-      path: math/integer/Fibonacci.hpp
-      title: math/integer/Fibonacci.hpp
+      path: math/divisors.hpp
+      title: math/divisors.hpp
     - icon: ':warning:'
-      path: math/integer/Garner.hpp
-      title: math/integer/Garner.hpp
-    - icon: ':warning:'
-      path: math/integer/binomial_coefficients.hpp
-      title: math/integer/binomial_coefficients.hpp
-    - icon: ':warning:'
-      path: math/integer/divisors.hpp
-      title: math/integer/divisors.hpp
-    - icon: ':warning:'
-      path: math/integer/factorize.hpp
-      title: math/integer/factorize.hpp
-    - icon: ':warning:'
-      path: math/integer/mod_inverse.hpp
-      title: math/integer/mod_inverse.hpp
-    - icon: ':warning:'
-      path: math/integer/prime_number_utility.hpp
-      title: math/integer/prime_number_utility.hpp
-    - icon: ':warning:'
-      path: math/integer/primes_list.hpp
-      title: math/integer/primes_list.hpp
-    - icon: ':warning:'
-      path: math/integer/totient.hpp
-      title: math/integer/totient.hpp
-  - name: math/matrix
-    pages:
+      path: math/factorize.hpp
+      title: math/factorize.hpp
     - icon: ':heavy_check_mark:'
-      path: math/matrix/matrix.hpp
+      path: math/matrix.hpp
       title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
-  - name: math/polynomial
-    pages:
     - icon: ':warning:'
-      path: math/polynomial/differentiate.hpp
-      title: math/polynomial/differentiate.hpp
+      path: math/mod_inverse.hpp
+      title: math/mod_inverse.hpp
     - icon: ':warning:'
-      path: math/polynomial/integrate.hpp
-      title: math/polynomial/integrate.hpp
+      path: math/polynomial.hpp
+      title: math/polynomial.hpp
     - icon: ':warning:'
-      path: math/polynomial/polynomial.hpp
-      title: math/polynomial/polynomial.hpp
+      path: math/prime_number_utility.hpp
+      title: math/prime_number_utility.hpp
+    - icon: ':warning:'
+      path: math/primes_list.hpp
+      title: math/primes_list.hpp
+    - icon: ':warning:'
+      path: math/totient.hpp
+      title: math/totient.hpp
   - name: other
     pages:
     - icon: ':heavy_check_mark:'
@@ -169,6 +148,11 @@ data:
       path: standard/rolling_hash.hpp
       title: "rolling_hash\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3067\u6587\u5B57\u5217\
         \u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9"
+  - name: .
+    pages:
+    - icon: ':warning:'
+      path: template.cpp
+      title: template.cpp
   verificationCategories:
   - name: test
     pages:
@@ -196,5 +180,8 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/grl-5-a.test.cpp
       title: test/grl-5-a.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: test/itp1-t-d.test.cpp
+      title: test/itp1-t-d.test.cpp
 layout: toppage
 ---

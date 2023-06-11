@@ -2,11 +2,11 @@
 data:
   _extendedDependsOn:
   - icon: ':warning:'
-    path: math/integer/Bezout_coefficients.hpp
-    title: math/integer/Bezout_coefficients.hpp
+    path: math/Bezout_coefficients.hpp
+    title: math/Bezout_coefficients.hpp
   - icon: ':warning:'
-    path: math/integer/mod_inverse.hpp
-    title: math/integer/mod_inverse.hpp
+    path: math/mod_inverse.hpp
+    title: math/mod_inverse.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -16,15 +16,15 @@ data:
     links:
     - https://atcoder.jp/contests/abc168/submissions/39533747
   bundledCode: "#line 1 \"standard/fraction.hpp\"\n\n\n#include <numeric>\n#include\
-    \ <iostream>\n#include <assert.h>\n#line 1 \"math/integer/mod_inverse.hpp\"\n\n\
-    \n#line 1 \"math/integer/Bezout_coefficients.hpp\"\n\n\n#include <utility>\n\n\
-    long long _extgcd(long long a, long long b, long long &s, long long &t){\n   \
-    \ if(b == 0){\n        s = 1;\n        t = 0;\n        return a;\n    }\n    else{\n\
-    \        auto d = std::lldiv(a, b);\n        long long tmp = _extgcd(b, d.rem,\
-    \ t, s);\n        t -= d.quot * s;\n        return tmp;\n    }\n}\n\nstd::pair<long\
+    \ <iostream>\n#include <assert.h>\n#line 1 \"math/mod_inverse.hpp\"\n\n\n#line\
+    \ 1 \"math/Bezout_coefficients.hpp\"\n\n\n#include <utility>\n#include <cstdlib>\n\
+    \nlong long _extgcd(long long a, long long b, long long &s, long long &t){\n \
+    \   if(b == 0){\n        s = 1;\n        t = 0;\n        return a;\n    }\n  \
+    \  else{\n        auto d = std::lldiv(a, b);\n        long long tmp = _extgcd(b,\
+    \ d.rem, t, s);\n        t -= d.quot * s;\n        return tmp;\n    }\n}\n\nstd::pair<long\
     \ long, long long> Bezout_coefficients(long long a, long long b){\n    long long\
     \ s, t;\n    _extgcd((a >= 0 ? a : -a), (b >= 0 ? b : -b), s, t);\n    return\
-    \ {(a >= 0 ? s : -s), (b >= 0 ? t : -t)};\n}\n\n\n#line 5 \"math/integer/mod_inverse.hpp\"\
+    \ {(a >= 0 ? s : -s), (b >= 0 ? t : -t)};\n}\n\n\n#line 5 \"math/mod_inverse.hpp\"\
     \n\nlong long mod_inverse(long long x, int mod){\n    assert(mod > 0);\n    x\
     \ %= mod;\n    auto [a, b] = Bezout_coefficients(x, mod);\n    assert(a * x ==\
     \ -b * mod + 1);\n    return (a >= 0 ? a : a + mod);\n}\n\n\n#line 7 \"standard/fraction.hpp\"\
@@ -112,16 +112,16 @@ data:
     \ fraction M_INF, INF;\n};\nconst fraction fraction::M_INF(-1, 0), fraction::INF(1,\
     \ 0);\n\n\n\n"
   code: "#ifndef FRACTION\n#define FRACTION\n#include <numeric>\n#include <iostream>\n\
-    #include <assert.h>\n#include \"../math/integer/mod_inverse.hpp\"\n\nnamespace\
-    \ internal{\n\n    __int128_t __gcd(__int128_t a, __int128_t b){\n        if(a\
-    \ % b == 0) return b;\n        return __gcd(b, a % b); \n    }\n\n    // \u7D76\
-    \u5BFE\u5024\u306E GCD \u3092\u8FD4\u3059\u3002\u7247\u65B9\u304C 0 \u306A\u3089\
-    \u3082\u3046\u4E00\u65B9\u306E\u7D76\u5BFE\u5024\u3002\n    __int128_t gcd(__int128_t\
-    \ a, __int128_t b){\n        if(b == 0) return (a >= 0 ? a : -a);\n        return\
-    \ internal::__gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));\n    }\n\n    inline\
-    \ void simplify(__int128_t &num, __int128_t &den){\n        __int128_t d = internal::gcd(num,\
-    \ den);\n        num /= (den >= 0 ? d : -d);\n        den /= (den >= 0 ? d : -d);\n\
-    \    }\n};\n\n// verify : https://atcoder.jp/contests/abc168/submissions/39533747\n\
+    #include <assert.h>\n#include \"../math/mod_inverse.hpp\"\n\nnamespace internal{\n\
+    \n    __int128_t __gcd(__int128_t a, __int128_t b){\n        if(a % b == 0) return\
+    \ b;\n        return __gcd(b, a % b); \n    }\n\n    // \u7D76\u5BFE\u5024\u306E\
+    \ GCD \u3092\u8FD4\u3059\u3002\u7247\u65B9\u304C 0 \u306A\u3089\u3082\u3046\u4E00\
+    \u65B9\u306E\u7D76\u5BFE\u5024\u3002\n    __int128_t gcd(__int128_t a, __int128_t\
+    \ b){\n        if(b == 0) return (a >= 0 ? a : -a);\n        return internal::__gcd((a\
+    \ >= 0 ? a : -a), (b >= 0 ? b : -b));\n    }\n\n    inline void simplify(__int128_t\
+    \ &num, __int128_t &den){\n        __int128_t d = internal::gcd(num, den);\n \
+    \       num /= (den >= 0 ? d : -d);\n        den /= (den >= 0 ? d : -d);\n   \
+    \ }\n};\n\n// verify : https://atcoder.jp/contests/abc168/submissions/39533747\n\
     // \u6F14\u7B97\u7D50\u679C\u306E\u5206\u5B50\u30FB\u5206\u6BCD\u304C\u3068\u3082\
     \u306B 64bit \u6574\u6570\u306E\u7BC4\u56F2\u3067\u306E\u307F\u52D5\u4F5C\u3092\
     \u4FDD\u8A3C\nclass fraction{\n  private:\n    long long num, den;\n\n    friend\
@@ -197,12 +197,12 @@ data:
     \ fraction M_INF, INF;\n};\nconst fraction fraction::M_INF(-1, 0), fraction::INF(1,\
     \ 0);\n\n\n#endif\n"
   dependsOn:
-  - math/integer/mod_inverse.hpp
-  - math/integer/Bezout_coefficients.hpp
+  - math/mod_inverse.hpp
+  - math/Bezout_coefficients.hpp
   isVerificationFile: false
   path: standard/fraction.hpp
   requiredBy: []
-  timestamp: '2023-06-12 00:09:34+09:00'
+  timestamp: '2023-06-12 02:08:44+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: standard/fraction.hpp

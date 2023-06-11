@@ -14,7 +14,7 @@ data:
     path: graph/graph.hpp
     title: "\u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059"
   - icon: ':heavy_check_mark:'
-    path: math/matrix/matrix.hpp
+    path: math/matrix.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
@@ -23,21 +23,21 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"graph/is_isomorphic.hpp\"\n\n\n#line 1 \"graph/graph.hpp\"\
-    \n\n\n#include <vector>\n#include <algorithm>\n#include <tuple>\n#line 1 \"graph/edge.hpp\"\
-    \n\n\n#include <iostream>\n\nnamespace internal{\n    template<class DERIVED,\
-    \ class WEIGHT>\n    struct _base_edge{\n        int from;\n        int to;\n\
-    \        WEIGHT cost;\n        int id;\n        _base_edge(int _from, int _to,\
-    \ WEIGHT _cost, int _id) : from(_from), to(_to), cost(_cost), id(_id) {}\n\n \
-    \       friend bool operator>(const _base_edge &e1, const _base_edge &e){\n  \
-    \          return e1.compare(e) > 0;\n        }\n        friend bool operator>=(const\
-    \ _base_edge &e1, const _base_edge &e){\n            return e1.compare(e) >= 0;\n\
-    \        }\n        friend bool operator<(const _base_edge &e1, const _base_edge\
-    \ &e){\n            return e1.compare(e) < 0;\n        }\n        friend bool\
-    \ operator<=(const _base_edge &e1, const _base_edge &e){\n            return e1.compare(e)\
-    \ <= 0;\n        }\n        friend std::ostream &operator<<(std::ostream &os,\
-    \ const _base_edge<DERIVED, WEIGHT> &e) {\n            e.print(os);\n        \
-    \    return os;\n        }\n        const _base_edge &operator=(const _base_edge\
+  bundledCode: "#line 1 \"graph/is_isomorphic.hpp\"\n\n\n#include <numeric>\n#line\
+    \ 1 \"graph/graph.hpp\"\n\n\n#include <vector>\n#include <algorithm>\n#include\
+    \ <tuple>\n#line 1 \"graph/edge.hpp\"\n\n\n#include <iostream>\n\nnamespace internal{\n\
+    \    template<class DERIVED, class WEIGHT>\n    struct _base_edge{\n        int\
+    \ from;\n        int to;\n        WEIGHT cost;\n        int id;\n        _base_edge(int\
+    \ _from, int _to, WEIGHT _cost, int _id) : from(_from), to(_to), cost(_cost),\
+    \ id(_id) {}\n\n        friend bool operator>(const _base_edge &e1, const _base_edge\
+    \ &e){\n            return e1.compare(e) > 0;\n        }\n        friend bool\
+    \ operator>=(const _base_edge &e1, const _base_edge &e){\n            return e1.compare(e)\
+    \ >= 0;\n        }\n        friend bool operator<(const _base_edge &e1, const\
+    \ _base_edge &e){\n            return e1.compare(e) < 0;\n        }\n        friend\
+    \ bool operator<=(const _base_edge &e1, const _base_edge &e){\n            return\
+    \ e1.compare(e) <= 0;\n        }\n        friend std::ostream &operator<<(std::ostream\
+    \ &os, const _base_edge<DERIVED, WEIGHT> &e) {\n            e.print(os);\n   \
+    \         return os;\n        }\n        const _base_edge &operator=(const _base_edge\
     \ &e){\n            from = e.from, to = e.to, cost = e.cost, id = e.id;\n    \
     \        return *this;\n        }\n\n        virtual ~_base_edge() = default;\
     \ \n\n      protected:\n        virtual void print(std::ostream &os) const = 0;\n\
@@ -154,8 +154,8 @@ data:
     \ {\n            iterator tmp = *this;\n            ++(*this);\n            return\
     \ tmp;\n        }\n    };\n    iterator begin() const { return iterator(&G, 0);\
     \ }\n    iterator end() const { return iterator(&G, G.size()); }\n};\n\n\n#line\
-    \ 1 \"math/matrix/matrix.hpp\"\n\n\n#include <valarray>\n#line 8 \"math/matrix/matrix.hpp\"\
-    \n\ntemplate<class T>\nclass matrix{\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
+    \ 1 \"math/matrix.hpp\"\n\n\n#include <valarray>\n#line 8 \"math/matrix.hpp\"\n\
+    \ntemplate<class T>\nclass matrix{\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n  public:\n    matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val,\
     \ _W), _H) {}\n    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()),\
     \ W(vv[0].size()), table(std::valarray<T>(W), H) {\n        for(int i=0; i<H;\
@@ -185,8 +185,8 @@ data:
     \ piv<H; piv++) if(dfm[piv][i] != 0) break;\n                if(piv == H) return\
     \ 0;\n                dfm[i].swap(dfm[piv]);\n                ret *= -1;\n   \
     \         }            \n            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i]\
-    \ * (dfm[j][i] / dfm[i][i]) ;\n            ret *= dfm[i][i];\n        }\n    \
-    \    return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
+    \ * (dfm[j][i] / dfm[i][i]);\n            ret *= dfm[i][i];\n        }\n     \
+    \   return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
     \            for(int j=0; j<W; j++){\n                std::cout << table[i][j]\
     \ << (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
     \        }\n    }\n\n\n    matrix<T> &operator+=(const matrix<T> &a){\n      \
@@ -213,11 +213,11 @@ data:
     \ *= a; }\n    matrix<T> operator/(const T &a){ return matrix<T>(*this) /= a;\
     \ }\n    matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }\n\
     \    std::valarray<T> &operator[](int h){ return table[h]; }\n    friend std::istream\
-    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(int i=0; i<mt.H;\
-    \ i++) is >> mt.table[i];\n        return is;\n    }\n    /**\n     * @brief \u30B5\
-    \u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static matrix<T>\
-    \ E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i < N; i++)\
-    \ ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 5 \"graph/is_isomorphic.hpp\"\
+    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(auto &arr : mt.table)\
+    \ for(auto &x : arr) is >> x;\n        return is;\n    }\n    /**\n     * @brief\
+    \ \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static\
+    \ matrix<T> E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i\
+    \ < N; i++) ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 6 \"graph/is_isomorphic.hpp\"\
     \n\n// \u591A\u5206\u3042\u3063\u3066\u308B\u304F\u3089\u3044\u306E\u6C17\u6301\
     \u3061\u3067...\n// \u540C\u578B\u5224\u5B9A\ntemplate<typename WEIGHT, bool is_directed>\n\
     bool is_isomorphic(const graph<WEIGHT, is_directed> &G1, const graph<WEIGHT, is_directed>\
@@ -230,30 +230,30 @@ data:
     \                ok = false;\n                break;\n            }\n        }\n\
     \        if(ok) return true;\n    }while(std::next_permutation(nodes_id.begin(),\
     \ nodes_id.end()));\n    return false;\n}\n\n\n"
-  code: "#ifndef IS_ISOMORPHIC\n#define IS_ISOMORPHIC\n#include \"graph.hpp\"\n#include\
-    \ \"../math/matrix/matrix.hpp\"\n\n// \u591A\u5206\u3042\u3063\u3066\u308B\u304F\
-    \u3089\u3044\u306E\u6C17\u6301\u3061\u3067...\n// \u540C\u578B\u5224\u5B9A\ntemplate<typename\
-    \ WEIGHT, bool is_directed>\nbool is_isomorphic(const graph<WEIGHT, is_directed>\
-    \ &G1, const graph<WEIGHT, is_directed> &G2){\n    if(G1.count_nodes() != G2.count_nodes())\
-    \ return false;\n    if(G1.count_nodes() != G2.count_nodes()) return false;\n\n\
-    \    int N = G1.count_nodes();\n    WEIGHT MIN = std::numeric_limits<WEIGHT>::min();\n\
-    \    matrix<WEIGHT> adj1(G1, MIN), adj2(G2, MIN);\n\n    std::vector<int> nodes_id(N);\n\
-    \    std::iota(nodes_id.begin(), nodes_id.end(), 0);\n    do{\n        bool ok\
-    \ = true;\n        for(int i=0; i<N; i++) for(int j=0; j<N; j++) {\n         \
-    \   if(adj1[i][j] != adj2[nodes_id[i]][nodes_id[j]]){\n                ok = false;\n\
-    \                break;\n            }\n        }\n        if(ok) return true;\n\
-    \    }while(std::next_permutation(nodes_id.begin(), nodes_id.end()));\n    return\
-    \ false;\n}\n\n#endif"
+  code: "#ifndef IS_ISOMORPHIC\n#define IS_ISOMORPHIC\n#include <numeric>\n#include\
+    \ \"graph.hpp\"\n#include \"../math/matrix.hpp\"\n\n// \u591A\u5206\u3042\u3063\
+    \u3066\u308B\u304F\u3089\u3044\u306E\u6C17\u6301\u3061\u3067...\n// \u540C\u578B\
+    \u5224\u5B9A\ntemplate<typename WEIGHT, bool is_directed>\nbool is_isomorphic(const\
+    \ graph<WEIGHT, is_directed> &G1, const graph<WEIGHT, is_directed> &G2){\n   \
+    \ if(G1.count_nodes() != G2.count_nodes()) return false;\n    if(G1.count_nodes()\
+    \ != G2.count_nodes()) return false;\n\n    int N = G1.count_nodes();\n    WEIGHT\
+    \ MIN = std::numeric_limits<WEIGHT>::min();\n    matrix<WEIGHT> adj1(G1, MIN),\
+    \ adj2(G2, MIN);\n\n    std::vector<int> nodes_id(N);\n    std::iota(nodes_id.begin(),\
+    \ nodes_id.end(), 0);\n    do{\n        bool ok = true;\n        for(int i=0;\
+    \ i<N; i++) for(int j=0; j<N; j++) {\n            if(adj1[i][j] != adj2[nodes_id[i]][nodes_id[j]]){\n\
+    \                ok = false;\n                break;\n            }\n        }\n\
+    \        if(ok) return true;\n    }while(std::next_permutation(nodes_id.begin(),\
+    \ nodes_id.end()));\n    return false;\n}\n\n#endif"
   dependsOn:
   - graph/graph.hpp
   - graph/edge.hpp
   - data_structure/union_find.hpp
-  - math/matrix/matrix.hpp
+  - math/matrix.hpp
   - graph/graph.hpp
   isVerificationFile: false
   path: graph/is_isomorphic.hpp
   requiredBy: []
-  timestamp: '2023-06-12 01:26:09+09:00'
+  timestamp: '2023-06-12 02:08:44+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/is_isomorphic.hpp

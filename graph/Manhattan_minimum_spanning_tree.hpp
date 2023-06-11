@@ -9,7 +9,7 @@
  * @brief マンハッタン距離で最小重み全域木を構成する。
  * @param xs 各ノードの x 座標
  * @param ys 各ノードの y 座標
- * */
+ */
 template<typename WEIGHT>
 class Manhattan_minimum_spanning_tree {
   private:

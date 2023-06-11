@@ -1,9 +1,9 @@
 #define PROBLEM "https://atcoder.jp/contests/jsc2021/tasks/jsc2021_g"
 #define IGNORE
 #include <bits/stdc++.h>
-#include "gandalfr/math/matrix.hpp"
-#include "gandalfr/standard/mod_integer.hpp"
-#include "gandalfr/graph/Manhattan_minimum_spanning_tree.hpp"
+#include "../math/matrix.hpp"
+#include "../standard/mod_integer.hpp"
+#include "../graph/Manhattan_minimum_spanning_tree.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)

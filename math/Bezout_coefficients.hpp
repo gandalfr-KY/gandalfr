@@ -1,6 +1,7 @@
 #ifndef BEZOUT_COEFFICIENTS
 #define BEZOUT_COEFFICIENTS
 #include <utility>
+#include <cstdlib>
 
 long long _extgcd(long long a, long long b, long long &s, long long &t){
     if(b == 0){

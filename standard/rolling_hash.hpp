@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 
-// verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7318906#1
-
 /**
  * @brief rolling_hashアルゴリズムで文字列を管理するクラス
  */

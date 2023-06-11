@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <assert.h>
-#include "../../graph/graph.hpp"
+#include "../graph/graph.hpp"
 
 template<class T>
 class matrix{
@@ -64,7 +64,7 @@ class matrix{
                 dfm[i].swap(dfm[piv]);
                 ret *= -1;
             }            
-            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i] * (dfm[j][i] / dfm[i][i]) ;
+            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i] * (dfm[j][i] / dfm[i][i]);
             ret *= dfm[i][i];
         }
         return ret;
@@ -133,7 +133,7 @@ class matrix{
     matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }
     std::valarray<T> &operator[](int h){ return table[h]; }
     friend std::istream &operator>>(std::istream &is, matrix<T> &mt){
-        for(int i=0; i<mt.H; i++) is >> mt.table[i];
+        for(auto &arr : mt.table) for(auto &x : arr) is >> x;
         return is;
     }
     /**

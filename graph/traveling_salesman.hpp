@@ -1,7 +1,7 @@
 #ifndef TRAVELING_SALESMAN
 #define TRAVELING_SALESMAN
 #include "graph.hpp"
-#include "../math/matrix/matrix.hpp"
+#include "../math/matrix.hpp"
 
 /*
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1

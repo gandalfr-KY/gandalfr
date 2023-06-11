@@ -1,6 +1,12 @@
 #ifndef POLYNOMIAL
 #define POLYNOMIAL
+#include <vector>
+#include <string>
+#include <algorithm>
 
+/**
+ * @deprecated 積がO(n^2)でおそい。強い人のライブラリを使おう。
+ */
 template<class coef>
 class polynomial{
   private:
@@ -125,12 +131,12 @@ class polynomial{
         return p.size() - 1;
     }
     
-    coef get(int n) const {
+    coef get_coef(int n) const {
         assert(0 <= n);
         return (n < p.size() ? p[n] : 0);
     }
 
-    void set(int n, const coef &x){
+    void set_coef(int n, const coef &x){
         assert(0 <= n);
         if(n >= p.size()) p.resize(n + 1, 0);
         p[n] = x;
@@ -163,7 +169,7 @@ class polynomial{
     }
 
     coef operator[](int n) const{
-        return get(n);
+        return get_coef(n);
     }
     
     coef operator()(const coef &x) const{
@@ -187,8 +193,23 @@ class polynomial{
         }
         return os;
     }
+    
+    polynomial<coef> integrate(){
+        polynomial<coef> ret(*this);
+        for(int i=1; i<=max_order()+1; i++){
+            ret.set_coef(i, get_coef(i-1) / i);
+        }
+        return ret;
+    }
+
+    polynomial<coef> differentiate(){
+        polynomial<coef> ret;
+        for(int i=0; i<max_order(); i++){
+            ret.set_coef(i, get_coef(i + 1) * (i + 1));
+        }
+        return ret;
+    }
 
 };
-
 
 #endif

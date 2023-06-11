@@ -1,5 +1,7 @@
 #ifndef MANHATTAN_MST
 #define MANHATTAN_MST
+#include <numeric>
+#include <map>
 #include "graph.hpp"
 
 // from : https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp

@@ -1,6 +1,6 @@
 #ifndef TOTIENT
 #define TOTIENT
-#include "../../standard/power.hpp"
+#include "../standard/power.hpp"
 #include "factorize.hpp"
 
 /* オイラー関数

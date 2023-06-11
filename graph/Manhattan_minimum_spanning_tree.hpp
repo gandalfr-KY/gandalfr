@@ -4,7 +4,12 @@
 #include <map>
 #include "graph.hpp"
 
-// from : https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp
+/**
+ * @see https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp
+ * @brief マンハッタン距離で最小重み全域木を構成する。
+ * @param xs 各ノードの x 座標
+ * @param ys 各ノードの y 座標
+ * */
 template<typename WEIGHT>
 class Manhattan_minimum_spanning_tree {
   private:
@@ -12,7 +17,7 @@ class Manhattan_minimum_spanning_tree {
 
   public:
 
-    Manhattan_minimum_spanning_tree(const std::vector<WEIGHT> &xs, const std::vector<WEIGHT> &ys) : mst(xs.size()) {
+    Manhattan_minimum_spanning_tree(std::vector<WEIGHT> &xs, std::vector<WEIGHT> &ys) : mst(xs.size()) {
         int N = xs.size();
         std::vector<edge<WEIGHT>> E;
         std::vector<int> idx(N);

@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "gandalfr/all"
+//#include "gandalfr/basic"
 using namespace std;
 using ll = long long;
 const int INF = 1001001001;
@@ -18,11 +18,11 @@ const ll _MOD = 998244353;
 #define LF cout << endl
 template<typename T1, typename T2> inline bool chmax(T1 &a, T2 b) { return a < b && (a = b, true); }
 template<typename T1, typename T2> inline bool chmin(T1 &a, T2 b) { return a > b && (a = b, true); }
-void Yes(bool ok){ cout << (ok ? "Yes" : "No") << endl; }
-using mint = mod_integer<MOD>;
+void Yes(bool ok){ std::cout << (ok ? "Yes" : "No") << std::endl; }
+/*using mint = mod_integer<MOD>;
 using _mint = mod_integer<_MOD>;
 using binom = binomial_coefficients<mint>;
-using _binom = binomial_coefficients<_mint>;
+using _binom = binomial_coefficients<_mint>;*/
 
 int main(void){
  

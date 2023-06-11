@@ -6,6 +6,11 @@
 #include "edge.hpp"
 #include "../data_structure/union_find.hpp"
 
+/**
+ * @brief グラフを管理するクラス。
+ * @tparam WEIGHT int なら重みなし、そうでないなら重みつきグラフ
+ * @tparam is_directed 有向グラフかとうか
+ */
 template <typename WEIGHT, bool is_directed>
 class graph{
     private:

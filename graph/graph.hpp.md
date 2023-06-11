@@ -61,7 +61,7 @@ data:
     title: math/integer/totient.hpp
   - icon: ':heavy_check_mark:'
     path: math/matrix/matrix.hpp
-    title: "\u884C\u5217\u7D2F\u4E57"
+    title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
   - icon: ':warning:'
     path: other/random.hpp
     title: other/random.hpp

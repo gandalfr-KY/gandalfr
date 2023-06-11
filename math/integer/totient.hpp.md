@@ -21,7 +21,7 @@ data:
     title: math/integer/primes_list.hpp
   - icon: ':heavy_check_mark:'
     path: math/matrix/matrix.hpp
-    title: "\u884C\u5217\u7D2F\u4E57"
+    title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
   - icon: ':warning:'
     path: standard/power.hpp
     title: standard/power.hpp
@@ -172,70 +172,81 @@ data:
     \ {}\n    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()),\
     \ table(std::valarray<T>(W), H) {\n        for(int i=0; i<H; i++) for(int j=0;\
     \ j<W; j++) table[i][j] = vv[i][j];\n    }\n    matrix(const std::valarray<std::valarray<T>>\
-    \ &vv) : H(vv.size()), W(vv[0].size()), table(vv) {}\n    // \u30B0\u30E9\u30D5\
-    =>\u96A3\u63A5\u884C\u5217\n    template<bool is_directed>\n    matrix(const graph<T,\
-    \ is_directed> &G, T invalid)\n         : H(G.count_nodes()), W(G.count_nodes()),\
-    \ table(std::valarray<T>(invalid, W), H){\n        for(int i = 0; i < H; i++)\
-    \ table[i][i] = 0; \n        for(auto &e : G.edges()){\n            table[e.from][e.to]\
-    \ = e.cost;\n            if(!is_directed) table[e.to][e.from] = e.cost;\n    \
-    \    }\n    }\n\n    int size_H() const { return H; }\n    int size_W() const\
-    \ { return W; }\n\n    matrix<T> transpose() const {\n        matrix<T> ret(W,\
-    \ H);\n        for(int i=0; i<H; i++) for(int j=0; j<W; j++) ret[j][i] = table[i][j];\n\
-    \        return ret;\n    }\n\n    const T determinant() const {\n        assert(H\
-    \ == W);\n        matrix<T> dfm(*this);\n        T ret = 1;\n        for(int i=0;\
-    \ i<H; i++){\n            if(dfm[i][i] == 0){\n                int piv;\n    \
-    \            for(piv=i+1; piv<H; piv++) if(dfm[piv][i] != 0) break;\n        \
-    \        if(piv == H) return 0;\n                std::swap(dfm[i], dfm[piv]);\n\
-    \                ret *= -1;\n            }            \n            for(int j=i+1;\
-    \ j<H; j++) dfm[j] -= dfm[i] * (dfm[j][i] / dfm[i][i]) ;\n            ret *= dfm[i][i];\n\
-    \        }\n        return ret;\n    }\n\n    matrix<T> &operator=(const matrix<T>\
-    \ &a){\n        table = a.table;\n        return *this;\n    }\n    matrix<T>\
-    \ &operator+=(const matrix<T> &a){\n        this->table += a.table;\n        return\
-    \ *this;\n    }\n    matrix<T> &operator-=(const matrix<T> &a){\n        this->table\
-    \ -= a.table;\n        return *this;\n    }\n    matrix<T> &operator*=(const T\
-    \ &a){\n        this->table *= a;\n        return *this;\n    }\n    matrix<T>\
-    \ &operator*=(const matrix<T> &a){\n        assert(W == a.H);\n        matrix<T>\
-    \ a_t(a.transpose()), ret(H, a.W);\n        for(int i=0; i<H; i++){\n        \
-    \    for(int j=0; j<a.W; j++){\n                ret[i][j] = (this->table[i] *\
-    \ a_t.table[j]).sum();\n            }\n        }\n        return *this = ret;\n\
-    \    }\n    matrix<T> &operator/=(const T &a){\n        this->table /= a;\n  \
-    \      return *this;\n    }\n    \n    /**\n     * @brief \u884C\u5217\u7D2F\u4E57\
-    \n     * @param n \u6307\u6570\n     * @attention n \u304C 0 \u306A\u3089\u5358\
-    \u4F4D\u884C\u5217\u304C\u8FD4\u308B\n     */\n    matrix<T> operator^=(long long\
-    \ n) {\n        assert(H == W);\n        if(n == 0) return *this = E(H);\n   \
-    \     n--;\n        matrix<T> x(*this);\n        while (n) {\n            if (n\
-    \ & 1) *this *= x;\n            x *= x;\n            n >>= 1;\n        }\n   \
-    \     return *this;\n    }\n    matrix<T> operator+(){ return *this; }\n    matrix<T>\
-    \ operator-(){ return matrix<T>(*this) *= -1; }\n    matrix<T> operator+(const\
-    \ matrix<T> &a){ return matrix<T>(*this) += a; }\n    matrix<T> operator-(const\
-    \ matrix<T> &a){ return matrix<T>(*this) -= a; }\n    template<typename S> matrix<T>\
-    \ operator*(const S &a){ return matrix<T>(*this) *= a; }\n    matrix<T> operator/(const\
-    \ T &a){ return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long long n)\
-    \ { return matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int h){\
-    \ return table[h]; }\n\n    friend std::istream &operator>>(std::istream &is,\
-    \ matrix<T> &mt){\n        for(int i=0; i<mt.H; i++) is >> mt.table[i];\n    \
-    \    return is;\n    }\n\n    void print() const {\n        for(int i=0; i<H;\
-    \ i++){\n            for(int j=0; j<W; j++){\n                std::cout << table[i][j]\
+    \ &vv) : H(vv.size()), W(vv[0].size()), table(vv) {}\n    /**\n     * @brief \u30B0\
+    \u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB\n     * @param invalid\
+    \ \u8FBA\u306E\u306A\u3044\u5834\u6240\u306E\u5024\n     * @attention G \u306B\
+    \u81EA\u5DF1\u30EB\u30FC\u30D7\u304C\u542B\u307E\u308C\u3066\u3044\u306A\u3044\
+    \u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\u306F 0 \n     */\n    template<bool\
+    \ is_directed>\n    matrix(const graph<T, is_directed> &G, T invalid)\n      \
+    \   : H(G.count_nodes()), W(G.count_nodes()), table(std::valarray<T>(invalid,\
+    \ W), H){\n        for(int i = 0; i < H; i++) table[i][i] = 0; \n        for(auto\
+    \ &e : G.edges()){\n            table[e.from][e.to] = e.cost;\n            if(!is_directed)\
+    \ table[e.to][e.from] = e.cost;\n        }\n    }\n\n    /**\n     * @brief \u884C\
+    \u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002\n     * @param val \u62E1\
+    \u5F35\u90E8\u5206\u306E\u5024\n     */\n    void resize(int _H, int _W, T val\
+    \ = 0){\n        H = _H, W = _W;\n        table.resize(_H, std::valarray<T>(val,\
+    \ _H));\n    }\n    int size_H() const { return H; }\n    int size_W() const {\
+    \ return W; }\n    matrix<T> transpose() const {\n        matrix<T> ret(W, H);\n\
+    \        for(int i=0; i<H; i++) for(int j=0; j<W; j++) ret[j][i] = table[i][j];\n\
+    \        return ret;\n    }\n    /**\n     * @attention O(n^3)\n     * @attention\
+    \ \u6574\u6570\u578B\u3067\u306F\u6B63\u3057\u304F\u8A08\u7B97\u3067\u304D\u306A\
+    \u3044\u3002double \u3084 fraction \u3092\u4F7F\u3046\u3053\u3068\u3002\n    \
+    \ */\n    const T determinant() const {\n        assert(H == W);\n        matrix<T>\
+    \ dfm(*this);\n        T ret = 1;\n        for(int i=0; i<H; i++){\n         \
+    \   if(dfm[i][i] == 0){\n                int piv;\n                for(piv=i+1;\
+    \ piv<H; piv++) if(dfm[piv][i] != 0) break;\n                if(piv == H) return\
+    \ 0;\n                dfm[i].swap(dfm[piv]);\n                ret *= -1;\n   \
+    \         }            \n            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i]\
+    \ * (dfm[j][i] / dfm[i][i]) ;\n            ret *= dfm[i][i];\n        }\n    \
+    \    return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
+    \            for(int j=0; j<W; j++){\n                std::cout << table[i][j]\
     \ << (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
-    \        }\n    }\n\n    static matrix<T> E(int N){\n        matrix<T> ret(N,\
-    \ N);\n        for(int i = 0; i < N; i++) ret[i][i] = 1;\n        return ret;\n\
-    \    }\n};\n\n\n#line 5 \"standard/power.hpp\"\n\ntemplate<class T>\nT power(T\
-    \ x, long long n) {\n    T ret = T(1);\n    while (n > 0) {\n        if (n & 1)\
-    \ ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n\
-    }\n\nlong long power(long long x, long long n) {\n    long long ret = 1;\n   \
-    \ while (n > 0) {\n        if (n & 1) ret = ret * x;\n        x = x * x;\n   \
-    \     n >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long\
-    \ long n, int MOD) {\n    long long ret = 1;\n    x %= MOD;\n    while (n > 0)\
-    \ {\n        if (n & 1) ret = ret * x % MOD;\n        x = x * x % MOD;\n     \
-    \   n >>= 1;\n    }\n    return ret;\n}\n\n\n#line 1 \"math/integer/factorize.hpp\"\
-    \n\n\n#include <utility>\n#include <cmath>\n#line 1 \"math/integer/primes_list.hpp\"\
-    \n\n\n#line 1 \"math/integer/prime_number_utility.hpp\"\n\n\n#line 4 \"math/integer/prime_number_utility.hpp\"\
-    \n#include <math.h>\n\n/* is_prime::judge(n) := |n|\u304C\u7D20\u6570\u304B\u3069\
-    \u3046\u304B\n * \u5224\u5B9A\u8868\u3092\u306A\u3089\u3057\u6642\u9593 O(NloglogN)\
-    \ \u3067\u69CB\u6210\u3057\u3066\u5224\u5B9A\n */\nclass prime_number_utility{\n\
-    \  protected:\n    static bool has_table_made;\n    static std::vector<bool> sieve;\n\
-    \    static const int sieve_size = (1 << 18);\n\n  public:\n    prime_number_utility()\
-    \ = delete;\n    ~prime_number_utility() = delete;\n\n    static bool is_prime(long\
+    \        }\n    }\n\n\n    matrix<T> &operator+=(const matrix<T> &a){\n      \
+    \  this->table += a.table;\n        return *this;\n    }\n    matrix<T> &operator-=(const\
+    \ matrix<T> &a){\n        this->table -= a.table;\n        return *this;\n   \
+    \ }\n    matrix<T> &operator*=(const T &a){\n        this->table *= a;\n     \
+    \   return *this;\n    }\n    matrix<T> &operator*=(const matrix<T> &a){\n   \
+    \     assert(W == a.H);\n        matrix<T> a_t(a.transpose()), ret(H, a.W);\n\
+    \        for(int i=0; i<H; i++){\n            for(int j=0; j<a.W; j++){\n    \
+    \            ret[i][j] = (this->table[i] * a_t.table[j]).sum();\n            }\n\
+    \        }\n        return *this = ret;\n    }\n    matrix<T> &operator/=(const\
+    \ T &a){\n        this->table /= a;\n        return *this;\n    }\n    /**\n \
+    \    * @brief \u884C\u5217\u306E\u51AA\u4E57\u3002\n     * @param n \u6307\u6570\
+    \n     * @attention n \u304C 0 \u306A\u3089\u5358\u4F4D\u884C\u5217\u3002\n  \
+    \   * @attention \u6F14\u7B97\u5B50\u306E\u512A\u5148\u5EA6\u306B\u6CE8\u610F\u3002\
+    \n     */\n    matrix<T> operator^=(long long n) {\n        assert(H == W);\n\
+    \        if(n == 0) return *this = E(H);\n        n--;\n        matrix<T> x(*this);\n\
+    \        while (n) {\n            if (n & 1) *this *= x;\n            x *= x;\n\
+    \            n >>= 1;\n        }\n        return *this;\n    }\n\n    matrix<T>\
+    \ operator+(){ return *this; }\n    matrix<T> operator-(){ return matrix<T>(*this)\
+    \ *= -1; }\n    matrix<T> operator+(const matrix<T> &a){ return matrix<T>(*this)\
+    \ += a; }\n    matrix<T> operator-(const matrix<T> &a){ return matrix<T>(*this)\
+    \ -= a; }\n    template<typename S> matrix<T> operator*(const S &a){ return matrix<T>(*this)\
+    \ *= a; }\n    matrix<T> operator/(const T &a){ return matrix<T>(*this) /= a;\
+    \ }\n    matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }\n\
+    \    std::valarray<T> &operator[](int h){ return table[h]; }\n    friend std::istream\
+    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(int i=0; i<mt.H;\
+    \ i++) is >> mt.table[i];\n        return is;\n    }\n    /**\n     * @brief \u30B5\
+    \u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static matrix<T>\
+    \ E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i < N; i++)\
+    \ ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 5 \"standard/power.hpp\"\
+    \n\ntemplate<class T>\nT power(T x, long long n) {\n    T ret = T(1);\n    while\
+    \ (n > 0) {\n        if (n & 1) ret = ret * x;\n        x = x * x;\n        n\
+    \ >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long long\
+    \ n) {\n    long long ret = 1;\n    while (n > 0) {\n        if (n & 1) ret =\
+    \ ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\n\
+    long long power(long long x, long long n, int MOD) {\n    long long ret = 1;\n\
+    \    x %= MOD;\n    while (n > 0) {\n        if (n & 1) ret = ret * x % MOD;\n\
+    \        x = x * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n}\n\n\n#line\
+    \ 1 \"math/integer/factorize.hpp\"\n\n\n#include <utility>\n#include <cmath>\n\
+    #line 1 \"math/integer/primes_list.hpp\"\n\n\n#line 1 \"math/integer/prime_number_utility.hpp\"\
+    \n\n\n#line 4 \"math/integer/prime_number_utility.hpp\"\n#include <math.h>\n\n\
+    /* is_prime::judge(n) := |n|\u304C\u7D20\u6570\u304B\u3069\u3046\u304B\n * \u5224\
+    \u5B9A\u8868\u3092\u306A\u3089\u3057\u6642\u9593 O(NloglogN) \u3067\u69CB\u6210\
+    \u3057\u3066\u5224\u5B9A\n */\nclass prime_number_utility{\n  protected:\n   \
+    \ static bool has_table_made;\n    static std::vector<bool> sieve;\n    static\
+    \ const int sieve_size = (1 << 18);\n\n  public:\n    prime_number_utility() =\
+    \ delete;\n    ~prime_number_utility() = delete;\n\n    static bool is_prime(long\
     \ long n){\n        if(!has_table_made){\n            sieve.assign(sieve_size,\
     \ true);\n            sieve[0] = sieve[1] = false;\n            sieve[2] = true;\n\
     \            for(int i = 4; i < sieve_size; i += 2) sieve[i] = false;\n      \
@@ -296,7 +307,7 @@ data:
   isVerificationFile: false
   path: math/integer/totient.hpp
   requiredBy: []
-  timestamp: '2023-06-12 00:09:34+09:00'
+  timestamp: '2023-06-12 01:26:09+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: math/integer/totient.hpp

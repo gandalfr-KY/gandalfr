@@ -11,11 +11,16 @@ data:
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test/manhattan-mst.test.cpp
+    title: test/manhattan-mst.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
+    document_title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\
+      \u91CD\u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
     links:
     - https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp
   bundledCode: "#line 1 \"graph/Manhattan_minimum_spanning_tree.hpp\"\n\n\n#include\
@@ -154,44 +159,50 @@ data:
     \ {\n            iterator tmp = *this;\n            ++(*this);\n            return\
     \ tmp;\n        }\n    };\n    iterator begin() const { return iterator(&G, 0);\
     \ }\n    iterator end() const { return iterator(&G, G.size()); }\n};\n\n\n#line\
-    \ 6 \"graph/Manhattan_minimum_spanning_tree.hpp\"\n\n// from : https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n\
-    template<typename WEIGHT>\nclass Manhattan_minimum_spanning_tree {\n  private:\n\
-    \    graph<WEIGHT, false> mst;\n\n  public:\n\n    Manhattan_minimum_spanning_tree(const\
-    \ std::vector<WEIGHT> &xs, const std::vector<WEIGHT> &ys) : mst(xs.size()) {\n\
-    \        int N = xs.size();\n        std::vector<edge<WEIGHT>> E;\n        std::vector<int>\
-    \ idx(N);\n        std::iota(idx.begin(), idx.end(), 0);\n        for (int s =\
-    \ 0; s < 2; s++) {\n            for (int t = 0; t < 2; t++) {\n              \
-    \  std::sort(idx.begin(), idx.end(), [&](int i, int j){ return xs[i] + ys[i] <\
-    \ xs[j] + ys[j]; });\n                std::map<WEIGHT, int> sweep;\n         \
-    \       for (int i : idx) {\n                    for (auto it = sweep.lower_bound(-ys[i]);\
-    \ it != sweep.end(); it = sweep.erase(it)) {\n                        int j =\
-    \ it->second;\n                        if (xs[i] - xs[j] < ys[i] - ys[j]) break;\n\
-    \                        E.emplace_back(edge<WEIGHT>{i, j, std::abs(xs[i] - xs[j])\
-    \ + std::abs(ys[i] - ys[j]), -1});\n                    }\n                  \
-    \  sweep[-ys[i]] = i;\n                }\n                std::swap(xs, ys);\n\
-    \            }\n            for(auto &x : xs) x = -x;\n        }\n\n        int\
-    \ cnt_id = 0;\n        sort(E.begin(), E.end());\n        for(auto &e : E) if(!mst.are_connected(e.from,\
+    \ 6 \"graph/Manhattan_minimum_spanning_tree.hpp\"\n\n/**\n * @see https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n\
+    \ * @brief \u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
+    \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002\n * @param xs \u5404\
+    \u30CE\u30FC\u30C9\u306E x \u5EA7\u6A19\n * @param ys \u5404\u30CE\u30FC\u30C9\
+    \u306E y \u5EA7\u6A19\n * */\ntemplate<typename WEIGHT>\nclass Manhattan_minimum_spanning_tree\
+    \ {\n  private:\n    graph<WEIGHT, false> mst;\n\n  public:\n\n    Manhattan_minimum_spanning_tree(std::vector<WEIGHT>\
+    \ &xs, std::vector<WEIGHT> &ys) : mst(xs.size()) {\n        int N = xs.size();\n\
+    \        std::vector<edge<WEIGHT>> E;\n        std::vector<int> idx(N);\n    \
+    \    std::iota(idx.begin(), idx.end(), 0);\n        for (int s = 0; s < 2; s++)\
+    \ {\n            for (int t = 0; t < 2; t++) {\n                std::sort(idx.begin(),\
+    \ idx.end(), [&](int i, int j){ return xs[i] + ys[i] < xs[j] + ys[j]; });\n  \
+    \              std::map<WEIGHT, int> sweep;\n                for (int i : idx)\
+    \ {\n                    for (auto it = sweep.lower_bound(-ys[i]); it != sweep.end();\
+    \ it = sweep.erase(it)) {\n                        int j = it->second;\n     \
+    \                   if (xs[i] - xs[j] < ys[i] - ys[j]) break;\n              \
+    \          E.emplace_back(edge<WEIGHT>{i, j, std::abs(xs[i] - xs[j]) + std::abs(ys[i]\
+    \ - ys[j]), -1});\n                    }\n                    sweep[-ys[i]] =\
+    \ i;\n                }\n                std::swap(xs, ys);\n            }\n \
+    \           for(auto &x : xs) x = -x;\n        }\n\n        int cnt_id = 0;\n\
+    \        sort(E.begin(), E.end());\n        for(auto &e : E) if(!mst.are_connected(e.from,\
     \ e.to)) {\n            e.id = cnt_id;\n            mst.add_edge(e);\n       \
     \     cnt_id++;\n        }\n    }\n\n    const graph<WEIGHT, false> &get_tree(){\
     \ return mst; }\n\n};\n\n\n"
   code: "#ifndef MANHATTAN_MST\n#define MANHATTAN_MST\n#include <numeric>\n#include\
-    \ <map>\n#include \"graph.hpp\"\n\n// from : https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n\
-    template<typename WEIGHT>\nclass Manhattan_minimum_spanning_tree {\n  private:\n\
-    \    graph<WEIGHT, false> mst;\n\n  public:\n\n    Manhattan_minimum_spanning_tree(const\
-    \ std::vector<WEIGHT> &xs, const std::vector<WEIGHT> &ys) : mst(xs.size()) {\n\
-    \        int N = xs.size();\n        std::vector<edge<WEIGHT>> E;\n        std::vector<int>\
-    \ idx(N);\n        std::iota(idx.begin(), idx.end(), 0);\n        for (int s =\
-    \ 0; s < 2; s++) {\n            for (int t = 0; t < 2; t++) {\n              \
-    \  std::sort(idx.begin(), idx.end(), [&](int i, int j){ return xs[i] + ys[i] <\
-    \ xs[j] + ys[j]; });\n                std::map<WEIGHT, int> sweep;\n         \
-    \       for (int i : idx) {\n                    for (auto it = sweep.lower_bound(-ys[i]);\
-    \ it != sweep.end(); it = sweep.erase(it)) {\n                        int j =\
-    \ it->second;\n                        if (xs[i] - xs[j] < ys[i] - ys[j]) break;\n\
-    \                        E.emplace_back(edge<WEIGHT>{i, j, std::abs(xs[i] - xs[j])\
-    \ + std::abs(ys[i] - ys[j]), -1});\n                    }\n                  \
-    \  sweep[-ys[i]] = i;\n                }\n                std::swap(xs, ys);\n\
-    \            }\n            for(auto &x : xs) x = -x;\n        }\n\n        int\
-    \ cnt_id = 0;\n        sort(E.begin(), E.end());\n        for(auto &e : E) if(!mst.are_connected(e.from,\
+    \ <map>\n#include \"graph.hpp\"\n\n/**\n * @see https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n\
+    \ * @brief \u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
+    \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002\n * @param xs \u5404\
+    \u30CE\u30FC\u30C9\u306E x \u5EA7\u6A19\n * @param ys \u5404\u30CE\u30FC\u30C9\
+    \u306E y \u5EA7\u6A19\n * */\ntemplate<typename WEIGHT>\nclass Manhattan_minimum_spanning_tree\
+    \ {\n  private:\n    graph<WEIGHT, false> mst;\n\n  public:\n\n    Manhattan_minimum_spanning_tree(std::vector<WEIGHT>\
+    \ &xs, std::vector<WEIGHT> &ys) : mst(xs.size()) {\n        int N = xs.size();\n\
+    \        std::vector<edge<WEIGHT>> E;\n        std::vector<int> idx(N);\n    \
+    \    std::iota(idx.begin(), idx.end(), 0);\n        for (int s = 0; s < 2; s++)\
+    \ {\n            for (int t = 0; t < 2; t++) {\n                std::sort(idx.begin(),\
+    \ idx.end(), [&](int i, int j){ return xs[i] + ys[i] < xs[j] + ys[j]; });\n  \
+    \              std::map<WEIGHT, int> sweep;\n                for (int i : idx)\
+    \ {\n                    for (auto it = sweep.lower_bound(-ys[i]); it != sweep.end();\
+    \ it = sweep.erase(it)) {\n                        int j = it->second;\n     \
+    \                   if (xs[i] - xs[j] < ys[i] - ys[j]) break;\n              \
+    \          E.emplace_back(edge<WEIGHT>{i, j, std::abs(xs[i] - xs[j]) + std::abs(ys[i]\
+    \ - ys[j]), -1});\n                    }\n                    sweep[-ys[i]] =\
+    \ i;\n                }\n                std::swap(xs, ys);\n            }\n \
+    \           for(auto &x : xs) x = -x;\n        }\n\n        int cnt_id = 0;\n\
+    \        sort(E.begin(), E.end());\n        for(auto &e : E) if(!mst.are_connected(e.from,\
     \ e.to)) {\n            e.id = cnt_id;\n            mst.add_edge(e);\n       \
     \     cnt_id++;\n        }\n    }\n\n    const graph<WEIGHT, false> &get_tree(){\
     \ return mst; }\n\n};\n\n#endif"
@@ -202,13 +213,15 @@ data:
   isVerificationFile: false
   path: graph/Manhattan_minimum_spanning_tree.hpp
   requiredBy: []
-  timestamp: '2023-06-12 02:21:06+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  timestamp: '2023-06-12 02:36:24+09:00'
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test/manhattan-mst.test.cpp
 documentation_of: graph/Manhattan_minimum_spanning_tree.hpp
 layout: document
 redirect_from:
 - /library/graph/Manhattan_minimum_spanning_tree.hpp
 - /library/graph/Manhattan_minimum_spanning_tree.hpp.html
-title: graph/Manhattan_minimum_spanning_tree.hpp
+title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\u307F\
+  \u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
 ---

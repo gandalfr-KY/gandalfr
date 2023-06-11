@@ -11,9 +11,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/Kruscal.hpp
     title: graph/Kruscal.hpp
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: graph/Manhattan_minimum_spanning_tree.hpp
-    title: graph/Manhattan_minimum_spanning_tree.hpp
+    title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
+      \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
   - icon: ':heavy_check_mark:'
     path: graph/Warshall_Floyd.hpp
     title: graph/Warshall_Floyd.hpp
@@ -75,6 +76,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/itp1-t-d.test.cpp
     title: test/itp1-t-d.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/manhattan-mst.test.cpp
+    title: test/manhattan-mst.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -326,6 +330,7 @@ data:
   - test/itp1-t-d.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp
+  - test/manhattan-mst.test.cpp
   - test/grl-5-a.test.cpp
   - test/grl-1-c.test.cpp
 documentation_of: graph/graph.hpp

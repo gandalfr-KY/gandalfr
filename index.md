@@ -115,7 +115,7 @@ data:
     pages:
     - icon: ':heavy_check_mark:'
       path: math/matrix/matrix.hpp
-      title: math/matrix/matrix.hpp
+      title: "\u884C\u5217\u7D2F\u4E57"
   - name: math/polynomial
     pages:
     - icon: ':warning:'

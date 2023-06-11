@@ -21,7 +21,7 @@ data:
     title: math/integer/primes_list.hpp
   - icon: ':heavy_check_mark:'
     path: math/matrix/matrix.hpp
-    title: math/matrix/matrix.hpp
+    title: "\u884C\u5217\u7D2F\u4E57"
   - icon: ':warning:'
     path: standard/power.hpp
     title: standard/power.hpp
@@ -194,25 +194,29 @@ data:
     \ *this;\n    }\n    matrix<T> &operator-=(const matrix<T> &a){\n        this->table\
     \ -= a.table;\n        return *this;\n    }\n    matrix<T> &operator*=(const T\
     \ &a){\n        this->table *= a;\n        return *this;\n    }\n    matrix<T>\
-    \ &operator*=(const matrix<T> &a){\n        assert(this->W == a.H);\n        matrix<T>\
-    \ a_t(a.transpose()), ret(this->H, a.W);\n        for(int i=0; i<this->H; i++){\n\
-    \            for(int j=0; j<a.W; j++){\n                ret[i][j] = (this->table[i]\
-    \ * a_t.table[j]).sum();\n            }\n        }\n        std::swap(*this, ret);\n\
-    \        return *this;\n    }\n    matrix<T> &operator/=(const T &a){\n      \
-    \  this->table /= a;\n        return *this;\n    }\n    matrix<T> &operator%=(const\
-    \ T &a){\n        for(int i=0; i<this->H; i++) this->table[i] %= a;\n        return\
-    \ *this;\n    }\n    matrix<T> operator+(){ return *this; }\n    matrix<T> operator-(){\
-    \ return matrix<T>(*this) *= -1; }\n    matrix<T> operator+(const matrix<T> &a){\
-    \ return matrix<T>(*this) += a; }\n    matrix<T> operator-(const matrix<T> &a){\
-    \ return matrix<T>(*this) -= a; }\n    template<typename S> matrix<T> operator*(const\
-    \ S &a){ return matrix<T>(*this) *= a; }\n    matrix<T> operator/(const T &a){\
-    \ return matrix<T>(*this) /= a; }\n    matrix<T> operator%(const T &a){ return\
-    \ matrix<T>(*this) %= a; }\n\n    std::valarray<T> &operator[](int h){ return\
-    \ table[h]; }\n\n    friend std::istream &operator>>(std::istream &is, matrix<T>\
-    \ &mt){\n        for(int i=0; i<mt.H; i++) is >> mt.table[i];\n        return\
-    \ is;\n    }\n\n    void print() const {\n        for(int i=0; i<H; i++){\n  \
-    \          for(int j=0; j<W; j++){\n                std::cout << table[i][j] <<\
-    \ (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
+    \ &operator*=(const matrix<T> &a){\n        assert(W == a.H);\n        matrix<T>\
+    \ a_t(a.transpose()), ret(H, a.W);\n        for(int i=0; i<H; i++){\n        \
+    \    for(int j=0; j<a.W; j++){\n                ret[i][j] = (this->table[i] *\
+    \ a_t.table[j]).sum();\n            }\n        }\n        return *this = ret;\n\
+    \    }\n    matrix<T> &operator/=(const T &a){\n        this->table /= a;\n  \
+    \      return *this;\n    }\n    \n    /**\n     * @brief \u884C\u5217\u7D2F\u4E57\
+    \n     * @param n \u6307\u6570\n     * @attention n \u304C 0 \u306A\u3089\u5358\
+    \u4F4D\u884C\u5217\u304C\u8FD4\u308B\n     */\n    matrix<T> operator^=(long long\
+    \ n) {\n        assert(H == W);\n        if(n == 0) return *this = E(H);\n   \
+    \     n--;\n        matrix<T> x(*this);\n        while (n) {\n            if (n\
+    \ & 1) *this *= x;\n            x *= x;\n            n >>= 1;\n        }\n   \
+    \     return *this;\n    }\n    matrix<T> operator+(){ return *this; }\n    matrix<T>\
+    \ operator-(){ return matrix<T>(*this) *= -1; }\n    matrix<T> operator+(const\
+    \ matrix<T> &a){ return matrix<T>(*this) += a; }\n    matrix<T> operator-(const\
+    \ matrix<T> &a){ return matrix<T>(*this) -= a; }\n    template<typename S> matrix<T>\
+    \ operator*(const S &a){ return matrix<T>(*this) *= a; }\n    matrix<T> operator/(const\
+    \ T &a){ return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long long n)\
+    \ { return matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int h){\
+    \ return table[h]; }\n\n    friend std::istream &operator>>(std::istream &is,\
+    \ matrix<T> &mt){\n        for(int i=0; i<mt.H; i++) is >> mt.table[i];\n    \
+    \    return is;\n    }\n\n    void print() const {\n        for(int i=0; i<H;\
+    \ i++){\n            for(int j=0; j<W; j++){\n                std::cout << table[i][j]\
+    \ << (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
     \        }\n    }\n\n    static matrix<T> E(int N){\n        matrix<T> ret(N,\
     \ N);\n        for(int i = 0; i < N; i++) ret[i][i] = 1;\n        return ret;\n\
     \    }\n};\n\n\n#line 5 \"standard/power.hpp\"\n\ntemplate<class T>\nT power(T\
@@ -223,15 +227,7 @@ data:
     \     n >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long\
     \ long n, int MOD) {\n    long long ret = 1;\n    x %= MOD;\n    while (n > 0)\
     \ {\n        if (n & 1) ret = ret * x % MOD;\n        x = x * x % MOD;\n     \
-    \   n >>= 1;\n    }\n    return ret;\n}\n\ntemplate<class T>\nmatrix<T> power(matrix<T>\
-    \ x, long long n) {\n    assert(x.size_H() == x.size_W());\n    int H = x.size_H();\n\
-    \    matrix<T> ret(H, H);\n    for(int i=0; i<H; i++) ret[i][i] = 1;\n    while\
-    \ (n > 0) {\n        if (n & 1) ret = ret * x;\n        x = x * x;\n        n\
-    \ >>= 1;\n    }\n    return ret;\n}\n\nmatrix<long long> power(matrix<long long>\
-    \ x, long long n, int MOD) {\n    assert(x.size_H() == x.size_W());\n    int H\
-    \ = x.size_H();\n    matrix<long long> ret(matrix<long long>::E(H));\n    while\
-    \ (n > 0) {\n        if (n & 1) ret = ret * x % MOD;\n        x = x * x % MOD;\n\
-    \        n >>= 1;\n    }\n    return ret;\n}\n\n\n#line 1 \"math/integer/factorize.hpp\"\
+    \   n >>= 1;\n    }\n    return ret;\n}\n\n\n#line 1 \"math/integer/factorize.hpp\"\
     \n\n\n#include <utility>\n#include <cmath>\n#line 1 \"math/integer/primes_list.hpp\"\
     \n\n\n#line 1 \"math/integer/prime_number_utility.hpp\"\n\n\n#line 4 \"math/integer/prime_number_utility.hpp\"\
     \n#include <math.h>\n\n/* is_prime::judge(n) := |n|\u304C\u7D20\u6570\u304B\u3069\
@@ -300,7 +296,7 @@ data:
   isVerificationFile: false
   path: math/integer/totient.hpp
   requiredBy: []
-  timestamp: '2023-06-07 01:06:33+09:00'
+  timestamp: '2023-06-12 00:09:34+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: math/integer/totient.hpp

@@ -46,7 +46,7 @@ data:
       title: graph/edge.hpp
     - icon: ':heavy_check_mark:'
       path: graph/graph.hpp
-      title: "\u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059"
+      title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
     - icon: ':warning:'
       path: graph/is_isomorphic.hpp
       title: graph/is_isomorphic.hpp

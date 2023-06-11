@@ -9,7 +9,7 @@ data:
     title: graph/edge.hpp
   - icon: ':heavy_check_mark:'
     path: graph/graph.hpp
-    title: "\u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059"
+    title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   - icon: ':warning:'
     path: graph/reversed_graph.hpp
     title: graph/reversed_graph.hpp
@@ -78,7 +78,11 @@ data:
     \ result[leader(i)].push_back(i);\n        result.erase(\n            std::remove_if(result.begin(),\
     \ result.end(),\n            [&](const std::vector<int>& v) { return v.empty();\
     \ }), result.end());\n        return result;\n    }\n};\n\n\n#line 8 \"graph/graph.hpp\"\
-    \n\ntemplate <typename WEIGHT, bool is_directed>\nclass graph{\n    private:\n\
+    \n\n/**\n * @brief \u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\
+    \u30B9\u3002\n * @tparam WEIGHT int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\
+    \u305D\u3046\u3067\u306A\u3044\u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\
+    \u30D5\n * @tparam is_directed \u6709\u5411\u30B0\u30E9\u30D5\u304B\u3068\u3046\
+    \u304B\n */\ntemplate <typename WEIGHT, bool is_directed>\nclass graph{\n    private:\n\
     \    int N;\n    std::vector<std::vector<edge<WEIGHT>>> G;\n    std::vector<edge<WEIGHT>>\
     \ E;\n    union_find uf;\n    WEIGHT W = 0;\n\n    void internal_add_edge(edge<WEIGHT>\
     \ e) {\n        uf.merge(e.from, e.to);\n        G[e.from].emplace_back(e);\n\
@@ -225,7 +229,7 @@ data:
   isVerificationFile: false
   path: graph/strongly_connected_components.hpp
   requiredBy: []
-  timestamp: '2023-06-07 00:47:15+09:00'
+  timestamp: '2023-06-12 02:21:06+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/strongly_connected_components.hpp

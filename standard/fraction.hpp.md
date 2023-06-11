@@ -1,10 +1,10 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: math/Bezout_coefficients.hpp
     title: math/Bezout_coefficients.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: math/mod_inverse.hpp
     title: math/mod_inverse.hpp
   _extendedRequiredBy: []

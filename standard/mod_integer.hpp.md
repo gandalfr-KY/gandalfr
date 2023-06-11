@@ -1,17 +1,20 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: math/Bezout_coefficients.hpp
     title: math/Bezout_coefficients.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: math/mod_inverse.hpp
     title: math/mod_inverse.hpp
   _extendedRequiredBy: []
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test/jsc2021-g.test.cpp
+    title: test/jsc2021-g.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"standard/mod_integer.hpp\"\n\n\n#include <iostream>\n#line\
@@ -106,8 +109,9 @@ data:
   path: standard/mod_integer.hpp
   requiredBy: []
   timestamp: '2023-06-12 02:08:44+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - test/jsc2021-g.test.cpp
 documentation_of: standard/mod_integer.hpp
 layout: document
 redirect_from:

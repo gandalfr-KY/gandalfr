@@ -1,17 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: data_structure/union_find.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
     path: graph/Kruscal.hpp
     title: graph/Kruscal.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/Manhattan_minimum_spanning_tree.hpp
     title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
       \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
@@ -54,7 +54,7 @@ data:
   - icon: ':warning:'
     path: graph/traveling_salesman.hpp
     title: graph/traveling_salesman.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/matrix.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
   - icon: ':warning:'
@@ -76,12 +76,18 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/itp1-t-d.test.cpp
     title: test/itp1-t-d.test.cpp
+  - icon: ':x:'
+    path: test/jsc2021-g.test.cpp
+    title: test/jsc2021-g.test.cpp
+  - icon: ':x:'
+    path: test/jsc2021-g.test.cpp
+    title: test/jsc2021-g.test.cpp
   - icon: ':heavy_check_mark:'
     path: test/manhattan-mst.test.cpp
     title: test/manhattan-mst.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     document_title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\
       \u3002"
@@ -325,7 +331,7 @@ data:
   - graph/Manhattan_minimum_spanning_tree.hpp
   - graph/topological_sort.hpp
   timestamp: '2023-06-12 02:21:06+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/itp1-t-d.test.cpp
   - test/grl-1-a.test.cpp
@@ -333,6 +339,8 @@ data:
   - test/manhattan-mst.test.cpp
   - test/grl-5-a.test.cpp
   - test/grl-1-c.test.cpp
+  - test/jsc2021-g.test.cpp
+  - test/jsc2021-g.test.cpp
 documentation_of: graph/graph.hpp
 layout: document
 redirect_from:

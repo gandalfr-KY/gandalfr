@@ -21,7 +21,7 @@ data:
     - icon: ':warning:'
       path: data_structure/sparse_table.hpp
       title: data_structure/sparse_table.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: data_structure/union_find.hpp
       title: data_structure/union_find.hpp
   - name: graph
@@ -29,7 +29,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: graph/Kruscal.hpp
       title: graph/Kruscal.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: graph/Manhattan_minimum_spanning_tree.hpp
       title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
         \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
@@ -42,10 +42,10 @@ data:
     - icon: ':warning:'
       path: graph/doubling.hpp
       title: graph/doubling.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: graph/edge.hpp
       title: graph/edge.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: graph/graph.hpp
       title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
     - icon: ':warning:'
@@ -74,7 +74,7 @@ data:
       title: graph/traveling_salesman.hpp
   - name: math
     pages:
-    - icon: ':warning:'
+    - icon: ':x:'
       path: math/Bezout_coefficients.hpp
       title: math/Bezout_coefficients.hpp
     - icon: ':warning:'
@@ -89,10 +89,10 @@ data:
     - icon: ':warning:'
       path: math/factorize.hpp
       title: math/factorize.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: math/matrix.hpp
       title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
-    - icon: ':warning:'
+    - icon: ':x:'
       path: math/mod_inverse.hpp
       title: math/mod_inverse.hpp
     - icon: ':warning:'
@@ -139,7 +139,7 @@ data:
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
         \u3067\u6307\u5B9A\u3057\u3001\u6700\u9577\u90E8\u5206\u5897\u52A0\u5217\u306E\
         \u306E\u9577\u3055\u3092\u6C42\u3081\u308B"
-    - icon: ':warning:'
+    - icon: ':x:'
       path: standard/mod_integer.hpp
       title: standard/mod_integer.hpp
     - icon: ':warning:'

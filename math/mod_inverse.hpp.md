@@ -1,7 +1,7 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':warning:'
+  - icon: ':x:'
     path: math/Bezout_coefficients.hpp
     title: math/Bezout_coefficients.hpp
   _extendedRequiredBy:
@@ -11,13 +11,16 @@ data:
   - icon: ':warning:'
     path: standard/fraction.hpp
     title: standard/fraction.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: standard/mod_integer.hpp
     title: standard/mod_integer.hpp
-  _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test/jsc2021-g.test.cpp
+    title: test/jsc2021-g.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/mod_inverse.hpp\"\n\n\n#include <assert.h>\n#line 1\
@@ -46,8 +49,9 @@ data:
   - standard/mod_integer.hpp
   - standard/fraction.hpp
   timestamp: '2023-06-12 02:08:44+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_WA
+  verifiedWith:
+  - test/jsc2021-g.test.cpp
 documentation_of: math/mod_inverse.hpp
 layout: document
 redirect_from:

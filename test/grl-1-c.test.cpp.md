@@ -1,19 +1,19 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: data_structure/union_find.hpp
   - icon: ':heavy_check_mark:'
     path: graph/Warshall_Floyd.hpp
     title: graph/Warshall_Floyd.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: math/matrix.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
   _extendedRequiredBy: []

@@ -1,13 +1,13 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: data_structure/union_find.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   _extendedRequiredBy:
@@ -27,9 +27,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/itp1-t-d.test.cpp
     title: test/itp1-t-d.test.cpp
-  _isVerificationFailed: false
+  - icon: ':x:'
+    path: test/jsc2021-g.test.cpp
+    title: test/jsc2021-g.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     document_title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
     links: []
@@ -309,10 +312,11 @@ data:
   - graph/is_isomorphic.hpp
   - graph/traveling_salesman.hpp
   timestamp: '2023-06-12 02:21:06+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/itp1-t-d.test.cpp
   - test/grl-1-c.test.cpp
+  - test/jsc2021-g.test.cpp
 documentation_of: math/matrix.hpp
 layout: document
 redirect_from:

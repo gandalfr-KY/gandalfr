@@ -1,17 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: data_structure/union_find.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/Manhattan_minimum_spanning_tree.hpp
     title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
       \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   _extendedRequiredBy: []
@@ -163,7 +163,7 @@ data:
     \ * @brief \u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
     \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002\n * @param xs \u5404\
     \u30CE\u30FC\u30C9\u306E x \u5EA7\u6A19\n * @param ys \u5404\u30CE\u30FC\u30C9\
-    \u306E y \u5EA7\u6A19\n * */\ntemplate<typename WEIGHT>\nclass Manhattan_minimum_spanning_tree\
+    \u306E y \u5EA7\u6A19\n */\ntemplate<typename WEIGHT>\nclass Manhattan_minimum_spanning_tree\
     \ {\n  private:\n    graph<WEIGHT, false> mst;\n\n  public:\n\n    Manhattan_minimum_spanning_tree(std::vector<WEIGHT>\
     \ &xs, std::vector<WEIGHT> &ys) : mst(xs.size()) {\n        int N = xs.size();\n\
     \        std::vector<edge<WEIGHT>> E;\n        std::vector<int> idx(N);\n    \
@@ -204,7 +204,7 @@ data:
   isVerificationFile: true
   path: test/manhattan-mst.test.cpp
   requiredBy: []
-  timestamp: '2023-06-12 02:36:24+09:00'
+  timestamp: '2023-06-12 02:39:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/manhattan-mst.test.cpp

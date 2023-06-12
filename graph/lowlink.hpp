@@ -3,10 +3,9 @@
 #include <utility>
 #include "graph.hpp"
 
-/* 単純無向グラフの関節点・橋を求める
- * 前処理 O(N)
- * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093344
- * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093485
+/**
+ * @brief 単純無向グラフの関節点・橋を求める
+ * @attention 連結でないときの verify ができてない。多分あってるけど...
  */
 template<typename WEIGHT>
 class lowlink{

@@ -29,7 +29,8 @@ data:
     title: graph/lowest_common_ancestor.hpp
   - icon: ':heavy_check_mark:'
     path: graph/lowlink.hpp
-    title: graph/lowlink.hpp
+    title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
+      \u6A4B\u3092\u6C42\u3081\u308B"
   - icon: ':warning:'
     path: graph/reversed_graph.hpp
     title: graph/reversed_graph.hpp
@@ -64,9 +65,6 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: test/grl-3-b.test.cpp
-    title: test/grl-3-b.test.cpp
   - icon: ':heavy_check_mark:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
@@ -153,7 +151,6 @@ data:
   verifiedWith:
   - test/grl-3-a.test.cpp
   - test/itp1-t-d.test.cpp
-  - test/grl-3-b.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp
   - test/manhattan-mst.test.cpp

@@ -10,15 +10,15 @@ data:
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':question:'
+  - icon: ':heavy_check_mark:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
@@ -160,9 +160,9 @@ data:
     \            if(e.to == pa) continue;\n            if(ord[e.to] == -1){\n    \
     \            dfs(g, e.to, cu, cnt, id, is_apt, is_bridge);\n                if(low[cu]\
     \ > low[e.to]) low[cu] = low[e.to];\n                if(ord[cu] < low[e.to]) is_bridge[e.id]\
-    \ = true;\n                else if(pa != -1) is_apt[id[cu]] = true;\n        \
-    \    }\n            else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];\n      \
-    \  }\n    }\n\npublic:\n    lowlink(graph<WEIGHT, false> &G) : ord(G.count_nodes(),\
+    \ = true;\n                if(pa != -1 && ord[cu] <= low[e.to]) is_apt[id[cu]]\
+    \ = true;\n            }\n            else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];\n\
+    \        }\n    }\n\npublic:\n    lowlink(graph<WEIGHT, false> &G) : ord(G.count_nodes(),\
     \ -1), low(G.count_nodes(), -1) {\n        \n        int C = G.count_connected_components(),\
     \ N = G.count_nodes(), M = G.count_edges();\n        std::vector<bool> is_apt(N,\
     \ false), is_bridge(M, false);\n        auto [decomposed, gr_id, nd_id] = G.decompose();\n\
@@ -207,8 +207,8 @@ data:
   isVerificationFile: true
   path: test/grl-3-a.test.cpp
   requiredBy: []
-  timestamp: '2023-06-12 12:31:33+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2023-06-12 12:34:06+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-3-a.test.cpp
 layout: document

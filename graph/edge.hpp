@@ -27,10 +27,7 @@ namespace internal{
             e.print(os);
             return os;
         }
-        const _base_edge &operator=(const _base_edge &e){
-            from = e.from, to = e.to, cost = e.cost, id = e.id;
-            return *this;
-        }
+        _base_edge &operator=(const _base_edge &e) = default;
 
         virtual ~_base_edge() = default; 
 
@@ -63,7 +60,7 @@ struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{
 
 template<>
 struct edge<int> : public internal::_base_edge<edge<int>, int>{
-    const int cost = 1;
+    static const int cost = 1;
     edge() : internal::_base_edge<edge<int>, int>(0, 0, 0, 0) {}
     edge(int _from, int _to, int _id) : _base_edge<edge<int>, int>(_from, _to, 0, _id) {}
   protected:

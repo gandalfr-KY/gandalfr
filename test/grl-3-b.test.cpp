@@ -1,6 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B"
 #include <bits/stdc++.h>
-#include "../graph/lowlink.hpp"
+#include "gandalfr/graph/lowlink.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
@@ -17,7 +17,10 @@ int main(void){
         G.add_edge(a, b);
     }
     lowlink LL(G);
-    auto ans(LL.bridges());
+    vector<edge<int>> ans;
+    for(auto id : LL.bridges()) {
+        ans.push_back(G.edges()[id]);
+    }
     for(auto &e : ans) if(e.from > e.to) swap(e.from, e.to);
     sort(all(ans));
     for(auto &e : ans) cout << e << endl;

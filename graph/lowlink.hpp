@@ -22,7 +22,7 @@ private:
                 dfs(g, e.to, cu, cnt, id, is_apt, is_bridge);
                 if(low[cu] > low[e.to]) low[cu] = low[e.to];
                 if(ord[cu] < low[e.to]) is_bridge[e.id] = true;
-                else if(pa != -1) is_apt[id[cu]] = true;
+                if(pa != -1 && ord[cu] <= low[e.to]) is_apt[id[cu]] = true;
             }
             else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];
         }

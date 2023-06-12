@@ -1,5 +1,6 @@
 #ifndef LOWEST_COMMON_ANCESTOR
 #define LOWEST_COMMON_ANCESTOR
+#include <assert.h>
 #include "shortest_path.hpp"
 #include "../data_structure/sparse_table.hpp"
 
@@ -18,24 +19,22 @@ class lowest_common_ancestor{
     RmQ_sparse_table<PAIR> sps;
     std::vector<WEIGHT> dist;
 
-    void Euler_tour(const graph<WEIGHT, false> &G, int cu, int pa, int dep, int &cnt){
+    void Euler_tour(const graph<WEIGHT, false> &G, int cu,
+                    int pa, int dep, int &cnt){
         idx[cu] = cnt;
-
         for(auto &e : G[cu]){
             if(e.to == pa) continue;
-            
             depth.push_back({dep, cu});
-            cnt++;
-
-            Euler_tour(G, e.to, cu, dep + 1, cnt);
+            Euler_tour(G, e.to, cu, dep + 1, ++cnt);
         }
-
         depth.push_back({dep, cu});
         cnt++;
     }
     
   public:
-    lowest_common_ancestor(const graph<WEIGHT, false> &G) : idx(G.count_nodes()), dist(shortest_path(G, 0)){
+    lowest_common_ancestor(const graph<WEIGHT, false> &G)
+        : idx(G.count_nodes()), dist(shortest_path(G, 0)){
+        assert(G.is_tree());
         int cnt = 0;
         Euler_tour(G, 0, -1, 0, cnt);
         sps.init(depth);

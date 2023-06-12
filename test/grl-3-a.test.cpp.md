@@ -10,15 +10,15 @@ data:
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
@@ -153,16 +153,16 @@ data:
     \u6C42\u3081\u308B\n * @attention \u9023\u7D50\u3067\u306A\u3044\u3068\u304D\u306E\
     \ verify \u304C\u3067\u304D\u3066\u306A\u3044\u3002\u591A\u5206\u3042\u3063\u3066\
     \u308B\u3051\u3069...\n */\ntemplate<typename WEIGHT>\nclass lowlink{\nprivate:\n\
-    \    std::vector<int> ord, low, apts, brids;\n    \n    void dfs(const graph<WEIGHT,\
-    \ false> &g, int cu, int pa, int &cnt, const std::vector<int> &id,\n         \
-    \    std::vector<bool> &is_apt, std::vector<bool> &is_bridge){\n        ord[cu]\
-    \ = low[cu] = cnt++;\n        for(auto &e : g[cu]){\n            if(e.to == pa)\
-    \ continue;\n            if(ord[e.to] == -1){\n                dfs(g, e.to, cu,\
-    \ cnt, id, is_apt, is_bridge);\n                if(low[cu] > low[e.to]) low[cu]\
-    \ = low[e.to];\n                if(ord[cu] < low[e.to]) is_bridge[e.id] = true;\n\
-    \                if(pa != -1 && ord[cu] <= low[e.to]) is_apt[id[cu]] = true;\n\
-    \            }\n            else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];\n\
-    \        }\n    }\n\npublic:\n    lowlink(graph<WEIGHT, false> &G) : ord(G.count_nodes(),\
+    \    std::vector<int> ord, low, apts;\n    std::vector<edge<WEIGHT>> brids;\n\
+    \    \n    void dfs(const graph<WEIGHT, false> &g, int cu, int pa, int &cnt, const\
+    \ std::vector<int> &id,\n             std::vector<bool> &is_apt, std::vector<bool>\
+    \ &is_bridge){\n        ord[cu] = low[cu] = cnt++;\n        for(auto &e : g[cu]){\n\
+    \            if(e.to == pa) continue;\n            if(ord[e.to] == -1){\n    \
+    \            dfs(g, e.to, cu, cnt, id, is_apt, is_bridge);\n                if(low[cu]\
+    \ > low[e.to]) low[cu] = low[e.to];\n                if(ord[cu] < low[e.to]) is_bridge[e.id]\
+    \ = true;\n                else if(pa != -1) is_apt[id[cu]] = true;\n        \
+    \    }\n            else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];\n      \
+    \  }\n    }\n\npublic:\n    lowlink(graph<WEIGHT, false> &G) : ord(G.count_nodes(),\
     \ -1), low(G.count_nodes(), -1) {\n        \n        int C = G.count_connected_components(),\
     \ N = G.count_nodes(), M = G.count_edges();\n        std::vector<bool> is_apt(N,\
     \ false), is_bridge(M, false);\n        auto [decomposed, gr_id, nd_id] = G.decompose();\n\
@@ -181,16 +181,16 @@ data:
     \ c = 0; c < C; c++) {\n            int cnt = 0;\n            dfs(decomposed[c],\
     \ st[c].second, -1, cnt, id[c], is_apt, is_bridge);\n        }\n        for(int\
     \ i = 0; i < N; i++) if(is_apt[i]) apts.push_back(i); \n        for(int i = 0;\
-    \ i < M; i++) if(is_bridge[i]) brids.push_back(i); \n    }\n\n    // unsorted\
-    \ \u3067\u3042\u308B\u3053\u3068\u306B\u6CE8\u610F\n    const std::vector<int>\
-    \ &articulation_points(){ return apts; }\n    const std::vector<int> &bridges(){\
-    \ return brids; }\n\n};\n\n\n\n#line 4 \"test/grl-3-a.test.cpp\"\nusing namespace\
-    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
-    \ i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n\n    int N,\
-    \ M;\n    cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n     \
-    \   int a, b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n    lowlink\
-    \ LL(G);\n    auto ans(LL.articulation_points());\n    sort(all(ans));\n    for(auto\
-    \ x : ans) cout << x << endl;\n\n}\n"
+    \ i < M; i++) if(is_bridge[i]) brids.emplace_back(G.edges()[i]); \n    }\n\n \
+    \   // unsorted \u3067\u3042\u308B\u3053\u3068\u306B\u6CE8\u610F\n    const std::vector<int>\
+    \ &articulation_points(){ return apts; }\n    const std::vector<edge<WEIGHT>>\
+    \ &bridges(){ return brids; }\n\n};\n\n\n\n#line 4 \"test/grl-3-a.test.cpp\"\n\
+    using namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j);\
+    \ i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n\
+    \n    int N, M;\n    cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n\
+    \        int a, b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n\
+    \    lowlink LL(G);\n    auto ans(LL.articulation_points());\n    sort(all(ans));\n\
+    \    for(auto x : ans) cout << x << endl;\n\n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A\"\n#include\
     \ <bits/stdc++.h>\n#include \"../graph/lowlink.hpp\"\nusing namespace std;\nusing\
     \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
@@ -207,8 +207,8 @@ data:
   isVerificationFile: true
   path: test/grl-3-a.test.cpp
   requiredBy: []
-  timestamp: '2023-06-12 12:25:40+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2023-06-12 12:31:33+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test/grl-3-a.test.cpp
 layout: document

@@ -17,10 +17,7 @@ int main(void){
         G.add_edge(a, b);
     }
     lowlink LL(G);
-    vector<edge<int>> ans;
-    for(auto id : LL.bridges()) {
-        ans.push_back(G.edges()[id]);
-    }
+    auto ans(LL.bridges());
     for(auto &e : ans) if(e.from > e.to) swap(e.from, e.to);
     sort(all(ans));
     for(auto &e : ans) cout << e << endl;

@@ -10,7 +10,8 @@
 template<typename WEIGHT>
 class lowlink{
 private:
-    std::vector<int> ord, low, apts, brids;
+    std::vector<int> ord, low, apts;
+    std::vector<edge<WEIGHT>> brids;
     
     void dfs(const graph<WEIGHT, false> &g, int cu, int pa, int &cnt, const std::vector<int> &id,
              std::vector<bool> &is_apt, std::vector<bool> &is_bridge){
@@ -21,7 +22,7 @@ private:
                 dfs(g, e.to, cu, cnt, id, is_apt, is_bridge);
                 if(low[cu] > low[e.to]) low[cu] = low[e.to];
                 if(ord[cu] < low[e.to]) is_bridge[e.id] = true;
-                if(pa != -1 && ord[cu] <= low[e.to]) is_apt[id[cu]] = true;
+                else if(pa != -1) is_apt[id[cu]] = true;
             }
             else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];
         }
@@ -51,12 +52,12 @@ public:
             dfs(decomposed[c], st[c].second, -1, cnt, id[c], is_apt, is_bridge);
         }
         for(int i = 0; i < N; i++) if(is_apt[i]) apts.push_back(i); 
-        for(int i = 0; i < M; i++) if(is_bridge[i]) brids.push_back(i); 
+        for(int i = 0; i < M; i++) if(is_bridge[i]) brids.emplace_back(G.edges()[i]); 
     }
 
     // unsorted であることに注意
     const std::vector<int> &articulation_points(){ return apts; }
-    const std::vector<int> &bridges(){ return brids; }
+    const std::vector<edge<WEIGHT>> &bridges(){ return brids; }
 
 };
 

@@ -10,20 +10,20 @@ data:
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/shortest_path.hpp
     title: graph/shortest_path.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
-    links:
-    - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093593
+    document_title: "\u6728\u306E\u76F4\u5F84"
+    links: []
   bundledCode: "#line 1 \"graph/diameter.hpp\"\n\n\n#line 1 \"graph/shortest_path.hpp\"\
     \n\n\n#include <queue>\n#line 1 \"graph/graph.hpp\"\n\n\n#include <vector>\n#include\
     \ <algorithm>\n#include <tuple>\n#line 1 \"graph/edge.hpp\"\n\n\n#include <iostream>\n\
@@ -192,21 +192,19 @@ data:
     \ ma);\n    for(int start_point : start_points){\n        q.push({0, start_point});\n\
     \        dist[start_point] = 0;\n    }\n\n    internal::dijkstra(G, dist, q);\n\
     \    for(WEIGHT &x : dist) if(x == ma) x = -1; \n    return dist;\n}\n\n\n#line\
-    \ 5 \"graph/diameter.hpp\"\n\n/* \u6728\u306E\u76F4\u5F84\n * \u91CD\u307F\u7121\
-    \u3057 : O(N)\n * \u91CD\u307F\u6709\u308A : O(NlogN)\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093593\n\
-    \ */\ntemplate<typename WEIGHT>\nWEIGHT diameter(const graph<WEIGHT, false> &G){\n\
+    \ 6 \"graph/diameter.hpp\"\n\n/**\n * @brief \u6728\u306E\u76F4\u5F84\n */\ntemplate<typename\
+    \ WEIGHT>\nWEIGHT diameter(const graph<WEIGHT, false> &G){\n    assert(G.is_tree());\n\
     \    std::vector<WEIGHT> dist = shortest_path(G, 0);\n    int farthest_node =\
     \ std::max_element(dist.begin(), dist.end()) - dist.begin();\n    dist = shortest_path(G,\
     \ farthest_node);\n    return *std::max_element(dist.begin(), dist.end());\n}\n\
     \n\n"
   code: "#ifndef DIAMETER\n#define DIAMETER\n#include \"shortest_path.hpp\" \n#include\
-    \ <iostream>\n\n/* \u6728\u306E\u76F4\u5F84\n * \u91CD\u307F\u7121\u3057 : O(N)\n\
-    \ * \u91CD\u307F\u6709\u308A : O(NlogN)\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093593\n\
+    \ <iostream>\n#include <assert.h>\n\n/**\n * @brief \u6728\u306E\u76F4\u5F84\n\
     \ */\ntemplate<typename WEIGHT>\nWEIGHT diameter(const graph<WEIGHT, false> &G){\n\
-    \    std::vector<WEIGHT> dist = shortest_path(G, 0);\n    int farthest_node =\
-    \ std::max_element(dist.begin(), dist.end()) - dist.begin();\n    dist = shortest_path(G,\
-    \ farthest_node);\n    return *std::max_element(dist.begin(), dist.end());\n}\n\
-    \n#endif\n"
+    \    assert(G.is_tree());\n    std::vector<WEIGHT> dist = shortest_path(G, 0);\n\
+    \    int farthest_node = std::max_element(dist.begin(), dist.end()) - dist.begin();\n\
+    \    dist = shortest_path(G, farthest_node);\n    return *std::max_element(dist.begin(),\
+    \ dist.end());\n}\n\n#endif\n"
   dependsOn:
   - graph/shortest_path.hpp
   - graph/graph.hpp
@@ -215,8 +213,8 @@ data:
   isVerificationFile: false
   path: graph/diameter.hpp
   requiredBy: []
-  timestamp: '2023-06-12 10:57:20+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2023-06-13 01:42:31+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/grl-5-a.test.cpp
 documentation_of: graph/diameter.hpp
@@ -224,5 +222,5 @@ layout: document
 redirect_from:
 - /library/graph/diameter.hpp
 - /library/graph/diameter.hpp.html
-title: graph/diameter.hpp
+title: "\u6728\u306E\u76F4\u5F84"
 ---

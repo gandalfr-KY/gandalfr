@@ -18,9 +18,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/Warshall_Floyd.hpp
     title: graph/Warshall_Floyd.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/diameter.hpp
-    title: graph/diameter.hpp
+    title: "\u6728\u306E\u76F4\u5F84"
   - icon: ':warning:'
     path: graph/doubling.hpp
     title: graph/doubling.hpp
@@ -30,7 +30,7 @@ data:
   - icon: ':warning:'
     path: graph/is_isomorphic.hpp
     title: graph/is_isomorphic.hpp
-  - icon: ':warning:'
+  - icon: ':x:'
     path: graph/lowest_common_ancestor.hpp
     title: graph/lowest_common_ancestor.hpp
   - icon: ':heavy_check_mark:'
@@ -40,7 +40,7 @@ data:
   - icon: ':warning:'
     path: graph/reversed_graph.hpp
     title: graph/reversed_graph.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/shortest_path.hpp
     title: graph/shortest_path.hpp
   - icon: ':warning:'
@@ -77,9 +77,12 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-3-b.test.cpp
     title: test/grl-3-b.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
+  - icon: ':x:'
+    path: test/grl-5-c.test.cpp
+    title: test/grl-5-c.test.cpp
   - icon: ':heavy_check_mark:'
     path: test/itp1-t-d.test.cpp
     title: test/itp1-t-d.test.cpp
@@ -324,6 +327,7 @@ data:
   - test/grl-3-a.test.cpp
   - test/itp1-t-d.test.cpp
   - test/grl-3-b.test.cpp
+  - test/grl-5-c.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp
   - test/manhattan-mst.test.cpp

@@ -18,9 +18,10 @@ data:
     - icon: ':warning:'
       path: data_structure/segment_tree.hpp
       title: data_structure/segment_tree.hpp
-    - icon: ':warning:'
+    - icon: ':x:'
       path: data_structure/sparse_table.hpp
-      title: data_structure/sparse_table.hpp
+      title: "\u7D50\u5408\u5247\u30FB\u51AA\u7B49\u6027\u3092\u6E80\u305F\u3059\u6F14\
+        \u7B97\u306E\u66F4\u65B0\u7121\u3057\u533A\u9593\u30AF\u30A8\u30EA\u51E6\u7406"
     - icon: ':question:'
       path: data_structure/union_find.hpp
       title: data_structure/union_find.hpp
@@ -36,9 +37,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: graph/Warshall_Floyd.hpp
       title: graph/Warshall_Floyd.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: graph/diameter.hpp
-      title: graph/diameter.hpp
+      title: "\u6728\u306E\u76F4\u5F84"
     - icon: ':warning:'
       path: graph/doubling.hpp
       title: graph/doubling.hpp
@@ -51,7 +52,7 @@ data:
     - icon: ':warning:'
       path: graph/is_isomorphic.hpp
       title: graph/is_isomorphic.hpp
-    - icon: ':warning:'
+    - icon: ':x:'
       path: graph/lowest_common_ancestor.hpp
       title: graph/lowest_common_ancestor.hpp
     - icon: ':heavy_check_mark:'
@@ -61,7 +62,7 @@ data:
     - icon: ':warning:'
       path: graph/reversed_graph.hpp
       title: graph/reversed_graph.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: graph/shortest_path.hpp
       title: graph/shortest_path.hpp
     - icon: ':warning:'
@@ -185,9 +186,12 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/grl-3-b.test.cpp
       title: test/grl-3-b.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-5-a.test.cpp
       title: test/grl-5-a.test.cpp
+    - icon: ':x:'
+      path: test/grl-5-c.test.cpp
+      title: test/grl-5-c.test.cpp
     - icon: ':heavy_check_mark:'
       path: test/itp1-t-d.test.cpp
       title: test/itp1-t-d.test.cpp

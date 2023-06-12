@@ -14,37 +14,39 @@ data:
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
+  - icon: ':x:'
+    path: graph/lowest_common_ancestor.hpp
+    title: graph/lowest_common_ancestor.hpp
   - icon: ':question:'
     path: graph/shortest_path.hpp
     title: graph/shortest_path.hpp
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':x:'
-    path: test/grl-5-c.test.cpp
-    title: test/grl-5-c.test.cpp
+  _extendedVerifiedWith: []
   _isVerificationFailed: true
-  _pathExtension: hpp
+  _pathExtension: cpp
   _verificationStatusIcon: ':x:'
   attributes:
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_C
     links:
-    - https://atcoder.jp/contests/abc070/submissions/39891502
-  bundledCode: "#line 1 \"graph/lowest_common_ancestor.hpp\"\n\n\n#include <assert.h>\n\
-    #line 1 \"graph/shortest_path.hpp\"\n\n\n#include <queue>\n#line 1 \"graph/graph.hpp\"\
-    \n\n\n#include <vector>\n#include <algorithm>\n#include <tuple>\n#line 1 \"graph/edge.hpp\"\
-    \n\n\n#include <iostream>\n\nnamespace internal{\n    template<class DERIVED,\
-    \ class WEIGHT>\n    struct _base_edge{\n        int from;\n        int to;\n\
-    \        WEIGHT cost;\n        int id;\n        _base_edge(int _from, int _to,\
-    \ WEIGHT _cost, int _id) : from(_from), to(_to), cost(_cost), id(_id) {}\n\n \
-    \       friend bool operator>(const _base_edge &e1, const _base_edge &e){\n  \
-    \          return e1.compare(e) > 0;\n        }\n        friend bool operator>=(const\
-    \ _base_edge &e1, const _base_edge &e){\n            return e1.compare(e) >= 0;\n\
-    \        }\n        friend bool operator<(const _base_edge &e1, const _base_edge\
-    \ &e){\n            return e1.compare(e) < 0;\n        }\n        friend bool\
-    \ operator<=(const _base_edge &e1, const _base_edge &e){\n            return e1.compare(e)\
-    \ <= 0;\n        }\n        friend std::ostream &operator<<(std::ostream &os,\
-    \ const _base_edge<DERIVED, WEIGHT> &e) {\n            e.print(os);\n        \
-    \    return os;\n        }\n        _base_edge &operator=(const _base_edge &e)\
-    \ = default;\n\n        virtual ~_base_edge() = default; \n\n        operator\
+    - https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_C
+  bundledCode: "#line 1 \"test/grl-5-c.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_C\"\
+    \n#include <bits/stdc++.h>\n#line 1 \"graph/lowest_common_ancestor.hpp\"\n\n\n\
+    #line 1 \"graph/shortest_path.hpp\"\n\n\n#line 1 \"graph/graph.hpp\"\n\n\n#line\
+    \ 1 \"graph/edge.hpp\"\n\n\n#line 4 \"graph/edge.hpp\"\n\nnamespace internal{\n\
+    \    template<class DERIVED, class WEIGHT>\n    struct _base_edge{\n        int\
+    \ from;\n        int to;\n        WEIGHT cost;\n        int id;\n        _base_edge(int\
+    \ _from, int _to, WEIGHT _cost, int _id) : from(_from), to(_to), cost(_cost),\
+    \ id(_id) {}\n\n        friend bool operator>(const _base_edge &e1, const _base_edge\
+    \ &e){\n            return e1.compare(e) > 0;\n        }\n        friend bool\
+    \ operator>=(const _base_edge &e1, const _base_edge &e){\n            return e1.compare(e)\
+    \ >= 0;\n        }\n        friend bool operator<(const _base_edge &e1, const\
+    \ _base_edge &e){\n            return e1.compare(e) < 0;\n        }\n        friend\
+    \ bool operator<=(const _base_edge &e1, const _base_edge &e){\n            return\
+    \ e1.compare(e) <= 0;\n        }\n        friend std::ostream &operator<<(std::ostream\
+    \ &os, const _base_edge<DERIVED, WEIGHT> &e) {\n            e.print(os);\n   \
+    \         return os;\n        }\n        _base_edge &operator=(const _base_edge\
+    \ &e) = default;\n\n        virtual ~_base_edge() = default; \n\n        operator\
     \ int() const { return to; }\n\n      protected:\n        virtual void print(std::ostream\
     \ &os) const = 0;\n        virtual int compare(const _base_edge &e) const = 0;\n\
     \    };\n}\n\ntemplate<class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
@@ -197,29 +199,29 @@ data:
     \ ma);\n    for(int start_point : start_points){\n        q.push({0, start_point});\n\
     \        dist[start_point] = 0;\n    }\n\n    internal::dijkstra(G, dist, q);\n\
     \    for(WEIGHT &x : dist) if(x == ma) x = -1; \n    return dist;\n}\n\n\n#line\
-    \ 1 \"data_structure/sparse_table.hpp\"\n\n\n#include <functional>\n#line 5 \"\
-    data_structure/sparse_table.hpp\"\n\n/**\n * @brief \u7D50\u5408\u5247\u30FB\u51AA\
-    \u7B49\u6027\u3092\u6E80\u305F\u3059\u6F14\u7B97\u306E\u66F4\u65B0\u7121\u3057\
-    \u533A\u9593\u30AF\u30A8\u30EA\u51E6\u7406\n */\ntemplate<class T>\nclass sparse_table{\n\
-    \  private:\n    const std::function< T(T, T) > op;\n    std::vector<std::vector<T>>\
-    \ table;\n    std::vector<short> log_table; // log_table[n] := 2^k < n \u3067\u3042\
-    \u308B\u6700\u5927\u306E k\n\n  public:\n    sparse_table(const std::function<\
-    \ T(T, T) > &f) : op(f) {}\n\n    // \u8981\u7D20\u306E\u914D\u5217 vec \u3067\
-    \u521D\u671F\u5316\n    void init(const std::vector<T> &vec){\n        table =\
-    \ {vec};\n        log_table.clear();\n\n        for(int i = 0; (1 << i) < table[i].size();\
-    \ i++){\n            table.push_back({});\n            for(int j = 0; j + (1 <<\
-    \ i) < table[i].size(); j++){\n                table[i + 1].push_back(op(table[i][j],\
-    \ table[i][j + (1 << i)]));\n            }\n        }\n\n        log_table.resize(vec.size()\
-    \ + 1, 0);\n        for(int i = 2; i <= vec.size(); i++){\n            log_table[i]\
-    \ = log_table[i>>1] + 1;\n        }\n    }\n\n    /**\n     * @brief [l, r) \u306E\
-    \u6F14\u7B97\u7D50\u679C\u3092\u5F97\u308B\n     * @attention l >= r \u306E\u3068\
-    \u304D\u672A\u5B9A\u7FA9\n     */\n    T get(int l, int r){\n        int k = log_table[r\
-    \ - l];\n        return op(table[k][l], table[k][r - (1 << k)]);\n    }\n\n};\n\
-    \ntemplate<typename T>\nstruct RmQ_sparse_table : public sparse_table<T>{\n  \
-    \  RmQ_sparse_table() : RmQ_sparse_table<T>::sparse_table([](T a, T b){ return\
-    \ (a < b ? a : b); }) {}\n};\n\ntemplate<typename T>\nstruct RMQ_sparse_table\
-    \ : public sparse_table<T>{\n    RMQ_sparse_table() : RMQ_sparse_table<T>::sparse_table([](T\
-    \ a, T b){ return (a > b ? a : b); }) {}\n};\n\n\n\n#line 6 \"graph/lowest_common_ancestor.hpp\"\
+    \ 1 \"data_structure/sparse_table.hpp\"\n\n\n#line 5 \"data_structure/sparse_table.hpp\"\
+    \n\n/**\n * @brief \u7D50\u5408\u5247\u30FB\u51AA\u7B49\u6027\u3092\u6E80\u305F\
+    \u3059\u6F14\u7B97\u306E\u66F4\u65B0\u7121\u3057\u533A\u9593\u30AF\u30A8\u30EA\
+    \u51E6\u7406\n */\ntemplate<class T>\nclass sparse_table{\n  private:\n    const\
+    \ std::function< T(T, T) > op;\n    std::vector<std::vector<T>> table;\n    std::vector<short>\
+    \ log_table; // log_table[n] := 2^k < n \u3067\u3042\u308B\u6700\u5927\u306E k\n\
+    \n  public:\n    sparse_table(const std::function< T(T, T) > &f) : op(f) {}\n\n\
+    \    // \u8981\u7D20\u306E\u914D\u5217 vec \u3067\u521D\u671F\u5316\n    void\
+    \ init(const std::vector<T> &vec){\n        table = {vec};\n        log_table.clear();\n\
+    \n        for(int i = 0; (1 << i) < table[i].size(); i++){\n            table.push_back({});\n\
+    \            for(int j = 0; j + (1 << i) < table[i].size(); j++){\n          \
+    \      table[i + 1].push_back(op(table[i][j], table[i][j + (1 << i)]));\n    \
+    \        }\n        }\n\n        log_table.resize(vec.size() + 1, 0);\n      \
+    \  for(int i = 2; i <= vec.size(); i++){\n            log_table[i] = log_table[i>>1]\
+    \ + 1;\n        }\n    }\n\n    /**\n     * @brief [l, r) \u306E\u6F14\u7B97\u7D50\
+    \u679C\u3092\u5F97\u308B\n     * @attention l >= r \u306E\u3068\u304D\u672A\u5B9A\
+    \u7FA9\n     */\n    T get(int l, int r){\n        int k = log_table[r - l];\n\
+    \        return op(table[k][l], table[k][r - (1 << k)]);\n    }\n\n};\n\ntemplate<typename\
+    \ T>\nstruct RmQ_sparse_table : public sparse_table<T>{\n    RmQ_sparse_table()\
+    \ : RmQ_sparse_table<T>::sparse_table([](T a, T b){ return (a < b ? a : b); })\
+    \ {}\n};\n\ntemplate<typename T>\nstruct RMQ_sparse_table : public sparse_table<T>{\n\
+    \    RMQ_sparse_table() : RMQ_sparse_table<T>::sparse_table([](T a, T b){ return\
+    \ (a > b ? a : b); }) {}\n};\n\n\n\n#line 6 \"graph/lowest_common_ancestor.hpp\"\
     \n\n/* \u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
     \u3092\u6C42\u3081\u308B\n * \u69CB\u7BC9   O(NlogN)\n * \u5024\u53D6\u5F97 O(1)\n\
     \ * verify : https://atcoder.jp/contests/abc070/submissions/39891502\n */\ntemplate<typename\
@@ -236,43 +238,41 @@ data:
     \    }\n\n    int get_ancestor(int a, int b){\n        int idxl = idx[a], idxr\
     \ = idx[b];\n        if(idxl > idxr) std::swap(idxl, idxr);\n        return sps.get(idxl,\
     \ idxr + 1).second;\n    }\n\n    WEIGHT distance(int u, int v){\n        return\
-    \ dist[u] + dist[v] - 2 * dist[get_ancestor(u, v)];\n    }\n\n};\n\n\n"
-  code: "#ifndef LOWEST_COMMON_ANCESTOR\n#define LOWEST_COMMON_ANCESTOR\n#include\
-    \ <assert.h>\n#include \"shortest_path.hpp\"\n#include \"../data_structure/sparse_table.hpp\"\
-    \n\n/* \u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
-    \u3092\u6C42\u3081\u308B\n * \u69CB\u7BC9   O(NlogN)\n * \u5024\u53D6\u5F97 O(1)\n\
-    \ * verify : https://atcoder.jp/contests/abc070/submissions/39891502\n */\ntemplate<typename\
-    \ WEIGHT>\nclass lowest_common_ancestor{\n  private:\n    using PAIR = std::pair<int,\
-    \ int>;\n    \n    std::vector<int> idx;\n    std::vector<PAIR> depth;\n    RmQ_sparse_table<PAIR>\
-    \ sps;\n    std::vector<WEIGHT> dist;\n\n    void Euler_tour(const graph<WEIGHT,\
-    \ false> &G, int cu,\n                    int pa, int dep, int &cnt){\n      \
-    \  idx[cu] = cnt;\n        for(auto &e : G[cu]){\n            if(e.to == pa) continue;\n\
-    \            depth.push_back({dep, cu});\n            Euler_tour(G, e.to, cu,\
-    \ dep + 1, ++cnt);\n        }\n        depth.push_back({dep, cu});\n        cnt++;\n\
-    \    }\n    \n  public:\n    lowest_common_ancestor(const graph<WEIGHT, false>\
-    \ &G)\n        : idx(G.count_nodes()), dist(shortest_path(G, 0)){\n        assert(G.is_tree());\n\
-    \        int cnt = 0;\n        Euler_tour(G, 0, -1, 0, cnt);\n        sps.init(depth);\n\
-    \    }\n\n    int get_ancestor(int a, int b){\n        int idxl = idx[a], idxr\
-    \ = idx[b];\n        if(idxl > idxr) std::swap(idxl, idxr);\n        return sps.get(idxl,\
-    \ idxr + 1).second;\n    }\n\n    WEIGHT distance(int u, int v){\n        return\
-    \ dist[u] + dist[v] - 2 * dist[get_ancestor(u, v)];\n    }\n\n};\n\n#endif"
+    \ dist[u] + dist[v] - 2 * dist[get_ancestor(u, v)];\n    }\n\n};\n\n\n#line 4\
+    \ \"test/grl-5-c.test.cpp\"\nusing namespace std;\nusing ll = long long;\n#define\
+    \ rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\nint main(void){\n\n  \
+    \  //input\n \n    int N;\n    cin >> N;\n    graph<int, false> G(N);\n    rep(i,0,N){\n\
+    \        int a;\n        cin >> a;\n        rep(j,0,a){\n            int b;\n\
+    \            cin >> b;\n            G.add_edge(i, b);\n        }\n    }\n\n  \
+    \  //calculate\n\n    lowest_common_ancestor LCA(G);\n    int q;\n    cin >> q;\n\
+    \    while(q--){\n        int a, b;\n        cin >> a >> b;\n        cout << LCA.get_ancestor(a,\
+    \ b) << endl;\n    }\n\n}\n"
+  code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_C\"\n#include\
+    \ <bits/stdc++.h>\n#include \"../graph/lowest_common_ancestor.hpp\"\nusing namespace\
+    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
+    \ i++)\n\nint main(void){\n\n    //input\n \n    int N;\n    cin >> N;\n    graph<int,\
+    \ false> G(N);\n    rep(i,0,N){\n        int a;\n        cin >> a;\n        rep(j,0,a){\n\
+    \            int b;\n            cin >> b;\n            G.add_edge(i, b);\n  \
+    \      }\n    }\n\n    //calculate\n\n    lowest_common_ancestor LCA(G);\n   \
+    \ int q;\n    cin >> q;\n    while(q--){\n        int a, b;\n        cin >> a\
+    \ >> b;\n        cout << LCA.get_ancestor(a, b) << endl;\n    }\n\n}"
   dependsOn:
+  - graph/lowest_common_ancestor.hpp
   - graph/shortest_path.hpp
   - graph/graph.hpp
   - graph/edge.hpp
   - data_structure/union_find.hpp
   - data_structure/sparse_table.hpp
-  isVerificationFile: false
-  path: graph/lowest_common_ancestor.hpp
+  isVerificationFile: true
+  path: test/grl-5-c.test.cpp
   requiredBy: []
   timestamp: '2023-06-13 01:42:31+09:00'
-  verificationStatus: LIBRARY_ALL_WA
-  verifiedWith:
-  - test/grl-5-c.test.cpp
-documentation_of: graph/lowest_common_ancestor.hpp
+  verificationStatus: TEST_WRONG_ANSWER
+  verifiedWith: []
+documentation_of: test/grl-5-c.test.cpp
 layout: document
 redirect_from:
-- /library/graph/lowest_common_ancestor.hpp
-- /library/graph/lowest_common_ancestor.hpp.html
-title: graph/lowest_common_ancestor.hpp
+- /verify/test/grl-5-c.test.cpp
+- /verify/test/grl-5-c.test.cpp.html
+title: test/grl-5-c.test.cpp
 ---

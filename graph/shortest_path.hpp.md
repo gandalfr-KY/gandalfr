@@ -11,22 +11,25 @@ data:
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/diameter.hpp
-    title: graph/diameter.hpp
-  - icon: ':warning:'
+    title: "\u6728\u306E\u76F4\u5F84"
+  - icon: ':x:'
     path: graph/lowest_common_ancestor.hpp
     title: graph/lowest_common_ancestor.hpp
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: test/grl-1-a.test.cpp
     title: test/grl-1-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
-  _isVerificationFailed: false
+  - icon: ':x:'
+    path: test/grl-5-c.test.cpp
+    title: test/grl-5-c.test.cpp
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7443620
@@ -252,8 +255,9 @@ data:
   - graph/diameter.hpp
   - graph/lowest_common_ancestor.hpp
   timestamp: '2023-06-12 10:57:20+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
+  - test/grl-5-c.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-5-a.test.cpp
 documentation_of: graph/shortest_path.hpp

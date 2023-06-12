@@ -4,23 +4,23 @@ data:
   - icon: ':question:'
     path: data_structure/union_find.hpp
     title: data_structure/union_find.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/diameter.hpp
-    title: graph/diameter.hpp
+    title: "\u6728\u306E\u76F4\u5F84"
   - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/shortest_path.hpp
     title: graph/shortest_path.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_A
@@ -195,9 +195,8 @@ data:
     \ ma);\n    for(int start_point : start_points){\n        q.push({0, start_point});\n\
     \        dist[start_point] = 0;\n    }\n\n    internal::dijkstra(G, dist, q);\n\
     \    for(WEIGHT &x : dist) if(x == ma) x = -1; \n    return dist;\n}\n\n\n#line\
-    \ 5 \"graph/diameter.hpp\"\n\n/* \u6728\u306E\u76F4\u5F84\n * \u91CD\u307F\u7121\
-    \u3057 : O(N)\n * \u91CD\u307F\u6709\u308A : O(NlogN)\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093593\n\
-    \ */\ntemplate<typename WEIGHT>\nWEIGHT diameter(const graph<WEIGHT, false> &G){\n\
+    \ 6 \"graph/diameter.hpp\"\n\n/**\n * @brief \u6728\u306E\u76F4\u5F84\n */\ntemplate<typename\
+    \ WEIGHT>\nWEIGHT diameter(const graph<WEIGHT, false> &G){\n    assert(G.is_tree());\n\
     \    std::vector<WEIGHT> dist = shortest_path(G, 0);\n    int farthest_node =\
     \ std::max_element(dist.begin(), dist.end()) - dist.begin();\n    dist = shortest_path(G,\
     \ farthest_node);\n    return *std::max_element(dist.begin(), dist.end());\n}\n\
@@ -222,8 +221,8 @@ data:
   isVerificationFile: true
   path: test/grl-5-a.test.cpp
   requiredBy: []
-  timestamp: '2023-06-12 10:57:20+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2023-06-13 01:42:31+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test/grl-5-a.test.cpp
 layout: document

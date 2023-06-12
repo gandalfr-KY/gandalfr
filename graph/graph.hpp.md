@@ -75,6 +75,9 @@ data:
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
   - icon: ':heavy_check_mark:'
+    path: test/grl-3-b.test.cpp
+    title: test/grl-3-b.test.cpp
+  - icon: ':heavy_check_mark:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
   - icon: ':heavy_check_mark:'
@@ -320,6 +323,7 @@ data:
   verifiedWith:
   - test/grl-3-a.test.cpp
   - test/itp1-t-d.test.cpp
+  - test/grl-3-b.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp
   - test/manhattan-mst.test.cpp

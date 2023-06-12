@@ -15,6 +15,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/grl-3-b.test.cpp
+    title: test/grl-3-b.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -231,6 +234,7 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-3-a.test.cpp
+  - test/grl-3-b.test.cpp
 documentation_of: graph/lowlink.hpp
 layout: document
 redirect_from:

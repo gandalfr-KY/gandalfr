@@ -182,7 +182,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/grl-3-a.test.cpp
       title: test/grl-3-a.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test/grl-3-b.test.cpp
       title: test/grl-3-b.test.cpp
     - icon: ':heavy_check_mark:'

@@ -1,6 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B"
 #include <bits/stdc++.h>
-#include "gandalfr/graph/lowlink.hpp"
+#include "../graph/lowlink.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)

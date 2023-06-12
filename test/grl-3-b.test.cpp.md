@@ -10,24 +10,23 @@ data:
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':question:'
-    path: math/matrix.hpp
-    title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
-  _extendedRequiredBy: []
-  _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: test/grl-1-c.test.cpp
-    title: test/grl-1-c.test.cpp
+    path: graph/lowlink.hpp
+    title: graph/lowlink.hpp
+  _extendedRequiredBy: []
+  _extendedVerifiedWith: []
   _isVerificationFailed: false
-  _pathExtension: hpp
+  _pathExtension: cpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    links: []
-  bundledCode: "#line 1 \"graph/Warshall_Floyd.hpp\"\n\n\n#line 1 \"math/matrix.hpp\"\
-    \n\n\n#include <valarray>\n#include <vector>\n#include <iostream>\n#include <assert.h>\n\
-    #line 1 \"graph/graph.hpp\"\n\n\n#line 4 \"graph/graph.hpp\"\n#include <algorithm>\n\
-    #include <tuple>\n#line 1 \"graph/edge.hpp\"\n\n\n#line 4 \"graph/edge.hpp\"\n\
-    \nnamespace internal{\n    template<class DERIVED, class WEIGHT>\n    struct _base_edge{\n\
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B
+    links:
+    - https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B
+  bundledCode: "#line 1 \"test/grl-3-b.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B\"\
+    \n#include <bits/stdc++.h>\n#line 1 \"graph/lowlink.hpp\"\n\n\n#line 1 \"graph/graph.hpp\"\
+    \n\n\n#line 1 \"graph/edge.hpp\"\n\n\n#line 4 \"graph/edge.hpp\"\n\nnamespace\
+    \ internal{\n    template<class DERIVED, class WEIGHT>\n    struct _base_edge{\n\
     \        int from;\n        int to;\n        WEIGHT cost;\n        int id;\n \
     \       _base_edge(int _from, int _to, WEIGHT _cost, int _id) : from(_from), to(_to),\
     \ cost(_cost), id(_id) {}\n\n        friend bool operator>(const _base_edge &e1,\
@@ -148,99 +147,65 @@ data:
     \        }\n        return std::make_tuple(Gs, group_id, node_id);\n    }\n\n\
     \    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
     \ << std::endl;\n        for(const edge<WEIGHT> &e : this->E) std::cout << e <<\
-    \ std::endl;\n    }\n};\n\n\n#line 8 \"math/matrix.hpp\"\n\ntemplate<class T>\n\
-    class matrix{\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
-    \ table;\n\n  public:\n    matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val,\
-    \ _W), _H) {}\n    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()),\
-    \ W(vv[0].size()), table(std::valarray<T>(W), H) {\n        for(int i=0; i<H;\
-    \ i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];\n    }\n    matrix(const\
-    \ std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv)\
-    \ {}\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\
-    \u5909\u63DB\n     * @param invalid \u8FBA\u306E\u306A\u3044\u5834\u6240\u306E\
-    \u5024\n     * @attention G \u306B\u81EA\u5DF1\u30EB\u30FC\u30D7\u304C\u542B\u307E\
-    \u308C\u3066\u3044\u306A\u3044\u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\u306F\
-    \ 0 \n     */\n    template<bool is_directed>\n    matrix(const graph<T, is_directed>\
-    \ &G, T invalid)\n         : H(G.count_nodes()), W(G.count_nodes()), table(std::valarray<T>(invalid,\
-    \ W), H){\n        for(int i = 0; i < H; i++) table[i][i] = 0; \n        for(auto\
-    \ &e : G.edges()){\n            table[e.from][e.to] = e.cost;\n            if(!is_directed)\
-    \ table[e.to][e.from] = e.cost;\n        }\n    }\n\n    /**\n     * @brief \u884C\
-    \u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002\n     * @param val \u62E1\
-    \u5F35\u90E8\u5206\u306E\u5024\n     */\n    void resize(int _H, int _W, T val\
-    \ = 0){\n        H = _H, W = _W;\n        table.resize(_H, std::valarray<T>(val,\
-    \ _H));\n    }\n    int size_H() const { return H; }\n    int size_W() const {\
-    \ return W; }\n    matrix<T> transpose() const {\n        matrix<T> ret(W, H);\n\
-    \        for(int i=0; i<H; i++) for(int j=0; j<W; j++) ret[j][i] = table[i][j];\n\
-    \        return ret;\n    }\n    /**\n     * @attention O(n^3)\n     * @attention\
-    \ \u6574\u6570\u578B\u3067\u306F\u6B63\u3057\u304F\u8A08\u7B97\u3067\u304D\u306A\
-    \u3044\u3002double \u3084 fraction \u3092\u4F7F\u3046\u3053\u3068\u3002\n    \
-    \ */\n    const T determinant() const {\n        assert(H == W);\n        matrix<T>\
-    \ dfm(*this);\n        T ret = 1;\n        for(int i=0; i<H; i++){\n         \
-    \   if(dfm[i][i] == 0){\n                int piv;\n                for(piv=i+1;\
-    \ piv<H; piv++) if(dfm[piv][i] != 0) break;\n                if(piv == H) return\
-    \ 0;\n                dfm[i].swap(dfm[piv]);\n                ret *= -1;\n   \
-    \         }            \n            for(int j=i+1; j<H; j++) dfm[j] -= dfm[i]\
-    \ * (dfm[j][i] / dfm[i][i]);\n            ret *= dfm[i][i];\n        }\n     \
-    \   return ret;\n    }\n    void print() const {\n        for(int i=0; i<H; i++){\n\
-    \            for(int j=0; j<W; j++){\n                std::cout << table[i][j]\
-    \ << (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
-    \        }\n    }\n\n\n    matrix<T> &operator+=(const matrix<T> &a){\n      \
-    \  this->table += a.table;\n        return *this;\n    }\n    matrix<T> &operator-=(const\
-    \ matrix<T> &a){\n        this->table -= a.table;\n        return *this;\n   \
-    \ }\n    matrix<T> &operator*=(const T &a){\n        this->table *= a;\n     \
-    \   return *this;\n    }\n    matrix<T> &operator*=(const matrix<T> &a){\n   \
-    \     assert(W == a.H);\n        matrix<T> a_t(a.transpose()), ret(H, a.W);\n\
-    \        for(int i=0; i<H; i++){\n            for(int j=0; j<a.W; j++){\n    \
-    \            ret[i][j] = (this->table[i] * a_t.table[j]).sum();\n            }\n\
-    \        }\n        return *this = ret;\n    }\n    matrix<T> &operator/=(const\
-    \ T &a){\n        this->table /= a;\n        return *this;\n    }\n    /**\n \
-    \    * @brief \u884C\u5217\u306E\u51AA\u4E57\u3002\n     * @param n \u6307\u6570\
-    \n     * @attention n \u304C 0 \u306A\u3089\u5358\u4F4D\u884C\u5217\u3002\n  \
-    \   * @attention \u6F14\u7B97\u5B50\u306E\u512A\u5148\u5EA6\u306B\u6CE8\u610F\u3002\
-    \n     */\n    matrix<T> operator^=(long long n) {\n        assert(H == W);\n\
-    \        if(n == 0) return *this = E(H);\n        n--;\n        matrix<T> x(*this);\n\
-    \        while (n) {\n            if (n & 1) *this *= x;\n            x *= x;\n\
-    \            n >>= 1;\n        }\n        return *this;\n    }\n\n    matrix<T>\
-    \ operator+(){ return *this; }\n    matrix<T> operator-(){ return matrix<T>(*this)\
-    \ *= -1; }\n    matrix<T> operator+(const matrix<T> &a){ return matrix<T>(*this)\
-    \ += a; }\n    matrix<T> operator-(const matrix<T> &a){ return matrix<T>(*this)\
-    \ -= a; }\n    template<typename S> matrix<T> operator*(const S &a){ return matrix<T>(*this)\
-    \ *= a; }\n    matrix<T> operator/(const T &a){ return matrix<T>(*this) /= a;\
-    \ }\n    matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }\n\
-    \    std::valarray<T> &operator[](int h){ return table[h]; }\n    friend std::istream\
-    \ &operator>>(std::istream &is, matrix<T> &mt){\n        for(auto &arr : mt.table)\
-    \ for(auto &x : arr) is >> x;\n        return is;\n    }\n    /**\n     * @brief\
-    \ \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n    */\n    static\
-    \ matrix<T> E(int N){\n        matrix<T> ret(N, N);\n        for(int i = 0; i\
-    \ < N; i++) ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 4 \"graph/Warshall_Floyd.hpp\"\
-    \n\ntemplate<class T>\nmatrix<T> Warshall_Floyd(matrix<T> mt) {\n    int N = mt.size_H();\n\
-    \    for(int k = 0; k < N; k++){ // \u7D4C\u7531\u3059\u308B\u9802\u70B9\n   \
-    \     for(int i = 0; i < N; i++) { // \u59CB\u70B9\n            for(int j = 0;\
-    \ j < N; j++) { // \u7D42\u70B9\n                mt[i][j] = std::min(mt[i][j],\
-    \ mt[i][k] + mt[k][j]);\n            }\n        }\n    }\n    return mt;\n}\n\n\
-    \n"
-  code: "#ifndef WARSHALL_FLOYD\n#define WARSHALL_FLOYD\n#include \"../math/matrix.hpp\"\
-    \n\ntemplate<class T>\nmatrix<T> Warshall_Floyd(matrix<T> mt) {\n    int N = mt.size_H();\n\
-    \    for(int k = 0; k < N; k++){ // \u7D4C\u7531\u3059\u308B\u9802\u70B9\n   \
-    \     for(int i = 0; i < N; i++) { // \u59CB\u70B9\n            for(int j = 0;\
-    \ j < N; j++) { // \u7D42\u70B9\n                mt[i][j] = std::min(mt[i][j],\
-    \ mt[i][k] + mt[k][j]);\n            }\n        }\n    }\n    return mt;\n}\n\n\
-    #endif"
+    \ std::endl;\n    }\n};\n\n\n#line 5 \"graph/lowlink.hpp\"\n\n/* \u5358\u7D14\u7121\
+    \u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\u6A4B\u3092\u6C42\u3081\
+    \u308B\n * \u524D\u51E6\u7406 O(N)\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093344\n\
+    \ * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093485\n */\n\
+    template<typename WEIGHT>\nclass lowlink{\n  private:\n    std::vector<int> ord,\
+    \ low, apts;\n    std::vector<edge<WEIGHT>> brids;\n    \n    void dfs(const graph<WEIGHT,\
+    \ false> &G, int cu, int pa, int &cnt){\n        ord[cu] = low[cu] = cnt++;\n\
+    \        bool is_apt = false;\n        for(auto &e : G[cu]){\n            if(e.to\
+    \ == pa) continue;\n            if(ord[e.to] == -1){\n                dfs(G, e.to,\
+    \ cu, cnt);\n                if(low[cu] > low[e.to]) low[cu] = low[e.to];\n  \
+    \              if(ord[cu] < low[e.to]) brids.emplace_back(e);\n              \
+    \  if(pa != -1 && ord[cu] <= low[e.to]) is_apt = true;\n            }\n      \
+    \      else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];\n        }\n        if(is_apt)\
+    \ apts.emplace_back(cu); \n    }\n\n  public:\n    lowlink(graph<WEIGHT, false>\
+    \ &G) : ord(G.count_nodes(), -1), low(G.count_nodes(), -1) {\n        // \u6B21\
+    \u6570\u304C\u6700\u5C0F\u306E\u30CE\u30FC\u30C9\u306F\u5FC5\u305A\u95A2\u7BC0\
+    \u70B9\u3067\u306A\u3044\n        // \u305D\u3053\u304B\u3089DFS\u3059\u308C\u3070\
+    \u3001\u6839\u30CE\u30FC\u30C9\u306E\u95A2\u7BC0\u70B9\u5224\u5B9A\u3092\u884C\
+    \u308F\u306A\u304F\u3066\u3088\u3044\n        std::vector<int> deg(G.count_nodes(),\
+    \ 0);\n        for(int i = 0; i < G.count_nodes(); i++) deg[i] = G[i].size();\
+    \ \n        \n        const std::vector<std::vector<int>> groups = G.connected_components();\n\
+    \        int sz = groups.size();\n        std::vector<std::pair<int, int>> group_min_deg(sz,\
+    \ {std::numeric_limits<int>::max(), -1});\n        for(int i = 0; i < sz; i++)\
+    \ for(int x : groups[i]) if(group_min_deg[i].first > deg[x]){\n            group_min_deg[i]\
+    \ = {deg[x], x};\n        }\n\n        for(auto[ign, x] : group_min_deg){\n  \
+    \          int cnt = 0;\n            dfs(G, x, -1, cnt);\n        }\n    }\n\n\
+    \    // unsorted \u3067\u3042\u308B\u3053\u3068\u306B\u6CE8\u610F\n    const std::vector<int>\
+    \ &articulation_points(){ return apts; }\n    const std::vector<edge<WEIGHT>>\
+    \ &bridges(){ return brids; }\n\n};\n\n\n\n#line 4 \"test/grl-3-b.test.cpp\"\n\
+    using namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j);\
+    \ i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n\
+    \n    int N, M;\n    cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n\
+    \        int a, b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n\
+    \    lowlink LL(G);\n    auto ans(LL.bridges());\n    for(auto &e : ans) if(e.from\
+    \ > e.to) swap(e.from, e.to);\n    sort(all(ans));\n    for(auto &e : ans) cout\
+    \ << e << endl;\n\n}\n"
+  code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B\"\n#include\
+    \ <bits/stdc++.h>\n#include \"../graph/lowlink.hpp\"\nusing namespace std;\nusing\
+    \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
+    #define all(a) (a).begin(),(a).end()\n\nint main(void){\n\n    int N, M;\n   \
+    \ cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n        int a,\
+    \ b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n    lowlink LL(G);\n\
+    \    auto ans(LL.bridges());\n    for(auto &e : ans) if(e.from > e.to) swap(e.from,\
+    \ e.to);\n    sort(all(ans));\n    for(auto &e : ans) cout << e << endl;\n\n}"
   dependsOn:
-  - math/matrix.hpp
+  - graph/lowlink.hpp
   - graph/graph.hpp
   - graph/edge.hpp
   - data_structure/union_find.hpp
-  isVerificationFile: false
-  path: graph/Warshall_Floyd.hpp
+  isVerificationFile: true
+  path: test/grl-3-b.test.cpp
   requiredBy: []
   timestamp: '2023-06-12 10:57:20+09:00'
-  verificationStatus: LIBRARY_ALL_AC
-  verifiedWith:
-  - test/grl-1-c.test.cpp
-documentation_of: graph/Warshall_Floyd.hpp
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: test/grl-3-b.test.cpp
 layout: document
 redirect_from:
-- /library/graph/Warshall_Floyd.hpp
-- /library/graph/Warshall_Floyd.hpp.html
-title: graph/Warshall_Floyd.hpp
+- /verify/test/grl-3-b.test.cpp
+- /verify/test/grl-3-b.test.cpp.html
+title: test/grl-3-b.test.cpp
 ---

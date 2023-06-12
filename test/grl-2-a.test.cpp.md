@@ -40,13 +40,14 @@ data:
     \        e.print(os);\n            return os;\n        }\n        const _base_edge\
     \ &operator=(const _base_edge &e){\n            from = e.from, to = e.to, cost\
     \ = e.cost, id = e.id;\n            return *this;\n        }\n\n        virtual\
-    \ ~_base_edge() = default; \n\n      protected:\n        virtual void print(std::ostream\
-    \ &os) const = 0;\n        virtual int compare(const _base_edge &e) const = 0;\n\
-    \    };\n}\n\ntemplate<class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
-    \ WEIGHT>{\n    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0)\
-    \ {}\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n\
-    \    void print(std::ostream &os) const override {\n        os << this->from <<\
-    \ \" \" << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
+    \ ~_base_edge() = default; \n\n        operator int() const { return to; }\n\n\
+    \      protected:\n        virtual void print(std::ostream &os) const = 0;\n \
+    \       virtual int compare(const _base_edge &e) const = 0;\n    };\n}\n\ntemplate<class\
+    \ WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{\n\
+    \    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0) {}\n    using\
+    \ internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n    void\
+    \ print(std::ostream &os) const override {\n        os << this->from << \" \"\
+    \ << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT>& e) const override {\n        if(this->cost == e.cost){\n          \
     \  if(this->from == e.from){\n                return this->to - e.to;\n      \
     \      }\n            return this->from - e.from;\n        }\n        return this->cost\
@@ -112,14 +113,16 @@ data:
     \u306E\u6570\n     */\n    int count_connected_components() const { return uf.count_groups();\
     \ }\n\n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\u30C8\
     \u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> connected_components(){\
-    \ return uf.groups(); }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\
-    \u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n     * @param\
-    \ e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\
-    \u3055\u308C\u308B \n     */\n    void add_edge(const edge<WEIGHT> &e){\n    \
-    \    internal_add_edge(e);\n    }\n\n    /**\n     * @attention \u8FBA\u306E id\
-    \ \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\
-    \u3089\u308C\u308B \n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\
-    \u30FC\n     */\n    template<typename T = WEIGHT>\n    typename std::enable_if<!std::is_same<T,\
+    \ return uf.groups(); }\n\n    /**\n     * @return \u6728\u304B\n     */\n   \
+    \ bool is_tree(){ return (uf.count_groups() == 1 && E.size() == N - 1); }\n\n\
+    \    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\u307F\n     */\n    WEIGHT\
+    \ weight() const { return W; }\n\n    /**\n     * @param e \u8FBA\n     * @attention\
+    \ \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\u3055\u308C\u308B \n  \
+    \   */\n    void add_edge(const edge<WEIGHT> &e){\n        internal_add_edge(e);\n\
+    \    }\n\n    /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\
+    \u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B \n\
+    \     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\u30FC\n     */\n\
+    \    template<typename T = WEIGHT>\n    typename std::enable_if<!std::is_same<T,\
     \ int>::value>::type \n    add_edge(int from, int to, WEIGHT cost) {\n       \
     \ internal_add_edge(edge<WEIGHT>(from, to, cost, E.size()));\n    }\n\n    /**\n\
     \     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\
@@ -146,29 +149,18 @@ data:
     \        }\n        return std::make_tuple(Gs, group_id, node_id);\n    }\n\n\
     \    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
     \ << std::endl;\n        for(const edge<WEIGHT> &e : this->E) std::cout << e <<\
-    \ std::endl;\n    }\n\n    class iterator {\n      private:\n        friend class\
-    \ graph;\n        const std::vector<std::vector<edge<WEIGHT>>>* edges;\n     \
-    \   std::size_t index;\n        iterator(const std::vector<std::vector<edge<WEIGHT>>>*\
-    \ edges, std::size_t index) : edges(edges), index(index) {}\n\n      public:\n\
-    \        bool operator==(const iterator& other) const { return edges == other.edges\
-    \ && index == other.index; }\n        bool operator!=(const iterator& other) const\
-    \ { return !(*this == other); }\n        const std::vector<edge<WEIGHT>> &operator*()\
-    \ const { return (*edges)[index]; }\n        iterator& operator++() {\n      \
-    \      index++;\n            return *this;\n        }\n        iterator operator++(int)\
-    \ {\n            iterator tmp = *this;\n            ++(*this);\n            return\
-    \ tmp;\n        }\n    };\n    iterator begin() const { return iterator(&G, 0);\
-    \ }\n    iterator end() const { return iterator(&G, G.size()); }\n};\n\n\n#line\
-    \ 4 \"graph/Kruscal.hpp\"\n\n/**\n * @param G \u7121\u5411\u30B0\u30E9\u30D5\n\
-    \ * @return \u6700\u5C0F\u5168\u57DF\u68EE\n */\ntemplate<typename WEIGHT>\ngraph<WEIGHT,\
-    \ false> Kruscal(const graph<WEIGHT, false> &G){\n    graph<WEIGHT, false> ret(G.count_nodes());\n\
-    \    std::vector<edge<WEIGHT>> E(G.edges());\n    std::sort(E.begin(), E.end());\n\
-    \    for(auto &e : E) if(!ret.are_connected(e.from, e.to)){ \n        ret.add_edge(e);\n\
-    \    }\n    return ret;\n}\n\n\n#line 4 \"test/grl-2-a.test.cpp\"\nusing namespace\
-    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
-    \ i++)\n\nint main(void){\n \n    //input\n \n    int N, M;\n    cin >> N >> M;\n\
-    \    graph<ll, false> G(N);\n    rep(i,0,M){\n        int a, b, c;\n        cin\
-    \ >> a>> b >> c;\n        G.add_edge(a, b, c);\n    }\n \n    //calculate\n  \
-    \  \n    cout << Kruscal(G).weight() << endl;\n \n}\n"
+    \ std::endl;\n    }\n};\n\n\n#line 4 \"graph/Kruscal.hpp\"\n\n/**\n * @param G\
+    \ \u7121\u5411\u30B0\u30E9\u30D5\n * @return \u6700\u5C0F\u5168\u57DF\u68EE\n\
+    \ */\ntemplate<typename WEIGHT>\ngraph<WEIGHT, false> Kruscal(const graph<WEIGHT,\
+    \ false> &G){\n    graph<WEIGHT, false> ret(G.count_nodes());\n    std::vector<edge<WEIGHT>>\
+    \ E(G.edges());\n    std::sort(E.begin(), E.end());\n    for(auto &e : E) if(!ret.are_connected(e.from,\
+    \ e.to)){ \n        ret.add_edge(e);\n    }\n    return ret;\n}\n\n\n#line 4 \"\
+    test/grl-2-a.test.cpp\"\nusing namespace std;\nusing ll = long long;\n#define\
+    \ rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\nint main(void){\n \n \
+    \   //input\n \n    int N, M;\n    cin >> N >> M;\n    graph<ll, false> G(N);\n\
+    \    rep(i,0,M){\n        int a, b, c;\n        cin >> a>> b >> c;\n        G.add_edge(a,\
+    \ b, c);\n    }\n \n    //calculate\n    \n    cout << Kruscal(G).weight() <<\
+    \ endl;\n \n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_A\"\n#include\
     \ <bits/stdc++.h>\n#include \"../graph/Kruscal.hpp\"\nusing namespace std;\nusing\
     \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
@@ -184,7 +176,7 @@ data:
   isVerificationFile: true
   path: test/grl-2-a.test.cpp
   requiredBy: []
-  timestamp: '2023-06-12 02:21:06+09:00'
+  timestamp: '2023-06-12 10:31:44+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-2-a.test.cpp

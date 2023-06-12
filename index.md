@@ -54,7 +54,7 @@ data:
     - icon: ':warning:'
       path: graph/lowest_common_ancestor.hpp
       title: graph/lowest_common_ancestor.hpp
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: graph/lowlink.hpp
       title: graph/lowlink.hpp
     - icon: ':warning:'
@@ -178,6 +178,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/grl-2-a.test.cpp
       title: test/grl-2-a.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: test/grl-3-a.test.cpp
+      title: test/grl-3-a.test.cpp
     - icon: ':heavy_check_mark:'
       path: test/grl-5-a.test.cpp
       title: test/grl-5-a.test.cpp

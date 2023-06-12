@@ -33,7 +33,7 @@ data:
   - icon: ':warning:'
     path: graph/lowest_common_ancestor.hpp
     title: graph/lowest_common_ancestor.hpp
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: graph/lowlink.hpp
     title: graph/lowlink.hpp
   - icon: ':warning:'
@@ -70,6 +70,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-2-a.test.cpp
     title: test/grl-2-a.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/grl-3-a.test.cpp
+    title: test/grl-3-a.test.cpp
   - icon: ':heavy_check_mark:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
@@ -108,13 +111,14 @@ data:
     \        e.print(os);\n            return os;\n        }\n        const _base_edge\
     \ &operator=(const _base_edge &e){\n            from = e.from, to = e.to, cost\
     \ = e.cost, id = e.id;\n            return *this;\n        }\n\n        virtual\
-    \ ~_base_edge() = default; \n\n      protected:\n        virtual void print(std::ostream\
-    \ &os) const = 0;\n        virtual int compare(const _base_edge &e) const = 0;\n\
-    \    };\n}\n\ntemplate<class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
-    \ WEIGHT>{\n    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0)\
-    \ {}\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n\
-    \    void print(std::ostream &os) const override {\n        os << this->from <<\
-    \ \" \" << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
+    \ ~_base_edge() = default; \n\n        operator int() const { return to; }\n\n\
+    \      protected:\n        virtual void print(std::ostream &os) const = 0;\n \
+    \       virtual int compare(const _base_edge &e) const = 0;\n    };\n}\n\ntemplate<class\
+    \ WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{\n\
+    \    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0) {}\n    using\
+    \ internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n    void\
+    \ print(std::ostream &os) const override {\n        os << this->from << \" \"\
+    \ << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT>& e) const override {\n        if(this->cost == e.cost){\n          \
     \  if(this->from == e.from){\n                return this->to - e.to;\n      \
     \      }\n            return this->from - e.from;\n        }\n        return this->cost\
@@ -180,21 +184,23 @@ data:
     \  * @return \u9023\u7D50\u6210\u5206\u306E\u6570\n     */\n    int count_connected_components()\
     \ const { return uf.count_groups(); }\n\n    /**\n     * @return \u9023\u7D50\u6210\
     \u5206\u306E\u30EA\u30B9\u30C8\u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>>\
-    \ connected_components(){ return uf.groups(); }\n\n    /**\n     * @return \u30B0\
-    \u30E9\u30D5\u306E\u91CD\u307F\n     */\n    WEIGHT weight() const { return W;\
-    \ }\n\n    /**\n     * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\
-    \u306E id \u306F\u4FDD\u6301\u3055\u308C\u308B \n     */\n    void add_edge(const\
-    \ edge<WEIGHT> &e){\n        internal_add_edge(e);\n    }\n\n    /**\n     * @attention\
-    \ \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\
-    \u76EE \u304C\u632F\u3089\u308C\u308B \n     * @attention WEIGHT \u304C int \u3060\
-    \u3068\u30A8\u30E9\u30FC\n     */\n    template<typename T = WEIGHT>\n    typename\
-    \ std::enable_if<!std::is_same<T, int>::value>::type \n    add_edge(int from,\
-    \ int to, WEIGHT cost) {\n        internal_add_edge(edge<WEIGHT>(from, to, cost,\
-    \ E.size()));\n    }\n\n    /**\n     * @attention \u8FBA\u306E id \u306F\u3001\
-    (\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\
-    \u308B \n     * @attention WEIGHT \u304C int \u4EE5\u5916\u3060\u3068\u30A8\u30E9\
-    \u30FC\n     */\n    template<typename T = WEIGHT>\n    typename std::enable_if<std::is_same<T,\
-    \ int>::value>::type \n    add_edge(int from, int to) {\n        internal_add_edge(edge<int>(from,\
+    \ connected_components(){ return uf.groups(); }\n\n    /**\n     * @return \u6728\
+    \u304B\n     */\n    bool is_tree(){ return (uf.count_groups() == 1 && E.size()\
+    \ == N - 1); }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\u307F\
+    \n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n     * @param e\
+    \ \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\
+    \u3055\u308C\u308B \n     */\n    void add_edge(const edge<WEIGHT> &e){\n    \
+    \    internal_add_edge(e);\n    }\n\n    /**\n     * @attention \u8FBA\u306E id\
+    \ \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\
+    \u3089\u308C\u308B \n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\
+    \u30FC\n     */\n    template<typename T = WEIGHT>\n    typename std::enable_if<!std::is_same<T,\
+    \ int>::value>::type \n    add_edge(int from, int to, WEIGHT cost) {\n       \
+    \ internal_add_edge(edge<WEIGHT>(from, to, cost, E.size()));\n    }\n\n    /**\n\
+    \     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\
+    \u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B \n     * @attention WEIGHT\
+    \ \u304C int \u4EE5\u5916\u3060\u3068\u30A8\u30E9\u30FC\n     */\n    template<typename\
+    \ T = WEIGHT>\n    typename std::enable_if<std::is_same<T, int>::value>::type\
+    \ \n    add_edge(int from, int to) {\n        internal_add_edge(edge<int>(from,\
     \ to, E.size()));\n    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\u9023\
     \u7D50\u306A\u30B0\u30E9\u30D5\u306B\u5206\u3051\u3066\u30EA\u30B9\u30C8\u306B\
     \u3057\u3066\u8FD4\u3059\n     * @example auto[Gs, gr, nd] = G.decompose();\n\
@@ -214,18 +220,7 @@ data:
     \        }\n        return std::make_tuple(Gs, group_id, node_id);\n    }\n\n\
     \    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
     \ << std::endl;\n        for(const edge<WEIGHT> &e : this->E) std::cout << e <<\
-    \ std::endl;\n    }\n\n    class iterator {\n      private:\n        friend class\
-    \ graph;\n        const std::vector<std::vector<edge<WEIGHT>>>* edges;\n     \
-    \   std::size_t index;\n        iterator(const std::vector<std::vector<edge<WEIGHT>>>*\
-    \ edges, std::size_t index) : edges(edges), index(index) {}\n\n      public:\n\
-    \        bool operator==(const iterator& other) const { return edges == other.edges\
-    \ && index == other.index; }\n        bool operator!=(const iterator& other) const\
-    \ { return !(*this == other); }\n        const std::vector<edge<WEIGHT>> &operator*()\
-    \ const { return (*edges)[index]; }\n        iterator& operator++() {\n      \
-    \      index++;\n            return *this;\n        }\n        iterator operator++(int)\
-    \ {\n            iterator tmp = *this;\n            ++(*this);\n            return\
-    \ tmp;\n        }\n    };\n    iterator begin() const { return iterator(&G, 0);\
-    \ }\n    iterator end() const { return iterator(&G, G.size()); }\n};\n\n\n"
+    \ std::endl;\n    }\n};\n\n\n"
   code: "#ifndef GRAPH_STRUCT\n#define GRAPH_STRUCT\n#include <vector>\n#include <algorithm>\n\
     #include <tuple>\n#include \"edge.hpp\"\n#include \"../data_structure/union_find.hpp\"\
     \n\n/**\n * @brief \u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\
@@ -261,14 +256,16 @@ data:
     \u306E\u6570\n     */\n    int count_connected_components() const { return uf.count_groups();\
     \ }\n\n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\u30C8\
     \u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> connected_components(){\
-    \ return uf.groups(); }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\
-    \u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n     * @param\
-    \ e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\
-    \u3055\u308C\u308B \n     */\n    void add_edge(const edge<WEIGHT> &e){\n    \
-    \    internal_add_edge(e);\n    }\n\n    /**\n     * @attention \u8FBA\u306E id\
-    \ \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\
-    \u3089\u308C\u308B \n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\
-    \u30FC\n     */\n    template<typename T = WEIGHT>\n    typename std::enable_if<!std::is_same<T,\
+    \ return uf.groups(); }\n\n    /**\n     * @return \u6728\u304B\n     */\n   \
+    \ bool is_tree(){ return (uf.count_groups() == 1 && E.size() == N - 1); }\n\n\
+    \    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\u307F\n     */\n    WEIGHT\
+    \ weight() const { return W; }\n\n    /**\n     * @param e \u8FBA\n     * @attention\
+    \ \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\u3055\u308C\u308B \n  \
+    \   */\n    void add_edge(const edge<WEIGHT> &e){\n        internal_add_edge(e);\n\
+    \    }\n\n    /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\
+    \u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B \n\
+    \     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\u30FC\n     */\n\
+    \    template<typename T = WEIGHT>\n    typename std::enable_if<!std::is_same<T,\
     \ int>::value>::type \n    add_edge(int from, int to, WEIGHT cost) {\n       \
     \ internal_add_edge(edge<WEIGHT>(from, to, cost, E.size()));\n    }\n\n    /**\n\
     \     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\
@@ -295,18 +292,7 @@ data:
     \        }\n        return std::make_tuple(Gs, group_id, node_id);\n    }\n\n\
     \    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
     \ << std::endl;\n        for(const edge<WEIGHT> &e : this->E) std::cout << e <<\
-    \ std::endl;\n    }\n\n    class iterator {\n      private:\n        friend class\
-    \ graph;\n        const std::vector<std::vector<edge<WEIGHT>>>* edges;\n     \
-    \   std::size_t index;\n        iterator(const std::vector<std::vector<edge<WEIGHT>>>*\
-    \ edges, std::size_t index) : edges(edges), index(index) {}\n\n      public:\n\
-    \        bool operator==(const iterator& other) const { return edges == other.edges\
-    \ && index == other.index; }\n        bool operator!=(const iterator& other) const\
-    \ { return !(*this == other); }\n        const std::vector<edge<WEIGHT>> &operator*()\
-    \ const { return (*edges)[index]; }\n        iterator& operator++() {\n      \
-    \      index++;\n            return *this;\n        }\n        iterator operator++(int)\
-    \ {\n            iterator tmp = *this;\n            ++(*this);\n            return\
-    \ tmp;\n        }\n    };\n    iterator begin() const { return iterator(&G, 0);\
-    \ }\n    iterator end() const { return iterator(&G, G.size()); }\n};\n\n#endif"
+    \ std::endl;\n    }\n};\n\n#endif"
   dependsOn:
   - graph/edge.hpp
   - data_structure/union_find.hpp
@@ -330,9 +316,10 @@ data:
   - graph/doubling.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
   - graph/topological_sort.hpp
-  timestamp: '2023-06-12 02:21:06+09:00'
+  timestamp: '2023-06-12 10:31:44+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
+  - test/grl-3-a.test.cpp
   - test/itp1-t-d.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp

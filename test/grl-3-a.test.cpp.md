@@ -5,15 +5,14 @@ data:
     path: data_structure/union_find.hpp
     title: data_structure/union_find.hpp
   - icon: ':question:'
-    path: graph/Manhattan_minimum_spanning_tree.hpp
-    title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
-      \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
-  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
+  - icon: ':heavy_check_mark:'
+    path: graph/lowlink.hpp
+    title: graph/lowlink.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -21,34 +20,34 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://judge.yosupo.jp/problem/manhattanmst
+    PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
     links:
-    - https://judge.yosupo.jp/problem/manhattanmst
-  bundledCode: "#line 1 \"test/manhattan-mst.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/manhattanmst\"\
-    \n#include <bits/stdc++.h>\n#line 1 \"graph/Manhattan_minimum_spanning_tree.hpp\"\
-    \n\n\n#line 1 \"graph/graph.hpp\"\n\n\n#line 1 \"graph/edge.hpp\"\n\n\n#line 4\
-    \ \"graph/edge.hpp\"\n\nnamespace internal{\n    template<class DERIVED, class\
-    \ WEIGHT>\n    struct _base_edge{\n        int from;\n        int to;\n      \
-    \  WEIGHT cost;\n        int id;\n        _base_edge(int _from, int _to, WEIGHT\
-    \ _cost, int _id) : from(_from), to(_to), cost(_cost), id(_id) {}\n\n        friend\
-    \ bool operator>(const _base_edge &e1, const _base_edge &e){\n            return\
-    \ e1.compare(e) > 0;\n        }\n        friend bool operator>=(const _base_edge\
-    \ &e1, const _base_edge &e){\n            return e1.compare(e) >= 0;\n       \
-    \ }\n        friend bool operator<(const _base_edge &e1, const _base_edge &e){\n\
-    \            return e1.compare(e) < 0;\n        }\n        friend bool operator<=(const\
-    \ _base_edge &e1, const _base_edge &e){\n            return e1.compare(e) <= 0;\n\
-    \        }\n        friend std::ostream &operator<<(std::ostream &os, const _base_edge<DERIVED,\
-    \ WEIGHT> &e) {\n            e.print(os);\n            return os;\n        }\n\
-    \        const _base_edge &operator=(const _base_edge &e){\n            from =\
-    \ e.from, to = e.to, cost = e.cost, id = e.id;\n            return *this;\n  \
-    \      }\n\n        virtual ~_base_edge() = default; \n\n        operator int()\
-    \ const { return to; }\n\n      protected:\n        virtual void print(std::ostream\
-    \ &os) const = 0;\n        virtual int compare(const _base_edge &e) const = 0;\n\
-    \    };\n}\n\ntemplate<class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
-    \ WEIGHT>{\n    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0)\
-    \ {}\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n\
-    \    void print(std::ostream &os) const override {\n        os << this->from <<\
-    \ \" \" << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
+    - https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
+  bundledCode: "#line 1 \"test/grl-3-a.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A\"\
+    \n#include <bits/stdc++.h>\n#line 1 \"graph/lowlink.hpp\"\n\n\n#line 1 \"graph/graph.hpp\"\
+    \n\n\n#line 1 \"graph/edge.hpp\"\n\n\n#line 4 \"graph/edge.hpp\"\n\nnamespace\
+    \ internal{\n    template<class DERIVED, class WEIGHT>\n    struct _base_edge{\n\
+    \        int from;\n        int to;\n        WEIGHT cost;\n        int id;\n \
+    \       _base_edge(int _from, int _to, WEIGHT _cost, int _id) : from(_from), to(_to),\
+    \ cost(_cost), id(_id) {}\n\n        friend bool operator>(const _base_edge &e1,\
+    \ const _base_edge &e){\n            return e1.compare(e) > 0;\n        }\n  \
+    \      friend bool operator>=(const _base_edge &e1, const _base_edge &e){\n  \
+    \          return e1.compare(e) >= 0;\n        }\n        friend bool operator<(const\
+    \ _base_edge &e1, const _base_edge &e){\n            return e1.compare(e) < 0;\n\
+    \        }\n        friend bool operator<=(const _base_edge &e1, const _base_edge\
+    \ &e){\n            return e1.compare(e) <= 0;\n        }\n        friend std::ostream\
+    \ &operator<<(std::ostream &os, const _base_edge<DERIVED, WEIGHT> &e) {\n    \
+    \        e.print(os);\n            return os;\n        }\n        const _base_edge\
+    \ &operator=(const _base_edge &e){\n            from = e.from, to = e.to, cost\
+    \ = e.cost, id = e.id;\n            return *this;\n        }\n\n        virtual\
+    \ ~_base_edge() = default; \n\n        operator int() const { return to; }\n\n\
+    \      protected:\n        virtual void print(std::ostream &os) const = 0;\n \
+    \       virtual int compare(const _base_edge &e) const = 0;\n    };\n}\n\ntemplate<class\
+    \ WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT>{\n\
+    \    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0) {}\n    using\
+    \ internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n  protected:\n    void\
+    \ print(std::ostream &os) const override {\n        os << this->from << \" \"\
+    \ << this->to << \" \" << this->cost;\n    }  \n    int compare(const internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT>& e) const override {\n        if(this->cost == e.cost){\n          \
     \  if(this->from == e.from){\n                return this->to - e.to;\n      \
     \      }\n            return this->from - e.from;\n        }\n        return this->cost\
@@ -150,59 +149,64 @@ data:
     \        }\n        return std::make_tuple(Gs, group_id, node_id);\n    }\n\n\
     \    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
     \ << std::endl;\n        for(const edge<WEIGHT> &e : this->E) std::cout << e <<\
-    \ std::endl;\n    }\n};\n\n\n#line 6 \"graph/Manhattan_minimum_spanning_tree.hpp\"\
-    \n\n/**\n * @see https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n\
-    \ * @brief \u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
-    \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002\n * @param xs \u5404\
-    \u30CE\u30FC\u30C9\u306E x \u5EA7\u6A19\n * @param ys \u5404\u30CE\u30FC\u30C9\
-    \u306E y \u5EA7\u6A19\n */\ntemplate<typename WEIGHT>\nclass Manhattan_minimum_spanning_tree\
-    \ {\n  private:\n    graph<WEIGHT, false> mst;\n\n  public:\n\n    Manhattan_minimum_spanning_tree(std::vector<WEIGHT>\
-    \ &xs, std::vector<WEIGHT> &ys) : mst(xs.size()) {\n        int N = xs.size();\n\
-    \        std::vector<edge<WEIGHT>> E;\n        std::vector<int> idx(N);\n    \
-    \    std::iota(idx.begin(), idx.end(), 0);\n        for (int s = 0; s < 2; s++)\
-    \ {\n            for (int t = 0; t < 2; t++) {\n                std::sort(idx.begin(),\
-    \ idx.end(), [&](int i, int j){ return xs[i] + ys[i] < xs[j] + ys[j]; });\n  \
-    \              std::map<WEIGHT, int> sweep;\n                for (int i : idx)\
-    \ {\n                    for (auto it = sweep.lower_bound(-ys[i]); it != sweep.end();\
-    \ it = sweep.erase(it)) {\n                        int j = it->second;\n     \
-    \                   if (xs[i] - xs[j] < ys[i] - ys[j]) break;\n              \
-    \          E.emplace_back(edge<WEIGHT>{i, j, std::abs(xs[i] - xs[j]) + std::abs(ys[i]\
-    \ - ys[j]), -1});\n                    }\n                    sweep[-ys[i]] =\
-    \ i;\n                }\n                std::swap(xs, ys);\n            }\n \
-    \           for(auto &x : xs) x = -x;\n        }\n\n        int cnt_id = 0;\n\
-    \        sort(E.begin(), E.end());\n        for(auto &e : E) if(!mst.are_connected(e.from,\
-    \ e.to)) {\n            e.id = cnt_id;\n            mst.add_edge(e);\n       \
-    \     cnt_id++;\n        }\n    }\n\n    const graph<WEIGHT, false> &get_tree(){\
-    \ return mst; }\n\n};\n\n\n#line 4 \"test/manhattan-mst.test.cpp\"\nusing namespace\
-    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
-    \ i++)\n\nint main(void){\n\n    //input\n \n    int N;\n    cin >> N;\n    vector<ll>\
-    \ X(N), Y(N);\n    rep(i,0,N){\n        cin >> X[i] >> Y[i];\n    }\n \n    //calculate\n\
-    \ \n    Manhattan_minimum_spanning_tree mst(X, Y);\n \n    cout << mst.get_tree().weight()\
-    \ << endl;\n    for(auto &e : mst.get_tree().edges()){\n        cout << e.from\
-    \ << \" \" << e.to << endl; \n    }\n\n}\n"
-  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/manhattanmst\"\n#include\
-    \ <bits/stdc++.h>\n#include \"../graph/Manhattan_minimum_spanning_tree.hpp\"\n\
+    \ std::endl;\n    }\n};\n\n\n#line 5 \"graph/lowlink.hpp\"\n\n/* \u5358\u7D14\u7121\
+    \u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\u6A4B\u3092\u6C42\u3081\
+    \u308B\n * \u524D\u51E6\u7406 O(N)\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093344\n\
+    \ * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7093485\n */\n\
+    template<typename WEIGHT>\nclass lowlink{\n  private:\n    std::vector<int> ord,\
+    \ low, apts;\n    std::vector<edge<WEIGHT>> brids;\n    \n    void dfs(const graph<WEIGHT,\
+    \ false> &G, int cu, int pa, int &cnt){\n        ord[cu] = low[cu] = cnt++;\n\
+    \        bool is_apt = false;\n        for(auto &e : G[cu]){\n            if(e.to\
+    \ == pa) continue;\n            if(ord[e.to] == -1){\n                dfs(G, e.to,\
+    \ cu, cnt);\n                if(low[cu] > low[e.to]) low[cu] = low[e.to];\n  \
+    \              if(ord[cu] < low[e.to]) brids.emplace_back(e);\n              \
+    \  if(pa != -1 && ord[cu] <= low[e.to]) is_apt = true;\n            }\n      \
+    \      else if(low[cu] > ord[e.to]) low[cu] = ord[e.to];\n        }\n        if(is_apt)\
+    \ apts.emplace_back(cu); \n    }\n\n  public:\n    lowlink(graph<WEIGHT, false>\
+    \ &G) : ord(G.count_nodes(), -1), low(G.count_nodes(), -1) {\n        // \u6B21\
+    \u6570\u304C\u6700\u5C0F\u306E\u30CE\u30FC\u30C9\u306F\u5FC5\u305A\u95A2\u7BC0\
+    \u70B9\u3067\u306A\u3044\n        // \u305D\u3053\u304B\u3089DFS\u3059\u308C\u3070\
+    \u3001\u6839\u30CE\u30FC\u30C9\u306E\u95A2\u7BC0\u70B9\u5224\u5B9A\u3092\u884C\
+    \u308F\u306A\u304F\u3066\u3088\u3044\n        std::vector<int> deg(G.count_nodes(),\
+    \ 0);\n        for(int i = 0; i < G.count_nodes(); i++) deg[i] = G[i].size();\
+    \ \n        \n        const std::vector<std::vector<int>> groups = G.connected_components();\n\
+    \        int sz = groups.size();\n        std::vector<std::pair<int, int>> group_min_deg(sz,\
+    \ {std::numeric_limits<int>::max(), -1});\n        for(int i = 0; i < sz; i++)\
+    \ for(int x : groups[i]) if(group_min_deg[i].first > deg[x]){\n            group_min_deg[i]\
+    \ = {deg[x], x};\n        }\n\n        for(auto[ign, x] : group_min_deg){\n  \
+    \          int cnt = 0;\n            dfs(G, x, -1, cnt);\n        }\n    }\n\n\
+    \    // unsorted \u3067\u3042\u308B\u3053\u3068\u306B\u6CE8\u610F\n    const std::vector<int>\
+    \ &articulation_points(){ return apts; }\n    const std::vector<edge<WEIGHT>>\
+    \ &bridges(){ return brids; }\n\n};\n\n\n\n#line 4 \"test/grl-3-a.test.cpp\"\n\
     using namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j);\
-    \ i < (ll)(n); i++)\n\nint main(void){\n\n    //input\n \n    int N;\n    cin\
-    \ >> N;\n    vector<ll> X(N), Y(N);\n    rep(i,0,N){\n        cin >> X[i] >> Y[i];\n\
-    \    }\n \n    //calculate\n \n    Manhattan_minimum_spanning_tree mst(X, Y);\n\
-    \ \n    cout << mst.get_tree().weight() << endl;\n    for(auto &e : mst.get_tree().edges()){\n\
-    \        cout << e.from << \" \" << e.to << endl; \n    }\n\n}"
+    \ i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n\
+    \n    int N, M;\n    cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n\
+    \        int a, b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n\
+    \    lowlink LL(G);\n    auto ans(LL.articulation_points());\n    sort(all(ans));\n\
+    \    for(auto x : ans) cout << x << endl;\n\n}\n"
+  code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A\"\n#include\
+    \ <bits/stdc++.h>\n#include \"../graph/lowlink.hpp\"\nusing namespace std;\nusing\
+    \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
+    #define all(a) (a).begin(),(a).end()\n\nint main(void){\n\n    int N, M;\n   \
+    \ cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n        int a,\
+    \ b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n    lowlink LL(G);\n\
+    \    auto ans(LL.articulation_points());\n    sort(all(ans));\n    for(auto x\
+    \ : ans) cout << x << endl;\n\n}"
   dependsOn:
-  - graph/Manhattan_minimum_spanning_tree.hpp
+  - graph/lowlink.hpp
   - graph/graph.hpp
   - graph/edge.hpp
   - data_structure/union_find.hpp
   isVerificationFile: true
-  path: test/manhattan-mst.test.cpp
+  path: test/grl-3-a.test.cpp
   requiredBy: []
   timestamp: '2023-06-12 10:31:44+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test/manhattan-mst.test.cpp
+documentation_of: test/grl-3-a.test.cpp
 layout: document
 redirect_from:
-- /verify/test/manhattan-mst.test.cpp
-- /verify/test/manhattan-mst.test.cpp.html
-title: test/manhattan-mst.test.cpp
+- /verify/test/grl-3-a.test.cpp
+- /verify/test/grl-3-a.test.cpp.html
+title: test/grl-3-a.test.cpp
 ---

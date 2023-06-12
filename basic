@@ -33,7 +33,7 @@
 #include "other/io_supporter.hpp"
 //#include "math/polynomial.hpp"
 #include "math/mod_inverse.hpp"
-#include "math/integer/totient.hpp"
+#include "math/totient.hpp"
 #include "math/prime_number_utility.hpp"
 #include "math/factorize.hpp"
 #include "math/primes_list.hpp"

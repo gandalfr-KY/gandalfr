@@ -87,6 +87,11 @@ class graph{
     std::vector<std::vector<int>> connected_components(){ return uf.groups(); }
 
     /**
+     * @return 木か
+     */
+    bool is_tree(){ return (uf.count_groups() == 1 && E.size() == N - 1); }
+
+    /**
      * @return グラフの重み
      */
     WEIGHT weight() const { return W; }
@@ -151,30 +156,6 @@ class graph{
         std::cout << this->N << " " << this->E.size() << std::endl;
         for(const edge<WEIGHT> &e : this->E) std::cout << e << std::endl;
     }
-
-    class iterator {
-      private:
-        friend class graph;
-        const std::vector<std::vector<edge<WEIGHT>>>* edges;
-        std::size_t index;
-        iterator(const std::vector<std::vector<edge<WEIGHT>>>* edges, std::size_t index) : edges(edges), index(index) {}
-
-      public:
-        bool operator==(const iterator& other) const { return edges == other.edges && index == other.index; }
-        bool operator!=(const iterator& other) const { return !(*this == other); }
-        const std::vector<edge<WEIGHT>> &operator*() const { return (*edges)[index]; }
-        iterator& operator++() {
-            index++;
-            return *this;
-        }
-        iterator operator++(int) {
-            iterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-    };
-    iterator begin() const { return iterator(&G, 0); }
-    iterator end() const { return iterator(&G, G.size()); }
 };
 
 #endif

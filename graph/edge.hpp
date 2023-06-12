@@ -34,6 +34,8 @@ namespace internal{
 
         virtual ~_base_edge() = default; 
 
+        operator int() const { return to; }
+
       protected:
         virtual void print(std::ostream &os) const = 0;
         virtual int compare(const _base_edge &e) const = 0;

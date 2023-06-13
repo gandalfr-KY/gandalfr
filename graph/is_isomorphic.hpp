@@ -12,8 +12,7 @@ bool is_isomorphic(const graph<WEIGHT, is_directed> &G1, const graph<WEIGHT, is_
     if(G1.count_nodes() != G2.count_nodes()) return false;
 
     int N = G1.count_nodes();
-    WEIGHT MAX = std::numeric_limits<WEIGHT>::max();
-    matrix<WEIGHT> adj1(G1, MIN), adj2(G2, MIN);
+    matrix<WEIGHT> adj1(G1.to_adjajency()), adj2(G2.to_adjajency());
 
     std::vector<int> nodes_id(N);
     std::iota(nodes_id.begin(), nodes_id.end(), 0);

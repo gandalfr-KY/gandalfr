@@ -5,6 +5,7 @@
 #include <tuple>
 #include "edge.hpp"
 #include "../data_structure/union_find.hpp"
+#include "../math/matrix.hpp"
 
 /**
  * @brief グラフを管理するクラス。
@@ -152,9 +153,26 @@ public:
         return std::make_tuple(Gs, group_id, node_id);
     }
 
+    /**
+     * @brief グラフを隣接行列に変換
+     * @param invalid 辺のないときの値
+     * @attention G に自己ループが含まれていない限り、対角成分は 0 
+     */
+    matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0){
+        int N = count_nodes();
+        matrix<WEIGHT> ret(N, N, invalid);
+        for (int i = 0; i < N; i++) ret[i][i] = 0; 
+        for (int i = 0; i < N; i++) {
+            for (auto &e : G[i]) {
+                ret[e.from][e.to] = e.cost;
+            }
+        }
+        return ret;
+    }
+
     void print() const {
         std::cout << this->N << " " << this->E.size() << std::endl;
-        for(const edge<WEIGHT> &e : this->E) std::cout << e << std::endl;
+        for (const edge<WEIGHT> &e : this->E) std::cout << e << std::endl;
     }
 };
 

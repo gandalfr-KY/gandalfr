@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 #include <assert.h>
-#include "../graph/graph.hpp"
 
 template<class T>
 class matrix{
@@ -18,20 +17,6 @@ class matrix{
         for(int i=0; i<H; i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];
     }
     matrix(const std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv) {}
-    /**
-     * @brief グラフを隣接行列に変換
-     * @param invalid 辺のない場所の値
-     * @attention G に自己ループが含まれていない限り、対角成分は 0 
-     */
-    template<bool is_directed>
-    matrix(const graph<T, is_directed> &G, T invalid)
-         : H(G.count_nodes()), W(G.count_nodes()), table(std::valarray<T>(invalid, W), H){
-        for(int i = 0; i < H; i++) table[i][i] = 0; 
-        for(auto &e : G.edges()){
-            table[e.from][e.to] = e.cost;
-            if(!is_directed) table[e.to][e.from] = e.cost;
-        }
-    }
 
     /**
      * @brief 行列をリサイズする。
@@ -69,6 +54,7 @@ class matrix{
         }
         return ret;
     }
+
     void print() const {
         for(int i=0; i<H; i++){
             for(int j=0; j<W; j++){
@@ -77,7 +63,6 @@ class matrix{
             std::cout << std::endl;
         }
     }
-
 
     matrix<T> &operator+=(const matrix<T> &a){
         this->table += a.table;

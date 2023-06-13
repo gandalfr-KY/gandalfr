@@ -1,5 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_C"
 #include <bits/stdc++.h>
+#include "../graph/graph.hpp"
 #include "../graph/Warshall_Floyd.hpp"
 using namespace std;
 using ll = long long;
@@ -20,7 +21,8 @@ int main(void){
     }
  
     //calculate
-    auto mt = matrix(G, INFLL);
+    
+    auto mt = G.to_adjajency(INFLL);
     rep(i,0,N) mt[i][i] = 0;
     auto dist = Warshall_Floyd(mt);
 

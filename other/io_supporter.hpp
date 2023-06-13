@@ -1,7 +1,6 @@
 #ifndef IO_SUPPORTER
 #define IO_SUPPORTER
 #include <iostream>
-#include <iterator>
 #include <utility>
 #include <queue>
 #include <string>
@@ -10,10 +9,9 @@ template <template <typename, typename...> class ContainerType, typename ValueTy
 std::ostream& operator<<(std::ostream &os, const ContainerType<ValueType>& container) {
     auto it = container.cbegin();
     if(it == container.end()) return os;
-    for(; std::next(it) != container.cend(); ++it){
-        os << *it << ' ';
-    }
-    return os << *it;
+    os << *it;
+    while(++it != container.cend()) os << ' ' << *it;
+    return os;
 }
 
 template <template <typename, typename...> class ContainerType, typename ValueType>

@@ -3,7 +3,7 @@ data:
   _extendedDependsOn:
   - icon: ':question:'
     path: data_structure/union_find.hpp
-    title: data_structure/union_find.hpp
+    title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
   - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
@@ -63,11 +63,13 @@ data:
     \ union_find{\n  private:\n    int N;\n    std::vector<int> par, group_siz;\n\
     \    int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find()\
     \ : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n)\
-    \ {}\n\n    void expand(int n){\n        if(n <= N) return;\n        N = n;\n\
-    \        par.resize(n, -1);\n        group_siz.resize(n, 1);\n        group_num\
-    \ += n - N;\n    }\n\n    int leader(int x){\n        if(par[x] == -1) return\
-    \ x;\n        else return par[x] = leader(par[x]);\n    }\n \n    bool same(int\
-    \ x, int y){\n        return leader(x) == leader(y);\n    }\n \n    bool merge(int\
+    \ {}\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\
+    \n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n\
+    \    void expand(int n){\n        if(n <= N) return;\n        N = n;\n       \
+    \ par.resize(n, -1);\n        group_siz.resize(n, 1);\n        group_num += n\
+    \ - N;\n    }\n\n    int leader(int x){\n        if(par[x] == -1) return x;\n\
+    \        else return par[x] = leader(par[x]);\n    }\n \n    bool same(int x,\
+    \ int y){\n        return leader(x) == leader(y);\n    }\n \n    bool merge(int\
     \ x, int y){\n        x = leader(x); y = leader(y);\n        if(x == y) return\
     \ false;\n        // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\u5408\n      \
     \  if(group_siz[x] < group_siz[y]) std::swap(x, y);\n        par[y] = x;\n   \
@@ -85,18 +87,18 @@ data:
     \ WEIGHT int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\u305D\u3046\u3067\u306A\
     \u3044\u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\u30D5\n * @tparam is_directed\
     \ \u6709\u5411\u30B0\u30E9\u30D5\u304B\u3068\u3046\u304B\n */\ntemplate <typename\
-    \ WEIGHT, bool is_directed>\nclass graph{\n    private:\n    int N;\n    std::vector<std::vector<edge<WEIGHT>>>\
+    \ WEIGHT, bool is_directed>\nclass graph{\nprivate:\n    int N;\n    std::vector<std::vector<edge<WEIGHT>>>\
     \ G;\n    std::vector<edge<WEIGHT>> E;\n    union_find uf;\n    WEIGHT W = 0;\n\
     \n    void internal_add_edge(edge<WEIGHT> e) {\n        uf.merge(e.from, e.to);\n\
     \        G[e.from].emplace_back(e);\n        if (!is_directed && e.from != e.to)\
     \ {\n            std::swap(e.from, e.to);\n            G[e.from].emplace_back(e);\n\
     \        }\n        if (!is_directed && e.from > e.to) std::swap(e.from, e.to);\n\
-    \        E.emplace_back(e);\n        W += e.cost;\n    }\n\n  public:\n    graph():\
+    \        E.emplace_back(e);\n        W += e.cost;\n    }\n\npublic:\n    graph():\
     \ N(0), G(0), uf(0) {};\n    graph(int n): N(n), G(n), uf(n) {};\n\n    /**\n\
     \     * @brief \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\
     \u3059\n     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\u306E\u30CE\
     \u30FC\u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\u3057\u305F\
-    \u3068\u304D\u3001\u5909\u5316\u306A\u3057\n     */ \n    void expand(int n){\n\
+    \u3068\u304D\u3001\u5909\u5316\u306A\u3057\n     */ \n    void expand(int n) {\n\
     \        if(n <= N) return;\n        N = n;\n        G.resize(n);\n        uf.expand(n);\n\
     \    }\n\n    /**\n     * @return \u30CE\u30FC\u30C9\u306E\u6570\n     */\n  \
     \  int count_nodes() const { return N; }\n\n    /**\n     * @return \u8FBA\u306E\
@@ -113,11 +115,11 @@ data:
     \  * @return \u9023\u7D50\u6210\u5206\u306E\u6570\n     */\n    int count_connected_components()\
     \ const { return uf.count_groups(); }\n\n    /**\n     * @return \u9023\u7D50\u6210\
     \u5206\u306E\u30EA\u30B9\u30C8\u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>>\
-    \ connected_components(){ return uf.groups(); }\n\n    /**\n     * @return \u6728\
-    \u304B\n     */\n    bool is_tree(){ return (uf.count_groups() == 1 && E.size()\
-    \ == N - 1); }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\u307F\
-    \n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n     * @param e\
-    \ \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\
+    \ connected_components() { return uf.groups(); }\n\n    /**\n     * @return \u6728\
+    \u304B\n     */\n    bool is_tree() const { return (uf.count_groups() == 1 &&\
+    \ E.size() == N - 1); }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\
+    \u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n     * @param\
+    \ e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\
     \u3055\u308C\u308B \n     */\n    void add_edge(const edge<WEIGHT> &e){\n    \
     \    internal_add_edge(e);\n    }\n\n    /**\n     * @attention \u8FBA\u306E id\
     \ \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\
@@ -230,7 +232,7 @@ data:
   isVerificationFile: false
   path: graph/lowlink.hpp
   requiredBy: []
-  timestamp: '2023-06-12 12:34:06+09:00'
+  timestamp: '2023-06-13 13:16:34+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-3-a.test.cpp

@@ -1,24 +1,28 @@
 #ifndef IO_SUPPORTER
 #define IO_SUPPORTER
 #include <iostream>
-#include <vector>
+#include <iterator>
 #include <utility>
 #include <queue>
 
-template<typename T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
-    for(int i=0; i<(int)v.size(); i++) os << v[i] << (i+1 != (int)v.size() ? " " : "");
-    return os;
+template <template <typename, typename...> class ContainerType, typename ValueType>
+std::ostream& operator<<(std::ostream &os, const ContainerType<ValueType>& container) {
+    auto it = container.cbegin();
+    for(; std::next(it) != container.cend(); ++it){
+        os << *it << ' ';
+    }
+    return os << *it;
 }
-template<typename T>
-std::istream &operator>>(std::istream &is, std::vector<T> &v){
-    for(T &in : v) is >> in;
+
+template <template <typename, typename...> class ContainerType, typename ValueType>
+std::istream& operator>>(std::istream &is, ContainerType<ValueType>& container) {
+    for(auto &x : container) is >> x;
     return is;
 }
 
 template<typename T1, typename T2>
 std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2>& p) {
-    os << p.first << " " << p.second;
+    os << p.first << ' ' << p.second;
     return os;
 }
 template<typename T1, typename T2>
@@ -28,30 +32,17 @@ std::istream &operator>>(std::istream &is, std::pair<T1, T2> &p) {
 }
 
 template<typename T>
-std::ostream &operator<<(std::ostream &os, std::queue<T> v) {
-    int N = v.size();
-    for(int i=0; i<N; i++) {
-        os << v.front() << (i+1 != N ? " " : "");
-        v.pop();
+std::ostream &operator<<(std::ostream &os, std::queue<T>& q) {
+    int sz = q.size();
+    while(--sz){
+        os << q.front() << ' ';
+        q.push(q.front());
+        q.pop();
     }
+    os << q.front();
+    q.push(q.front());
+    q.pop();
     return os;
 }
-
-template<typename T>
-std::ostream &operator<<(std::ostream &os, const std::set<T> &st) {
-    for(const T &x : st){
-        std::cout << x << " ";
-    }
-    return os;
-}
-
-template<typename T>
-std::ostream &operator<<(std::ostream &os, const std::multiset<T> &st) {
-    for(const T &x : st){
-        std::cout << x << " ";
-    }
-    return os;
-}
-
 
 #endif

@@ -13,7 +13,6 @@
 std::vector<std::pair<long long, int>> factorize(long long N){
     std::vector<std::pair<long long, int>> ret;
     prime_number_list::set_minimum_limit(ceil(sqrt(N)));
-    long long p;
     for(long long p : prime_number_list::list()){
         if(N == 1 || (__int128_t)p * p > N) break;
         while(N % p == 0){

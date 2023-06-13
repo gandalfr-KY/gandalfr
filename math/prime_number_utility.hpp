@@ -28,7 +28,7 @@ class prime_number_utility{
 
         // n が小さいとき、篩を参照
         if(n < init_seive_size) return sieve[n];
-        if(n & 1 == 0) return 0;
+        if((n & 1) == 0) return 0;
         // n が大きいとき、O(√n) 試し割りで計算
         long long sqrt_n = std::ceil(std::sqrt(n)) + 1;
         for(long long i = 3; i <= sqrt_n; i += 2) {

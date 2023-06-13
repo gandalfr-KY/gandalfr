@@ -37,13 +37,13 @@ data:
     \       for(int j = i * 2; j < init_seive_size; j += i) sieve[j] = false;\n  \
     \          }\n        }\n\n        // n \u304C\u5C0F\u3055\u3044\u3068\u304D\u3001\
     \u7BE9\u3092\u53C2\u7167\n        if(n < init_seive_size) return sieve[n];\n \
-    \       if(n & 1 == 0) return 0;\n        // n \u304C\u5927\u304D\u3044\u3068\u304D\
-    \u3001O(\u221An) \u8A66\u3057\u5272\u308A\u3067\u8A08\u7B97\n        long long\
-    \ sqrt_n = std::ceil(std::sqrt(n)) + 1;\n        for(long long i = 3; i <= sqrt_n;\
-    \ i += 2) {\n            if(!sieve[i]) continue;\n            if(n % i == 0) return\
-    \ false;\n        }\n        return true;\n    }\n\n    static const std::vector<bool>\
-    \ &table(){ return sieve; }\n};\n\n\n\n#line 5 \"math/prime_number_list.hpp\"\n\
-    \n// \u6607\u9806\u306E\u7D20\u6570\u30EA\u30B9\u30C8\nclass prime_number_list{\n\
+    \       if((n & 1) == 0) return 0;\n        // n \u304C\u5927\u304D\u3044\u3068\
+    \u304D\u3001O(\u221An) \u8A66\u3057\u5272\u308A\u3067\u8A08\u7B97\n        long\
+    \ long sqrt_n = std::ceil(std::sqrt(n)) + 1;\n        for(long long i = 3; i <=\
+    \ sqrt_n; i += 2) {\n            if(!sieve[i]) continue;\n            if(n % i\
+    \ == 0) return false;\n        }\n        return true;\n    }\n\n    static const\
+    \ std::vector<bool> &table(){ return sieve; }\n};\n\n\n\n#line 5 \"math/prime_number_list.hpp\"\
+    \n\n// \u6607\u9806\u306E\u7D20\u6570\u30EA\u30B9\u30C8\nclass prime_number_list{\n\
     protected:\n    static inline std::vector<int> primes{2, 3};\n\npublic:\n    prime_number_list()\
     \ = delete;\n    ~prime_number_list() = delete;\n\n    static void reserve(int\
     \ siz){\n        for(int i = primes.back() + 2; (int)primes.size() < siz; i +=\
@@ -56,23 +56,23 @@ data:
     \ * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...}\n * @attention prime_factorize(1)\
     \ => {}\n * @attention prime_factorize(0) => {{0, 1}}\n */ \nstd::vector<std::pair<long\
     \ long, int>> factorize(long long N){\n    std::vector<std::pair<long long, int>>\
-    \ ret;\n    prime_number_list::set_minimum_limit(ceil(sqrt(N)));\n    long long\
-    \ p;\n    for(long long p : prime_number_list::list()){\n        if(N == 1 ||\
-    \ (__int128_t)p * p > N) break;\n        while(N % p == 0){\n            if(ret.empty()\
-    \ || ret.back().first != p) ret.push_back({p, 1});\n            else ret.back().second++;\n\
-    \            N /= p;\n        }\n    }\n    if(N != 1) ret.push_back({N, 1});\n\
-    \    return ret;\n}\n\n\n"
+    \ ret;\n    prime_number_list::set_minimum_limit(ceil(sqrt(N)));\n    for(long\
+    \ long p : prime_number_list::list()){\n        if(N == 1 || (__int128_t)p * p\
+    \ > N) break;\n        while(N % p == 0){\n            if(ret.empty() || ret.back().first\
+    \ != p) ret.push_back({p, 1});\n            else ret.back().second++;\n      \
+    \      N /= p;\n        }\n    }\n    if(N != 1) ret.push_back({N, 1});\n    return\
+    \ ret;\n}\n\n\n"
   code: "#ifndef FACTORIZE\n#define FACTORIZE\n#include <utility>\n#include <cmath>\n\
     #include \"prime_number_list.hpp\"\n\n/**\n * @brief \u7D20\u56E0\u6570\u5206\u89E3\
     \u3059\u308B\n * @return prime_factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2,\
     \ e2], ...}\n * @attention prime_factorize(1) => {}\n * @attention prime_factorize(0)\
     \ => {{0, 1}}\n */ \nstd::vector<std::pair<long long, int>> factorize(long long\
     \ N){\n    std::vector<std::pair<long long, int>> ret;\n    prime_number_list::set_minimum_limit(ceil(sqrt(N)));\n\
-    \    long long p;\n    for(long long p : prime_number_list::list()){\n       \
-    \ if(N == 1 || (__int128_t)p * p > N) break;\n        while(N % p == 0){\n   \
-    \         if(ret.empty() || ret.back().first != p) ret.push_back({p, 1});\n  \
-    \          else ret.back().second++;\n            N /= p;\n        }\n    }\n\
-    \    if(N != 1) ret.push_back({N, 1});\n    return ret;\n}\n\n#endif"
+    \    for(long long p : prime_number_list::list()){\n        if(N == 1 || (__int128_t)p\
+    \ * p > N) break;\n        while(N % p == 0){\n            if(ret.empty() || ret.back().first\
+    \ != p) ret.push_back({p, 1});\n            else ret.back().second++;\n      \
+    \      N /= p;\n        }\n    }\n    if(N != 1) ret.push_back({N, 1});\n    return\
+    \ ret;\n}\n\n#endif"
   dependsOn:
   - math/prime_number_list.hpp
   - math/prime_number_utility.hpp
@@ -80,7 +80,7 @@ data:
   path: math/factorize.hpp
   requiredBy:
   - math/totient.hpp
-  timestamp: '2023-06-13 23:12:39+09:00'
+  timestamp: '2023-06-13 23:38:02+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-a.test.cpp

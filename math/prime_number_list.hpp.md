@@ -35,7 +35,7 @@ data:
     \   if(!sieve[i]) continue;\n                for(int j = i * 2; j < init_seive_size;\
     \ j += i) sieve[j] = false;\n            }\n        }\n\n        // n \u304C\u5C0F\
     \u3055\u3044\u3068\u304D\u3001\u7BE9\u3092\u53C2\u7167\n        if(n < init_seive_size)\
-    \ return sieve[n];\n        if(n & 1 == 0) return 0;\n        // n \u304C\u5927\
+    \ return sieve[n];\n        if((n & 1) == 0) return 0;\n        // n \u304C\u5927\
     \u304D\u3044\u3068\u304D\u3001O(\u221An) \u8A66\u3057\u5272\u308A\u3067\u8A08\u7B97\
     \n        long long sqrt_n = std::ceil(std::sqrt(n)) + 1;\n        for(long long\
     \ i = 3; i <= sqrt_n; i += 2) {\n            if(!sieve[i]) continue;\n       \
@@ -67,7 +67,7 @@ data:
   requiredBy:
   - math/factorize.hpp
   - math/totient.hpp
-  timestamp: '2023-06-13 23:12:39+09:00'
+  timestamp: '2023-06-13 23:38:02+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-a.test.cpp

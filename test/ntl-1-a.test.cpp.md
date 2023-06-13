@@ -36,7 +36,7 @@ data:
     \              if(!sieve[i]) continue;\n                for(int j = i * 2; j <\
     \ init_seive_size; j += i) sieve[j] = false;\n            }\n        }\n\n   \
     \     // n \u304C\u5C0F\u3055\u3044\u3068\u304D\u3001\u7BE9\u3092\u53C2\u7167\n\
-    \        if(n < init_seive_size) return sieve[n];\n        if(n & 1 == 0) return\
+    \        if(n < init_seive_size) return sieve[n];\n        if((n & 1) == 0) return\
     \ 0;\n        // n \u304C\u5927\u304D\u3044\u3068\u304D\u3001O(\u221An) \u8A66\
     \u3057\u5272\u308A\u3067\u8A08\u7B97\n        long long sqrt_n = std::ceil(std::sqrt(n))\
     \ + 1;\n        for(long long i = 3; i <= sqrt_n; i += 2) {\n            if(!sieve[i])\
@@ -56,13 +56,13 @@ data:
     \ * ...) => {{p1, e1}, {p2, e2], ...}\n * @attention prime_factorize(1) => {}\n\
     \ * @attention prime_factorize(0) => {{0, 1}}\n */ \nstd::vector<std::pair<long\
     \ long, int>> factorize(long long N){\n    std::vector<std::pair<long long, int>>\
-    \ ret;\n    prime_number_list::set_minimum_limit(ceil(sqrt(N)));\n    long long\
-    \ p;\n    for(long long p : prime_number_list::list()){\n        if(N == 1 ||\
-    \ (__int128_t)p * p > N) break;\n        while(N % p == 0){\n            if(ret.empty()\
-    \ || ret.back().first != p) ret.push_back({p, 1});\n            else ret.back().second++;\n\
-    \            N /= p;\n        }\n    }\n    if(N != 1) ret.push_back({N, 1});\n\
-    \    return ret;\n}\n\n\n#line 4 \"test/ntl-1-a.test.cpp\"\nusing namespace std;\n\
-    using ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
+    \ ret;\n    prime_number_list::set_minimum_limit(ceil(sqrt(N)));\n    for(long\
+    \ long p : prime_number_list::list()){\n        if(N == 1 || (__int128_t)p * p\
+    \ > N) break;\n        while(N % p == 0){\n            if(ret.empty() || ret.back().first\
+    \ != p) ret.push_back({p, 1});\n            else ret.back().second++;\n      \
+    \      N /= p;\n        }\n    }\n    if(N != 1) ret.push_back({N, 1});\n    return\
+    \ ret;\n}\n\n\n#line 4 \"test/ntl-1-a.test.cpp\"\nusing namespace std;\nusing\
+    \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
     \nint main(void){\n \n    //input\n\n    int N;\n    cin >> N;\n\n    //calculate\n\
     \n    cout << N << \":\";\n    for(auto p : factorize(N)){\n        rep(i,0,p.second)\
     \ cout << \" \" << p.first;\n    }\n    cout << endl;\n\n}\n"
@@ -79,7 +79,7 @@ data:
   isVerificationFile: true
   path: test/ntl-1-a.test.cpp
   requiredBy: []
-  timestamp: '2023-06-13 23:12:39+09:00'
+  timestamp: '2023-06-13 23:38:02+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/ntl-1-a.test.cpp

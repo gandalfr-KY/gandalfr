@@ -151,7 +151,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: standard/rolling_hash.hpp
       title: "rolling_hash\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3067\u6587\u5B57\u5217\
-        \u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9"
+        \u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   - name: .
     pages:
     - icon: ':warning:'

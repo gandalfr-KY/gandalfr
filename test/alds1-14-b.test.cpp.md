@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: standard/rolling_hash.hpp
     title: "rolling_hash\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3067\u6587\u5B57\u5217\
-      \u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9"
+      \u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -19,10 +19,12 @@ data:
     \n#include <bits/stdc++.h>\n#line 1 \"standard/rolling_hash.hpp\"\n\n\n#line 6\
     \ \"standard/rolling_hash.hpp\"\n\n/**\n * @brief rolling_hash\u30A2\u30EB\u30B4\
     \u30EA\u30BA\u30E0\u3067\u6587\u5B57\u5217\u3092\u7BA1\u7406\u3059\u308B\u30AF\
-    \u30E9\u30B9\n */\nclass rolling_hash{\nprivate:\n    static inline unsigned long\
-    \ long _base = 0;\n    static inline const unsigned long long _mod = (1LL<<61)\
-    \ - 1;\n\tstd::vector<unsigned long long> hashes, bases;\n    static inline const\
-    \ std::vector<unsigned long long> base_list{\n        1809535154732661841LL,\n\
+    \u30E9\u30B9\u3002\n * @attention \u8907\u6570\u306E\u30A4\u30F3\u30B9\u30BF\u30F3\
+    \u30B9\u3092\u751F\u6210\u3057\u3066\u3082\u3001\u57FA\u6570\u306F\u5171\u6709\
+    \u3055\u308C\u308B\u3002\n */\nclass rolling_hash{\nprivate:\n    static inline\
+    \ unsigned long long _base = 0;\n    static inline const unsigned long long _mod\
+    \ = (1LL<<61) - 1;\n\tstd::vector<unsigned long long> hashes, bases;\n    static\
+    \ inline const std::vector<unsigned long long> base_list{\n        1809535154732661841LL,\n\
     \        1884190988654199289LL,\n        1743269039721525290LL,\n        443670500607027996LL,\n\
     \        1847920912542467715LL,\n        854073078368186965LL,\n        1223509603385983965LL,\n\
     \        1417510665238831134LL,\n        1078954822254450931LL,\n        544731273123194097LL,\n\
@@ -73,7 +75,7 @@ data:
   isVerificationFile: true
   path: test/alds1-14-b.test.cpp
   requiredBy: []
-  timestamp: '2023-06-13 14:42:37+09:00'
+  timestamp: '2023-06-13 14:50:12+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/alds1-14-b.test.cpp

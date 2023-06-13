@@ -61,11 +61,10 @@ public:
 	}
 
 	/**
-     * @brief 文字列を結合してハッシュ値を計算
-     * @return get(_l, _r) == r_hash なる string[_l, _r) に対して、[_l, _r) + [l, r) のハッシュ値
+     * @brief r_hash == get(_l, _r) なるハッシュ値を、string([_l, _r) + [l, r)) のハッシュ値に更新。
      */
-    unsigned long long concat(__uint128_t r_hash, int l, int r){
-        return ((__uint128_t)r_hash * bases[r - l] + get(l, r)) % _mod;
+    void concat(unsigned long long &r_hash, int l, int r){
+        r_hash = ((__uint128_t)r_hash * bases[r - l] + get(l, r)) % _mod;
 	}
 
     /**

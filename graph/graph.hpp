@@ -13,7 +13,7 @@
  */
 template <typename WEIGHT, bool is_directed>
 class graph{
-    private:
+private:
     int N;
     std::vector<std::vector<edge<WEIGHT>>> G;
     std::vector<edge<WEIGHT>> E;
@@ -32,7 +32,7 @@ class graph{
         W += e.cost;
     }
 
-  public:
+public:
     graph(): N(0), G(0), uf(0) {};
     graph(int n): N(n), G(n), uf(n) {};
 
@@ -41,7 +41,7 @@ class graph{
      * @param n サイズ
      * @attention 今のノード数より小さい数を渡したとき、変化なし
      */ 
-    void expand(int n){
+    void expand(int n) {
         if(n <= N) return;
         N = n;
         G.resize(n);
@@ -84,12 +84,12 @@ class graph{
     /**
      * @return 連結成分のリストのリスト
      */
-    std::vector<std::vector<int>> connected_components(){ return uf.groups(); }
+    std::vector<std::vector<int>> connected_components() { return uf.groups(); }
 
     /**
      * @return 木か
      */
-    bool is_tree(){ return (uf.count_groups() == 1 && E.size() == N - 1); }
+    bool is_tree() const { return (uf.count_groups() == 1 && E.size() == N - 1); }
 
     /**
      * @return グラフの重み

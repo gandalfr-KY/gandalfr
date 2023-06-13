@@ -4,10 +4,8 @@
 #include "shortest_path.hpp"
 #include "../data_structure/sparse_table.hpp"
 
-/* 無向単純木の最小共通祖先を求める
- * 構築   O(NlogN)
- * 値取得 O(1)
- * verify : https://atcoder.jp/contests/abc070/submissions/39891502
+/**
+ * @brief 無向単純木の最小共通祖先を求めるクラス
  */
 template<typename WEIGHT>
 class lowest_common_ancestor{

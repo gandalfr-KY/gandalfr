@@ -14,6 +14,10 @@ class union_find{
     union_find() : N(0) {}
     union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n) {}
 
+    /**
+     * @brief 頂点を n 個に増やす
+     * @attention 小さくはできない
+     */
     void expand(int n){
         if(n <= N) return;
         N = n;

@@ -9,8 +9,8 @@
  */
 class rolling_hash{
 private:
-    unsigned long long _base;
-    const unsigned long long _mod = (1LL<<61) - 1;
+    static inline unsigned long long _base = 0;
+    static inline const unsigned long long _mod = (1LL<<61) - 1;
 	std::vector<unsigned long long> hashes, bases;
     static inline const std::vector<unsigned long long> base_list{
         1809535154732661841LL,
@@ -38,23 +38,12 @@ private:
 
 public:
 	rolling_hash(const std::string &s) : hashes(s.size() + 1, 0), bases(s.size() + 1, 0) {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distr(0, base_list.size() - 1);
-        _base = base_list[distr(gen)]; // generate numbers
-
-		bases[0] = 1;
-		for(int i = 0; i < (int)s.size(); i++){
-			hashes[i + 1] = ((__uint128_t)hashes[i] * _base + s[i]) % _mod;
-			bases[i + 1] = ((__uint128_t)bases[i] * _base) % _mod;
-		}
-	}
-
-    /**
-     * @brief 基数、mod を手動で設定するとき
-     */
-	rolling_hash(const std::string &s, unsigned long long b, unsigned long long m)
-        : _base(b), _mod(m), hashes(s.size() + 1, 0), bases(s.size() + 1, 0) {
+        if(_base == 0) {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> distr(0, base_list.size() - 1);
+            _base = base_list[distr(gen)];
+        }
 		bases[0] = 1;
 		for(int i = 0; i < (int)s.size(); i++){
 			hashes[i + 1] = ((__uint128_t)hashes[i] * _base + s[i]) % _mod;
@@ -90,7 +79,6 @@ public:
         }
         return ok;
     }
-
 };
 
 #endif

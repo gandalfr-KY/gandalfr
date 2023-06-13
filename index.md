@@ -89,24 +89,24 @@ data:
     - icon: ':warning:'
       path: math/divisors.hpp
       title: math/divisors.hpp
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: math/factorize.hpp
-      title: math/factorize.hpp
+      title: "\u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B"
     - icon: ':question:'
       path: math/matrix.hpp
-      title: "\u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB"
+      title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
     - icon: ':x:'
       path: math/mod_inverse.hpp
       title: math/mod_inverse.hpp
     - icon: ':warning:'
       path: math/polynomial.hpp
       title: math/polynomial.hpp
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
+      path: math/prime_number_list.hpp
+      title: math/prime_number_list.hpp
+    - icon: ':heavy_check_mark:'
       path: math/prime_number_utility.hpp
       title: math/prime_number_utility.hpp
-    - icon: ':warning:'
-      path: math/primes_list.hpp
-      title: math/primes_list.hpp
     - icon: ':warning:'
       path: math/totient.hpp
       title: math/totient.hpp
@@ -205,5 +205,8 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/manhattan-mst.test.cpp
       title: test/manhattan-mst.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: test/ntl-1-a.test.cpp
+      title: test/ntl-1-a.test.cpp
 layout: toppage
 ---

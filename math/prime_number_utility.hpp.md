@@ -2,19 +2,22 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: math/factorize.hpp
-    title: math/factorize.hpp
-  - icon: ':warning:'
-    path: math/primes_list.hpp
-    title: math/primes_list.hpp
+    title: "\u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B"
+  - icon: ':heavy_check_mark:'
+    path: math/prime_number_list.hpp
+    title: math/prime_number_list.hpp
   - icon: ':warning:'
     path: math/totient.hpp
     title: math/totient.hpp
-  _extendedVerifiedWith: []
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test/ntl-1-a.test.cpp
+    title: test/ntl-1-a.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"math/prime_number_utility.hpp\"\n\n\n#include <vector>\n\
@@ -65,10 +68,11 @@ data:
   requiredBy:
   - math/factorize.hpp
   - math/totient.hpp
-  - math/primes_list.hpp
+  - math/prime_number_list.hpp
   timestamp: '2023-06-12 02:08:44+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test/ntl-1-a.test.cpp
 documentation_of: math/prime_number_utility.hpp
 layout: document
 redirect_from:

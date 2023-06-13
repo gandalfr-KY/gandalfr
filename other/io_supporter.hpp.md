@@ -6,18 +6,20 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/alds1-5-d.test.cpp
     title: test/alds1-5-d.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/dpl-1-d.test.cpp
+    title: test/dpl-1-d.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 1 \"other/io_supporter.hpp\"\n\n\n#include <iostream>\n#include\
-    \ <iterator>\n#include <utility>\n#include <queue>\n#include <string>\n\ntemplate\
-    \ <template <typename, typename...> class ContainerType, typename ValueType>\n\
-    std::ostream& operator<<(std::ostream &os, const ContainerType<ValueType>& container)\
-    \ {\n    auto it = container.cbegin();\n    if(it == container.end()) return os;\n\
-    \    for(; std::next(it) != container.cend(); ++it){\n        os << *it << ' ';\n\
-    \    }\n    return os << *it;\n}\n\ntemplate <template <typename, typename...>\
+    \ <utility>\n#include <queue>\n#include <string>\n\ntemplate <template <typename,\
+    \ typename...> class ContainerType, typename ValueType>\nstd::ostream& operator<<(std::ostream\
+    \ &os, const ContainerType<ValueType>& container) {\n    auto it = container.cbegin();\n\
+    \    if(it == container.end()) return os;\n    os << *it;\n    while(++it != container.cend())\
+    \ os << ' ' << *it;\n    return os;\n}\n\ntemplate <template <typename, typename...>\
     \ class ContainerType, typename ValueType>\nstd::istream& operator>>(std::istream\
     \ &is, ContainerType<ValueType>& container) {\n    for(auto &x : container) is\
     \ >> x;\n    return is;\n}\n\nstd::ostream& operator<<(std::ostream &os, const\
@@ -32,12 +34,11 @@ data:
     \ ';\n        q.push(q.front());\n        q.pop();\n    }\n    os << q.front();\n\
     \    q.push(q.front());\n    q.pop();\n    return os;\n}\n\n\n"
   code: "#ifndef IO_SUPPORTER\n#define IO_SUPPORTER\n#include <iostream>\n#include\
-    \ <iterator>\n#include <utility>\n#include <queue>\n#include <string>\n\ntemplate\
-    \ <template <typename, typename...> class ContainerType, typename ValueType>\n\
-    std::ostream& operator<<(std::ostream &os, const ContainerType<ValueType>& container)\
-    \ {\n    auto it = container.cbegin();\n    if(it == container.end()) return os;\n\
-    \    for(; std::next(it) != container.cend(); ++it){\n        os << *it << ' ';\n\
-    \    }\n    return os << *it;\n}\n\ntemplate <template <typename, typename...>\
+    \ <utility>\n#include <queue>\n#include <string>\n\ntemplate <template <typename,\
+    \ typename...> class ContainerType, typename ValueType>\nstd::ostream& operator<<(std::ostream\
+    \ &os, const ContainerType<ValueType>& container) {\n    auto it = container.cbegin();\n\
+    \    if(it == container.end()) return os;\n    os << *it;\n    while(++it != container.cend())\
+    \ os << ' ' << *it;\n    return os;\n}\n\ntemplate <template <typename, typename...>\
     \ class ContainerType, typename ValueType>\nstd::istream& operator>>(std::istream\
     \ &is, ContainerType<ValueType>& container) {\n    for(auto &x : container) is\
     \ >> x;\n    return is;\n}\n\nstd::ostream& operator<<(std::ostream &os, const\
@@ -55,9 +56,10 @@ data:
   isVerificationFile: false
   path: other/io_supporter.hpp
   requiredBy: []
-  timestamp: '2023-06-13 16:07:16+09:00'
+  timestamp: '2023-06-13 22:45:06+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/dpl-1-d.test.cpp
   - test/alds1-5-d.test.cpp
 documentation_of: other/io_supporter.hpp
 layout: document

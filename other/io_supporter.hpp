@@ -4,10 +4,12 @@
 #include <iterator>
 #include <utility>
 #include <queue>
+#include <string>
 
 template <template <typename, typename...> class ContainerType, typename ValueType>
 std::ostream& operator<<(std::ostream &os, const ContainerType<ValueType>& container) {
     auto it = container.cbegin();
+    if(it == container.end()) return os;
     for(; std::next(it) != container.cend(); ++it){
         os << *it << ' ';
     }
@@ -17,6 +19,16 @@ std::ostream& operator<<(std::ostream &os, const ContainerType<ValueType>& conta
 template <template <typename, typename...> class ContainerType, typename ValueType>
 std::istream& operator>>(std::istream &is, ContainerType<ValueType>& container) {
     for(auto &x : container) is >> x;
+    return is;
+}
+
+std::ostream& operator<<(std::ostream &os, const std::string& s) {
+    std::operator<<(os, s);
+    return os;
+}
+
+std::istream& operator>>(std::istream &is, std::string& s) {
+    std::operator>>(is, s);
     return is;
 }
 

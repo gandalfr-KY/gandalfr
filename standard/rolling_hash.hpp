@@ -5,7 +5,8 @@
 #include <random>
 
 /**
- * @brief rolling_hashアルゴリズムで文字列を管理するクラス
+ * @brief rolling_hashアルゴリズムで文字列を管理するクラス。
+ * @attention 複数のインスタンスを生成しても、基数は共有される。
  */
 class rolling_hash{
 private:

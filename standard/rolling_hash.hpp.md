@@ -3,12 +3,15 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy: []
   _extendedVerifiedWith:
+  - icon: ':x:'
+    path: test/abc284-f.test.cpp
+    title: test/abc284-f.test.cpp
   - icon: ':heavy_check_mark:'
     path: test/alds1-14-b.test.cpp
     title: test/alds1-14-b.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':question:'
   attributes:
     document_title: "rolling_hash\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3067\u6587\u5B57\
       \u5217\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
@@ -39,15 +42,14 @@ data:
     \ @brief \u534A\u958B\u533A\u9593\u3092\u6307\u5B9A\n     * @return string[l,\
     \ r) \u306E\u30CF\u30C3\u30B7\u30E5\u5024\n     */\n\tunsigned long long get(int\
     \ l, int r){\n\t\treturn (hashes[r] + _mod - ((__uint128_t)hashes[l] * bases[r\
-    \ - l]) % _mod) % _mod;\n\t}\n\n\t/**\n     * @brief \u6587\u5B57\u5217\u3092\u7D50\
-    \u5408\u3057\u3066\u30CF\u30C3\u30B7\u30E5\u5024\u3092\u8A08\u7B97\n     * @return\
-    \ get(_l, _r) == r_hash \u306A\u308B string[_l, _r) \u306B\u5BFE\u3057\u3066\u3001\
-    [_l, _r) + [l, r) \u306E\u30CF\u30C3\u30B7\u30E5\u5024\n     */\n    unsigned\
-    \ long long concat(__uint128_t r_hash, int l, int r){\n        return ((__uint128_t)r_hash\
-    \ * bases[r - l] + get(l, r)) % _mod;\n\t}\n\n    /**\n     * @return string[l1,\
-    \ r1), string[l2, r2) \u306E\u6700\u9577\u5171\u901A\u63A5\u982D\u8F9E\u306E\u9577\
-    \u3055\n     */\n    int longest_common_prefix(int l1, int r1, int l2, int r2){\n\
-    \        int ok = 0, ng = std::min(r1 - l1, r2 - l2) + 1;\n        while(std::abs(ok\
+    \ - l]) % _mod) % _mod;\n\t}\n\n\t/**\n     * @brief r_hash == get(_l, _r) \u306A\
+    \u308B\u30CF\u30C3\u30B7\u30E5\u5024\u3092\u3001string([_l, _r) + [l, r)) \u306E\
+    \u30CF\u30C3\u30B7\u30E5\u5024\u306B\u66F4\u65B0\u3002\n     */\n    void concat(unsigned\
+    \ long long &r_hash, int l, int r){\n        r_hash = ((__uint128_t)r_hash * bases[r\
+    \ - l] + get(l, r)) % _mod;\n\t}\n\n    /**\n     * @return string[l1, r1), string[l2,\
+    \ r2) \u306E\u6700\u9577\u5171\u901A\u63A5\u982D\u8F9E\u306E\u9577\u3055\n   \
+    \  */\n    int longest_common_prefix(int l1, int r1, int l2, int r2){\n      \
+    \  int ok = 0, ng = std::min(r1 - l1, r2 - l2) + 1;\n        while(std::abs(ok\
     \ - ng) > 1){\n            int mid = (ok + ng) / 2;\n            if(get(l1, l1\
     \ + mid) == get(l2, l2 + mid)) ok = mid;\n            else ng = mid;\n       \
     \ }\n        return ok;\n    }\n};\n\n\n"
@@ -77,15 +79,14 @@ data:
     \ @brief \u534A\u958B\u533A\u9593\u3092\u6307\u5B9A\n     * @return string[l,\
     \ r) \u306E\u30CF\u30C3\u30B7\u30E5\u5024\n     */\n\tunsigned long long get(int\
     \ l, int r){\n\t\treturn (hashes[r] + _mod - ((__uint128_t)hashes[l] * bases[r\
-    \ - l]) % _mod) % _mod;\n\t}\n\n\t/**\n     * @brief \u6587\u5B57\u5217\u3092\u7D50\
-    \u5408\u3057\u3066\u30CF\u30C3\u30B7\u30E5\u5024\u3092\u8A08\u7B97\n     * @return\
-    \ get(_l, _r) == r_hash \u306A\u308B string[_l, _r) \u306B\u5BFE\u3057\u3066\u3001\
-    [_l, _r) + [l, r) \u306E\u30CF\u30C3\u30B7\u30E5\u5024\n     */\n    unsigned\
-    \ long long concat(__uint128_t r_hash, int l, int r){\n        return ((__uint128_t)r_hash\
-    \ * bases[r - l] + get(l, r)) % _mod;\n\t}\n\n    /**\n     * @return string[l1,\
-    \ r1), string[l2, r2) \u306E\u6700\u9577\u5171\u901A\u63A5\u982D\u8F9E\u306E\u9577\
-    \u3055\n     */\n    int longest_common_prefix(int l1, int r1, int l2, int r2){\n\
-    \        int ok = 0, ng = std::min(r1 - l1, r2 - l2) + 1;\n        while(std::abs(ok\
+    \ - l]) % _mod) % _mod;\n\t}\n\n\t/**\n     * @brief r_hash == get(_l, _r) \u306A\
+    \u308B\u30CF\u30C3\u30B7\u30E5\u5024\u3092\u3001string([_l, _r) + [l, r)) \u306E\
+    \u30CF\u30C3\u30B7\u30E5\u5024\u306B\u66F4\u65B0\u3002\n     */\n    void concat(unsigned\
+    \ long long &r_hash, int l, int r){\n        r_hash = ((__uint128_t)r_hash * bases[r\
+    \ - l] + get(l, r)) % _mod;\n\t}\n\n    /**\n     * @return string[l1, r1), string[l2,\
+    \ r2) \u306E\u6700\u9577\u5171\u901A\u63A5\u982D\u8F9E\u306E\u9577\u3055\n   \
+    \  */\n    int longest_common_prefix(int l1, int r1, int l2, int r2){\n      \
+    \  int ok = 0, ng = std::min(r1 - l1, r2 - l2) + 1;\n        while(std::abs(ok\
     \ - ng) > 1){\n            int mid = (ok + ng) / 2;\n            if(get(l1, l1\
     \ + mid) == get(l2, l2 + mid)) ok = mid;\n            else ng = mid;\n       \
     \ }\n        return ok;\n    }\n};\n\n#endif"
@@ -93,9 +94,10 @@ data:
   isVerificationFile: false
   path: standard/rolling_hash.hpp
   requiredBy: []
-  timestamp: '2023-06-13 14:50:12+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2023-06-13 15:03:58+09:00'
+  verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
+  - test/abc284-f.test.cpp
   - test/alds1-14-b.test.cpp
 documentation_of: standard/rolling_hash.hpp
 layout: document

@@ -148,7 +148,7 @@ data:
     - icon: ':warning:'
       path: standard/power.hpp
       title: standard/power.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: standard/rolling_hash.hpp
       title: "rolling_hash\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3067\u6587\u5B57\u5217\
         \u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9"
@@ -160,7 +160,7 @@ data:
   verificationCategories:
   - name: test
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/alds1-14-b.test.cpp
       title: test/alds1-14-b.test.cpp
     - icon: ':heavy_check_mark:'

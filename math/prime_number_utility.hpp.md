@@ -24,44 +24,44 @@ data:
     #include <math.h>\n\n/* is_prime::judge(n) := |n|\u304C\u7D20\u6570\u304B\u3069\
     \u3046\u304B\n * \u5224\u5B9A\u8868\u3092\u306A\u3089\u3057\u6642\u9593 O(NloglogN)\
     \ \u3067\u69CB\u6210\u3057\u3066\u5224\u5B9A\n */\nclass prime_number_utility{\n\
-    \  protected:\n    static bool has_table_made;\n    static std::vector<bool> sieve;\n\
-    \    static const int sieve_size = (1 << 18);\n\n  public:\n    prime_number_utility()\
+    \  protected:\n    static const int init_seive_size = (1 << 24), sqrt_size = (1\
+    \ << 12);\n    static inline std::vector<bool> sieve;\n\n  public:\n    prime_number_utility()\
     \ = delete;\n    ~prime_number_utility() = delete;\n\n    static bool is_prime(long\
-    \ long n){\n        if(!has_table_made){\n            sieve.assign(sieve_size,\
-    \ true);\n            sieve[0] = sieve[1] = false;\n            sieve[2] = true;\n\
-    \            for(int i = 4; i < sieve_size; i += 2) sieve[i] = false;\n      \
-    \      int sqrt_size = ceil(std::sqrt(sieve_size)) + 1;\n            for(int i\
-    \ = 3; i <= sqrt_size; i += 2){\n                if(!sieve[i]) continue;\n   \
-    \             for(int j = i * 2; j < sieve_size; j += i) sieve[j] = false;\n \
-    \           }\n            has_table_made = true;\n        }\n        if(n < 0)\
-    \ n *= -1;\n        if(n < sieve_size) return sieve[n];\n        \n        long\
-    \ long sqrt_n = ceil(std::sqrt(n)) + 1;\n        if(n % 2 == 0) return false;\n\
-    \        for(long long i = 3; i <= sqrt_n; i += 2){\n            if(!sieve[i])\
+    \ long n) {\n        if(sieve.empty()){ // \u7BE9\u304C\u672A\u69CB\u7BC9\u306A\
+    \u3089\n            sieve.assign(init_seive_size, true);\n            sieve[0]\
+    \ = sieve[1] = false;\n            for(int i = 4; i < init_seive_size; i += 2)\
+    \ sieve[i] = false;\n            for(int i = 3; i <= sqrt_size; i += 2) {\n  \
+    \              if(!sieve[i]) continue;\n                for(int j = i * 2; j <\
+    \ init_seive_size; j += i) sieve[j] = false;\n            }\n        }\n\n   \
+    \     // n \u304C\u5C0F\u3055\u3044\u3068\u304D\u3001\u7BE9\u3092\u53C2\u7167\n\
+    \        if(n < init_seive_size) return sieve[n];\n        if(n & 1 == 0) return\
+    \ 0;\n        // n \u304C\u5927\u304D\u3044\u3068\u304D\u3001O(\u221An) \u8A66\
+    \u3057\u5272\u308A\u3067\u8A08\u7B97\n        long long sqrt_n = std::ceil(std::sqrt(n))\
+    \ + 1;\n        for(long long i = 3; i <= sqrt_n; i += 2) {\n            if(!sieve[i])\
     \ continue;\n            if(n % i == 0) return false;\n        }\n        return\
     \ true;\n    }\n\n    static const std::vector<bool> &table(){ return sieve; }\n\
-    };\nstd::vector<bool> prime_number_utility::sieve;\nbool prime_number_utility::has_table_made\
-    \ = false;\n\n\n\n"
+    };\n\n\n\n"
   code: "#ifndef PRIME_NUMBER_UTILITY\n#define PRIME_NUMBER_UTILITY\n#include <vector>\n\
     #include <math.h>\n\n/* is_prime::judge(n) := |n|\u304C\u7D20\u6570\u304B\u3069\
     \u3046\u304B\n * \u5224\u5B9A\u8868\u3092\u306A\u3089\u3057\u6642\u9593 O(NloglogN)\
     \ \u3067\u69CB\u6210\u3057\u3066\u5224\u5B9A\n */\nclass prime_number_utility{\n\
-    \  protected:\n    static bool has_table_made;\n    static std::vector<bool> sieve;\n\
-    \    static const int sieve_size = (1 << 18);\n\n  public:\n    prime_number_utility()\
+    \  protected:\n    static const int init_seive_size = (1 << 24), sqrt_size = (1\
+    \ << 12);\n    static inline std::vector<bool> sieve;\n\n  public:\n    prime_number_utility()\
     \ = delete;\n    ~prime_number_utility() = delete;\n\n    static bool is_prime(long\
-    \ long n){\n        if(!has_table_made){\n            sieve.assign(sieve_size,\
-    \ true);\n            sieve[0] = sieve[1] = false;\n            sieve[2] = true;\n\
-    \            for(int i = 4; i < sieve_size; i += 2) sieve[i] = false;\n      \
-    \      int sqrt_size = ceil(std::sqrt(sieve_size)) + 1;\n            for(int i\
-    \ = 3; i <= sqrt_size; i += 2){\n                if(!sieve[i]) continue;\n   \
-    \             for(int j = i * 2; j < sieve_size; j += i) sieve[j] = false;\n \
-    \           }\n            has_table_made = true;\n        }\n        if(n < 0)\
-    \ n *= -1;\n        if(n < sieve_size) return sieve[n];\n        \n        long\
-    \ long sqrt_n = ceil(std::sqrt(n)) + 1;\n        if(n % 2 == 0) return false;\n\
-    \        for(long long i = 3; i <= sqrt_n; i += 2){\n            if(!sieve[i])\
+    \ long n) {\n        if(sieve.empty()){ // \u7BE9\u304C\u672A\u69CB\u7BC9\u306A\
+    \u3089\n            sieve.assign(init_seive_size, true);\n            sieve[0]\
+    \ = sieve[1] = false;\n            for(int i = 4; i < init_seive_size; i += 2)\
+    \ sieve[i] = false;\n            for(int i = 3; i <= sqrt_size; i += 2) {\n  \
+    \              if(!sieve[i]) continue;\n                for(int j = i * 2; j <\
+    \ init_seive_size; j += i) sieve[j] = false;\n            }\n        }\n\n   \
+    \     // n \u304C\u5C0F\u3055\u3044\u3068\u304D\u3001\u7BE9\u3092\u53C2\u7167\n\
+    \        if(n < init_seive_size) return sieve[n];\n        if(n & 1 == 0) return\
+    \ 0;\n        // n \u304C\u5927\u304D\u3044\u3068\u304D\u3001O(\u221An) \u8A66\
+    \u3057\u5272\u308A\u3067\u8A08\u7B97\n        long long sqrt_n = std::ceil(std::sqrt(n))\
+    \ + 1;\n        for(long long i = 3; i <= sqrt_n; i += 2) {\n            if(!sieve[i])\
     \ continue;\n            if(n % i == 0) return false;\n        }\n        return\
     \ true;\n    }\n\n    static const std::vector<bool> &table(){ return sieve; }\n\
-    };\nstd::vector<bool> prime_number_utility::sieve;\nbool prime_number_utility::has_table_made\
-    \ = false;\n\n\n#endif"
+    };\n\n\n#endif"
   dependsOn: []
   isVerificationFile: false
   path: math/prime_number_utility.hpp
@@ -69,7 +69,7 @@ data:
   - math/factorize.hpp
   - math/totient.hpp
   - math/prime_number_list.hpp
-  timestamp: '2023-06-12 02:08:44+09:00'
+  timestamp: '2023-06-13 23:12:39+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-a.test.cpp

@@ -8,7 +8,8 @@ data:
   _extendedRequiredBy:
   - icon: ':warning:'
     path: math/totient.hpp
-    title: math/totient.hpp
+    title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
+      \u6570"
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: test/ntl-1-a.test.cpp
@@ -22,11 +23,15 @@ data:
   bundledCode: "#line 1 \"math/factorize.hpp\"\n\n\n#include <utility>\n#include <cmath>\n\
     #line 1 \"math/prime_number_utility.hpp\"\n\n\n#include <vector>\n#include <math.h>\n\
     \n/**\n * @brief \u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\
-    \u30C8\u3059\u308B\u30AF\u30E9\u30B9\n */\nclass prime_number_utility{\nprotected:\n\
-    \    static const int init_seive_size = (1 << 24), sqrt_size = (1 << 12);\n  \
-    \  static inline std::vector<bool> sieve;\n    static inline std::vector<int>\
+    \u30C8\u3059\u308B\u30AF\u30E9\u30B9\n * @brief \u7D20\u6570\u7BE9\u3092\u56FA\
+    \u5B9A\u30B5\u30A4\u30BA\u3067\u69CB\u7BC9\u3001\u305D\u308C\u3092\u3082\u3068\
+    \u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\u3046\n */\nclass prime_number_utility{\n\
+    protected:\n    static const int init_seive_size = (1 << 26), sqrt_size = (1 <<\
+    \ 13);\n    static inline std::vector<bool> sieve;\n    static inline std::vector<int>\
     \ primes{2, 3};\n\npublic:\n    prime_number_utility() = delete;\n    ~prime_number_utility()\
-    \ = delete;\n\n    static bool is_prime(long long n) {\n        if(sieve.empty()){\
+    \ = delete;\n\n    /**\n     * @brief n \u304C\u7D20\u6570\u304B\u3092\u5224\u5B9A\
+    \n     * @attention if n < (1 << 26) : O(1)\n     * @attention else : O(\u221A\
+    n)\n     */\n    static bool is_prime(long long n) {\n        if(sieve.empty()){\
     \ // \u7BE9\u304C\u672A\u69CB\u7BC9\u306A\u3089\n            sieve.assign(init_seive_size,\
     \ true);\n            sieve[0] = sieve[1] = false;\n            for(int i = 4;\
     \ i < init_seive_size; i += 2) sieve[i] = false;\n            for(int i = 3; i\
@@ -73,7 +78,7 @@ data:
   path: math/factorize.hpp
   requiredBy:
   - math/totient.hpp
-  timestamp: '2023-06-15 14:58:26+09:00'
+  timestamp: '2023-06-15 15:10:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-a.test.cpp

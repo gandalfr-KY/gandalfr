@@ -107,7 +107,8 @@ data:
         \u3059\u308B\u30AF\u30E9\u30B9"
     - icon: ':warning:'
       path: math/totient.hpp
-      title: math/totient.hpp
+      title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
+        \u6570"
   - name: other
     pages:
     - icon: ':heavy_check_mark:'

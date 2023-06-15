@@ -63,8 +63,8 @@ data:
   timestamp: '2023-06-15 14:58:26+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/dpl-1-d.test.cpp
   - test/alds1-5-d.test.cpp
+  - test/dpl-1-d.test.cpp
 documentation_of: other/io_supporter.hpp
 layout: document
 redirect_from:

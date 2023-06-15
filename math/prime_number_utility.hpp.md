@@ -92,8 +92,8 @@ data:
   timestamp: '2023-06-15 15:10:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/ntl-1-d.test.cpp
   - test/ntl-1-a.test.cpp
+  - test/ntl-1-d.test.cpp
 documentation_of: math/prime_number_utility.hpp
 layout: document
 redirect_from:

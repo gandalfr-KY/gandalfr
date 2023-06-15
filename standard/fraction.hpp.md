@@ -80,12 +80,11 @@ data:
     \    fraction(long long n) : num(n), den(1) {}\n    fraction(__int128_t numerator,\
     \ __int128_t denominator){\n        internal::simplify(numerator, denominator);\n\
     \        num = numerator, den = denominator;\n    }\n    fraction() : num(0),\
-    \ den(1) {}\n\n    const fraction &operator=(const fraction &a){\n        num\
-    \ = a.num, den = a.den;\n        return *this;\n    }\n    const fraction &operator+=(const\
-    \ fraction &a){\n        return *this = *this + a;\n    }\n    const fraction\
-    \ &operator-=(const fraction &a){\n        return *this = *this - a;\n    }\n\
-    \    const fraction &operator*=(const fraction &a){\n        return *this = *this\
-    \ * a;\n    }\n    const fraction &operator/=(const fraction &a){\n        return\
+    \ den(1) {}\n\n    fraction &operator=(const fraction &a) = default;\n    fraction\
+    \ &operator+=(const fraction &a){\n        return *this = *this + a;\n    }\n\
+    \    fraction &operator-=(const fraction &a){\n        return *this = *this -\
+    \ a;\n    }\n    fraction &operator*=(const fraction &a){\n        return *this\
+    \ = *this * a;\n    }\n    fraction &operator/=(const fraction &a){\n        return\
     \ *this = *this / a;\n    }\n\n    friend std::istream &operator>>(std::istream\
     \ &is, fraction &a){\n        std::string buf;\n        is >> buf;\n        __int128_t\
     \ num_tmp = 0, den_tmp = 0;\n        int i = (buf[0] == '-'), sz = buf.size();\n\
@@ -165,12 +164,11 @@ data:
     \    fraction(long long n) : num(n), den(1) {}\n    fraction(__int128_t numerator,\
     \ __int128_t denominator){\n        internal::simplify(numerator, denominator);\n\
     \        num = numerator, den = denominator;\n    }\n    fraction() : num(0),\
-    \ den(1) {}\n\n    const fraction &operator=(const fraction &a){\n        num\
-    \ = a.num, den = a.den;\n        return *this;\n    }\n    const fraction &operator+=(const\
-    \ fraction &a){\n        return *this = *this + a;\n    }\n    const fraction\
-    \ &operator-=(const fraction &a){\n        return *this = *this - a;\n    }\n\
-    \    const fraction &operator*=(const fraction &a){\n        return *this = *this\
-    \ * a;\n    }\n    const fraction &operator/=(const fraction &a){\n        return\
+    \ den(1) {}\n\n    fraction &operator=(const fraction &a) = default;\n    fraction\
+    \ &operator+=(const fraction &a){\n        return *this = *this + a;\n    }\n\
+    \    fraction &operator-=(const fraction &a){\n        return *this = *this -\
+    \ a;\n    }\n    fraction &operator*=(const fraction &a){\n        return *this\
+    \ = *this * a;\n    }\n    fraction &operator/=(const fraction &a){\n        return\
     \ *this = *this / a;\n    }\n\n    friend std::istream &operator>>(std::istream\
     \ &is, fraction &a){\n        std::string buf;\n        is >> buf;\n        __int128_t\
     \ num_tmp = 0, den_tmp = 0;\n        int i = (buf[0] == '-'), sz = buf.size();\n\
@@ -202,7 +200,7 @@ data:
   isVerificationFile: false
   path: standard/fraction.hpp
   requiredBy: []
-  timestamp: '2023-06-12 02:08:44+09:00'
+  timestamp: '2023-06-16 02:03:45+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: standard/fraction.hpp

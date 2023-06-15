@@ -93,16 +93,16 @@ data:
   bundledCode: "#line 1 \"math/matrix.hpp\"\n\n\n#include <valarray>\n#include <vector>\n\
     #include <iostream>\n#include <assert.h>\n\ntemplate<class T>\nclass matrix{\n\
     \  private:\n    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n\
-    \    matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val,\
-    \ _W), _H) {}\n    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()),\
-    \ W(vv[0].size()), table(std::valarray<T>(W), H) {\n        for(int i=0; i<H;\
-    \ i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];\n    }\n    matrix(const\
-    \ std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv)\
-    \ {}\n\n    /**\n     * @brief \u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\
-    \u308B\u3002\n     * @param val \u62E1\u5F35\u90E8\u5206\u306E\u5024\n     */\n\
-    \    void resize(int _H, int _W, T val = 0){\n        H = _H, W = _W;\n      \
-    \  table.resize(_H, std::valarray<T>(val, _H));\n    }\n    int size_H() const\
-    \ { return H; }\n    int size_W() const { return W; }\n    matrix<T> transpose()\
+    \    matrix() = default;\n    matrix(int _H, int _W, T val = 0) : H(_H), W(_W),\
+    \ table(std::valarray<T>(val, _W), _H) {}\n    matrix(const std::vector<std::vector<T>>\
+    \ &vv) : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H) {\n    \
+    \    for(int i=0; i<H; i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];\n \
+    \   }\n    matrix(const std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()),\
+    \ table(vv) {}\n\n    /**\n     * @brief \u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\
+    \u3059\u308B\u3002\n     * @param val \u62E1\u5F35\u90E8\u5206\u306E\u5024\n \
+    \    */\n    void resize(int _H, int _W, T val = 0){\n        H = _H, W = _W;\n\
+    \        table.resize(_H, std::valarray<T>(val, _H));\n    }\n    int size_H()\
+    \ const { return H; }\n    int size_W() const { return W; }\n    matrix<T> transpose()\
     \ const {\n        matrix<T> ret(W, H);\n        for(int i=0; i<H; i++) for(int\
     \ j=0; j<W; j++) ret[j][i] = table[i][j];\n        return ret;\n    }\n    /**\n\
     \     * @attention O(n^3)\n     * @attention \u6574\u6570\u578B\u3067\u306F\u6B63\
@@ -149,16 +149,16 @@ data:
   code: "#ifndef MATRIX\n#define MATRIX\n#include <valarray>\n#include <vector>\n\
     #include <iostream>\n#include <assert.h>\n\ntemplate<class T>\nclass matrix{\n\
     \  private:\n    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n\
-    \    matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val,\
-    \ _W), _H) {}\n    matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()),\
-    \ W(vv[0].size()), table(std::valarray<T>(W), H) {\n        for(int i=0; i<H;\
-    \ i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];\n    }\n    matrix(const\
-    \ std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()), table(vv)\
-    \ {}\n\n    /**\n     * @brief \u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\
-    \u308B\u3002\n     * @param val \u62E1\u5F35\u90E8\u5206\u306E\u5024\n     */\n\
-    \    void resize(int _H, int _W, T val = 0){\n        H = _H, W = _W;\n      \
-    \  table.resize(_H, std::valarray<T>(val, _H));\n    }\n    int size_H() const\
-    \ { return H; }\n    int size_W() const { return W; }\n    matrix<T> transpose()\
+    \    matrix() = default;\n    matrix(int _H, int _W, T val = 0) : H(_H), W(_W),\
+    \ table(std::valarray<T>(val, _W), _H) {}\n    matrix(const std::vector<std::vector<T>>\
+    \ &vv) : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H) {\n    \
+    \    for(int i=0; i<H; i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];\n \
+    \   }\n    matrix(const std::valarray<std::valarray<T>> &vv) : H(vv.size()), W(vv[0].size()),\
+    \ table(vv) {}\n\n    /**\n     * @brief \u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\
+    \u3059\u308B\u3002\n     * @param val \u62E1\u5F35\u90E8\u5206\u306E\u5024\n \
+    \    */\n    void resize(int _H, int _W, T val = 0){\n        H = _H, W = _W;\n\
+    \        table.resize(_H, std::valarray<T>(val, _H));\n    }\n    int size_H()\
+    \ const { return H; }\n    int size_W() const { return W; }\n    matrix<T> transpose()\
     \ const {\n        matrix<T> ret(W, H);\n        for(int i=0; i<H; i++) for(int\
     \ j=0; j<W; j++) ret[j][i] = table[i][j];\n        return ret;\n    }\n    /**\n\
     \     * @attention O(n^3)\n     * @attention \u6574\u6570\u578B\u3067\u306F\u6B63\
@@ -207,34 +207,34 @@ data:
   path: math/matrix.hpp
   requiredBy:
   - other/random.hpp
-  - graph/diameter.hpp
   - graph/Warshall_Floyd.hpp
-  - graph/lowest_common_ancestor.hpp
-  - graph/lowlink.hpp
-  - graph/shortest_path.hpp
-  - graph/Kruscal.hpp
-  - graph/reversed_graph.hpp
-  - graph/strongly_connected_components.hpp
   - graph/graph.hpp
-  - graph/is_isomorphic.hpp
-  - graph/traveling_salesman.hpp
-  - graph/doubling.hpp
-  - graph/Manhattan_minimum_spanning_tree.hpp
+  - graph/lowest_common_ancestor.hpp
   - graph/topological_sort.hpp
-  timestamp: '2023-06-13 22:45:06+09:00'
+  - graph/diameter.hpp
+  - graph/shortest_path.hpp
+  - graph/reversed_graph.hpp
+  - graph/doubling.hpp
+  - graph/Kruscal.hpp
+  - graph/traveling_salesman.hpp
+  - graph/strongly_connected_components.hpp
+  - graph/lowlink.hpp
+  - graph/Manhattan_minimum_spanning_tree.hpp
+  - graph/is_isomorphic.hpp
+  timestamp: '2023-06-16 02:03:45+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test/grl-3-a.test.cpp
-  - test/itp1-t-d.test.cpp
-  - test/grl-3-b.test.cpp
-  - test/grl-5-c.test.cpp
   - test/grl-1-a.test.cpp
+  - test/grl-3-b.test.cpp
   - test/grl-2-a.test.cpp
-  - test/manhattan-mst.test.cpp
-  - test/grl-5-a.test.cpp
+  - test/jsc2021-g.test.cpp
+  - test/jsc2021-g.test.cpp
+  - test/grl-5-c.test.cpp
   - test/grl-1-c.test.cpp
-  - test/jsc2021-g.test.cpp
-  - test/jsc2021-g.test.cpp
+  - test/grl-5-a.test.cpp
+  - test/grl-3-a.test.cpp
+  - test/manhattan-mst.test.cpp
+  - test/itp1-t-d.test.cpp
 documentation_of: math/matrix.hpp
 layout: document
 redirect_from:

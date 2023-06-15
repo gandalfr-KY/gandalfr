@@ -12,5 +12,6 @@
 "test/grl-5-c.test.cpp": "2023-06-13 22:45:06 +0900",
 "test/itp1-t-d.test.cpp": "2023-06-13 22:45:06 +0900",
 "test/manhattan-mst.test.cpp": "2023-06-13 22:45:06 +0900",
-"test/ntl-1-a.test.cpp": "2023-06-15 15:10:19 +0900"
+"test/ntl-1-a.test.cpp": "2023-06-15 15:10:19 +0900",
+"test/ntl-1-d.test.cpp": "2023-06-15 15:12:50 +0900"
 }

@@ -105,20 +105,17 @@ class fraction{
     }
     fraction() : num(0), den(1) {}
 
-    const fraction &operator=(const fraction &a){
-        num = a.num, den = a.den;
-        return *this;
-    }
-    const fraction &operator+=(const fraction &a){
+    fraction &operator=(const fraction &a) = default;
+    fraction &operator+=(const fraction &a){
         return *this = *this + a;
     }
-    const fraction &operator-=(const fraction &a){
+    fraction &operator-=(const fraction &a){
         return *this = *this - a;
     }
-    const fraction &operator*=(const fraction &a){
+    fraction &operator*=(const fraction &a){
         return *this = *this * a;
     }
-    const fraction &operator/=(const fraction &a){
+    fraction &operator/=(const fraction &a){
         return *this = *this / a;
     }
 

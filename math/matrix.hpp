@@ -12,6 +12,7 @@ class matrix{
     std::valarray<std::valarray<T>> table;
 
   public:
+    matrix() = default;
     matrix(int _H, int _W, T val = 0) : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}
     matrix(const std::vector<std::vector<T>> &vv) : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H) {
         for(int i=0; i<H; i++) for(int j=0; j<W; j++) table[i][j] = vv[i][j];

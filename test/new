@@ -1,0 +1,14 @@
+#define PROBLEM "https://atcoder.jp/contests/jsc2021/tasks/jsc2021_g"
+#define IGNORE
+#include <bits/stdc++.h>
+#include "../math/totient.hpp"
+using namespace std;
+using ll = long long;
+#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
+#define all(a) (a).begin(),(a).end()
+
+int main(void){
+    int N;
+    cin >> N;
+    cout << totient(N) << endl;
+}

@@ -5,10 +5,11 @@
 
 /**
  * @brief 素数判定や列挙をサポートするクラス
+ * @brief 素数篩を固定サイズで構築、それをもとに素数列挙などを行う
  */
 class prime_number_utility{
 protected:
-    static const int init_seive_size = (1 << 24), sqrt_size = (1 << 12);
+    static const int init_seive_size = (1 << 26), sqrt_size = (1 << 13);
     static inline std::vector<bool> sieve;
     static inline std::vector<int> primes{2, 3};
 
@@ -16,6 +17,11 @@ public:
     prime_number_utility() = delete;
     ~prime_number_utility() = delete;
 
+    /**
+     * @brief n が素数かを判定
+     * @attention if n < (1 << 26) : O(1)
+     * @attention else : O(√n)
+     */
     static bool is_prime(long long n) {
         if(sieve.empty()){ // 篩が未構築なら
             sieve.assign(init_seive_size, true);

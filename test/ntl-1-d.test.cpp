@@ -1,5 +1,4 @@
-#define PROBLEM "https://atcoder.jp/contests/jsc2021/tasks/jsc2021_g"
-#define IGNORE
+#define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_D"
 #include <bits/stdc++.h>
 #include "../math/totient.hpp"
 using namespace std;

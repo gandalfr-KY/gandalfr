@@ -279,8 +279,8 @@ data:
   timestamp: '2023-06-13 22:45:06+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test/manhattan-mst.test.cpp
   - test/jsc2021-g.test.cpp
+  - test/manhattan-mst.test.cpp
 documentation_of: graph/Manhattan_minimum_spanning_tree.hpp
 layout: document
 redirect_from:

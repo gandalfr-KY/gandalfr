@@ -34,29 +34,30 @@ data:
     \ *arg_it);\n        else dp_it = std::upper_bound(dp.begin(), dp.end(), *arg_it);\n\
     \        if(dp_it != dp.end()) *dp_it = *arg_it;\n        else dp.push_back(*arg_it);\n\
     \    }\n    return dp.size();\n}\n\n\n#line 1 \"other/io_supporter.hpp\"\n\n\n\
-    #line 7 \"other/io_supporter.hpp\"\n\ntemplate <template <typename, typename...>\
-    \ class ContainerType, typename ValueType>\nstd::ostream& operator<<(std::ostream\
-    \ &os, const ContainerType<ValueType>& container) {\n    auto it = container.cbegin();\n\
-    \    if(it == container.end()) return os;\n    os << *it;\n    while(++it != container.cend())\
-    \ os << ' ' << *it;\n    return os;\n}\n\ntemplate <template <typename, typename...>\
-    \ class ContainerType, typename ValueType>\nstd::istream& operator>>(std::istream\
-    \ &is, ContainerType<ValueType>& container) {\n    for(auto &x : container) is\
-    \ >> x;\n    return is;\n}\n\nstd::ostream& operator<<(std::ostream &os, const\
-    \ std::string& s) {\n    std::operator<<(os, s);\n    return os;\n}\n\nstd::istream&\
-    \ operator>>(std::istream &is, std::string& s) {\n    std::operator>>(is, s);\n\
-    \    return is;\n}\n\ntemplate<typename T1, typename T2>\nstd::ostream &operator<<(std::ostream\
-    \ &os, const std::pair<T1, T2>& p) {\n    os << p.first << ' ' << p.second;\n\
-    \    return os;\n}\ntemplate<typename T1, typename T2>\nstd::istream &operator>>(std::istream\
-    \ &is, std::pair<T1, T2> &p) {\n    is >> p.first >> p.second;\n    return is;\n\
-    }\n\ntemplate<typename T>\nstd::ostream &operator<<(std::ostream &os, std::queue<T>&\
-    \ q) {\n    int sz = q.size();\n    while(--sz){\n        os << q.front() << '\
-    \ ';\n        q.push(q.front());\n        q.pop();\n    }\n    os << q.front();\n\
-    \    q.push(q.front());\n    q.pop();\n    return os;\n}\n\n\n#line 5 \"test/dpl-1-d.test.cpp\"\
-    \nusing namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i =\
-    \ (ll)(j); i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\nint main(void){\n\
-    \ \n    //input\n \n    int N;\n    cin >> N;\n    vector<int> A(N);\n    rep(i,0,N)\
-    \ cin >> A[i];\n\n    //calculate\n \n    cout << longest_increasing_subsequence(all(A),\
-    \ true) << endl;\n \n}\n"
+    #line 8 \"other/io_supporter.hpp\"\n\ntemplate<typename T>\nstd::ostream &operator<<(std::ostream\
+    \ &os, const std::vector<T> &v) {\n    for(int i=0; i<(int)v.size(); i++) os <<\
+    \ v[i] << (i+1 != (int)v.size() ? \" \" : \"\");\n    return os;\n}\ntemplate<typename\
+    \ T>\nstd::ostream &operator<<(std::ostream &os, const std::set<T> &st) {\n  \
+    \  for(const T &x : st){\n        std::cout << x << \" \";\n    }\n    return\
+    \ os;\n}\n\ntemplate<typename T>\nstd::ostream &operator<<(std::ostream &os, const\
+    \ std::multiset<T> &st) {\n    for(const T &x : st){\n        std::cout << x <<\
+    \ \" \";\n    }\n    return os;\n}\ntemplate<typename T>\nstd::ostream &operator<<(std::ostream\
+    \ &os, const std::deque<T> &dq) {\n    for(const T &x : dq){\n        std::cout\
+    \ << x << \" \";\n    }\n    return os;\n}\ntemplate<typename T1, typename T2>\n\
+    std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2>& p) {\n   \
+    \ os << p.first << ' ' << p.second;\n    return os;\n}\ntemplate<typename T>\n\
+    std::ostream &operator<<(std::ostream &os, std::queue<T>& q) {\n    int sz = q.size();\n\
+    \    while(--sz){\n        os << q.front() << ' ';\n        q.push(q.front());\n\
+    \        q.pop();\n    }\n    os << q.front();\n    q.push(q.front());\n    q.pop();\n\
+    \    return os;\n}\n\ntemplate<typename T>\nstd::istream &operator>>(std::istream\
+    \ &is, std::vector<T> &v){\n    for(T &in : v) is >> in;\n    return is;\n}\n\
+    template<typename T1, typename T2>\nstd::istream &operator>>(std::istream &is,\
+    \ std::pair<T1, T2> &p) {\n    is >> p.first >> p.second;\n    return is;\n}\n\
+    \n\n\n#line 5 \"test/dpl-1-d.test.cpp\"\nusing namespace std;\nusing ll = long\
+    \ long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n#define all(a)\
+    \ (a).begin(),(a).end()\nint main(void){\n \n    //input\n \n    int N;\n    cin\
+    \ >> N;\n    vector<int> A(N);\n    rep(i,0,N) cin >> A[i];\n\n    //calculate\n\
+    \ \n    cout << longest_increasing_subsequence(all(A), true) << endl;\n \n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/DPL_1_D\"\n#include\
     \ <bits/stdc++.h>\n#include \"../standard/longest_increasing_subsequence.hpp\"\
     \n#include \"../other/io_supporter.hpp\"\nusing namespace std;\nusing ll = long\
@@ -70,7 +71,7 @@ data:
   isVerificationFile: true
   path: test/dpl-1-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-13 22:45:06+09:00'
+  timestamp: '2023-06-15 14:58:26+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/dpl-1-d.test.cpp

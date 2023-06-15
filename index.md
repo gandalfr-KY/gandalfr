@@ -102,11 +102,9 @@ data:
       path: math/polynomial.hpp
       title: math/polynomial.hpp
     - icon: ':heavy_check_mark:'
-      path: math/prime_number_list.hpp
-      title: math/prime_number_list.hpp
-    - icon: ':heavy_check_mark:'
       path: math/prime_number_utility.hpp
-      title: math/prime_number_utility.hpp
+      title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
+        \u3059\u308B\u30AF\u30E9\u30B9"
     - icon: ':warning:'
       path: math/totient.hpp
       title: math/totient.hpp

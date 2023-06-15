@@ -97,8 +97,8 @@ data:
   timestamp: '2023-06-13 15:03:58+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test/abc284-f.test.cpp
   - test/alds1-14-b.test.cpp
+  - test/abc284-f.test.cpp
 documentation_of: standard/rolling_hash.hpp
 layout: document
 redirect_from:

@@ -2,7 +2,7 @@
 #define FACTORIZE
 #include <utility>
 #include <cmath>
-#include "prime_number_list.hpp"
+#include "prime_number_utility.hpp"
 
 /**
  * @brief 素因数分解する
@@ -12,8 +12,8 @@
  */ 
 std::vector<std::pair<long long, int>> factorize(long long N){
     std::vector<std::pair<long long, int>> ret;
-    prime_number_list::set_minimum_limit(ceil(sqrt(N)));
-    for(long long p : prime_number_list::list()){
+    prime_number_utility::set_minimum_limit(ceil(sqrt(N)));
+    for(long long p : prime_number_utility::list()){
         if(N == 1 || (__int128_t)p * p > N) break;
         while(N % p == 0){
             if(ret.empty() || ret.back().first != p) ret.push_back({p, 1});

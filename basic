@@ -36,7 +36,6 @@
 #include "math/totient.hpp"
 #include "math/prime_number_utility.hpp"
 #include "math/factorize.hpp"
-#include "math/primes_list.hpp"
 #include "math/binomial_coefficients.hpp"
 #include "math/Bezout_coefficients.hpp"
 #include "math/divisors.hpp"

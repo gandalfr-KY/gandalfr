@@ -303,8 +303,8 @@ data:
   timestamp: '2023-06-13 22:45:06+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/grl-3-b.test.cpp
   - test/grl-3-a.test.cpp
+  - test/grl-3-b.test.cpp
 documentation_of: graph/lowlink.hpp
 layout: document
 redirect_from:

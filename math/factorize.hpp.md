@@ -6,7 +6,7 @@ data:
     title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
       \u3059\u308B\u30AF\u30E9\u30B9"
   _extendedRequiredBy:
-  - icon: ':warning:'
+  - icon: ':heavy_check_mark:'
     path: math/totient.hpp
     title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
       \u6570"
@@ -14,6 +14,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/ntl-1-a.test.cpp
     title: test/ntl-1-a.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/ntl-1-d.test.cpp
+    title: test/ntl-1-d.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -81,6 +84,7 @@ data:
   timestamp: '2023-06-15 15:10:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/ntl-1-d.test.cpp
   - test/ntl-1-a.test.cpp
 documentation_of: math/factorize.hpp
 layout: document

@@ -9,38 +9,40 @@ data:
     title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
       \u3059\u308B\u30AF\u30E9\u30B9"
   - icon: ':heavy_check_mark:'
+    path: math/totient.hpp
+    title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
+      \u6570"
+  - icon: ':heavy_check_mark:'
     path: standard/power.hpp
     title: standard/power.hpp
   _extendedRequiredBy: []
-  _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: test/ntl-1-d.test.cpp
-    title: test/ntl-1-d.test.cpp
+  _extendedVerifiedWith: []
   _isVerificationFailed: false
-  _pathExtension: hpp
+  _pathExtension: cpp
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
-    document_title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\
-      \u95A2\u6570"
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_D
     links:
-    - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874
-  bundledCode: "#line 1 \"math/totient.hpp\"\n\n\n#line 1 \"standard/power.hpp\"\n\
-    \n\n#include <assert.h>\n\ntemplate<class T>\nT power(T x, long long n) {\n  \
-    \  T ret = T(1);\n    while (n > 0) {\n        if (n & 1) ret = ret * x;\n   \
-    \     x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long\
-    \ long x, long long n) {\n    long long ret = 1;\n    while (n > 0) {\n      \
-    \  if (n & 1) ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n  \
-    \  return ret;\n}\n\nlong long power(long long x, long long n, int MOD) {\n  \
-    \  long long ret = 1;\n    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\
-    \ ret = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n    }\n  \
-    \  return ret;\n}\n\n\n#line 1 \"math/factorize.hpp\"\n\n\n#include <utility>\n\
-    #include <cmath>\n#line 1 \"math/prime_number_utility.hpp\"\n\n\n#include <vector>\n\
-    #include <math.h>\n\n/**\n * @brief \u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\
-    \u3092\u30B5\u30DD\u30FC\u30C8\u3059\u308B\u30AF\u30E9\u30B9\n * @brief \u7D20\
-    \u6570\u7BE9\u3092\u56FA\u5B9A\u30B5\u30A4\u30BA\u3067\u69CB\u7BC9\u3001\u305D\
-    \u308C\u3092\u3082\u3068\u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\
-    \u3046\n */\nclass prime_number_utility{\nprotected:\n    static const int init_seive_size\
-    \ = (1 << 26), sqrt_size = (1 << 13);\n    static inline std::vector<bool> sieve;\n\
+    - https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_D
+  bundledCode: "#line 1 \"test/ntl-1-d.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_D\"\
+    \n#include <bits/stdc++.h>\n#line 1 \"math/totient.hpp\"\n\n\n#line 1 \"standard/power.hpp\"\
+    \n\n\n#line 4 \"standard/power.hpp\"\n\ntemplate<class T>\nT power(T x, long long\
+    \ n) {\n    T ret = T(1);\n    while (n > 0) {\n        if (n & 1) ret = ret *\
+    \ x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\nlong\
+    \ long power(long long x, long long n) {\n    long long ret = 1;\n    while (n\
+    \ > 0) {\n        if (n & 1) ret = ret * x;\n        x = x * x;\n        n >>=\
+    \ 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long long n, int\
+    \ MOD) {\n    long long ret = 1;\n    x %= MOD;\n    while (n > 0) {\n       \
+    \ if (n & 1) ret = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n\
+    \    }\n    return ret;\n}\n\n\n#line 1 \"math/factorize.hpp\"\n\n\n#line 1 \"\
+    math/prime_number_utility.hpp\"\n\n\n#line 5 \"math/prime_number_utility.hpp\"\
+    \n\n/**\n * @brief \u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\
+    \u30FC\u30C8\u3059\u308B\u30AF\u30E9\u30B9\n * @brief \u7D20\u6570\u7BE9\u3092\
+    \u56FA\u5B9A\u30B5\u30A4\u30BA\u3067\u69CB\u7BC9\u3001\u305D\u308C\u3092\u3082\
+    \u3068\u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\u3046\n */\nclass\
+    \ prime_number_utility{\nprotected:\n    static const int init_seive_size = (1\
+    \ << 26), sqrt_size = (1 << 13);\n    static inline std::vector<bool> sieve;\n\
     \    static inline std::vector<int> primes{2, 3};\n\npublic:\n    prime_number_utility()\
     \ = delete;\n    ~prime_number_utility() = delete;\n\n    /**\n     * @brief n\
     \ \u304C\u7D20\u6570\u304B\u3092\u5224\u5B9A\n     * @attention if n < (1 << 26)\
@@ -77,28 +79,30 @@ data:
     \u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874\n\
     \ */\nlong long totient(long long n){\n\tauto facs = factorize(n);\n\tlong long\
     \ ret = 1;\n\tfor(auto &p : facs) ret *= power(p.first, p.second - 1) * (p.first\
-    \ - 1);\n\treturn ret;\n}\n\n\n"
-  code: "#ifndef TOTIENT\n#define TOTIENT\n#include \"../standard/power.hpp\"\n#include\
-    \ \"factorize.hpp\"\n\n/**\n * @brief \u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\
-    \u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874\n\
-    \ */\nlong long totient(long long n){\n\tauto facs = factorize(n);\n\tlong long\
-    \ ret = 1;\n\tfor(auto &p : facs) ret *= power(p.first, p.second - 1) * (p.first\
-    \ - 1);\n\treturn ret;\n}\n\n#endif"
+    \ - 1);\n\treturn ret;\n}\n\n\n#line 4 \"test/ntl-1-d.test.cpp\"\nusing namespace\
+    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
+    \ i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n    int N;\n\
+    \    cin >> N;\n    cout << totient(N) << endl;\n}\n"
+  code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_D\"\n#include\
+    \ <bits/stdc++.h>\n#include \"../math/totient.hpp\"\nusing namespace std;\nusing\
+    \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
+    #define all(a) (a).begin(),(a).end()\n\nint main(void){\n    int N;\n    cin >>\
+    \ N;\n    cout << totient(N) << endl;\n}"
   dependsOn:
+  - math/totient.hpp
   - standard/power.hpp
   - math/factorize.hpp
   - math/prime_number_utility.hpp
-  isVerificationFile: false
-  path: math/totient.hpp
+  isVerificationFile: true
+  path: test/ntl-1-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-15 15:10:19+09:00'
-  verificationStatus: LIBRARY_ALL_AC
-  verifiedWith:
-  - test/ntl-1-d.test.cpp
-documentation_of: math/totient.hpp
+  timestamp: '2023-06-15 15:12:50+09:00'
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: test/ntl-1-d.test.cpp
 layout: document
 redirect_from:
-- /library/math/totient.hpp
-- /library/math/totient.hpp.html
-title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570"
+- /verify/test/ntl-1-d.test.cpp
+- /verify/test/ntl-1-d.test.cpp.html
+title: test/ntl-1-d.test.cpp
 ---

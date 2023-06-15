@@ -43,8 +43,8 @@ data:
   isVerificationFile: false
   path: math/Bezout_coefficients.hpp
   requiredBy:
-  - math/mod_inverse.hpp
   - math/Garner.hpp
+  - math/mod_inverse.hpp
   - standard/mod_integer.hpp
   - standard/fraction.hpp
   timestamp: '2023-06-12 02:08:44+09:00'

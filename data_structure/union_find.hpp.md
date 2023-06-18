@@ -81,54 +81,57 @@ data:
   attributes:
     document_title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
     links: []
-  bundledCode: "#line 1 \"data_structure/union_find.hpp\"\n\n\n#include <vector>\n\
-    #include <algorithm>\n#include <assert.h>\n\nclass union_find{\n  private:\n \
-    \   int N;\n    std::vector<int> par, group_siz;\n    int group_num; // \u96C6\
+  bundledCode: "#line 1 \"data_structure/union_find.hpp\"\n\n\n#include <assert.h>\n\
+    \n#include <algorithm>\n#include <vector>\n\nclass union_find {\n  private:\n\
+    \    int N;\n    std::vector<int> par, group_siz;\n    int group_num; // \u96C6\
     \u5408\u306E\u6570\n\n  public:\n    union_find() : N(0) {}\n    union_find(int\
     \ n) : N(n), par(n, -1), group_siz(n, 1), group_num(n) {}\n\n    /**\n     * @brief\
     \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
-    \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n){\n\
-    \        if(n <= N) return;\n        N = n;\n        par.resize(n, -1);\n    \
-    \    group_siz.resize(n, 1);\n        group_num += n - N;\n    }\n\n    int leader(int\
-    \ x){\n        if(par[x] == -1) return x;\n        else return par[x] = leader(par[x]);\n\
-    \    }\n \n    bool same(int x, int y){\n        return leader(x) == leader(y);\n\
-    \    }\n \n    bool merge(int x, int y){\n        x = leader(x); y = leader(y);\n\
-    \        if(x == y) return false;\n        // \u5C0F\u3055\u3044\u307B\u3046\u306B\
-    \u7D71\u5408\n        if(group_siz[x] < group_siz[y]) std::swap(x, y);\n     \
-    \   par[y] = x;\n        group_siz[x] += group_siz[y];\n        group_num--;\n\
+    \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
+    \        if (n <= N)\n            return;\n        N = n;\n        par.resize(n,\
+    \ -1);\n        group_siz.resize(n, 1);\n        group_num += n - N;\n    }\n\n\
+    \    int leader(int x) {\n        if (par[x] == -1)\n            return x;\n \
+    \       else\n            return par[x] = leader(par[x]);\n    }\n\n    bool same(int\
+    \ x, int y) { return leader(x) == leader(y); }\n\n    bool merge(int x, int y)\
+    \ {\n        x = leader(x);\n        y = leader(y);\n        if (x == y)\n   \
+    \         return false;\n        // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\
+    \u5408\n        if (group_siz[x] < group_siz[y])\n            std::swap(x, y);\n\
+    \        par[y] = x;\n        group_siz[x] += group_siz[y];\n        group_num--;\n\
     \        return true;\n    }\n\n    // x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\
-    \u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n    int size(int x){\n     \
-    \   return group_siz[leader(x)];\n    }\n\n    int count_groups() const {\n  \
-    \      return group_num;\n    }\n\n    std::vector<std::vector<int>> groups(){\n\
-    \        std::vector<std::vector<int>> result(N);\n        for(int i = 0; i <\
-    \ N; i++) result[i].reserve(group_siz[i]);\n        for(int i = 0; i < N; i++)\
-    \ result[leader(i)].push_back(i);\n        result.erase(\n            std::remove_if(result.begin(),\
-    \ result.end(),\n            [&](const std::vector<int>& v) { return v.empty();\
-    \ }), result.end());\n        return result;\n    }\n};\n\n\n"
-  code: "#ifndef UNION_FIND\n#define UNION_FIND\n#include <vector>\n#include <algorithm>\n\
-    #include <assert.h>\n\nclass union_find{\n  private:\n    int N;\n    std::vector<int>\
+    \u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n    int size(int x) { return\
+    \ group_siz[leader(x)]; }\n\n    int count_groups() const { return group_num;\
+    \ }\n\n    std::vector<std::vector<int>> groups() {\n        std::vector<std::vector<int>>\
+    \ result(N);\n        for (int i = 0; i < N; i++)\n            result[i].reserve(group_siz[i]);\n\
+    \        for (int i = 0; i < N; i++)\n            result[leader(i)].push_back(i);\n\
+    \        result.erase(std::remove_if(\n                         result.begin(),\
+    \ result.end(),\n                         [&](const std::vector<int> &v) { return\
+    \ v.empty(); }),\n                     result.end());\n        return result;\n\
+    \    }\n};\n\n\n"
+  code: "#ifndef UNION_FIND\n#define UNION_FIND\n#include <assert.h>\n\n#include <algorithm>\n\
+    #include <vector>\n\nclass union_find {\n  private:\n    int N;\n    std::vector<int>\
     \ par, group_siz;\n    int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n\
     \    union_find() : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n,\
     \ 1), group_num(n) {}\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\
     \u5897\u3084\u3059\n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\
-    \u3044\n     */\n    void expand(int n){\n        if(n <= N) return;\n       \
-    \ N = n;\n        par.resize(n, -1);\n        group_siz.resize(n, 1);\n      \
-    \  group_num += n - N;\n    }\n\n    int leader(int x){\n        if(par[x] ==\
-    \ -1) return x;\n        else return par[x] = leader(par[x]);\n    }\n \n    bool\
-    \ same(int x, int y){\n        return leader(x) == leader(y);\n    }\n \n    bool\
-    \ merge(int x, int y){\n        x = leader(x); y = leader(y);\n        if(x ==\
-    \ y) return false;\n        // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\u5408\
-    \n        if(group_siz[x] < group_siz[y]) std::swap(x, y);\n        par[y] = x;\n\
-    \        group_siz[x] += group_siz[y];\n        group_num--;\n        return true;\n\
-    \    }\n\n    // x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\
-    \u30A4\u30BA\u3092\u8FD4\u3059\n    int size(int x){\n        return group_siz[leader(x)];\n\
-    \    }\n\n    int count_groups() const {\n        return group_num;\n    }\n\n\
-    \    std::vector<std::vector<int>> groups(){\n        std::vector<std::vector<int>>\
-    \ result(N);\n        for(int i = 0; i < N; i++) result[i].reserve(group_siz[i]);\n\
-    \        for(int i = 0; i < N; i++) result[leader(i)].push_back(i);\n        result.erase(\n\
-    \            std::remove_if(result.begin(), result.end(),\n            [&](const\
-    \ std::vector<int>& v) { return v.empty(); }), result.end());\n        return\
-    \ result;\n    }\n};\n\n#endif"
+    \u3044\n     */\n    void expand(int n) {\n        if (n <= N)\n            return;\n\
+    \        N = n;\n        par.resize(n, -1);\n        group_siz.resize(n, 1);\n\
+    \        group_num += n - N;\n    }\n\n    int leader(int x) {\n        if (par[x]\
+    \ == -1)\n            return x;\n        else\n            return par[x] = leader(par[x]);\n\
+    \    }\n\n    bool same(int x, int y) { return leader(x) == leader(y); }\n\n \
+    \   bool merge(int x, int y) {\n        x = leader(x);\n        y = leader(y);\n\
+    \        if (x == y)\n            return false;\n        // \u5C0F\u3055\u3044\
+    \u307B\u3046\u306B\u7D71\u5408\n        if (group_siz[x] < group_siz[y])\n   \
+    \         std::swap(x, y);\n        par[y] = x;\n        group_siz[x] += group_siz[y];\n\
+    \        group_num--;\n        return true;\n    }\n\n    // x \u306E\u5C5E\u3059\
+    \u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n   \
+    \ int size(int x) { return group_siz[leader(x)]; }\n\n    int count_groups() const\
+    \ { return group_num; }\n\n    std::vector<std::vector<int>> groups() {\n    \
+    \    std::vector<std::vector<int>> result(N);\n        for (int i = 0; i < N;\
+    \ i++)\n            result[i].reserve(group_siz[i]);\n        for (int i = 0;\
+    \ i < N; i++)\n            result[leader(i)].push_back(i);\n        result.erase(std::remove_if(\n\
+    \                         result.begin(), result.end(),\n                    \
+    \     [&](const std::vector<int> &v) { return v.empty(); }),\n               \
+    \      result.end());\n        return result;\n    }\n};\n\n#endif\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/union_find.hpp
@@ -147,7 +150,7 @@ data:
   - graph/lowlink.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-06-13 13:16:34+09:00'
+  timestamp: '2023-06-19 01:40:27+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/grl-1-a.test.cpp

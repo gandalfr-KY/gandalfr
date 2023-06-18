@@ -1,5 +1,4 @@
-#ifndef TRAVELING_SALESMAN
-#define TRAVELING_SALESMAN
+#pragma once
 #include "../math/matrix.hpp"
 #include "graph.hpp"
 
@@ -31,5 +30,3 @@ WEIGHT traveling_salesman(const graph<WEIGHT, is_directed> &G) {
         ret = -1;
     return ret;
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef TOTIENT
-#define TOTIENT
+#pragma once
 #include "../standard/power.hpp"
 #include "factorize.hpp"
 
@@ -14,5 +13,3 @@ long long totient(long long n) {
         ret *= power(p.first, p.second - 1) * (p.first - 1);
     return ret;
 }
-
-#endif

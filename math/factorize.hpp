@@ -1,5 +1,4 @@
-#ifndef FACTORIZE
-#define FACTORIZE
+#pragma once
 #include <cmath>
 #include <utility>
 
@@ -29,5 +28,3 @@ std::vector<std::pair<long long, int>> factorize(long long N) {
         ret.push_back({N, 1});
     return ret;
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RANDOM
-#define RANDOM
+#pragma once
 #include <random>
 
 #include "../graph/graph.hpp"
@@ -62,5 +61,3 @@ struct random_utility {
   private:
     std::mt19937 mt;
 };
-
-#endif

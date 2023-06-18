@@ -1,5 +1,4 @@
-#ifndef MATRIX
-#define MATRIX
+#pragma once
 #include <assert.h>
 
 #include <iostream>
@@ -149,5 +148,3 @@ template <class T> class matrix {
         return ret;
     }
 };
-
-#endif

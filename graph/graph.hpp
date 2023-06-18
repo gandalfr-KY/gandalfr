@@ -1,5 +1,4 @@
-#ifndef GRAPH_STRUCT
-#define GRAPH_STRUCT
+#pragma once
 #include <algorithm>
 #include <tuple>
 #include <vector>
@@ -180,5 +179,3 @@ template <typename WEIGHT, bool is_directed> class graph {
             std::cout << e << std::endl;
     }
 };
-
-#endif

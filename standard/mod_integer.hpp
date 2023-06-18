@@ -1,5 +1,4 @@
-#ifndef MOD_INTEGER
-#define MOD_INTEGER
+#pragma once
 #include <iostream>
 
 #include "../math/mod_inverse.hpp"
@@ -91,5 +90,3 @@ template <int mod> class mod_integer {
         return os;
     }
 };
-
-#endif

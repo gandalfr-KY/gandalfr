@@ -1,5 +1,4 @@
-#ifndef POWER
-#define POWER
+#pragma once
 #include <assert.h>
 
 template <class T> T power(T x, long long n) {
@@ -35,5 +34,3 @@ long long power(long long x, long long n, int MOD) {
     }
     return ret;
 }
-
-#endif

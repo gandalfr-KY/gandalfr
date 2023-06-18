@@ -1,5 +1,4 @@
-#ifndef TOPOLOGICAL_SORT
-#define TOPOLOGICAL_SORT
+#pragma once
 #include <queue>
 
 #include "graph.hpp"
@@ -29,5 +28,3 @@ std::vector<int> topological_sort(const graph<WEIGHT, true> &G) {
     }
     return sorted;
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef PREFIX_SUMS
-#define PREFIX_SUMS
+#pragma once
 #include <functional>
 #include <vector>
 
@@ -76,5 +75,3 @@ template <class T> class prefix_sums_2d {
 
     const std::vector<std::vector<T>> &result() { return acm; }
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef EDGE_STRUCT
-#define EDGE_STRUCT
+#pragma once
 #include <iostream>
 
 namespace internal {
@@ -78,5 +77,3 @@ template <> struct edge<int> : public internal::_base_edge<edge<int>, int> {
         return this->from - e.from;
     }
 };
-
-#endif

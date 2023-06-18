@@ -1,5 +1,4 @@
-#ifndef DOUBLING
-#define DOUBLING
+#pragma once
 #include "graph.hpp"
 
 /*
@@ -110,5 +109,3 @@ template <typename WEIGHT> class doubling {
         return par[a][0];
     }
 };
-
-#endif

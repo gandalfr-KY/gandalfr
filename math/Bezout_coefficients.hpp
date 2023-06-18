@@ -1,5 +1,4 @@
-#ifndef BEZOUT_COEFFICIENTS
-#define BEZOUT_COEFFICIENTS
+#pragma once
 #include <cstdlib>
 #include <utility>
 
@@ -23,5 +22,3 @@ std::pair<long long, long long> Bezout_coefficients(long long a, long long b) {
     internal::extgcd((a >= 0 ? a : -a), (b >= 0 ? b : -b), s, t);
     return {(a >= 0 ? s : -s), (b >= 0 ? t : -t)};
 }
-
-#endif

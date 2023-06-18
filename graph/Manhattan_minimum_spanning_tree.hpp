@@ -1,5 +1,4 @@
-#ifndef MANHATTAN_MST
-#define MANHATTAN_MST
+#pragma once
 #include <map>
 #include <numeric>
 
@@ -60,5 +59,3 @@ template <typename WEIGHT> class Manhattan_minimum_spanning_tree {
 
     const graph<WEIGHT, false> &get_tree() { return mst; }
 };
-
-#endif

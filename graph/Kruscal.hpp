@@ -1,5 +1,4 @@
-#ifndef KRUSCAL
-#define KRUSCAL
+#pragma once
 #include "graph.hpp"
 
 /**
@@ -17,5 +16,3 @@ graph<WEIGHT, false> Kruscal(const graph<WEIGHT, false> &G) {
         }
     return ret;
 }
-
-#endif

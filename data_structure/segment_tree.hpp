@@ -1,5 +1,4 @@
-#ifndef SEGMENT_TREE
-#define SEGMENT_TREE
+#pragma once
 #include <assert.h>
 
 #include <functional>
@@ -114,5 +113,3 @@ template <class T> struct RMQ_segment_tree : public segment_tree<T> {
               vec, [](T a, T b) { return (a > b ? a : b); },
               std::numeric_limits<T>::lowest()){};
 };
-
-#endif

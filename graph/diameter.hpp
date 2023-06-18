@@ -1,5 +1,4 @@
-#ifndef DIAMETER
-#define DIAMETER
+#pragma once
 #include <assert.h>
 
 #include <iostream>
@@ -17,5 +16,3 @@ template <typename WEIGHT> WEIGHT diameter(const graph<WEIGHT, false> &G) {
     dist = shortest_path(G, farthest_node);
     return *std::max_element(dist.begin(), dist.end());
 }
-
-#endif

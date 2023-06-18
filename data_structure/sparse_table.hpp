@@ -1,5 +1,4 @@
-#ifndef SPARSE_TABLE
-#define SPARSE_TABLE
+#pragma once
 #include <functional>
 #include <vector>
 
@@ -54,5 +53,3 @@ template <typename T> struct RMQ_sparse_table : public sparse_table<T> {
         : RMQ_sparse_table<T>::sparse_table(
               [](T a, T b) { return (a > b ? a : b); }) {}
 };
-
-#endif

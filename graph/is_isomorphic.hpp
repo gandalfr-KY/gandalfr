@@ -1,5 +1,4 @@
-#ifndef IS_ISOMORPHIC
-#define IS_ISOMORPHIC
+#pragma once
 #include <numeric>
 
 #include "../math/matrix.hpp"
@@ -34,5 +33,3 @@ bool is_isomorphic(const graph<WEIGHT, is_directed> &G1,
     } while (std::next_permutation(nodes_id.begin(), nodes_id.end()));
     return false;
 }
-
-#endif

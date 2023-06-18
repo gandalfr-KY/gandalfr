@@ -1,5 +1,4 @@
-#ifndef LONGEST_INCREASINNG_SUBSEQUENCE
-#define LONGEST_INCREASINNG_SUBSEQUENCE
+#pragma once
 #include <algorithm>
 #include <set>
 #include <type_traits>
@@ -28,5 +27,3 @@ int longest_increasing_subsequence(const InputIterator &__begin,
     }
     return dp.size();
 }
-
-#endif

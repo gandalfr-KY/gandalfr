@@ -1,5 +1,4 @@
-#ifndef LOWEST_COMMON_ANCESTOR
-#define LOWEST_COMMON_ANCESTOR
+#pragma once
 #include <assert.h>
 
 #include "../data_structure/sparse_table.hpp"
@@ -50,5 +49,3 @@ template <typename WEIGHT> class lowest_common_ancestor {
         return dist[u] + dist[v] - 2 * dist[get_ancestor(u, v)];
     }
 };
-
-#endif

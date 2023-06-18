@@ -1,5 +1,4 @@
-#ifndef DUAL_SEGMENT_TREE
-#define DUAL_SEGMENT_TREE
+#pragma once
 #include <assert.h>
 
 #include <functional>
@@ -159,5 +158,3 @@ template <class T> class RUQ_dual_segment_tree {
         act(a, b, 2 * k + 2, (l + r) / 2, r, action);
     }
 };
-
-#endif

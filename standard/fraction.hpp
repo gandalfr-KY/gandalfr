@@ -1,5 +1,4 @@
-#ifndef FRACTION
-#define FRACTION
+#pragma once
 #include <assert.h>
 
 #include <iostream>
@@ -188,5 +187,3 @@ class fraction {
     static const fraction M_INF, INF;
 };
 const fraction fraction::M_INF(-1, 0), fraction::INF(1, 0);
-
-#endif

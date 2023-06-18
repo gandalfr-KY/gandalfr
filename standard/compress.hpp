@@ -1,5 +1,4 @@
-#ifndef COMPRESS
-#define COMPRESS
+#pragma once
 #include <algorithm>
 #include <iterator>
 #include <type_traits>
@@ -23,5 +22,3 @@ std::vector<int> compress(const InputIterator &__begin,
         ret.push_back(std::lower_bound(w.begin(), w.end(), *it) - w.begin());
     return ret;
 }
-
-#endif

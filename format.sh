@@ -1,16 +1,19 @@
 #!/bin/bash
 
 START_DIR="."
+
 EXTENSION=".hpp"
 
 format_file() {
     echo "Formatting $1"
     clang-format -i $1
 
-    if [[ "$(tail -c1 $1)" != "" ]]
+    if [[ "$(tail -c1 $1)" != $'\n' ]]
     then
         echo "" >> $1
     fi
+
+    sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' $1
 }
 
 scan_dir() {

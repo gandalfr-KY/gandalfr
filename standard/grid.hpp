@@ -1,5 +1,4 @@
-#ifndef GRID_STRUCTURE
-#define GRID_STRUCTURE
+#pragma once
 #include <iostream>
 #include <vector>
 
@@ -74,5 +73,3 @@ struct grid {
  */
 const std::vector<grid> around = {{0, 0},  {0, 1}, {1, 0},   {0, -1}, {-1, 0},
                                   {-1, 1}, {1, 1}, {-1, -1}, {1, -1}};
-
-#endif

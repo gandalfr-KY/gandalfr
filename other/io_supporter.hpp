@@ -1,5 +1,4 @@
-#ifndef IO_SUPPORTER
-#define IO_SUPPORTER
+#pragma once
 #include <deque>
 #include <iostream>
 #include <queue>
@@ -64,5 +63,3 @@ std::istream &operator>>(std::istream &is, std::pair<T1, T2> &p) {
     is >> p.first >> p.second;
     return is;
 }
-
-#endif

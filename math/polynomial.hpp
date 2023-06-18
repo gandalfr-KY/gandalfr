@@ -1,5 +1,4 @@
-#ifndef POLYNOMIAL
-#define POLYNOMIAL
+#pragma once
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -218,5 +217,3 @@ template <class coef> class polynomial {
         return ret;
     }
 };
-
-#endif

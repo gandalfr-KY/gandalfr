@@ -1,5 +1,4 @@
-#ifndef SHORTEST_PATH
-#define SHORTEST_PATH
+#pragma once
 #include <queue>
 
 #include "graph.hpp"
@@ -113,5 +112,3 @@ std::vector<WEIGHT> shortest_path(const graph<WEIGHT, is_directed> &G,
             x = -1;
     return dist;
 }
-
-#endif

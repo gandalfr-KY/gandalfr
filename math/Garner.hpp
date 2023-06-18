@@ -1,5 +1,4 @@
-#ifndef GARNER
-#define GARNER
+#pragma once
 #include <vector>
 
 #include "mod_inverse.hpp"
@@ -25,5 +24,3 @@ long long Garner(std::vector<long long> a, std::vector<long long> p,
     }
     return kp[sz];
 }
-
-#endif

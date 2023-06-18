@@ -1,5 +1,4 @@
-#ifndef BINARY_INDEXED_TREE
-#define BINARY_INDEXED_TREE
+#pragma once
 #include <vector>
 
 /**
@@ -32,5 +31,3 @@ template <class T> struct binary_indexed_tree {
         return ret;
     }
 };
-
-#endif

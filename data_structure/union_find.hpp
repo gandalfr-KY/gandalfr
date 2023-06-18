@@ -1,5 +1,4 @@
-#ifndef UNION_FIND
-#define UNION_FIND
+#pragma once
 #include <assert.h>
 
 #include <algorithm>
@@ -69,5 +68,3 @@ class union_find {
         return result;
     }
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef DIVISORS
-#define DIVISORS
+#pragma once
 #include <algorithm>
 #include <vector>
 
@@ -18,5 +17,3 @@ std::vector<long long> divisors(long long N) {
     std::sort(ret.begin(), ret.end());
     return ret;
 }
-
-#endif

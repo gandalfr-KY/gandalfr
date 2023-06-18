@@ -1,5 +1,4 @@
-#ifndef STRONGLY_CONNECTED_COMPONENTS
-#define STRONGLY_CONNECTED_COMPONENTS
+#pragma once
 #include "reversed_graph.hpp"
 
 /* 強連結成分分解
@@ -69,5 +68,3 @@ template <typename WEIGHT> class strongly_connected_components {
     const std::vector<int> &group_id() { return grp_id; }
     const graph<WEIGHT, true> &simplified_graph() { return S; };
 };
-
-#endif

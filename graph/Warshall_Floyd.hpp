@@ -1,5 +1,4 @@
-#ifndef WARSHALL_FLOYD
-#define WARSHALL_FLOYD
+#pragma once
 #include "../math/matrix.hpp"
 
 template <class T> matrix<T> Warshall_Floyd(matrix<T> mt) {
@@ -13,5 +12,3 @@ template <class T> matrix<T> Warshall_Floyd(matrix<T> mt) {
     }
     return mt;
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef REVERSED_GRAPH
-#define REVERSED_GRAPH
+#pragma once
 #include "graph.hpp"
 
 // 有向グラフの辺の向きを逆にしたグラフを作る
@@ -12,5 +11,3 @@ graph<WEIGHT, true> reversed_graph(const graph<WEIGHT, true> &G) {
     }
     return ret;
 }
-
-#endif

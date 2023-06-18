@@ -1,5 +1,4 @@
-#ifndef ROLLING_HASH
-#define ROLLING_HASH
+#pragma once
 #include <random>
 #include <string>
 #include <vector>
@@ -71,5 +70,3 @@ class rolling_hash {
         return ok;
     }
 };
-
-#endif

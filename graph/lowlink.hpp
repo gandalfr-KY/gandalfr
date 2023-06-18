@@ -1,5 +1,4 @@
-#ifndef LOWLINK
-#define LOWLINK
+#pragma once
 #include <utility>
 
 #include "graph.hpp"
@@ -72,5 +71,3 @@ template <typename WEIGHT> class lowlink {
     const std::vector<int> &articulation_points() { return apts; }
     const std::vector<edge<WEIGHT>> &bridges() { return brids; }
 };
-
-#endif

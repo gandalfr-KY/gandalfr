@@ -1,5 +1,4 @@
-#ifndef PRIME_NUMBER_UTILITY
-#define PRIME_NUMBER_UTILITY
+#pragma once
 #include <math.h>
 
 #include <vector>
@@ -68,5 +67,3 @@ class prime_number_utility {
     static const std::vector<int> &list() { return primes; }
     static const std::vector<bool> &table() { return sieve; }
 };
-
-#endif

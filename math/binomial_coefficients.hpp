@@ -1,5 +1,4 @@
-#ifndef BINOMIAL_COEFFICIENTS
-#define BINOMIAL_COEFFICIENTS
+#pragma once
 #include <vector>
 
 template <class T> class binomial_coefficients {
@@ -24,5 +23,3 @@ template <class T> class binomial_coefficients {
     }
 };
 template <class T> std::vector<T> binomial_coefficients<T>::fact = {1};
-
-#endif

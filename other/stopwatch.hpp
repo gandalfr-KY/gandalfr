@@ -1,5 +1,4 @@
-#ifndef STOPWATCH
-#define STOPWATCH
+#pragma once
 #include <chrono>
 
 /* reset() := タイマーを0にリセット
@@ -24,5 +23,3 @@ class {
             .count();
     }
 } static stopwatch;
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef INVERSION
-#define INVERSION
+#pragma once
 #include <set>
 #include <type_traits>
 #include <vector>
@@ -63,5 +62,3 @@ long long inversion(const InputIterator &__begin1, const InputIterator &__end1,
     }
     return inversion(cmp1.begin(), cmp1.end());
 }
-
-#endif

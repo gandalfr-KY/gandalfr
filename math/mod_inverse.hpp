@@ -1,9 +1,10 @@
 #ifndef MOD_INVERSE
 #define MOD_INVERSE
 #include <assert.h>
+
 #include "Bezout_coefficients.hpp"
 
-long long mod_inverse(long long x, int mod){
+long long mod_inverse(long long x, int mod) {
     assert(mod > 0);
     x %= mod;
     auto [a, b] = Bezout_coefficients(x, mod);

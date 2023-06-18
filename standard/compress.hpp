@@ -10,14 +10,16 @@
  * @param __end 右端のイテレータ
  * @attention 0 はじまりで圧縮する。
  */
-template<typename InputIterator>
-std::vector<int> compress(const InputIterator &__begin,  const InputIterator &__end){
+template <typename InputIterator>
+std::vector<int> compress(const InputIterator &__begin,
+                          const InputIterator &__end) {
     std::vector<int> ret;
     ret.reserve(std::distance(__begin, __end));
-    std::vector<typename std::iterator_traits<InputIterator>::value_type> w(__begin, __end);
+    std::vector<typename std::iterator_traits<InputIterator>::value_type> w(
+        __begin, __end);
     std::sort(w.begin(), w.end());
     w.erase(std::unique(w.begin(), w.end()), w.end());
-    for(auto it = __begin; it != __end; it++)
+    for (auto it = __begin; it != __end; it++)
         ret.push_back(std::lower_bound(w.begin(), w.end(), *it) - w.begin());
     return ret;
 }

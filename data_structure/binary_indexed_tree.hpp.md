@@ -19,7 +19,7 @@ data:
   attributes:
     document_title: "\u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97"
     links: []
-  bundledCode: "#line 1 \"data_structure/binary_indexed_tree.hpp\"\n\n\n#include <vector>\n\
+  bundledCode: "#line 2 \"data_structure/binary_indexed_tree.hpp\"\n#include <vector>\n\
     \n/**\n * @brief \u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97\
     \n * @attention 0-indexed\n */\ntemplate <class T> struct binary_indexed_tree\
     \ {\n  private:\n    int N;\n    std::vector<T> bit;\n\n  public:\n    binary_indexed_tree(int\
@@ -28,23 +28,23 @@ data:
     \ x = a + 1; x <= N; x += x & -x)\n            bit[x - 1] += w;\n    }\n\n   \
     \ /**\n     * @return [0, a) \u306E\u7DCF\u548C\n     */\n    T get(int a) {\n\
     \        T ret = 0;\n        for (int x = a; x > 0; x -= x & -x)\n           \
-    \ ret += bit[x - 1];\n        return ret;\n    }\n};\n\n\n"
-  code: "#ifndef BINARY_INDEXED_TREE\n#define BINARY_INDEXED_TREE\n#include <vector>\n\
-    \n/**\n * @brief \u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97\
-    \n * @attention 0-indexed\n */\ntemplate <class T> struct binary_indexed_tree\
-    \ {\n  private:\n    int N;\n    std::vector<T> bit;\n\n  public:\n    binary_indexed_tree(int\
-    \ siz) : N(siz), bit(N, 0) {}\n\n    /**\n     * @return a \u306E\u4F4D\u7F6E\u306B\
-    \ w \u3092\u52A0\u7B97\n     */\n    void add(int a, T w) {\n        for (int\
-    \ x = a + 1; x <= N; x += x & -x)\n            bit[x - 1] += w;\n    }\n\n   \
-    \ /**\n     * @return [0, a) \u306E\u7DCF\u548C\n     */\n    T get(int a) {\n\
-    \        T ret = 0;\n        for (int x = a; x > 0; x -= x & -x)\n           \
-    \ ret += bit[x - 1];\n        return ret;\n    }\n};\n\n#endif\n"
+    \ ret += bit[x - 1];\n        return ret;\n    }\n};\n"
+  code: "#pragma once\n#include <vector>\n\n/**\n * @brief \u4E00\u70B9\u52A0\u7B97\
+    \u3001\u533A\u9593\u548C\u306E\u53D6\u5F97\n * @attention 0-indexed\n */\ntemplate\
+    \ <class T> struct binary_indexed_tree {\n  private:\n    int N;\n    std::vector<T>\
+    \ bit;\n\n  public:\n    binary_indexed_tree(int siz) : N(siz), bit(N, 0) {}\n\
+    \n    /**\n     * @return a \u306E\u4F4D\u7F6E\u306B w \u3092\u52A0\u7B97\n  \
+    \   */\n    void add(int a, T w) {\n        for (int x = a + 1; x <= N; x += x\
+    \ & -x)\n            bit[x - 1] += w;\n    }\n\n    /**\n     * @return [0, a)\
+    \ \u306E\u7DCF\u548C\n     */\n    T get(int a) {\n        T ret = 0;\n      \
+    \  for (int x = a; x > 0; x -= x & -x)\n            ret += bit[x - 1];\n     \
+    \   return ret;\n    }\n};\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/binary_indexed_tree.hpp
   requiredBy:
   - standard/inversion.hpp
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/alds1-5-d.test.cpp

@@ -10,7 +10,7 @@ data:
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7627473#1
     - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7627486#1
-  bundledCode: "#line 1 \"data_structure/dual_segment_tree.hpp\"\n\n\n#include <assert.h>\n\
+  bundledCode: "#line 2 \"data_structure/dual_segment_tree.hpp\"\n#include <assert.h>\n\
     \n#include <functional>\n#include <iostream>\n#include <optional>\n#include <vector>\n\
     \n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7627486#1\n\
     \ */\ntemplate <class T> class dual_segment_tree {\n  private:\n    int n, vec_size;\n\
@@ -68,10 +68,9 @@ data:
     \ T> action) {\n        if (r <= a || b <= l)\n            return;\n        if\
     \ (a <= l && r <= b) {\n            v[k] = std::max(v[k], action);\n         \
     \   return;\n        }\n        act(a, b, 2 * k + 1, l, (l + r) / 2, action);\n\
-    \        act(a, b, 2 * k + 2, (l + r) / 2, r, action);\n    }\n};\n\n\n"
-  code: "#ifndef DUAL_SEGMENT_TREE\n#define DUAL_SEGMENT_TREE\n#include <assert.h>\n\
-    \n#include <functional>\n#include <iostream>\n#include <optional>\n#include <vector>\n\
-    \n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7627486#1\n\
+    \        act(a, b, 2 * k + 2, (l + r) / 2, r, action);\n    }\n};\n"
+  code: "#pragma once\n#include <assert.h>\n\n#include <functional>\n#include <iostream>\n\
+    #include <optional>\n#include <vector>\n\n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7627486#1\n\
     \ */\ntemplate <class T> class dual_segment_tree {\n  private:\n    int n, vec_size;\n\
     \    const T e;\n    const std::function<T(T, T)> op;\n    std::vector<T> v;\n\
     \n  public:\n    // \u8981\u7D20\u306E\u914D\u5217 vec \u3067\u521D\u671F\u5316\
@@ -127,12 +126,12 @@ data:
     \ T> action) {\n        if (r <= a || b <= l)\n            return;\n        if\
     \ (a <= l && r <= b) {\n            v[k] = std::max(v[k], action);\n         \
     \   return;\n        }\n        act(a, b, 2 * k + 1, l, (l + r) / 2, action);\n\
-    \        act(a, b, 2 * k + 2, (l + r) / 2, r, action);\n    }\n};\n\n#endif\n"
+    \        act(a, b, 2 * k + 2, (l + r) / 2, r, action);\n    }\n};\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/dual_segment_tree.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/dual_segment_tree.hpp

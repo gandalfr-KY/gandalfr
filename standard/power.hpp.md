@@ -15,32 +15,31 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"standard/power.hpp\"\n\n\n#include <assert.h>\n\ntemplate\
-    \ <class T> T power(T x, long long n) {\n    T ret = T(1);\n    while (n > 0)\
-    \ {\n        if (n & 1)\n            ret = ret * x;\n        x = x * x;\n    \
-    \    n >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long\
-    \ long n) {\n    long long ret = 1;\n    while (n > 0) {\n        if (n & 1)\n\
-    \            ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n   \
-    \ return ret;\n}\n\nlong long power(long long x, long long n, int MOD) {\n   \
-    \ long long ret = 1;\n    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n\
-    \            ret = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n\
-    \    }\n    return ret;\n}\n\n\n"
-  code: "#ifndef POWER\n#define POWER\n#include <assert.h>\n\ntemplate <class T> T\
-    \ power(T x, long long n) {\n    T ret = T(1);\n    while (n > 0) {\n        if\
-    \ (n & 1)\n            ret = ret * x;\n        x = x * x;\n        n >>= 1;\n\
-    \    }\n    return ret;\n}\n\nlong long power(long long x, long long n) {\n  \
-    \  long long ret = 1;\n    while (n > 0) {\n        if (n & 1)\n            ret\
-    \ = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\
-    \nlong long power(long long x, long long n, int MOD) {\n    long long ret = 1;\n\
-    \    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n            ret = ret\
-    \ * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n\
-    }\n\n#endif\n"
+  bundledCode: "#line 2 \"standard/power.hpp\"\n#include <assert.h>\n\ntemplate <class\
+    \ T> T power(T x, long long n) {\n    T ret = T(1);\n    while (n > 0) {\n   \
+    \     if (n & 1)\n            ret = ret * x;\n        x = x * x;\n        n >>=\
+    \ 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long long n) {\n\
+    \    long long ret = 1;\n    while (n > 0) {\n        if (n & 1)\n           \
+    \ ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n\
+    }\n\nlong long power(long long x, long long n, int MOD) {\n    long long ret =\
+    \ 1;\n    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n            ret\
+    \ = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n    }\n    return\
+    \ ret;\n}\n"
+  code: "#pragma once\n#include <assert.h>\n\ntemplate <class T> T power(T x, long\
+    \ long n) {\n    T ret = T(1);\n    while (n > 0) {\n        if (n & 1)\n    \
+    \        ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return\
+    \ ret;\n}\n\nlong long power(long long x, long long n) {\n    long long ret =\
+    \ 1;\n    while (n > 0) {\n        if (n & 1)\n            ret = ret * x;\n  \
+    \      x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long\
+    \ long x, long long n, int MOD) {\n    long long ret = 1;\n    x %= MOD;\n   \
+    \ while (n > 0) {\n        if (n & 1)\n            ret = ret * x % MOD;\n    \
+    \    x = x * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n}\n"
   dependsOn: []
   isVerificationFile: false
   path: standard/power.hpp
   requiredBy:
   - math/totient.hpp
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp

@@ -80,7 +80,7 @@ data:
   _verificationStatusIcon: ':question:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"graph/edge.hpp\"\n\n\n#include <iostream>\n\nnamespace internal\
+  bundledCode: "#line 2 \"graph/edge.hpp\"\n#include <iostream>\n\nnamespace internal\
     \ {\ntemplate <class DERIVED, class WEIGHT> struct _base_edge {\n    int from;\n\
     \    int to;\n    WEIGHT cost;\n    int id;\n    _base_edge(int _from, int _to,\
     \ WEIGHT _cost, int _id)\n        : from(_from), to(_to), cost(_cost), id(_id)\
@@ -112,24 +112,24 @@ data:
     \ const override {\n        os << this->from << \" \" << this->to;\n    }\n  \
     \  int compare(const internal::_base_edge<edge<int>, int> &e) const override {\n\
     \        if (this->from == e.from) {\n            return this->to - e.to;\n  \
-    \      }\n        return this->from - e.from;\n    }\n};\n\n\n"
-  code: "#ifndef EDGE_STRUCT\n#define EDGE_STRUCT\n#include <iostream>\n\nnamespace\
-    \ internal {\ntemplate <class DERIVED, class WEIGHT> struct _base_edge {\n   \
-    \ int from;\n    int to;\n    WEIGHT cost;\n    int id;\n    _base_edge(int _from,\
-    \ int _to, WEIGHT _cost, int _id)\n        : from(_from), to(_to), cost(_cost),\
-    \ id(_id) {}\n\n    friend bool operator>(const _base_edge &e1, const _base_edge\
-    \ &e) {\n        return e1.compare(e) > 0;\n    }\n    friend bool operator>=(const\
-    \ _base_edge &e1, const _base_edge &e) {\n        return e1.compare(e) >= 0;\n\
-    \    }\n    friend bool operator<(const _base_edge &e1, const _base_edge &e) {\n\
-    \        return e1.compare(e) < 0;\n    }\n    friend bool operator<=(const _base_edge\
-    \ &e1, const _base_edge &e) {\n        return e1.compare(e) <= 0;\n    }\n   \
-    \ friend std::ostream &operator<<(std::ostream &os,\n                        \
-    \            const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n \
-    \       return os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\
-    \n    virtual ~_base_edge() = default;\n\n    operator int() const { return to;\
-    \ }\n\n  protected:\n    virtual void print(std::ostream &os) const = 0;\n   \
-    \ virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\
-    \ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    \      }\n        return this->from - e.from;\n    }\n};\n"
+  code: "#pragma once\n#include <iostream>\n\nnamespace internal {\ntemplate <class\
+    \ DERIVED, class WEIGHT> struct _base_edge {\n    int from;\n    int to;\n   \
+    \ WEIGHT cost;\n    int id;\n    _base_edge(int _from, int _to, WEIGHT _cost,\
+    \ int _id)\n        : from(_from), to(_to), cost(_cost), id(_id) {}\n\n    friend\
+    \ bool operator>(const _base_edge &e1, const _base_edge &e) {\n        return\
+    \ e1.compare(e) > 0;\n    }\n    friend bool operator>=(const _base_edge &e1,\
+    \ const _base_edge &e) {\n        return e1.compare(e) >= 0;\n    }\n    friend\
+    \ bool operator<(const _base_edge &e1, const _base_edge &e) {\n        return\
+    \ e1.compare(e) < 0;\n    }\n    friend bool operator<=(const _base_edge &e1,\
+    \ const _base_edge &e) {\n        return e1.compare(e) <= 0;\n    }\n    friend\
+    \ std::ostream &operator<<(std::ostream &os,\n                               \
+    \     const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n        return\
+    \ os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\n  \
+    \  virtual ~_base_edge() = default;\n\n    operator int() const { return to; }\n\
+    \n  protected:\n    virtual void print(std::ostream &os) const = 0;\n    virtual\
+    \ int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\n\
+    template <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT> {\n    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0,\
     \ 0) {}\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\n\
     \  protected:\n    void print(std::ostream &os) const override {\n        os <<\
@@ -145,7 +145,7 @@ data:
     \ const override {\n        os << this->from << \" \" << this->to;\n    }\n  \
     \  int compare(const internal::_base_edge<edge<int>, int> &e) const override {\n\
     \        if (this->from == e.from) {\n            return this->to - e.to;\n  \
-    \      }\n        return this->from - e.from;\n    }\n};\n\n#endif\n"
+    \      }\n        return this->from - e.from;\n    }\n};\n"
   dependsOn: []
   isVerificationFile: false
   path: graph/edge.hpp
@@ -164,7 +164,7 @@ data:
   - graph/lowlink.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/grl-1-a.test.cpp

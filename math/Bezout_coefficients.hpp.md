@@ -23,24 +23,24 @@ data:
   _verificationStatusIcon: ':x:'
   attributes:
     links: []
-  bundledCode: "#line 1 \"math/Bezout_coefficients.hpp\"\n\n\n#include <cstdlib>\n\
-    #include <utility>\n\nnamespace internal {\nlong long extgcd(long long a, long\
-    \ long b, long long &s, long long &t) {\n    if (b == 0) {\n        s = 1;\n \
-    \       t = 0;\n        return a;\n    } else {\n        auto d = std::lldiv(a,\
-    \ b);\n        long long tmp = extgcd(b, d.rem, t, s);\n        t -= d.quot *\
-    \ s;\n        return tmp;\n    }\n}\n} // namespace internal\n\nstd::pair<long\
-    \ long, long long> Bezout_coefficients(long long a, long long b) {\n    long long\
-    \ s, t;\n    internal::extgcd((a >= 0 ? a : -a), (b >= 0 ? b : -b), s, t);\n \
-    \   return {(a >= 0 ? s : -s), (b >= 0 ? t : -t)};\n}\n\n\n"
-  code: "#ifndef BEZOUT_COEFFICIENTS\n#define BEZOUT_COEFFICIENTS\n#include <cstdlib>\n\
-    #include <utility>\n\nnamespace internal {\nlong long extgcd(long long a, long\
-    \ long b, long long &s, long long &t) {\n    if (b == 0) {\n        s = 1;\n \
-    \       t = 0;\n        return a;\n    } else {\n        auto d = std::lldiv(a,\
-    \ b);\n        long long tmp = extgcd(b, d.rem, t, s);\n        t -= d.quot *\
-    \ s;\n        return tmp;\n    }\n}\n} // namespace internal\n\nstd::pair<long\
-    \ long, long long> Bezout_coefficients(long long a, long long b) {\n    long long\
-    \ s, t;\n    internal::extgcd((a >= 0 ? a : -a), (b >= 0 ? b : -b), s, t);\n \
-    \   return {(a >= 0 ? s : -s), (b >= 0 ? t : -t)};\n}\n\n#endif\n"
+  bundledCode: "#line 2 \"math/Bezout_coefficients.hpp\"\n#include <cstdlib>\n#include\
+    \ <utility>\n\nnamespace internal {\nlong long extgcd(long long a, long long b,\
+    \ long long &s, long long &t) {\n    if (b == 0) {\n        s = 1;\n        t\
+    \ = 0;\n        return a;\n    } else {\n        auto d = std::lldiv(a, b);\n\
+    \        long long tmp = extgcd(b, d.rem, t, s);\n        t -= d.quot * s;\n \
+    \       return tmp;\n    }\n}\n} // namespace internal\n\nstd::pair<long long,\
+    \ long long> Bezout_coefficients(long long a, long long b) {\n    long long s,\
+    \ t;\n    internal::extgcd((a >= 0 ? a : -a), (b >= 0 ? b : -b), s, t);\n    return\
+    \ {(a >= 0 ? s : -s), (b >= 0 ? t : -t)};\n}\n"
+  code: "#pragma once\n#include <cstdlib>\n#include <utility>\n\nnamespace internal\
+    \ {\nlong long extgcd(long long a, long long b, long long &s, long long &t) {\n\
+    \    if (b == 0) {\n        s = 1;\n        t = 0;\n        return a;\n    } else\
+    \ {\n        auto d = std::lldiv(a, b);\n        long long tmp = extgcd(b, d.rem,\
+    \ t, s);\n        t -= d.quot * s;\n        return tmp;\n    }\n}\n} // namespace\
+    \ internal\n\nstd::pair<long long, long long> Bezout_coefficients(long long a,\
+    \ long long b) {\n    long long s, t;\n    internal::extgcd((a >= 0 ? a : -a),\
+    \ (b >= 0 ? b : -b), s, t);\n    return {(a >= 0 ? s : -s), (b >= 0 ? t : -t)};\n\
+    }\n"
   dependsOn: []
   isVerificationFile: false
   path: math/Bezout_coefficients.hpp
@@ -49,7 +49,7 @@ data:
   - math/Garner.hpp
   - standard/mod_integer.hpp
   - standard/fraction.hpp
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

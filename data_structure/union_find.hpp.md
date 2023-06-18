@@ -81,11 +81,11 @@ data:
   attributes:
     document_title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
     links: []
-  bundledCode: "#line 1 \"data_structure/union_find.hpp\"\n\n\n#include <assert.h>\n\
-    \n#include <algorithm>\n#include <vector>\n\nclass union_find {\n  private:\n\
-    \    int N;\n    std::vector<int> par, group_siz;\n    int group_num; // \u96C6\
-    \u5408\u306E\u6570\n\n  public:\n    union_find() : N(0) {}\n    union_find(int\
-    \ n) : N(n), par(n, -1), group_siz(n, 1), group_num(n) {}\n\n    /**\n     * @brief\
+  bundledCode: "#line 2 \"data_structure/union_find.hpp\"\n#include <assert.h>\n\n\
+    #include <algorithm>\n#include <vector>\n\nclass union_find {\n  private:\n  \
+    \  int N;\n    std::vector<int> par, group_siz;\n    int group_num; // \u96C6\u5408\
+    \u306E\u6570\n\n  public:\n    union_find() : N(0) {}\n    union_find(int n) :\
+    \ N(n), par(n, -1), group_siz(n, 1), group_num(n) {}\n\n    /**\n     * @brief\
     \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
     \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
     \        if (n <= N)\n            return;\n        N = n;\n        par.resize(n,\
@@ -106,17 +106,17 @@ data:
     \        result.erase(std::remove_if(\n                         result.begin(),\
     \ result.end(),\n                         [&](const std::vector<int> &v) { return\
     \ v.empty(); }),\n                     result.end());\n        return result;\n\
-    \    }\n};\n\n\n"
-  code: "#ifndef UNION_FIND\n#define UNION_FIND\n#include <assert.h>\n\n#include <algorithm>\n\
-    #include <vector>\n\nclass union_find {\n  private:\n    int N;\n    std::vector<int>\
-    \ par, group_siz;\n    int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n\
-    \    union_find() : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n,\
-    \ 1), group_num(n) {}\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\
-    \u5897\u3084\u3059\n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\
-    \u3044\n     */\n    void expand(int n) {\n        if (n <= N)\n            return;\n\
-    \        N = n;\n        par.resize(n, -1);\n        group_siz.resize(n, 1);\n\
-    \        group_num += n - N;\n    }\n\n    int leader(int x) {\n        if (par[x]\
-    \ == -1)\n            return x;\n        else\n            return par[x] = leader(par[x]);\n\
+    \    }\n};\n"
+  code: "#pragma once\n#include <assert.h>\n\n#include <algorithm>\n#include <vector>\n\
+    \nclass union_find {\n  private:\n    int N;\n    std::vector<int> par, group_siz;\n\
+    \    int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find()\
+    \ : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n)\
+    \ {}\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\
+    \n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n\
+    \    void expand(int n) {\n        if (n <= N)\n            return;\n        N\
+    \ = n;\n        par.resize(n, -1);\n        group_siz.resize(n, 1);\n        group_num\
+    \ += n - N;\n    }\n\n    int leader(int x) {\n        if (par[x] == -1)\n   \
+    \         return x;\n        else\n            return par[x] = leader(par[x]);\n\
     \    }\n\n    bool same(int x, int y) { return leader(x) == leader(y); }\n\n \
     \   bool merge(int x, int y) {\n        x = leader(x);\n        y = leader(y);\n\
     \        if (x == y)\n            return false;\n        // \u5C0F\u3055\u3044\
@@ -131,7 +131,7 @@ data:
     \ i < N; i++)\n            result[leader(i)].push_back(i);\n        result.erase(std::remove_if(\n\
     \                         result.begin(), result.end(),\n                    \
     \     [&](const std::vector<int> &v) { return v.empty(); }),\n               \
-    \      result.end());\n        return result;\n    }\n};\n\n#endif\n"
+    \      result.end());\n        return result;\n    }\n};\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/union_find.hpp
@@ -150,7 +150,7 @@ data:
   - graph/lowlink.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/grl-1-a.test.cpp

@@ -21,35 +21,34 @@ data:
   attributes:
     links:
     - https://atcoder.jp/contests/abc235/submissions/39688316
-  bundledCode: "#line 1 \"graph/doubling.hpp\"\n\n\n#line 1 \"graph/graph.hpp\"\n\n\
-    \n#include <algorithm>\n#include <tuple>\n#include <vector>\n\n#line 1 \"data_structure/union_find.hpp\"\
-    \n\n\n#include <assert.h>\n\n#line 7 \"data_structure/union_find.hpp\"\n\nclass\
-    \ union_find {\n  private:\n    int N;\n    std::vector<int> par, group_siz;\n\
-    \    int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find()\
-    \ : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n)\
-    \ {}\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\
-    \n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n\
-    \    void expand(int n) {\n        if (n <= N)\n            return;\n        N\
-    \ = n;\n        par.resize(n, -1);\n        group_siz.resize(n, 1);\n        group_num\
-    \ += n - N;\n    }\n\n    int leader(int x) {\n        if (par[x] == -1)\n   \
-    \         return x;\n        else\n            return par[x] = leader(par[x]);\n\
-    \    }\n\n    bool same(int x, int y) { return leader(x) == leader(y); }\n\n \
-    \   bool merge(int x, int y) {\n        x = leader(x);\n        y = leader(y);\n\
-    \        if (x == y)\n            return false;\n        // \u5C0F\u3055\u3044\
-    \u307B\u3046\u306B\u7D71\u5408\n        if (group_siz[x] < group_siz[y])\n   \
-    \         std::swap(x, y);\n        par[y] = x;\n        group_siz[x] += group_siz[y];\n\
-    \        group_num--;\n        return true;\n    }\n\n    // x \u306E\u5C5E\u3059\
-    \u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n   \
-    \ int size(int x) { return group_siz[leader(x)]; }\n\n    int count_groups() const\
-    \ { return group_num; }\n\n    std::vector<std::vector<int>> groups() {\n    \
-    \    std::vector<std::vector<int>> result(N);\n        for (int i = 0; i < N;\
-    \ i++)\n            result[i].reserve(group_siz[i]);\n        for (int i = 0;\
-    \ i < N; i++)\n            result[leader(i)].push_back(i);\n        result.erase(std::remove_if(\n\
-    \                         result.begin(), result.end(),\n                    \
-    \     [&](const std::vector<int> &v) { return v.empty(); }),\n               \
-    \      result.end());\n        return result;\n    }\n};\n\n\n#line 1 \"math/matrix.hpp\"\
-    \n\n\n#line 4 \"math/matrix.hpp\"\n\n#include <iostream>\n#include <valarray>\n\
-    #line 8 \"math/matrix.hpp\"\n\ntemplate <class T> class matrix {\n  private:\n\
+  bundledCode: "#line 2 \"graph/graph.hpp\"\n#include <algorithm>\n#include <tuple>\n\
+    #include <vector>\n\n#line 2 \"data_structure/union_find.hpp\"\n#include <assert.h>\n\
+    \n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
+    \    int N;\n    std::vector<int> par, group_siz;\n    int group_num; // \u96C6\
+    \u5408\u306E\u6570\n\n  public:\n    union_find() : N(0) {}\n    union_find(int\
+    \ n) : N(n), par(n, -1), group_siz(n, 1), group_num(n) {}\n\n    /**\n     * @brief\
+    \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
+    \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
+    \        if (n <= N)\n            return;\n        N = n;\n        par.resize(n,\
+    \ -1);\n        group_siz.resize(n, 1);\n        group_num += n - N;\n    }\n\n\
+    \    int leader(int x) {\n        if (par[x] == -1)\n            return x;\n \
+    \       else\n            return par[x] = leader(par[x]);\n    }\n\n    bool same(int\
+    \ x, int y) { return leader(x) == leader(y); }\n\n    bool merge(int x, int y)\
+    \ {\n        x = leader(x);\n        y = leader(y);\n        if (x == y)\n   \
+    \         return false;\n        // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\
+    \u5408\n        if (group_siz[x] < group_siz[y])\n            std::swap(x, y);\n\
+    \        par[y] = x;\n        group_siz[x] += group_siz[y];\n        group_num--;\n\
+    \        return true;\n    }\n\n    // x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\
+    \u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n    int size(int x) { return\
+    \ group_siz[leader(x)]; }\n\n    int count_groups() const { return group_num;\
+    \ }\n\n    std::vector<std::vector<int>> groups() {\n        std::vector<std::vector<int>>\
+    \ result(N);\n        for (int i = 0; i < N; i++)\n            result[i].reserve(group_siz[i]);\n\
+    \        for (int i = 0; i < N; i++)\n            result[leader(i)].push_back(i);\n\
+    \        result.erase(std::remove_if(\n                         result.begin(),\
+    \ result.end(),\n                         [&](const std::vector<int> &v) { return\
+    \ v.empty(); }),\n                     result.end());\n        return result;\n\
+    \    }\n};\n#line 3 \"math/matrix.hpp\"\n\n#include <iostream>\n#include <valarray>\n\
+    #line 7 \"math/matrix.hpp\"\n\ntemplate <class T> class matrix {\n  private:\n\
     \    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n    matrix()\
     \ = default;\n    matrix(int _H, int _W, T val = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val,\
     \ _W), _H) {}\n    matrix(const std::vector<std::vector<T>> &vv)\n        : H(vv.size()),\
@@ -107,23 +106,23 @@ data:
     \                is >> x;\n        return is;\n    }\n    /**\n     * @brief \u30B5\
     \u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T>\
     \ E(int N) {\n        matrix<T> ret(N, N);\n        for (int i = 0; i < N; i++)\n\
-    \            ret[i][i] = 1;\n        return ret;\n    }\n};\n\n\n#line 1 \"graph/edge.hpp\"\
-    \n\n\n#line 4 \"graph/edge.hpp\"\n\nnamespace internal {\ntemplate <class DERIVED,\
-    \ class WEIGHT> struct _base_edge {\n    int from;\n    int to;\n    WEIGHT cost;\n\
-    \    int id;\n    _base_edge(int _from, int _to, WEIGHT _cost, int _id)\n    \
-    \    : from(_from), to(_to), cost(_cost), id(_id) {}\n\n    friend bool operator>(const\
-    \ _base_edge &e1, const _base_edge &e) {\n        return e1.compare(e) > 0;\n\
-    \    }\n    friend bool operator>=(const _base_edge &e1, const _base_edge &e)\
-    \ {\n        return e1.compare(e) >= 0;\n    }\n    friend bool operator<(const\
-    \ _base_edge &e1, const _base_edge &e) {\n        return e1.compare(e) < 0;\n\
-    \    }\n    friend bool operator<=(const _base_edge &e1, const _base_edge &e)\
-    \ {\n        return e1.compare(e) <= 0;\n    }\n    friend std::ostream &operator<<(std::ostream\
-    \ &os,\n                                    const _base_edge<DERIVED, WEIGHT>\
-    \ &e) {\n        e.print(os);\n        return os;\n    }\n    _base_edge &operator=(const\
-    \ _base_edge &e) = default;\n\n    virtual ~_base_edge() = default;\n\n    operator\
-    \ int() const { return to; }\n\n  protected:\n    virtual void print(std::ostream\
-    \ &os) const = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n\
-    } // namespace internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    \            ret[i][i] = 1;\n        return ret;\n    }\n};\n#line 3 \"graph/edge.hpp\"\
+    \n\nnamespace internal {\ntemplate <class DERIVED, class WEIGHT> struct _base_edge\
+    \ {\n    int from;\n    int to;\n    WEIGHT cost;\n    int id;\n    _base_edge(int\
+    \ _from, int _to, WEIGHT _cost, int _id)\n        : from(_from), to(_to), cost(_cost),\
+    \ id(_id) {}\n\n    friend bool operator>(const _base_edge &e1, const _base_edge\
+    \ &e) {\n        return e1.compare(e) > 0;\n    }\n    friend bool operator>=(const\
+    \ _base_edge &e1, const _base_edge &e) {\n        return e1.compare(e) >= 0;\n\
+    \    }\n    friend bool operator<(const _base_edge &e1, const _base_edge &e) {\n\
+    \        return e1.compare(e) < 0;\n    }\n    friend bool operator<=(const _base_edge\
+    \ &e1, const _base_edge &e) {\n        return e1.compare(e) <= 0;\n    }\n   \
+    \ friend std::ostream &operator<<(std::ostream &os,\n                        \
+    \            const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n \
+    \       return os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\
+    \n    virtual ~_base_edge() = default;\n\n    operator int() const { return to;\
+    \ }\n\n  protected:\n    virtual void print(std::ostream &os) const = 0;\n   \
+    \ virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\
+    \ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT> {\n    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0,\
     \ 0) {}\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\n\
     \  protected:\n    void print(std::ostream &os) const override {\n        os <<\
@@ -139,7 +138,7 @@ data:
     \ const override {\n        os << this->from << \" \" << this->to;\n    }\n  \
     \  int compare(const internal::_base_edge<edge<int>, int> &e) const override {\n\
     \        if (this->from == e.from) {\n            return this->to - e.to;\n  \
-    \      }\n        return this->from - e.from;\n    }\n};\n\n\n#line 10 \"graph/graph.hpp\"\
+    \      }\n        return this->from - e.from;\n    }\n};\n#line 9 \"graph/graph.hpp\"\
     \n\n/**\n * @brief \u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\
     \u30B9\u3002\n * @tparam WEIGHT int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\
     \u305D\u3046\u3067\u306A\u3044\u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\
@@ -217,54 +216,7 @@ data:
     \ = e.cost;\n            }\n        }\n        return ret;\n    }\n\n    void\
     \ print() const {\n        std::cout << this->N << \" \" << this->E.size() <<\
     \ std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
-    \ << e << std::endl;\n    }\n};\n\n\n#line 4 \"graph/doubling.hpp\"\n\n/*\n *\
-    \ verify : https://atcoder.jp/contests/abc235/submissions/39688316\n */\ntemplate\
-    \ <typename WEIGHT> class doubling {\n  private:\n    int N;\n    WEIGHT MIN =\
-    \ std::numeric_limits<WEIGHT>::min();\n    std::vector<int> depth;\n    std::vector<short>\
-    \ log_table;\n    std::vector<std::vector<int>> par;\n    std::vector<std::vector<WEIGHT>>\
-    \ max_cost;\n\n    void dfs(const graph<WEIGHT, false> &G, int cu, int pa) {\n\
-    \        par[cu][0] = pa;\n        for (auto &e : G[cu]) {\n            if (e.to\
-    \ == pa)\n                continue;\n            max_cost[e.to] = {e.cost};\n\
-    \            depth[e.to] = depth[cu] + 1;\n            dfs(G, e.to, cu);\n   \
-    \     }\n    }\n\n  public:\n    doubling(const graph<WEIGHT, false> &G)\n   \
-    \     : N(G.count_nodes()), depth(G.count_nodes(), 0),\n          par(G.count_nodes(),\
-    \ std::vector<int>(1)), max_cost(G.count_nodes()) {\n        max_cost[0] = {MIN};\n\
-    \        dfs(G, 0, -1);\n\n        log_table.resize(N + 1);\n        log_table[0]\
-    \ = 1;\n        for (int i = 1; i <= N; i++) {\n            log_table[i] = log_table[i\
-    \ >> 1] + 1;\n        }\n        for (int i = 0; i < N; i++) {\n            par[i].reserve(log_table[depth[i]]);\n\
-    \            max_cost[i].reserve(log_table[depth[i]]);\n        }\n\n        //\
-    \ \u3059\u3079\u3066\u306E\u30CE\u30FC\u30C9\u306B\u3064\u3044\u3066\u89AA\u3092\
-    \ -1 \u307E\u3067\u8ABF\u3079\u305F\u3089\u7D42\u4E86\n        for (int i = 1,\
-    \ end_lines = 0; end_lines < N; i++) {\n            for (int j = 0; j < N; j++)\
-    \ {\n                if (par[j].back() == -1) {\n                    end_lines++;\n\
-    \                    continue;\n                }\n\n                if (par[par[j][i\
-    \ - 1]].size() < i ||\n                    par[par[j][i - 1]][i - 1] == -1) {\n\
-    \                    par[j].push_back(-1);\n                    max_cost[j].push_back(MIN);\n\
-    \                } else {\n                    par[j].push_back(par[par[j][i -\
-    \ 1]][i - 1]);\n                    max_cost[j].push_back(std::max(\n        \
-    \                max_cost[j][i - 1], max_cost[par[j][i - 1]][i - 1]));\n     \
-    \           }\n            }\n        }\n    }\n\n    WEIGHT get_max_cost(int\
-    \ a, int b) {\n        WEIGHT ret = MIN;\n        if (depth[a] < depth[b])\n \
-    \           std::swap(a, b);\n        for (int i = 0, d = depth[a] - depth[b];\
-    \ d > 0; d >>= 1, i++) {\n            if (d & 1) {\n                ret = std::max(ret,\
-    \ max_cost[a][i]);\n                a = par[a][i];\n            }\n        }\n\
-    \        if (a == b)\n            return ret;\n\n        for (int i = std::min(par[a].size(),\
-    \ par[b].size()) - 2; i >= 0;\n             i = std::min(i - 1,\n            \
-    \              (int)std::min(par[a].size(), par[b].size()) - 2)) {\n         \
-    \   if (par[a][i] != par[b][i]) {\n                ret = std::max(ret, std::max(max_cost[a][i],\
-    \ max_cost[b][i]));\n                a = par[a][i];\n                b = par[b][i];\n\
-    \            }\n        }\n        ret = std::max(ret, std::max(max_cost[a][0],\
-    \ max_cost[b][0]));\n        return ret;\n    }\n\n    int get_ancestor(int a,\
-    \ int b) {\n        if (depth[a] < depth[b])\n            std::swap(a, b);\n \
-    \       for (int i = 0, d = depth[a] - depth[b]; d > 0; d >>= 1, i++) {\n    \
-    \        if (d & 1)\n                a = par[a][i];\n        }\n        if (a\
-    \ == b)\n            return a;\n\n        for (int i = std::min(par[a].size(),\
-    \ par[b].size()) - 2; i >= 0;\n             i = std::min(i - 1,\n            \
-    \              (int)std::min(par[a].size(), par[b].size()) - 2)) {\n         \
-    \   if (par[a][i] != par[b][i]) {\n                a = par[a][i];\n          \
-    \      b = par[b][i];\n            }\n        }\n        return par[a][0];\n \
-    \   }\n};\n\n\n"
-  code: "#ifndef DOUBLING\n#define DOUBLING\n#include \"graph.hpp\"\n\n/*\n * verify\
+    \ << e << std::endl;\n    }\n};\n#line 3 \"graph/doubling.hpp\"\n\n/*\n * verify\
     \ : https://atcoder.jp/contests/abc235/submissions/39688316\n */\ntemplate <typename\
     \ WEIGHT> class doubling {\n  private:\n    int N;\n    WEIGHT MIN = std::numeric_limits<WEIGHT>::min();\n\
     \    std::vector<int> depth;\n    std::vector<short> log_table;\n    std::vector<std::vector<int>>\
@@ -310,7 +262,54 @@ data:
     \              (int)std::min(par[a].size(), par[b].size()) - 2)) {\n         \
     \   if (par[a][i] != par[b][i]) {\n                a = par[a][i];\n          \
     \      b = par[b][i];\n            }\n        }\n        return par[a][0];\n \
-    \   }\n};\n\n#endif\n"
+    \   }\n};\n"
+  code: "#pragma once\n#include \"graph.hpp\"\n\n/*\n * verify : https://atcoder.jp/contests/abc235/submissions/39688316\n\
+    \ */\ntemplate <typename WEIGHT> class doubling {\n  private:\n    int N;\n  \
+    \  WEIGHT MIN = std::numeric_limits<WEIGHT>::min();\n    std::vector<int> depth;\n\
+    \    std::vector<short> log_table;\n    std::vector<std::vector<int>> par;\n \
+    \   std::vector<std::vector<WEIGHT>> max_cost;\n\n    void dfs(const graph<WEIGHT,\
+    \ false> &G, int cu, int pa) {\n        par[cu][0] = pa;\n        for (auto &e\
+    \ : G[cu]) {\n            if (e.to == pa)\n                continue;\n       \
+    \     max_cost[e.to] = {e.cost};\n            depth[e.to] = depth[cu] + 1;\n \
+    \           dfs(G, e.to, cu);\n        }\n    }\n\n  public:\n    doubling(const\
+    \ graph<WEIGHT, false> &G)\n        : N(G.count_nodes()), depth(G.count_nodes(),\
+    \ 0),\n          par(G.count_nodes(), std::vector<int>(1)), max_cost(G.count_nodes())\
+    \ {\n        max_cost[0] = {MIN};\n        dfs(G, 0, -1);\n\n        log_table.resize(N\
+    \ + 1);\n        log_table[0] = 1;\n        for (int i = 1; i <= N; i++) {\n \
+    \           log_table[i] = log_table[i >> 1] + 1;\n        }\n        for (int\
+    \ i = 0; i < N; i++) {\n            par[i].reserve(log_table[depth[i]]);\n   \
+    \         max_cost[i].reserve(log_table[depth[i]]);\n        }\n\n        // \u3059\
+    \u3079\u3066\u306E\u30CE\u30FC\u30C9\u306B\u3064\u3044\u3066\u89AA\u3092 -1 \u307E\
+    \u3067\u8ABF\u3079\u305F\u3089\u7D42\u4E86\n        for (int i = 1, end_lines\
+    \ = 0; end_lines < N; i++) {\n            for (int j = 0; j < N; j++) {\n    \
+    \            if (par[j].back() == -1) {\n                    end_lines++;\n  \
+    \                  continue;\n                }\n\n                if (par[par[j][i\
+    \ - 1]].size() < i ||\n                    par[par[j][i - 1]][i - 1] == -1) {\n\
+    \                    par[j].push_back(-1);\n                    max_cost[j].push_back(MIN);\n\
+    \                } else {\n                    par[j].push_back(par[par[j][i -\
+    \ 1]][i - 1]);\n                    max_cost[j].push_back(std::max(\n        \
+    \                max_cost[j][i - 1], max_cost[par[j][i - 1]][i - 1]));\n     \
+    \           }\n            }\n        }\n    }\n\n    WEIGHT get_max_cost(int\
+    \ a, int b) {\n        WEIGHT ret = MIN;\n        if (depth[a] < depth[b])\n \
+    \           std::swap(a, b);\n        for (int i = 0, d = depth[a] - depth[b];\
+    \ d > 0; d >>= 1, i++) {\n            if (d & 1) {\n                ret = std::max(ret,\
+    \ max_cost[a][i]);\n                a = par[a][i];\n            }\n        }\n\
+    \        if (a == b)\n            return ret;\n\n        for (int i = std::min(par[a].size(),\
+    \ par[b].size()) - 2; i >= 0;\n             i = std::min(i - 1,\n            \
+    \              (int)std::min(par[a].size(), par[b].size()) - 2)) {\n         \
+    \   if (par[a][i] != par[b][i]) {\n                ret = std::max(ret, std::max(max_cost[a][i],\
+    \ max_cost[b][i]));\n                a = par[a][i];\n                b = par[b][i];\n\
+    \            }\n        }\n        ret = std::max(ret, std::max(max_cost[a][0],\
+    \ max_cost[b][0]));\n        return ret;\n    }\n\n    int get_ancestor(int a,\
+    \ int b) {\n        if (depth[a] < depth[b])\n            std::swap(a, b);\n \
+    \       for (int i = 0, d = depth[a] - depth[b]; d > 0; d >>= 1, i++) {\n    \
+    \        if (d & 1)\n                a = par[a][i];\n        }\n        if (a\
+    \ == b)\n            return a;\n\n        for (int i = std::min(par[a].size(),\
+    \ par[b].size()) - 2; i >= 0;\n             i = std::min(i - 1,\n            \
+    \              (int)std::min(par[a].size(), par[b].size()) - 2)) {\n         \
+    \   if (par[a][i] != par[b][i]) {\n                a = par[a][i];\n          \
+    \      b = par[b][i];\n            }\n        }\n        return par[a][0];\n \
+    \   }\n};\n"
   dependsOn:
   - graph/graph.hpp
   - data_structure/union_find.hpp
@@ -319,7 +318,7 @@ data:
   isVerificationFile: false
   path: graph/doubling.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/doubling.hpp

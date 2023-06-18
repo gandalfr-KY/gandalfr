@@ -19,9 +19,8 @@ data:
     links:
     - https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_A
   bundledCode: "#line 1 \"test/ntl-1-a.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_A\"\
-    \n#include <bits/stdc++.h>\n#line 1 \"math/factorize.hpp\"\n\n\n#line 5 \"math/factorize.hpp\"\
-    \n\n#line 1 \"math/prime_number_utility.hpp\"\n\n\n#line 4 \"math/prime_number_utility.hpp\"\
-    \n\n#line 6 \"math/prime_number_utility.hpp\"\n\n/**\n * @brief \u7D20\u6570\u5224\
+    \n#include <bits/stdc++.h>\n#line 4 \"math/factorize.hpp\"\n\n#line 3 \"math/prime_number_utility.hpp\"\
+    \n\n#line 5 \"math/prime_number_utility.hpp\"\n\n/**\n * @brief \u7D20\u6570\u5224\
     \u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\u3059\u308B\u30AF\u30E9\
     \u30B9\n * @brief \u7D20\u6570\u7BE9\u3092\u56FA\u5B9A\u30B5\u30A4\u30BA\u3067\
     \u69CB\u7BC9\u3001\u305D\u308C\u3092\u3082\u3068\u306B\u7D20\u6570\u5217\u6319\
@@ -52,18 +51,18 @@ data:
     \u3048\u308B\u307E\u3067\u62E1\u5F35\n    static void set_minimum_limit(int lim)\
     \ {\n        while (primes.back() < lim)\n            expand_list(primes.size()\
     \ + 1);\n    }\n\n    static const std::vector<int> &list() { return primes; }\n\
-    \    static const std::vector<bool> &table() { return sieve; }\n};\n\n\n#line\
-    \ 7 \"math/factorize.hpp\"\n\n/**\n * @brief \u7D20\u56E0\u6570\u5206\u89E3\u3059\
-    \u308B\n * @return prime_factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2],\
-    \ ...}\n * @attention prime_factorize(1) => {}\n * @attention prime_factorize(0)\
-    \ => {{0, 1}}\n */\nstd::vector<std::pair<long long, int>> factorize(long long\
-    \ N) {\n    std::vector<std::pair<long long, int>> ret;\n    prime_number_utility::set_minimum_limit(ceil(sqrt(N)));\n\
+    \    static const std::vector<bool> &table() { return sieve; }\n};\n#line 6 \"\
+    math/factorize.hpp\"\n\n/**\n * @brief \u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B\
+    \n * @return prime_factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...}\n\
+    \ * @attention prime_factorize(1) => {}\n * @attention prime_factorize(0) => {{0,\
+    \ 1}}\n */\nstd::vector<std::pair<long long, int>> factorize(long long N) {\n\
+    \    std::vector<std::pair<long long, int>> ret;\n    prime_number_utility::set_minimum_limit(ceil(sqrt(N)));\n\
     \    for (long long p : prime_number_utility::list()) {\n        if (N == 1 ||\
     \ (__int128_t)p * p > N)\n            break;\n        while (N % p == 0) {\n \
     \           if (ret.empty() || ret.back().first != p)\n                ret.push_back({p,\
     \ 1});\n            else\n                ret.back().second++;\n            N\
     \ /= p;\n        }\n    }\n    if (N != 1)\n        ret.push_back({N, 1});\n \
-    \   return ret;\n}\n\n\n#line 4 \"test/ntl-1-a.test.cpp\"\nusing namespace std;\n\
+    \   return ret;\n}\n#line 4 \"test/ntl-1-a.test.cpp\"\nusing namespace std;\n\
     using ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
     \nint main(void){\n \n    //input\n\n    int N;\n    cin >> N;\n\n    //calculate\n\
     \n    cout << N << \":\";\n    for(auto p : factorize(N)){\n        rep(i,0,p.second)\
@@ -80,7 +79,7 @@ data:
   isVerificationFile: true
   path: test/ntl-1-a.test.cpp
   requiredBy: []
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/ntl-1-a.test.cpp

@@ -3,15 +3,15 @@ data:
   libraryCategories:
   - name: data_structure
     pages:
-    - icon: ':warning:'
-      path: data_structure/Kth_hold_multiset.hpp
-      title: data_structure/Kth_hold_multiset.hpp
     - icon: ':heavy_check_mark:'
       path: data_structure/binary_indexed_tree.hpp
       title: "\u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97"
     - icon: ':warning:'
       path: data_structure/dual_segment_tree.hpp
       title: data_structure/dual_segment_tree.hpp
+    - icon: ':warning:'
+      path: data_structure/my_multiset.hpp
+      title: data_structure/my_multiset.hpp
     - icon: ':warning:'
       path: data_structure/prefix_sums.hpp
       title: data_structure/prefix_sums.hpp

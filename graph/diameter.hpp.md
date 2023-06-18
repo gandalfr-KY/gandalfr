@@ -27,11 +27,10 @@ data:
   attributes:
     document_title: "\u6728\u306E\u76F4\u5F84"
     links: []
-  bundledCode: "#line 1 \"graph/diameter.hpp\"\n\n\n#include <assert.h>\n\n#include\
-    \ <iostream>\n\n#line 1 \"graph/shortest_path.hpp\"\n\n\n#include <queue>\n\n\
-    #line 1 \"graph/graph.hpp\"\n\n\n#include <algorithm>\n#include <tuple>\n#include\
-    \ <vector>\n\n#line 1 \"data_structure/union_find.hpp\"\n\n\n#line 4 \"data_structure/union_find.hpp\"\
-    \n\n#line 7 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
+  bundledCode: "#line 2 \"graph/diameter.hpp\"\n#include <assert.h>\n\n#include <iostream>\n\
+    \n#line 2 \"graph/shortest_path.hpp\"\n#include <queue>\n\n#line 2 \"graph/graph.hpp\"\
+    \n#include <algorithm>\n#include <tuple>\n#include <vector>\n\n#line 3 \"data_structure/union_find.hpp\"\
+    \n\n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
     \    int N;\n    std::vector<int> par, group_siz;\n    int group_num; // \u96C6\
     \u5408\u306E\u6570\n\n  public:\n    union_find() : N(0) {}\n    union_find(int\
     \ n) : N(n), par(n, -1), group_siz(n, 1), group_num(n) {}\n\n    /**\n     * @brief\
@@ -55,14 +54,14 @@ data:
     \        result.erase(std::remove_if(\n                         result.begin(),\
     \ result.end(),\n                         [&](const std::vector<int> &v) { return\
     \ v.empty(); }),\n                     result.end());\n        return result;\n\
-    \    }\n};\n\n\n#line 1 \"math/matrix.hpp\"\n\n\n#line 4 \"math/matrix.hpp\"\n\
-    \n#line 6 \"math/matrix.hpp\"\n#include <valarray>\n#line 8 \"math/matrix.hpp\"\
-    \n\ntemplate <class T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
-    \ table;\n\n  public:\n    matrix() = default;\n    matrix(int _H, int _W, T val\
-    \ = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const\
-    \ std::vector<std::vector<T>> &vv)\n        : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W),\
-    \ H) {\n        for (int i = 0; i < H; i++)\n            for (int j = 0; j < W;\
-    \ j++)\n                table[i][j] = vv[i][j];\n    }\n    matrix(const std::valarray<std::valarray<T>>\
+    \    }\n};\n#line 3 \"math/matrix.hpp\"\n\n#line 5 \"math/matrix.hpp\"\n#include\
+    \ <valarray>\n#line 7 \"math/matrix.hpp\"\n\ntemplate <class T> class matrix {\n\
+    \  private:\n    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n\
+    \    matrix() = default;\n    matrix(int _H, int _W, T val = 0)\n        : H(_H),\
+    \ W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const std::vector<std::vector<T>>\
+    \ &vv)\n        : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H)\
+    \ {\n        for (int i = 0; i < H; i++)\n            for (int j = 0; j < W; j++)\n\
+    \                table[i][j] = vv[i][j];\n    }\n    matrix(const std::valarray<std::valarray<T>>\
     \ &vv)\n        : H(vv.size()), W(vv[0].size()), table(vv) {}\n\n    /**\n   \
     \  * @brief \u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002\n   \
     \  * @param val \u62E1\u5F35\u90E8\u5206\u306E\u5024\n     */\n    void resize(int\
@@ -115,23 +114,22 @@ data:
     \   * @brief \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n\
     \    static matrix<T> E(int N) {\n        matrix<T> ret(N, N);\n        for (int\
     \ i = 0; i < N; i++)\n            ret[i][i] = 1;\n        return ret;\n    }\n\
-    };\n\n\n#line 1 \"graph/edge.hpp\"\n\n\n#line 4 \"graph/edge.hpp\"\n\nnamespace\
-    \ internal {\ntemplate <class DERIVED, class WEIGHT> struct _base_edge {\n   \
-    \ int from;\n    int to;\n    WEIGHT cost;\n    int id;\n    _base_edge(int _from,\
-    \ int _to, WEIGHT _cost, int _id)\n        : from(_from), to(_to), cost(_cost),\
-    \ id(_id) {}\n\n    friend bool operator>(const _base_edge &e1, const _base_edge\
-    \ &e) {\n        return e1.compare(e) > 0;\n    }\n    friend bool operator>=(const\
-    \ _base_edge &e1, const _base_edge &e) {\n        return e1.compare(e) >= 0;\n\
-    \    }\n    friend bool operator<(const _base_edge &e1, const _base_edge &e) {\n\
-    \        return e1.compare(e) < 0;\n    }\n    friend bool operator<=(const _base_edge\
-    \ &e1, const _base_edge &e) {\n        return e1.compare(e) <= 0;\n    }\n   \
-    \ friend std::ostream &operator<<(std::ostream &os,\n                        \
-    \            const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n \
-    \       return os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\
-    \n    virtual ~_base_edge() = default;\n\n    operator int() const { return to;\
-    \ }\n\n  protected:\n    virtual void print(std::ostream &os) const = 0;\n   \
-    \ virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\
-    \ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    };\n#line 3 \"graph/edge.hpp\"\n\nnamespace internal {\ntemplate <class DERIVED,\
+    \ class WEIGHT> struct _base_edge {\n    int from;\n    int to;\n    WEIGHT cost;\n\
+    \    int id;\n    _base_edge(int _from, int _to, WEIGHT _cost, int _id)\n    \
+    \    : from(_from), to(_to), cost(_cost), id(_id) {}\n\n    friend bool operator>(const\
+    \ _base_edge &e1, const _base_edge &e) {\n        return e1.compare(e) > 0;\n\
+    \    }\n    friend bool operator>=(const _base_edge &e1, const _base_edge &e)\
+    \ {\n        return e1.compare(e) >= 0;\n    }\n    friend bool operator<(const\
+    \ _base_edge &e1, const _base_edge &e) {\n        return e1.compare(e) < 0;\n\
+    \    }\n    friend bool operator<=(const _base_edge &e1, const _base_edge &e)\
+    \ {\n        return e1.compare(e) <= 0;\n    }\n    friend std::ostream &operator<<(std::ostream\
+    \ &os,\n                                    const _base_edge<DERIVED, WEIGHT>\
+    \ &e) {\n        e.print(os);\n        return os;\n    }\n    _base_edge &operator=(const\
+    \ _base_edge &e) = default;\n\n    virtual ~_base_edge() = default;\n\n    operator\
+    \ int() const { return to; }\n\n  protected:\n    virtual void print(std::ostream\
+    \ &os) const = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n\
+    } // namespace internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT> {\n    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0,\
     \ 0) {}\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\n\
     \  protected:\n    void print(std::ostream &os) const override {\n        os <<\
@@ -147,7 +145,7 @@ data:
     \ const override {\n        os << this->from << \" \" << this->to;\n    }\n  \
     \  int compare(const internal::_base_edge<edge<int>, int> &e) const override {\n\
     \        if (this->from == e.from) {\n            return this->to - e.to;\n  \
-    \      }\n        return this->from - e.from;\n    }\n};\n\n\n#line 10 \"graph/graph.hpp\"\
+    \      }\n        return this->from - e.from;\n    }\n};\n#line 9 \"graph/graph.hpp\"\
     \n\n/**\n * @brief \u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\
     \u30B9\u3002\n * @tparam WEIGHT int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\
     \u305D\u3046\u3067\u306A\u3044\u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\
@@ -225,7 +223,7 @@ data:
     \ = e.cost;\n            }\n        }\n        return ret;\n    }\n\n    void\
     \ print() const {\n        std::cout << this->N << \" \" << this->E.size() <<\
     \ std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
-    \ << e << std::endl;\n    }\n};\n\n\n#line 6 \"graph/shortest_path.hpp\"\n\nnamespace\
+    \ << e << std::endl;\n    }\n};\n#line 5 \"graph/shortest_path.hpp\"\n\nnamespace\
     \ internal {\ntemplate <bool is_directed>\nvoid bfs(const graph<int, is_directed>\
     \ &G, std::vector<int> &dist,\n         std::queue<int> &q) {\n    while (!q.empty())\
     \ {\n        int cu = q.front();\n        q.pop();\n        for (auto &e : G[cu])\
@@ -272,19 +270,18 @@ data:
     \ std::vector<WEIGHT> dist(G.count_nodes(), ma);\n    for (int start_point : start_points)\
     \ {\n        q.push({0, start_point});\n        dist[start_point] = 0;\n    }\n\
     \n    internal::dijkstra(G, dist, q);\n    for (WEIGHT &x : dist)\n        if\
-    \ (x == ma)\n            x = -1;\n    return dist;\n}\n\n\n#line 8 \"graph/diameter.hpp\"\
+    \ (x == ma)\n            x = -1;\n    return dist;\n}\n#line 7 \"graph/diameter.hpp\"\
     \n\n/**\n * @brief \u6728\u306E\u76F4\u5F84\n */\ntemplate <typename WEIGHT> WEIGHT\
     \ diameter(const graph<WEIGHT, false> &G) {\n    assert(G.is_tree());\n    std::vector<WEIGHT>\
     \ dist = shortest_path(G, 0);\n    int farthest_node =\n        std::max_element(dist.begin(),\
     \ dist.end()) - dist.begin();\n    dist = shortest_path(G, farthest_node);\n \
-    \   return *std::max_element(dist.begin(), dist.end());\n}\n\n\n"
-  code: "#ifndef DIAMETER\n#define DIAMETER\n#include <assert.h>\n\n#include <iostream>\n\
-    \n#include \"shortest_path.hpp\"\n\n/**\n * @brief \u6728\u306E\u76F4\u5F84\n\
-    \ */\ntemplate <typename WEIGHT> WEIGHT diameter(const graph<WEIGHT, false> &G)\
-    \ {\n    assert(G.is_tree());\n    std::vector<WEIGHT> dist = shortest_path(G,\
-    \ 0);\n    int farthest_node =\n        std::max_element(dist.begin(), dist.end())\
-    \ - dist.begin();\n    dist = shortest_path(G, farthest_node);\n    return *std::max_element(dist.begin(),\
-    \ dist.end());\n}\n\n#endif\n"
+    \   return *std::max_element(dist.begin(), dist.end());\n}\n"
+  code: "#pragma once\n#include <assert.h>\n\n#include <iostream>\n\n#include \"shortest_path.hpp\"\
+    \n\n/**\n * @brief \u6728\u306E\u76F4\u5F84\n */\ntemplate <typename WEIGHT> WEIGHT\
+    \ diameter(const graph<WEIGHT, false> &G) {\n    assert(G.is_tree());\n    std::vector<WEIGHT>\
+    \ dist = shortest_path(G, 0);\n    int farthest_node =\n        std::max_element(dist.begin(),\
+    \ dist.end()) - dist.begin();\n    dist = shortest_path(G, farthest_node);\n \
+    \   return *std::max_element(dist.begin(), dist.end());\n}\n"
   dependsOn:
   - graph/shortest_path.hpp
   - graph/graph.hpp
@@ -294,7 +291,7 @@ data:
   isVerificationFile: false
   path: graph/diameter.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:40:27+09:00'
+  timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-5-a.test.cpp

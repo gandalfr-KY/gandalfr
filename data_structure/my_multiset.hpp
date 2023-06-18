@@ -1,12 +1,13 @@
 #pragma once
 
+#include <iostream>
 #include <set>
 
 template <typename _Key, typename _Compare = std ::less<_Key>,
           typename _Alloc = std ::allocator<_Key>>
 class my_multiset : public std::multiset<_Key, _Compare, _Alloc> {
   public:
-    using multiset<_Key, _Compare, _Alloc>::multiset;
+    using std::multiset<_Key, _Compare, _Alloc>::multiset;
     bool erase_one(const _Key &__x) {
         auto it = this->find(__x);
         if (it == this->end()) {
@@ -24,5 +25,13 @@ class my_multiset : public std::multiset<_Key, _Compare, _Alloc> {
             this->erase(__x);
             return ret;
         }
+    }
+    friend std::ostream &operator<<(std::ostream &os, const my_multiset &ms) {
+        auto it = ms.begin();
+        os << *it;
+        for (++it; it != ms.end(); ++it) {
+            os << ' ' << *it;
+        }
+        return os;
     }
 };

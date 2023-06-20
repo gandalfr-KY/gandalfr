@@ -4,7 +4,6 @@
 
 /**
  * @brief オイラーのトーシェント関数
- * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874
  */
 long long totient(long long n) {
     auto facs = factorize(n);

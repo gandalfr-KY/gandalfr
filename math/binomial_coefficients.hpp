@@ -1,9 +1,12 @@
 #pragma once
 #include <vector>
+#include <map>
+
+#include "../standard/mod_integer.hpp"
 
 template <class T> class binomial_coefficients {
   private:
-    static std::vector<T> fact;
+    static inline std::vector<T> fact;
 
     static void expand(int n) {
         while (n >= fact.size()) {
@@ -22,4 +25,6 @@ template <class T> class binomial_coefficients {
         return fact[n] / fact[k] / fact[n - k];
     }
 };
-template <class T> std::vector<T> binomial_coefficients<T>::fact = {1};
+
+using binom = binomial_coefficients<mint>;
+using _binom = binomial_coefficients<_mint>;

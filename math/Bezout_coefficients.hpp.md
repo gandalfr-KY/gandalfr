@@ -5,6 +5,9 @@ data:
   - icon: ':warning:'
     path: math/Garner.hpp
     title: math/Garner.hpp
+  - icon: ':warning:'
+    path: math/binomial_coefficients.hpp
+    title: math/binomial_coefficients.hpp
   - icon: ':x:'
     path: math/mod_inverse.hpp
     title: math/mod_inverse.hpp
@@ -45,6 +48,7 @@ data:
   isVerificationFile: false
   path: math/Bezout_coefficients.hpp
   requiredBy:
+  - math/binomial_coefficients.hpp
   - math/mod_inverse.hpp
   - math/Garner.hpp
   - standard/mod_integer.hpp

@@ -9,6 +9,9 @@ data:
     path: math/Garner.hpp
     title: math/Garner.hpp
   - icon: ':warning:'
+    path: math/binomial_coefficients.hpp
+    title: math/binomial_coefficients.hpp
+  - icon: ':warning:'
     path: standard/fraction.hpp
     title: standard/fraction.hpp
   - icon: ':x:'
@@ -45,6 +48,7 @@ data:
   isVerificationFile: false
   path: math/mod_inverse.hpp
   requiredBy:
+  - math/binomial_coefficients.hpp
   - math/Garner.hpp
   - standard/mod_integer.hpp
   - standard/fraction.hpp

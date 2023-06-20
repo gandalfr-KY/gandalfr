@@ -22,8 +22,7 @@ data:
   attributes:
     document_title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\
       \u95A2\u6570"
-    links:
-    - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874
+    links: []
   bundledCode: "#line 2 \"standard/power.hpp\"\n#include <assert.h>\n\ntemplate <class\
     \ T> T power(T x, long long n) {\n    T ret = T(1);\n    while (n > 0) {\n   \
     \     if (n & 1)\n            ret = ret * x;\n        x = x * x;\n        n >>=\
@@ -78,16 +77,15 @@ data:
     \    else\n                ret.back().second++;\n            N /= p;\n       \
     \ }\n    }\n    if (N != 1)\n        ret.push_back({N, 1});\n    return ret;\n\
     }\n#line 4 \"math/totient.hpp\"\n\n/**\n * @brief \u30AA\u30A4\u30E9\u30FC\u306E\
-    \u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874\n\
-    \ */\nlong long totient(long long n) {\n    auto facs = factorize(n);\n    long\
-    \ long ret = 1;\n    for (auto &p : facs)\n        ret *= power(p.first, p.second\
-    \ - 1) * (p.first - 1);\n    return ret;\n}\n"
+    \u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n */\nlong long totient(long\
+    \ long n) {\n    auto facs = factorize(n);\n    long long ret = 1;\n    for (auto\
+    \ &p : facs)\n        ret *= power(p.first, p.second - 1) * (p.first - 1);\n \
+    \   return ret;\n}\n"
   code: "#pragma once\n#include \"../standard/power.hpp\"\n#include \"factorize.hpp\"\
     \n\n/**\n * @brief \u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\
-    \u30C8\u95A2\u6570\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874\n\
-    \ */\nlong long totient(long long n) {\n    auto facs = factorize(n);\n    long\
-    \ long ret = 1;\n    for (auto &p : facs)\n        ret *= power(p.first, p.second\
-    \ - 1) * (p.first - 1);\n    return ret;\n}\n"
+    \u30C8\u95A2\u6570\n */\nlong long totient(long long n) {\n    auto facs = factorize(n);\n\
+    \    long long ret = 1;\n    for (auto &p : facs)\n        ret *= power(p.first,\
+    \ p.second - 1) * (p.first - 1);\n    return ret;\n}\n"
   dependsOn:
   - standard/power.hpp
   - math/factorize.hpp
@@ -95,7 +93,7 @@ data:
   isVerificationFile: false
   path: math/totient.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-06-20 14:17:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp

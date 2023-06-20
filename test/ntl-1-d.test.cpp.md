@@ -79,14 +79,13 @@ data:
     \ 1});\n            else\n                ret.back().second++;\n            N\
     \ /= p;\n        }\n    }\n    if (N != 1)\n        ret.push_back({N, 1});\n \
     \   return ret;\n}\n#line 4 \"math/totient.hpp\"\n\n/**\n * @brief \u30AA\u30A4\
-    \u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n * verify\
-    \ : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7267874\n */\nlong long\
-    \ totient(long long n) {\n    auto facs = factorize(n);\n    long long ret = 1;\n\
-    \    for (auto &p : facs)\n        ret *= power(p.first, p.second - 1) * (p.first\
-    \ - 1);\n    return ret;\n}\n#line 4 \"test/ntl-1-d.test.cpp\"\nusing namespace\
-    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
-    \ i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n    int N;\n\
-    \    cin >> N;\n    cout << totient(N) << endl;\n}\n"
+    \u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n */\nlong\
+    \ long totient(long long n) {\n    auto facs = factorize(n);\n    long long ret\
+    \ = 1;\n    for (auto &p : facs)\n        ret *= power(p.first, p.second - 1)\
+    \ * (p.first - 1);\n    return ret;\n}\n#line 4 \"test/ntl-1-d.test.cpp\"\nusing\
+    \ namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j);\
+    \ i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n\
+    \    int N;\n    cin >> N;\n    cout << totient(N) << endl;\n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_D\"\n#include\
     \ <bits/stdc++.h>\n#include \"../math/totient.hpp\"\nusing namespace std;\nusing\
     \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
@@ -100,7 +99,7 @@ data:
   isVerificationFile: true
   path: test/ntl-1-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-06-20 14:17:04+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/ntl-1-d.test.cpp

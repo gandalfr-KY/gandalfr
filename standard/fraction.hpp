@@ -65,7 +65,7 @@ class fraction {
                     (__int128_t)a.den * b.den};
         }
     }
-    friend const fraction operator*(const fraction &a, const fraction &b) {
+    friend fraction operator*(const fraction &a, const fraction &b) {
         assert(a.num != 0 || b.den != 0);
         assert(a.den != 0 || b.num != 0);
         long long gcd_tmp1 = std::gcd(a.num, b.den),
@@ -75,7 +75,7 @@ class fraction {
                        (a.den / gcd_tmp2) * (b.den / gcd_tmp1));
         return ret;
     }
-    friend const fraction operator/(const fraction &a, const fraction &b) {
+    friend fraction operator/(const fraction &a, const fraction &b) {
         assert(a.num != 0 || b.num != 0);
         assert(a.den != 0 || b.den != 0);
         long long gcd_tmp1 = std::gcd(a.num, b.num),

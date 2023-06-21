@@ -42,18 +42,18 @@ data:
     \u6700\u5927\u306E k\n\n  public:\n    sparse_table(const std::function<T(T, T)>\
     \ &f) : op(f) {}\n\n    // \u8981\u7D20\u306E\u914D\u5217 vec \u3067\u521D\u671F\
     \u5316\n    void init(const std::vector<T> &vec) {\n        table = {vec};\n \
-    \       log_table.clear();\n\n        for (int i = 0; (1 << i) < table[i].size();\
+    \       log_table.clear();\n\n        for (int i = 0; (1 << i) < (int)table[i].size();\
     \ i++) {\n            table.push_back({});\n            for (int j = 0; j + (1\
-    \ << i) < table[i].size(); j++) {\n                table[i + 1].push_back(op(table[i][j],\
+    \ << i) < (int)table[i].size(); j++) {\n                table[i + 1].push_back(op(table[i][j],\
     \ table[i][j + (1 << i)]));\n            }\n        }\n\n        log_table.resize(vec.size()\
-    \ + 1, 0);\n        for (int i = 2; i <= vec.size(); i++) {\n            log_table[i]\
-    \ = log_table[i >> 1] + 1;\n        }\n    }\n\n    /**\n     * @brief [l, r)\
-    \ \u306E\u6F14\u7B97\u7D50\u679C\u3092\u5F97\u308B\n     * @attention l >= r \u306E\
-    \u3068\u304D\u672A\u5B9A\u7FA9\n     */\n    T get(int l, int r) {\n        int\
-    \ k = log_table[r - l];\n        return op(table[k][l], table[k][r - (1 << k)]);\n\
-    \    }\n};\n\ntemplate <typename T> struct RmQ_sparse_table : public sparse_table<T>\
-    \ {\n    RmQ_sparse_table()\n        : RmQ_sparse_table<T>::sparse_table(\n  \
-    \            [](T a, T b) { return (a < b ? a : b); }) {}\n};\n\ntemplate <typename\
+    \ + 1, 0);\n        for (int i = 2; i <= (int)vec.size(); i++) {\n           \
+    \ log_table[i] = log_table[i >> 1] + 1;\n        }\n    }\n\n    /**\n     * @brief\
+    \ [l, r) \u306E\u6F14\u7B97\u7D50\u679C\u3092\u5F97\u308B\n     * @attention l\
+    \ >= r \u306E\u3068\u304D\u672A\u5B9A\u7FA9\n     */\n    T get(int l, int r)\
+    \ {\n        int k = log_table[r - l];\n        return op(table[k][l], table[k][r\
+    \ - (1 << k)]);\n    }\n};\n\ntemplate <typename T> struct RmQ_sparse_table :\
+    \ public sparse_table<T> {\n    RmQ_sparse_table()\n        : RmQ_sparse_table<T>::sparse_table(\n\
+    \              [](T a, T b) { return (a < b ? a : b); }) {}\n};\n\ntemplate <typename\
     \ T> struct RMQ_sparse_table : public sparse_table<T> {\n    RMQ_sparse_table()\n\
     \        : RMQ_sparse_table<T>::sparse_table(\n              [](T a, T b) { return\
     \ (a > b ? a : b); }) {}\n};\n#line 2 \"graph/shortest_path.hpp\"\n#include <queue>\n\
@@ -346,7 +346,7 @@ data:
   isVerificationFile: false
   path: graph/lowest_common_ancestor.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-06-21 11:58:18+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-5-c.test.cpp

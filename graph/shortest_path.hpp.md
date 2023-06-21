@@ -342,9 +342,9 @@ data:
   timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/grl-5-a.test.cpp
   - test/grl-1-a.test.cpp
   - test/grl-5-c.test.cpp
-  - test/grl-5-a.test.cpp
 documentation_of: graph/shortest_path.hpp
 layout: document
 redirect_from:

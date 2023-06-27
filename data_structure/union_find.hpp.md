@@ -25,7 +25,7 @@ data:
     path: graph/lowest_common_ancestor.hpp
     title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
       \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
@@ -60,7 +60,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-b.test.cpp
     title: test/grl-3-b.test.cpp
   - icon: ':heavy_check_mark:'
@@ -83,55 +83,61 @@ data:
     links: []
   bundledCode: "#line 2 \"data_structure/union_find.hpp\"\n#include <assert.h>\n\n\
     #include <algorithm>\n#include <vector>\n\nclass union_find {\n  private:\n  \
-    \  int N;\n    std::vector<int> par, group_siz;\n    int group_num; // \u96C6\u5408\
-    \u306E\u6570\n\n  public:\n    union_find() : N(0) {}\n    union_find(int n) :\
-    \ N(n), par(n, -1), group_siz(n, 1), group_num(n) {}\n\n    /**\n     * @brief\
-    \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
-    \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
-    \        if (n <= N)\n            return;\n        N = n;\n        par.resize(n,\
-    \ -1);\n        group_siz.resize(n, 1);\n        group_num += n - N;\n    }\n\n\
-    \    int leader(int x) {\n        if (par[x] == -1)\n            return x;\n \
-    \       else\n            return par[x] = leader(par[x]);\n    }\n\n    bool same(int\
-    \ x, int y) { return leader(x) == leader(y); }\n\n    bool merge(int x, int y)\
-    \ {\n        x = leader(x);\n        y = leader(y);\n        if (x == y)\n   \
-    \         return false;\n        // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\
-    \u5408\n        if (group_siz[x] < group_siz[y])\n            std::swap(x, y);\n\
-    \        par[y] = x;\n        group_siz[x] += group_siz[y];\n        group_num--;\n\
-    \        return true;\n    }\n\n    // x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\
-    \u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n    int size(int x) { return\
-    \ group_siz[leader(x)]; }\n\n    int count_groups() const { return group_num;\
-    \ }\n\n    std::vector<std::vector<int>> groups() {\n        std::vector<std::vector<int>>\
-    \ result(N);\n        for (int i = 0; i < N; i++)\n            result[i].reserve(group_siz[i]);\n\
-    \        for (int i = 0; i < N; i++)\n            result[leader(i)].push_back(i);\n\
-    \        result.erase(std::remove_if(\n                         result.begin(),\
-    \ result.end(),\n                         [&](const std::vector<int> &v) { return\
-    \ v.empty(); }),\n                     result.end());\n        return result;\n\
-    \    }\n};\n"
-  code: "#pragma once\n#include <assert.h>\n\n#include <algorithm>\n#include <vector>\n\
-    \nclass union_find {\n  private:\n    int N;\n    std::vector<int> par, group_siz;\n\
-    \    int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find()\
-    \ : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n)\
-    \ {}\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\
-    \n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n\
-    \    void expand(int n) {\n        if (n <= N)\n            return;\n        N\
-    \ = n;\n        par.resize(n, -1);\n        group_siz.resize(n, 1);\n        group_num\
-    \ += n - N;\n    }\n\n    int leader(int x) {\n        if (par[x] == -1)\n   \
-    \         return x;\n        else\n            return par[x] = leader(par[x]);\n\
-    \    }\n\n    bool same(int x, int y) { return leader(x) == leader(y); }\n\n \
-    \   bool merge(int x, int y) {\n        x = leader(x);\n        y = leader(y);\n\
-    \        if (x == y)\n            return false;\n        // \u5C0F\u3055\u3044\
-    \u307B\u3046\u306B\u7D71\u5408\n        if (group_siz[x] < group_siz[y])\n   \
-    \         std::swap(x, y);\n        par[y] = x;\n        group_siz[x] += group_siz[y];\n\
-    \        group_num--;\n        return true;\n    }\n\n    // x \u306E\u5C5E\u3059\
+    \  int N;\n    std::vector<int> par, group_siz, nxt;\n    int group_num; // \u96C6\
+    \u5408\u306E\u6570\n \n  public:\n    union_find() : N(0) {}\n    union_find(int\
+    \ n) : N(n), par(n, -1), group_siz(n, 1), group_num(n),nxt(n) {\n        std::iota(nxt.begin(),\
+    \ nxt.end(), 0);\n    }\n \n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\
+    \u306B\u5897\u3084\u3059\n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\
+    \u306A\u3044\n     */\n    void expand(int n) {\n        if (n <= N)\n       \
+    \     return;\n        N = n;\n        par.resize(n, -1);\n        group_siz.resize(n,\
+    \ 1);\n        nxt.resize(n);\n        for (int i = N; i < n; ++i)\n         \
+    \   nxt[i] = i;\n        group_num += n - N;\n    }\n \n    int leader(int x)\
+    \ {\n        if (par[x] == -1)\n            return x;\n        else\n        \
+    \    return par[x] = leader(par[x]);\n    }\n \n    bool same(int x, int y) {\
+    \ return leader(x) == leader(y); }\n \n    bool merge(int x, int y) {\n      \
+    \  x = leader(x);\n        y = leader(y);\n        if (x == y)\n            return\
+    \ false;\n        if (group_siz[x] < group_siz[y])\n            std::swap(x, y);\
+    \ // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\u5408\n \n        par[y] = x;\n\
+    \        group_siz[x] += group_siz[y];\n        std::swap(nxt[x], nxt[y]);\n \
+    \       group_num--;\n        return true;\n    }\n \n    // x \u306E\u5C5E\u3059\
     \u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n   \
-    \ int size(int x) { return group_siz[leader(x)]; }\n\n    int count_groups() const\
-    \ { return group_num; }\n\n    std::vector<std::vector<int>> groups() {\n    \
-    \    std::vector<std::vector<int>> result(N);\n        for (int i = 0; i < N;\
-    \ i++)\n            result[i].reserve(group_siz[i]);\n        for (int i = 0;\
-    \ i < N; i++)\n            result[leader(i)].push_back(i);\n        result.erase(std::remove_if(\n\
-    \                         result.begin(), result.end(),\n                    \
-    \     [&](const std::vector<int> &v) { return v.empty(); }),\n               \
-    \      result.end());\n        return result;\n    }\n};\n"
+    \ int size(int x) { return group_siz[leader(x)]; }\n \n    int count_groups()\
+    \ const { return group_num; }\n \n    std::vector<std::vector<int>> groups() {\n\
+    \        std::vector<std::vector<int>> result;\n        result.reserve(group_num);\n\
+    \        std::vector<bool> used(N, false);\n        for (int cur = 0; cur < N;\
+    \ ++cur) {\n            if (!used[cur]) {\n                used[cur] = true;\n\
+    \                result.push_back({cur});\n                result.reserve(size(cur));\n\
+    \                while (!used[cur = nxt[cur]]) {\n                    used[cur]\
+    \ = true;\n                    result.back().push_back(cur);\n               \
+    \ }\n            }\n        }\n        return result;\n    }\n};\n"
+  code: "#pragma once\n#include <assert.h>\n\n#include <algorithm>\n#include <vector>\n\
+    \nclass union_find {\n  private:\n    int N;\n    std::vector<int> par, group_siz,\
+    \ nxt;\n    int group_num; // \u96C6\u5408\u306E\u6570\n \n  public:\n    union_find()\
+    \ : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n),nxt(n)\
+    \ {\n        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n \n    /**\n     *\
+    \ @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention\
+    \ \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int\
+    \ n) {\n        if (n <= N)\n            return;\n        N = n;\n        par.resize(n,\
+    \ -1);\n        group_siz.resize(n, 1);\n        nxt.resize(n);\n        for (int\
+    \ i = N; i < n; ++i)\n            nxt[i] = i;\n        group_num += n - N;\n \
+    \   }\n \n    int leader(int x) {\n        if (par[x] == -1)\n            return\
+    \ x;\n        else\n            return par[x] = leader(par[x]);\n    }\n \n  \
+    \  bool same(int x, int y) { return leader(x) == leader(y); }\n \n    bool merge(int\
+    \ x, int y) {\n        x = leader(x);\n        y = leader(y);\n        if (x ==\
+    \ y)\n            return false;\n        if (group_siz[x] < group_siz[y])\n  \
+    \          std::swap(x, y); // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\u5408\
+    \n \n        par[y] = x;\n        group_siz[x] += group_siz[y];\n        std::swap(nxt[x],\
+    \ nxt[y]);\n        group_num--;\n        return true;\n    }\n \n    // x \u306E\
+    \u5C5E\u3059\u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\
+    \u3059\n    int size(int x) { return group_siz[leader(x)]; }\n \n    int count_groups()\
+    \ const { return group_num; }\n \n    std::vector<std::vector<int>> groups() {\n\
+    \        std::vector<std::vector<int>> result;\n        result.reserve(group_num);\n\
+    \        std::vector<bool> used(N, false);\n        for (int cur = 0; cur < N;\
+    \ ++cur) {\n            if (!used[cur]) {\n                used[cur] = true;\n\
+    \                result.push_back({cur});\n                result.reserve(size(cur));\n\
+    \                while (!used[cur = nxt[cur]]) {\n                    used[cur]\
+    \ = true;\n                    result.back().push_back(cur);\n               \
+    \ }\n            }\n        }\n        return result;\n    }\n};\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/union_find.hpp
@@ -150,7 +156,7 @@ data:
   - graph/lowlink.hpp
   - graph/doubling.hpp
   - other/random.hpp
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-06-27 13:20:07+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

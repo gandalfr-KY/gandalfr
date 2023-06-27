@@ -20,19 +20,6 @@ template <typename WEIGHT, bool is_directed> class graph {
     union_find uf;
     WEIGHT W = 0;
 
-    void internal_add_edge(edge<WEIGHT> e) {
-        uf.merge(e.from, e.to);
-        G[e.from].emplace_back(e);
-        if (!is_directed && e.from != e.to) {
-            std::swap(e.from, e.to);
-            G[e.from].emplace_back(e);
-        }
-        if (!is_directed && e.from > e.to)
-            std::swap(e.from, e.to);
-        E.emplace_back(e);
-        W += e.cost;
-    }
-
   public:
     graph() : N(0), G(0), uf(0){};
     graph(int n) : N(n), G(n), uf(n){};
@@ -104,26 +91,37 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @param e 辺
      * @attention 渡した辺の id は保持される
      */
-    void add_edge(const edge<WEIGHT> &e) { internal_add_edge(e); }
+    void add_edge(edge<WEIGHT> e) {
+        uf.merge(e.from, e.to);
+        E.emplace_back(e);
+        G[e.from].emplace_back(e);
+        if (!is_directed && e.from != e.to) {
+            std::swap(e.from, e.to);
+            G[e.from].emplace_back(e);
+        }
+        W += e.cost;
+    }
 
     /**
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
      * @attention WEIGHT が int だとエラー
      */
-    template <typename T = WEIGHT>
-    typename std::enable_if<!std::is_same<T, int>::value>::type
-    add_edge(int from, int to, WEIGHT cost) {
-        internal_add_edge(edge<WEIGHT>(from, to, cost, E.size()));
+    void add_edge(int from, int to, WEIGHT cost) {
+        static_assert(!std::is_same<WEIGHT, int>::value);
+        if (!is_directed && from > to)
+            std::swap(from, to);
+        add_edge(edge<WEIGHT>(from, to, cost, E.size()));
     }
 
     /**
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
      * @attention WEIGHT が int 以外だとエラー
      */
-    template <typename T = WEIGHT>
-    typename std::enable_if<std::is_same<T, int>::value>::type
-    add_edge(int from, int to) {
-        internal_add_edge(edge<int>(from, to, E.size()));
+    void add_edge(int from, int to) {
+        static_assert(std::is_same<WEIGHT, int>::value);
+        if(!is_directed && from > to)
+            std::swap(from, to);
+        add_edge(edge<int>(from, to, E.size()));
     }
 
     /**

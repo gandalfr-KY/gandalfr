@@ -25,27 +25,27 @@ data:
     links:
     - https://atcoder.jp/contests/practice2/submissions/36388906
   bundledCode: "#line 2 \"graph/graph.hpp\"\n#include <algorithm>\n#include <tuple>\n\
-    #include <vector>\n\n#line 2 \"data_structure/union_find.hpp\"\n#include <assert.h>\n\
-    \n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
-    \    int N;\n    std::vector<int> par, group_siz, nxt;\n    int group_num; //\
-    \ \u96C6\u5408\u306E\u6570\n \n  public:\n    union_find() : N(0) {}\n    union_find(int\
-    \ n) : N(n), par(n, -1), group_siz(n, 1), group_num(n),nxt(n) {\n        std::iota(nxt.begin(),\
-    \ nxt.end(), 0);\n    }\n \n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\
-    \u306B\u5897\u3084\u3059\n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\
-    \u306A\u3044\n     */\n    void expand(int n) {\n        if (n <= N)\n       \
-    \     return;\n        N = n;\n        par.resize(n, -1);\n        group_siz.resize(n,\
-    \ 1);\n        nxt.resize(n);\n        for (int i = N; i < n; ++i)\n         \
-    \   nxt[i] = i;\n        group_num += n - N;\n    }\n \n    int leader(int x)\
-    \ {\n        if (par[x] == -1)\n            return x;\n        else\n        \
-    \    return par[x] = leader(par[x]);\n    }\n \n    bool same(int x, int y) {\
-    \ return leader(x) == leader(y); }\n \n    bool merge(int x, int y) {\n      \
-    \  x = leader(x);\n        y = leader(y);\n        if (x == y)\n            return\
-    \ false;\n        if (group_siz[x] < group_siz[y])\n            std::swap(x, y);\
-    \ // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\u5408\n \n        par[y] = x;\n\
-    \        group_siz[x] += group_siz[y];\n        std::swap(nxt[x], nxt[y]);\n \
-    \       group_num--;\n        return true;\n    }\n \n    // x \u306E\u5C5E\u3059\
-    \u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n   \
-    \ int size(int x) { return group_siz[leader(x)]; }\n \n    int count_groups()\
+    #include <vector>\n#include <stack>\n\n#line 2 \"data_structure/union_find.hpp\"\
+    \n#include <assert.h>\n\n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find\
+    \ {\n  private:\n    int N;\n    std::vector<int> par, group_siz, nxt;\n    int\
+    \ group_num; // \u96C6\u5408\u306E\u6570\n \n  public:\n    union_find() : N(0)\
+    \ {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n),nxt(n)\
+    \ {\n        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n \n    /**\n     *\
+    \ @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention\
+    \ \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int\
+    \ n) {\n        if (n <= N)\n            return;\n        N = n;\n        par.resize(n,\
+    \ -1);\n        group_siz.resize(n, 1);\n        nxt.resize(n);\n        for (int\
+    \ i = N; i < n; ++i)\n            nxt[i] = i;\n        group_num += n - N;\n \
+    \   }\n \n    int leader(int x) {\n        if (par[x] == -1)\n            return\
+    \ x;\n        else\n            return par[x] = leader(par[x]);\n    }\n \n  \
+    \  bool same(int x, int y) { return leader(x) == leader(y); }\n \n    bool merge(int\
+    \ x, int y) {\n        x = leader(x);\n        y = leader(y);\n        if (x ==\
+    \ y)\n            return false;\n        if (group_siz[x] < group_siz[y])\n  \
+    \          std::swap(x, y); // \u5C0F\u3055\u3044\u307B\u3046\u306B\u7D71\u5408\
+    \n \n        par[y] = x;\n        group_siz[x] += group_siz[y];\n        std::swap(nxt[x],\
+    \ nxt[y]);\n        group_num--;\n        return true;\n    }\n \n    // x \u306E\
+    \u5C5E\u3059\u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\
+    \u3059\n    int size(int x) { return group_siz[leader(x)]; }\n \n    int count_groups()\
     \ const { return group_num; }\n \n    std::vector<std::vector<int>> groups() {\n\
     \        std::vector<std::vector<int>> result;\n        result.reserve(group_num);\n\
     \        std::vector<bool> used(N, false);\n        for (int cur = 0; cur < N;\
@@ -144,7 +144,7 @@ data:
     \ const override {\n        os << this->from << \" \" << this->to;\n    }\n  \
     \  int compare(const internal::_base_edge<edge<int>, int> &e) const override {\n\
     \        if (this->from == e.from) {\n            return this->to - e.to;\n  \
-    \      }\n        return this->from - e.from;\n    }\n};\n#line 9 \"graph/graph.hpp\"\
+    \      }\n        return this->from - e.from;\n    }\n};\n#line 10 \"graph/graph.hpp\"\
     \n\n/**\n * @brief \u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\
     \u30B9\u3002\n * @tparam WEIGHT int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\
     \u305D\u3046\u3067\u306A\u3044\u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\
@@ -220,8 +220,32 @@ data:
     \        for (int i = 0; i < N; i++)\n            ret[i][i] = 0;\n        for\
     \ (int i = 0; i < N; i++) {\n            for (auto &e : G[i]) {\n            \
     \    ret[e.from][e.to] = e.cost;\n            }\n        }\n        return ret;\n\
-    \    }\n\n    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
-    \ << std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
+    \    }\n\n    std::vector<int> preorder(int start) {\n        std::vector<int>\
+    \ result;\n        std::vector<bool> visited(N, false);\n        std::stack<int>\
+    \ stk;\n        visited[start] = true;\n        stk.push(start);\n\n        while\
+    \ (!stk.empty()) {\n            int cu = stk.top(); stk.pop();\n            result.push_back(cu);\n\
+    \            for (int i = G[cu].size() - 1; i >= 0; --i) {\n                int\
+    \ to = G[cu][i];\n                if (!visited[to]) {\n                    visited[to]\
+    \ = true;\n                    stk.push(to);\n                }\n            }\n\
+    \        }\n        return result;\n    }\n\n    std::vector<int> inorder(int\
+    \ start) {\n        std::vector<int> result;\n        std::vector<bool> visited(N,\
+    \ false);\n        std::stack<int> stk;\n        visited[start] = true;\n    \
+    \    stk.push(start);\n\n        while (!stk.empty()) {\n            int cu =\
+    \ stk.top();\n            for (int i = G[cu].size() - 1; i >= 0; --i) {\n    \
+    \            int to = G[cu][i];\n                if (!visited[to]) {\n       \
+    \             visited[to] = true;\n                    result.push_back(to);\n\
+    \                    stk.push(to);\n                }\n            }\n       \
+    \     stk.pop();\n            result.push_back(cu);\n        }\n        return\
+    \ result;\n    }\n\n    std::vector<int> postorder(int start) {\n        std::vector<int>\
+    \ result;\n        std::vector<bool> visited(N, false);\n        std::stack<int>\
+    \ stk;\n        visited[start] = true;\n        stk.push(start);\n\n        while\
+    \ (!stk.empty()) {\n            int cu = stk.top();\n            for (int i =\
+    \ G[cu].size() - 1; i >= 0; --i) {\n                int to = G[cu][i];\n     \
+    \           if (!visited[to]) {\n                    visited[to] = true;\n   \
+    \                 stk.push(to);\n                }\n            }\n          \
+    \  result.push_back(cu);\n        }\n        return result;\n    }\n\n    void\
+    \ print() const {\n        std::cout << this->N << \" \" << this->E.size() <<\
+    \ std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
     \ << e << std::endl;\n    }\n};\n#line 3 \"graph/reversed_graph.hpp\"\n\n// \u6709\
     \u5411\u30B0\u30E9\u30D5\u306E\u8FBA\u306E\u5411\u304D\u3092\u9006\u306B\u3057\
     \u305F\u30B0\u30E9\u30D5\u3092\u4F5C\u308B\ntemplate <typename WEIGHT>\ngraph<WEIGHT,\
@@ -300,7 +324,7 @@ data:
   isVerificationFile: false
   path: graph/strongly_connected_components.hpp
   requiredBy: []
-  timestamp: '2023-06-27 13:20:07+09:00'
+  timestamp: '2023-06-28 19:50:28+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/strongly_connected_components.hpp

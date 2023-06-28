@@ -81,8 +81,8 @@ data:
     \u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T>\
     \ E(int N) {\n        matrix<T> ret(N, N);\n        for (int i = 0; i < N; i++)\n\
     \            ret[i][i] = 1;\n        return ret;\n    }\n};\n#line 2 \"graph/graph.hpp\"\
-    \n#include <algorithm>\n#include <tuple>\n#line 5 \"graph/graph.hpp\"\n\n#line\
-    \ 3 \"data_structure/union_find.hpp\"\n\n#line 6 \"data_structure/union_find.hpp\"\
+    \n#include <algorithm>\n#include <tuple>\n#line 5 \"graph/graph.hpp\"\n#include\
+    \ <stack>\n\n#line 3 \"data_structure/union_find.hpp\"\n\n#line 6 \"data_structure/union_find.hpp\"\
     \n\nclass union_find {\n  private:\n    int N;\n    std::vector<int> par, group_siz,\
     \ nxt;\n    int group_num; // \u96C6\u5408\u306E\u6570\n \n  public:\n    union_find()\
     \ : N(0) {}\n    union_find(int n) : N(n), par(n, -1), group_siz(n, 1), group_num(n),nxt(n)\
@@ -141,7 +141,7 @@ data:
     \ const override {\n        os << this->from << \" \" << this->to;\n    }\n  \
     \  int compare(const internal::_base_edge<edge<int>, int> &e) const override {\n\
     \        if (this->from == e.from) {\n            return this->to - e.to;\n  \
-    \      }\n        return this->from - e.from;\n    }\n};\n#line 9 \"graph/graph.hpp\"\
+    \      }\n        return this->from - e.from;\n    }\n};\n#line 10 \"graph/graph.hpp\"\
     \n\n/**\n * @brief \u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\
     \u30B9\u3002\n * @tparam WEIGHT int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\
     \u305D\u3046\u3067\u306A\u3044\u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\
@@ -217,8 +217,32 @@ data:
     \        for (int i = 0; i < N; i++)\n            ret[i][i] = 0;\n        for\
     \ (int i = 0; i < N; i++) {\n            for (auto &e : G[i]) {\n            \
     \    ret[e.from][e.to] = e.cost;\n            }\n        }\n        return ret;\n\
-    \    }\n\n    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
-    \ << std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
+    \    }\n\n    std::vector<int> preorder(int start) {\n        std::vector<int>\
+    \ result;\n        std::vector<bool> visited(N, false);\n        std::stack<int>\
+    \ stk;\n        visited[start] = true;\n        stk.push(start);\n\n        while\
+    \ (!stk.empty()) {\n            int cu = stk.top(); stk.pop();\n            result.push_back(cu);\n\
+    \            for (int i = G[cu].size() - 1; i >= 0; --i) {\n                int\
+    \ to = G[cu][i];\n                if (!visited[to]) {\n                    visited[to]\
+    \ = true;\n                    stk.push(to);\n                }\n            }\n\
+    \        }\n        return result;\n    }\n\n    std::vector<int> inorder(int\
+    \ start) {\n        std::vector<int> result;\n        std::vector<bool> visited(N,\
+    \ false);\n        std::stack<int> stk;\n        visited[start] = true;\n    \
+    \    stk.push(start);\n\n        while (!stk.empty()) {\n            int cu =\
+    \ stk.top();\n            for (int i = G[cu].size() - 1; i >= 0; --i) {\n    \
+    \            int to = G[cu][i];\n                if (!visited[to]) {\n       \
+    \             visited[to] = true;\n                    result.push_back(to);\n\
+    \                    stk.push(to);\n                }\n            }\n       \
+    \     stk.pop();\n            result.push_back(cu);\n        }\n        return\
+    \ result;\n    }\n\n    std::vector<int> postorder(int start) {\n        std::vector<int>\
+    \ result;\n        std::vector<bool> visited(N, false);\n        std::stack<int>\
+    \ stk;\n        visited[start] = true;\n        stk.push(start);\n\n        while\
+    \ (!stk.empty()) {\n            int cu = stk.top();\n            for (int i =\
+    \ G[cu].size() - 1; i >= 0; --i) {\n                int to = G[cu][i];\n     \
+    \           if (!visited[to]) {\n                    visited[to] = true;\n   \
+    \                 stk.push(to);\n                }\n            }\n          \
+    \  result.push_back(cu);\n        }\n        return result;\n    }\n\n    void\
+    \ print() const {\n        std::cout << this->N << \" \" << this->E.size() <<\
+    \ std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
     \ << e << std::endl;\n    }\n};\n#line 6 \"graph/is_isomorphic.hpp\"\n\n// \u591A\
     \u5206\u3042\u3063\u3066\u308B\u304F\u3089\u3044\u306E\u6C17\u6301\u3061\u3067\
     ...\n// \u540C\u578B\u5224\u5B9A\ntemplate <typename WEIGHT, bool is_directed>\n\
@@ -255,7 +279,7 @@ data:
   isVerificationFile: false
   path: graph/is_isomorphic.hpp
   requiredBy: []
-  timestamp: '2023-06-27 13:20:07+09:00'
+  timestamp: '2023-06-28 19:50:28+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/is_isomorphic.hpp

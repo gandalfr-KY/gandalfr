@@ -48,11 +48,11 @@ data:
   isVerificationFile: false
   path: math/Bezout_coefficients.hpp
   requiredBy:
-  - math/binomial_coefficients.hpp
-  - math/Garner.hpp
   - math/mod_inverse.hpp
-  - standard/mod_integer.hpp
+  - math/Garner.hpp
+  - math/binomial_coefficients.hpp
   - standard/fraction.hpp
+  - standard/mod_integer.hpp
   timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:

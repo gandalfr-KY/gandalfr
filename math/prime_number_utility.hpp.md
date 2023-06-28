@@ -92,8 +92,8 @@ data:
   isVerificationFile: false
   path: math/prime_number_utility.hpp
   requiredBy:
-  - math/totient.hpp
   - math/factorize.hpp
+  - math/totient.hpp
   timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

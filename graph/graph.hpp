@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <tuple>
 #include <vector>
+#include <stack>
 
 #include "../data_structure/union_find.hpp"
 #include "../math/matrix.hpp"
@@ -169,6 +170,71 @@ template <typename WEIGHT, bool is_directed> class graph {
             }
         }
         return ret;
+    }
+
+    std::vector<int> preorder(int start) {
+        std::vector<int> result;
+        std::vector<bool> visited(N, false);
+        std::stack<int> stk;
+        visited[start] = true;
+        stk.push(start);
+
+        while (!stk.empty()) {
+            int cu = stk.top(); stk.pop();
+            result.push_back(cu);
+            for (int i = G[cu].size() - 1; i >= 0; --i) {
+                int to = G[cu][i];
+                if (!visited[to]) {
+                    visited[to] = true;
+                    stk.push(to);
+                }
+            }
+        }
+        return result;
+    }
+
+    std::vector<int> inorder(int start) {
+        std::vector<int> result;
+        std::vector<bool> visited(N, false);
+        std::stack<int> stk;
+        visited[start] = true;
+        stk.push(start);
+
+        while (!stk.empty()) {
+            int cu = stk.top();
+            for (int i = G[cu].size() - 1; i >= 0; --i) {
+                int to = G[cu][i];
+                if (!visited[to]) {
+                    visited[to] = true;
+                    result.push_back(to);
+                    stk.push(to);
+                }
+            }
+            stk.pop();
+            result.push_back(cu);
+        }
+        return result;
+    }
+
+    std::vector<int> postorder(int start) {
+        std::vector<int> result;
+        std::vector<bool> visited(N, false);
+        std::stack<int> stk;
+        visited[start] = true;
+        stk.push(start);
+
+        while (!stk.empty()) {
+            int cu = stk.top();
+            for (int i = G[cu].size() - 1; i >= 0; --i) {
+                int to = G[cu][i];
+                if (!visited[to]) {
+                    visited[to] = true;
+                    stk.push(to);
+                }
+            }
+            result.push_back(cu);
+        }
+        return result;
     }
 
     void print() const {

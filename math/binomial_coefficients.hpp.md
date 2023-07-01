@@ -17,8 +17,8 @@ data:
   _verificationStatusIcon: ':warning:'
   attributes:
     links: []
-  bundledCode: "#line 2 \"math/binomial_coefficients.hpp\"\n#include <vector>\n#include\
-    \ <map>\n\n#line 2 \"standard/mod_integer.hpp\"\n#include <iostream>\n#include\
+  bundledCode: "#line 2 \"math/binomial_coefficients.hpp\"\n#include <map>\n#include\
+    \ <vector>\n\n#line 2 \"standard/mod_integer.hpp\"\n#include <iostream>\n#include\
     \ <queue>\n#include <utility>\n\n#line 2 \"math/mod_inverse.hpp\"\n#include <assert.h>\n\
     \n#line 2 \"math/Bezout_coefficients.hpp\"\n#include <cstdlib>\n#line 4 \"math/Bezout_coefficients.hpp\"\
     \n\nnamespace internal {\nlong long extgcd(long long a, long long b, long long\
@@ -35,8 +35,8 @@ data:
     \u3068\u3059\u308B\u3068\u304D\u306E\u6574\u6570\u578B;\ntemplate <int mod> class\
     \ mod_integer {\n  private:\n    long long val; // \u5024\u306F\u5FC5\u305A 0\
     \ <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    static inline std::deque<std::pair<int,\
-    \ int>> modinv_cache; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\n  \
-    \  static inline const int cache_size = 8;\n    friend mod_integer operator+(const\
+    \ int>>\n        modinv_cache; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\
+    \n    static inline const int cache_size = 8;\n    friend mod_integer operator+(const\
     \ mod_integer &a) { return a; }\n    friend mod_integer operator-(const mod_integer\
     \ &a) { return -a.val; }\n    friend mod_integer operator+(const mod_integer &a,\
     \ const mod_integer &b) {\n        return mod_integer(a.val + b.val);\n    }\n\
@@ -60,26 +60,27 @@ data:
     \        if (val < 0)\n            val += mod;\n        return *this;\n    }\n\
     \    mod_integer &operator*=(const mod_integer &a) {\n        (val *= a.val) %=\
     \ mod;\n        return *this;\n    }\n    mod_integer &operator/=(const mod_integer\
-    \ &a) {\n        bool found = false;\n        for(auto& [k, v] : modinv_cache)\
-    \ if(k == a.val) {\n            found = true;\n            (val *= v) %= mod;\n\
-    \            break;\n        }\n        if(!found) {\n            int inv = mod_inverse(a.val,\
-    \ mod);\n            (val *= inv) %= mod;\n            modinv_cache.push_back({a.val,\
-    \ inv});\n            if ((int)modinv_cache.size() > cache_size)\n           \
-    \     modinv_cache.pop_front();\n        }\n        return *this;\n    }\n\n \
-    \   friend std::istream &operator>>(std::istream &is, mod_integer &a) {\n    \
-    \    is >> a.val;\n        a.val %= mod;\n        if (a.val < 0)\n           \
-    \ a.val += mod;\n        return is;\n    }\n    friend std::ostream &operator<<(std::ostream\
-    \ &os, const mod_integer &a) {\n        os << a.val;\n        return os;\n   \
-    \ }\n};\n\nusing mint = mod_integer<1000000007>;\nusing _mint = mod_integer<998244353>;\n\
-    #line 6 \"math/binomial_coefficients.hpp\"\n\ntemplate <class T> class binomial_coefficients\
-    \ {\n  private:\n    static inline std::vector<T> fact;\n\n    static void expand(int\
-    \ n) {\n        while (n >= fact.size()) {\n            fact.push_back(fact.back()\
-    \ * fact.size());\n        }\n    }\n\n  public:\n    binomial_coefficients()\
-    \ = delete;\n    ~binomial_coefficients() = delete;\n\n    static T get(int n,\
-    \ int k) {\n        assert(0 <= k && k <= n);\n        if (n >= fact.size())\n\
-    \            expand(n);\n        return fact[n] / fact[k] / fact[n - k];\n   \
-    \ }\n};\n\nusing binom = binomial_coefficients<mint>;\nusing _binom = binomial_coefficients<_mint>;\n"
-  code: "#pragma once\n#include <vector>\n#include <map>\n\n#include \"../standard/mod_integer.hpp\"\
+    \ &a) {\n        bool found = false;\n        for (auto &[k, v] : modinv_cache)\n\
+    \            if (k == a.val) {\n                found = true;\n              \
+    \  (val *= v) %= mod;\n                break;\n            }\n        if (!found)\
+    \ {\n            int inv = mod_inverse(a.val, mod);\n            (val *= inv)\
+    \ %= mod;\n            modinv_cache.push_back({a.val, inv});\n            if ((int)modinv_cache.size()\
+    \ > cache_size)\n                modinv_cache.pop_front();\n        }\n      \
+    \  return *this;\n    }\n\n    friend std::istream &operator>>(std::istream &is,\
+    \ mod_integer &a) {\n        is >> a.val;\n        a.val %= mod;\n        if (a.val\
+    \ < 0)\n            a.val += mod;\n        return is;\n    }\n    friend std::ostream\
+    \ &operator<<(std::ostream &os, const mod_integer &a) {\n        os << a.val;\n\
+    \        return os;\n    }\n};\n\nusing mint = mod_integer<1000000007>;\nusing\
+    \ _mint = mod_integer<998244353>;\n#line 6 \"math/binomial_coefficients.hpp\"\n\
+    \ntemplate <class T> class binomial_coefficients {\n  private:\n    static inline\
+    \ std::vector<T> fact;\n\n    static void expand(int n) {\n        while (n >=\
+    \ fact.size()) {\n            fact.push_back(fact.back() * fact.size());\n   \
+    \     }\n    }\n\n  public:\n    binomial_coefficients() = delete;\n    ~binomial_coefficients()\
+    \ = delete;\n\n    static T get(int n, int k) {\n        assert(0 <= k && k <=\
+    \ n);\n        if (n >= fact.size())\n            expand(n);\n        return fact[n]\
+    \ / fact[k] / fact[n - k];\n    }\n};\n\nusing binom = binomial_coefficients<mint>;\n\
+    using _binom = binomial_coefficients<_mint>;\n"
+  code: "#pragma once\n#include <map>\n#include <vector>\n\n#include \"../standard/mod_integer.hpp\"\
     \n\ntemplate <class T> class binomial_coefficients {\n  private:\n    static inline\
     \ std::vector<T> fact;\n\n    static void expand(int n) {\n        while (n >=\
     \ fact.size()) {\n            fact.push_back(fact.back() * fact.size());\n   \
@@ -95,7 +96,7 @@ data:
   isVerificationFile: false
   path: math/binomial_coefficients.hpp
   requiredBy: []
-  timestamp: '2023-06-20 14:17:04+09:00'
+  timestamp: '2023-07-01 19:17:15+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: math/binomial_coefficients.hpp

@@ -37,8 +37,8 @@ data:
     \u3068\u3059\u308B\u3068\u304D\u306E\u6574\u6570\u578B;\ntemplate <int mod> class\
     \ mod_integer {\n  private:\n    long long val; // \u5024\u306F\u5FC5\u305A 0\
     \ <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    static inline std::deque<std::pair<int,\
-    \ int>> modinv_cache; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\n  \
-    \  static inline const int cache_size = 8;\n    friend mod_integer operator+(const\
+    \ int>>\n        modinv_cache; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\
+    \n    static inline const int cache_size = 8;\n    friend mod_integer operator+(const\
     \ mod_integer &a) { return a; }\n    friend mod_integer operator-(const mod_integer\
     \ &a) { return -a.val; }\n    friend mod_integer operator+(const mod_integer &a,\
     \ const mod_integer &b) {\n        return mod_integer(a.val + b.val);\n    }\n\
@@ -62,24 +62,25 @@ data:
     \        if (val < 0)\n            val += mod;\n        return *this;\n    }\n\
     \    mod_integer &operator*=(const mod_integer &a) {\n        (val *= a.val) %=\
     \ mod;\n        return *this;\n    }\n    mod_integer &operator/=(const mod_integer\
-    \ &a) {\n        bool found = false;\n        for(auto& [k, v] : modinv_cache)\
-    \ if(k == a.val) {\n            found = true;\n            (val *= v) %= mod;\n\
-    \            break;\n        }\n        if(!found) {\n            int inv = mod_inverse(a.val,\
-    \ mod);\n            (val *= inv) %= mod;\n            modinv_cache.push_back({a.val,\
-    \ inv});\n            if ((int)modinv_cache.size() > cache_size)\n           \
-    \     modinv_cache.pop_front();\n        }\n        return *this;\n    }\n\n \
-    \   friend std::istream &operator>>(std::istream &is, mod_integer &a) {\n    \
-    \    is >> a.val;\n        a.val %= mod;\n        if (a.val < 0)\n           \
-    \ a.val += mod;\n        return is;\n    }\n    friend std::ostream &operator<<(std::ostream\
-    \ &os, const mod_integer &a) {\n        os << a.val;\n        return os;\n   \
-    \ }\n};\n\nusing mint = mod_integer<1000000007>;\nusing _mint = mod_integer<998244353>;\n"
+    \ &a) {\n        bool found = false;\n        for (auto &[k, v] : modinv_cache)\n\
+    \            if (k == a.val) {\n                found = true;\n              \
+    \  (val *= v) %= mod;\n                break;\n            }\n        if (!found)\
+    \ {\n            int inv = mod_inverse(a.val, mod);\n            (val *= inv)\
+    \ %= mod;\n            modinv_cache.push_back({a.val, inv});\n            if ((int)modinv_cache.size()\
+    \ > cache_size)\n                modinv_cache.pop_front();\n        }\n      \
+    \  return *this;\n    }\n\n    friend std::istream &operator>>(std::istream &is,\
+    \ mod_integer &a) {\n        is >> a.val;\n        a.val %= mod;\n        if (a.val\
+    \ < 0)\n            a.val += mod;\n        return is;\n    }\n    friend std::ostream\
+    \ &operator<<(std::ostream &os, const mod_integer &a) {\n        os << a.val;\n\
+    \        return os;\n    }\n};\n\nusing mint = mod_integer<1000000007>;\nusing\
+    \ _mint = mod_integer<998244353>;\n"
   code: "#pragma once\n#include <iostream>\n#include <queue>\n#include <utility>\n\
     \n#include \"../math/mod_inverse.hpp\"\n\n// mod_integer<P> a := P\u3092\u6CD5\
     \u3068\u3059\u308B\u3068\u304D\u306E\u6574\u6570\u578B;\ntemplate <int mod> class\
     \ mod_integer {\n  private:\n    long long val; // \u5024\u306F\u5FC5\u305A 0\
     \ <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    static inline std::deque<std::pair<int,\
-    \ int>> modinv_cache; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\n  \
-    \  static inline const int cache_size = 8;\n    friend mod_integer operator+(const\
+    \ int>>\n        modinv_cache; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\
+    \n    static inline const int cache_size = 8;\n    friend mod_integer operator+(const\
     \ mod_integer &a) { return a; }\n    friend mod_integer operator-(const mod_integer\
     \ &a) { return -a.val; }\n    friend mod_integer operator+(const mod_integer &a,\
     \ const mod_integer &b) {\n        return mod_integer(a.val + b.val);\n    }\n\
@@ -103,17 +104,18 @@ data:
     \        if (val < 0)\n            val += mod;\n        return *this;\n    }\n\
     \    mod_integer &operator*=(const mod_integer &a) {\n        (val *= a.val) %=\
     \ mod;\n        return *this;\n    }\n    mod_integer &operator/=(const mod_integer\
-    \ &a) {\n        bool found = false;\n        for(auto& [k, v] : modinv_cache)\
-    \ if(k == a.val) {\n            found = true;\n            (val *= v) %= mod;\n\
-    \            break;\n        }\n        if(!found) {\n            int inv = mod_inverse(a.val,\
-    \ mod);\n            (val *= inv) %= mod;\n            modinv_cache.push_back({a.val,\
-    \ inv});\n            if ((int)modinv_cache.size() > cache_size)\n           \
-    \     modinv_cache.pop_front();\n        }\n        return *this;\n    }\n\n \
-    \   friend std::istream &operator>>(std::istream &is, mod_integer &a) {\n    \
-    \    is >> a.val;\n        a.val %= mod;\n        if (a.val < 0)\n           \
-    \ a.val += mod;\n        return is;\n    }\n    friend std::ostream &operator<<(std::ostream\
-    \ &os, const mod_integer &a) {\n        os << a.val;\n        return os;\n   \
-    \ }\n};\n\nusing mint = mod_integer<1000000007>;\nusing _mint = mod_integer<998244353>;\n"
+    \ &a) {\n        bool found = false;\n        for (auto &[k, v] : modinv_cache)\n\
+    \            if (k == a.val) {\n                found = true;\n              \
+    \  (val *= v) %= mod;\n                break;\n            }\n        if (!found)\
+    \ {\n            int inv = mod_inverse(a.val, mod);\n            (val *= inv)\
+    \ %= mod;\n            modinv_cache.push_back({a.val, inv});\n            if ((int)modinv_cache.size()\
+    \ > cache_size)\n                modinv_cache.pop_front();\n        }\n      \
+    \  return *this;\n    }\n\n    friend std::istream &operator>>(std::istream &is,\
+    \ mod_integer &a) {\n        is >> a.val;\n        a.val %= mod;\n        if (a.val\
+    \ < 0)\n            a.val += mod;\n        return is;\n    }\n    friend std::ostream\
+    \ &operator<<(std::ostream &os, const mod_integer &a) {\n        os << a.val;\n\
+    \        return os;\n    }\n};\n\nusing mint = mod_integer<1000000007>;\nusing\
+    \ _mint = mod_integer<998244353>;\n"
   dependsOn:
   - math/mod_inverse.hpp
   - math/Bezout_coefficients.hpp
@@ -121,7 +123,7 @@ data:
   path: standard/mod_integer.hpp
   requiredBy:
   - math/binomial_coefficients.hpp
-  timestamp: '2023-06-20 14:17:04+09:00'
+  timestamp: '2023-07-01 19:17:15+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

@@ -1,5 +1,4 @@
 #pragma once
-#include "reversed_graph.hpp"
 
 /* 強連結成分分解
  * groups() := 同一連結成分をまとめた二次元配列を返す
@@ -38,7 +37,7 @@ template <typename WEIGHT> class strongly_connected_components {
         int N = G.count_nodes();
         std::vector<bool> used(N, false);
         std::vector<int> ord;
-        graph<WEIGHT, true> R(reversed_graph(G));
+        graph<WEIGHT, true> R(G.reverse());
 
         for (int i = 0; i < N; i++) {
             dfs1(G, i, ord, used);

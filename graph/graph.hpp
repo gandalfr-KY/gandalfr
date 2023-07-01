@@ -1,8 +1,9 @@
 #pragma once
 #include <algorithm>
+#include <stack>
 #include <tuple>
 #include <vector>
-#include <stack>
+#include <assert.h>
 
 #include "../data_structure/union_find.hpp"
 #include "../math/matrix.hpp"
@@ -21,9 +22,11 @@ template <typename WEIGHT, bool is_directed> class graph {
     union_find uf;
     WEIGHT W = 0;
 
+    std::vector<bool> visited;
+
   public:
-    graph() : N(0), G(0), uf(0){};
-    graph(int n) : N(n), G(n), uf(n){};
+    graph() : N(0), G(0), uf(0), visited(0) {};
+    graph(int n) : N(n), G(n), uf(n), visited(n) {};
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -36,6 +39,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         N = n;
         G.resize(n);
         uf.expand(n);
+        visited.resize(n);
     }
 
     /**
@@ -74,13 +78,13 @@ template <typename WEIGHT, bool is_directed> class graph {
     /**
      * @return 連結成分のリストのリスト
      */
-    std::vector<std::vector<int>> connected_components() { return uf.groups(); }
+    std::vector<std::vector<int>> connected_components() { return uf.all_groups(); }
 
     /**
      * @return 木か
      */
     bool is_tree() const {
-        return (uf.count_groups() == 1 && E.size() == N - 1);
+        return (uf.count_groups() == 1 && (int)E.size() == N - 1);
     }
 
     /**
@@ -120,7 +124,7 @@ template <typename WEIGHT, bool is_directed> class graph {
      */
     void add_edge(int from, int to) {
         static_assert(std::is_same<WEIGHT, int>::value);
-        if(!is_directed && from > to)
+        if (!is_directed && from > to)
             std::swap(from, to);
         add_edge(edge<int>(from, to, E.size()));
     }
@@ -136,7 +140,7 @@ template <typename WEIGHT, bool is_directed> class graph {
     std::tuple<std::vector<graph>, std::vector<int>, std::vector<int>>
     decompose() {
         std::vector<graph> Gs(uf.count_groups());
-        std::vector<std::vector<int>> groups(uf.groups());
+        std::vector<std::vector<int>> groups(uf.all_groups());
         std::vector<int> group_id(N), node_id(N);
         for (int i = 0; i < groups.size(); i++) {
             Gs[i].expand(groups[i].size());
@@ -145,7 +149,7 @@ template <typename WEIGHT, bool is_directed> class graph {
                 node_id[groups[i][j]] = j;
             }
         }
-        for (auto &e : E) {
+        for (auto e : E) {
             int id = group_id[e.from];
             e.from = node_id[e.from];
             e.to = node_id[e.to];
@@ -172,69 +176,108 @@ template <typename WEIGHT, bool is_directed> class graph {
         return ret;
     }
 
+    /**
+     * @brief 行きがけ順に bfs
+     * @attention グラフは連結であることが必要
+    */
     std::vector<int> preorder(int start) {
+        assert(uf.count_groups() == 1);
         std::vector<int> result;
-        std::vector<bool> visited(N, false);
-        std::stack<int> stk;
+        std::stack<std::pair<int, int>> stk;
+        for(int x : uf.contained_group(start))
+            visited[x] = false;
         visited[start] = true;
-        stk.push(start);
+        stk.push({start, 0});
 
         while (!stk.empty()) {
-            int cu = stk.top(); stk.pop();
-            result.push_back(cu);
-            for (int i = G[cu].size() - 1; i >= 0; --i) {
-                int to = G[cu][i];
+            auto &[cu, idx] = stk.top();
+            if (idx == 0)
+                result.push_back(cu);
+            if (idx == G[cu].size()) {
+                stk.pop();
+            } else {
+                int to = G[cu][idx++];
                 if (!visited[to]) {
                     visited[to] = true;
-                    stk.push(to);
+                    stk.push({to, 0});
                 }
             }
         }
         return result;
     }
-
+    
     std::vector<int> inorder(int start) {
         std::vector<int> result;
-        std::vector<bool> visited(N, false);
-        std::stack<int> stk;
-        visited[start] = true;
-        stk.push(start);
+        std::stack<std::pair<int, int>> stk;
+        for(int x : uf.contained_group(start))
+            visited[x] = false;
+        stk.push({start, 0});
 
         while (!stk.empty()) {
-            int cu = stk.top();
-            for (int i = G[cu].size() - 1; i >= 0; --i) {
-                int to = G[cu][i];
+            auto &[cu, idx] = stk.top();
+            if (idx == G[cu].size()) {
+                stk.pop();
+                result.push_back(cu);
+            } else {
+                int to = G[cu][idx++];
                 if (!visited[to]) {
                     visited[to] = true;
-                    result.push_back(to);
-                    stk.push(to);
+                    stk.push({to, 0});
+                    result.push_back(cu);
                 }
             }
-            stk.pop();
-            result.push_back(cu);
         }
         return result;
     }
 
-    std::vector<int> postorder(int start) {
+    std::vector<int> postorder(int start) const {
         std::vector<int> result;
-        std::vector<bool> visited(N, false);
-        std::stack<int> stk;
+        std::stack<std::pair<int, int>> stk;
+        for(int x : uf.contained_group(start))
+            visited[x] = false;
         visited[start] = true;
-        stk.push(start);
+        stk.push({start, 0});
 
         while (!stk.empty()) {
-            int cu = stk.top();
-            for (int i = G[cu].size() - 1; i >= 0; --i) {
-                int to = G[cu][i];
+            auto &[cu, idx] = stk.top();
+            if (idx == G[cu].size()) {
+                stk.pop();
+                result.push_back(cu);
+            } else {
+                int to = G[cu][idx++];
                 if (!visited[to]) {
                     visited[to] = true;
-                    stk.push(to);
+                    stk.push({to, 0});
                 }
             }
-            result.push_back(cu);
         }
         return result;
+    }
+
+    graph<WEIGHT, is_directed> reverse() const {
+        if (!is_directed)
+            return *this;
+        graph<WEIGHT, is_directed> ret(count_nodes());
+        for (auto e : edges()) {
+            std::swap(e.from, e.to);
+            ret.add_edge(e);
+        }
+        return ret;
+    }
+
+    /**
+     * @return 最小全域森
+     */
+    graph<WEIGHT, false> minimum_spanning_tree() const {
+        static_assert(!is_directed);
+        graph<WEIGHT, false> ret(count_nodes());
+        std::vector<edge<WEIGHT>> E(edges());
+        std::sort(E.begin(), E.end());
+        for (auto &e : E)
+            if (!ret.are_connected(e.from, e.to)) {
+                ret.add_edge(e);
+            }
+        return ret;
     }
 
     void print() const {

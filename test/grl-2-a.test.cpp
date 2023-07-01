@@ -1,6 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_A"
 #include <bits/stdc++.h>
-#include "../graph/Kruscal.hpp"
+#include "../graph/graph.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
@@ -20,6 +20,6 @@ int main(void){
  
     //calculate
     
-    cout << Kruscal(G).weight() << endl;
+    cout << G.minimum_spanning_tree().weight() << endl;
  
 }

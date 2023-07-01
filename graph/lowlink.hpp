@@ -64,6 +64,7 @@ template <typename WEIGHT> class lowlink {
                 apts.push_back(i);
         for (int i = 0; i < M; i++)
             if (is_bridge[i])
+
                 brids.emplace_back(G.edges()[i]);
     }
 

@@ -1,7 +1,5 @@
-#include "graph/reversed_graph.hpp"
 #include "graph/is_isomorphic.hpp"
 #include "graph/lowlink.hpp"
-#include "graph/Kruscal.hpp"
 #include "graph/diameter.hpp"
 #include "graph/topological_sort.hpp"
 #include "graph/Warshall_Floyd.hpp"

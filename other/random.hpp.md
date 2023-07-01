@@ -221,9 +221,9 @@ data:
     \    ret[e.from][e.to] = e.cost;\n            }\n        }\n        return ret;\n\
     \    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\u306B bfs\n  \
     \   * @attention \u30B0\u30E9\u30D5\u306F\u9023\u7D50\u3067\u3042\u308B\u3053\u3068\
-    \u304C\u5FC5\u8981\n    */\n    std::vector<int> preorder(int start) {\n     \
-    \   assert(uf.count_groups() == 1);\n        std::vector<int> result;\n      \
-    \  std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
+    \u304C\u5FC5\u8981\n    */\n    std::vector<int> preorder(int start) const {\n\
+    \        assert(uf.count_groups() == 1);\n        std::vector<int> result;\n \
+    \       std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
     \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
     \            if (idx == 0)\n                result.push_back(cu);\n          \
@@ -231,7 +231,7 @@ data:
     \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
     \ {\n                    visited[to] = true;\n                    stk.push({to,\
     \ 0});\n                }\n            }\n        }\n        return result;\n\
-    \    }\n    \n    std::vector<int> inorder(int start) {\n        std::vector<int>\
+    \    }\n    \n    std::vector<int> inorder(int start) const {\n        std::vector<int>\
     \ result;\n        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        stk.push({start, 0});\n\n        while\
     \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
@@ -324,7 +324,7 @@ data:
   isVerificationFile: false
   path: other/random.hpp
   requiredBy: []
-  timestamp: '2023-07-01 19:17:15+09:00'
+  timestamp: '2023-07-02 00:57:27+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: other/random.hpp

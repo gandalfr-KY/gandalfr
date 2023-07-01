@@ -180,7 +180,7 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @brief 行きがけ順に bfs
      * @attention グラフは連結であることが必要
     */
-    std::vector<int> preorder(int start) {
+    std::vector<int> preorder(int start) const {
         assert(uf.count_groups() == 1);
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
@@ -206,7 +206,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         return result;
     }
     
-    std::vector<int> inorder(int start) {
+    std::vector<int> inorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
         for(int x : uf.contained_group(start))

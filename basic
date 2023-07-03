@@ -18,6 +18,7 @@
 #include "data_structure/binary_indexed_tree.hpp"
 #include "data_structure/union_find.hpp"
 #include "data_structure/my_multiset.hpp"
+#include "data_structure/LRU_cache.hpp"
 #include "standard/fraction.hpp"
 #include "standard/rolling_hash.hpp"
 #include "standard/inversion.hpp"

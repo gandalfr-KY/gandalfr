@@ -9,9 +9,7 @@
 template <int mod> class mod_integer {
   private:
     long long val; // 値は必ず 0 <= val < mod に保たれる
-    static inline std::deque<std::pair<int, int>>
-        modinv_cache; // 逆元のキャッシュ
-    static inline const int cache_size = 8;
+    static inline lru_cache<int, int> modinv_cache {8}; // 逆元のキャッシュ
     friend mod_integer operator+(const mod_integer &a) { return a; }
     friend mod_integer operator-(const mod_integer &a) { return -a.val; }
     friend mod_integer operator+(const mod_integer &a, const mod_integer &b) {
@@ -66,19 +64,15 @@ template <int mod> class mod_integer {
         return *this;
     }
     mod_integer &operator/=(const mod_integer &a) {
-        bool found = false;
-        for (auto &[k, v] : modinv_cache)
-            if (k == a.val) {
-                found = true;
-                (val *= v) %= mod;
-                break;
-            }
-        if (!found) {
+        auto iter = modinv_cache.get(a.val);
+        if (iter != modinv_cache.end()) {
+            // キャッシュに存在する場合、キャッシュの値を使用する
+            (val *= iter->second) %= mod;
+        } else {
+            // キャッシュに存在しない場合、逆元を計算してキャッシュに保存
             int inv = mod_inverse(a.val, mod);
             (val *= inv) %= mod;
-            modinv_cache.push_back({a.val, inv});
-            if ((int)modinv_cache.size() > cache_size)
-                modinv_cache.pop_front();
+            modinv_cache.put(a.val, inv);
         }
         return *this;
     }

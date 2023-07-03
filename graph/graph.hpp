@@ -255,14 +255,16 @@ template <typename WEIGHT, bool is_directed> class graph {
     }
 
     graph<WEIGHT, is_directed> reverse() const {
-        if (!is_directed)
+        if constexpr (!is_directed) {
             return *this;
-        graph<WEIGHT, is_directed> ret(count_nodes());
-        for (auto e : edges()) {
-            std::swap(e.from, e.to);
-            ret.add_edge(e);
+        } else {
+            graph<WEIGHT, is_directed> ret(count_nodes());
+            for (auto e : edges()) {
+                std::swap(e.from, e.to);
+                ret.add_edge(e);
+            }
+            return ret;
         }
-        return ret;
     }
 
     /**

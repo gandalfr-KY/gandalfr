@@ -1,13 +1,13 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   - icon: ':question:'
@@ -222,7 +222,7 @@ data:
     \  return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\
     \u306B bfs\n     * @attention \u30B0\u30E9\u30D5\u306F\u9023\u7D50\u3067\u3042\
     \u308B\u3053\u3068\u304C\u5FC5\u8981\n    */\n    std::vector<int> preorder(int\
-    \ start) const {\n        assert(uf.count_groups() == 1);\n        std::vector<int>\
+    \ start) {\n        assert(uf.count_groups() == 1);\n        std::vector<int>\
     \ result;\n        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
     \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
@@ -231,7 +231,7 @@ data:
     \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
     \ {\n                    visited[to] = true;\n                    stk.push({to,\
     \ 0});\n                }\n            }\n        }\n        return result;\n\
-    \    }\n    \n    std::vector<int> inorder(int start) const {\n        std::vector<int>\
+    \    }\n    \n    std::vector<int> inorder(int start) {\n        std::vector<int>\
     \ result;\n        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        stk.push({start, 0});\n\n        while\
     \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
@@ -240,7 +240,7 @@ data:
     \  if (!visited[to]) {\n                    visited[to] = true;\n            \
     \        stk.push({to, 0});\n                    result.push_back(cu);\n     \
     \           }\n            }\n        }\n        return result;\n    }\n\n   \
-    \ std::vector<int> postorder(int start) const {\n        std::vector<int> result;\n\
+    \ std::vector<int> postorder(int start) {\n        std::vector<int> result;\n\
     \        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
     \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
@@ -249,31 +249,32 @@ data:
     \ G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
     \ = true;\n                    stk.push({to, 0});\n                }\n       \
     \     }\n        }\n        return result;\n    }\n\n    graph<WEIGHT, is_directed>\
-    \ reverse() const {\n        if (!is_directed)\n            return *this;\n  \
-    \      graph<WEIGHT, is_directed> ret(count_nodes());\n        for (auto e : edges())\
-    \ {\n            std::swap(e.from, e.to);\n            ret.add_edge(e);\n    \
-    \    }\n        return ret;\n    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\
-    \u57DF\u68EE\n     */\n    graph<WEIGHT, false> minimum_spanning_tree() const\
-    \ {\n        static_assert(!is_directed);\n        graph<WEIGHT, false> ret(count_nodes());\n\
-    \        std::vector<edge<WEIGHT>> E(edges());\n        std::sort(E.begin(), E.end());\n\
-    \        for (auto &e : E)\n            if (!ret.are_connected(e.from, e.to))\
-    \ {\n                ret.add_edge(e);\n            }\n        return ret;\n  \
-    \  }\n\n    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
-    \ << std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
-    \ << e << std::endl;\n    }\n};\n#line 6 \"graph/is_isomorphic.hpp\"\n\n// \u591A\
-    \u5206\u3042\u3063\u3066\u308B\u304F\u3089\u3044\u306E\u6C17\u6301\u3061\u3067\
-    ...\n// \u540C\u578B\u5224\u5B9A\ntemplate <typename WEIGHT, bool is_directed>\n\
-    bool is_isomorphic(const graph<WEIGHT, is_directed> &G1,\n                   const\
-    \ graph<WEIGHT, is_directed> &G2) {\n    if (G1.count_nodes() != G2.count_nodes())\n\
-    \        return false;\n    if (G1.count_nodes() != G2.count_nodes())\n      \
-    \  return false;\n\n    int N = G1.count_nodes();\n    matrix<WEIGHT> adj1(G1.to_adjajency()),\
-    \ adj2(G2.to_adjajency());\n\n    std::vector<int> nodes_id(N);\n    std::iota(nodes_id.begin(),\
-    \ nodes_id.end(), 0);\n    do {\n        bool ok = true;\n        for (int i =\
-    \ 0; i < N; i++)\n            for (int j = 0; j < N; j++) {\n                if\
-    \ (adj1[i][j] != adj2[nodes_id[i]][nodes_id[j]]) {\n                    ok = false;\n\
-    \                    break;\n                }\n            }\n        if (ok)\n\
-    \            return true;\n    } while (std::next_permutation(nodes_id.begin(),\
-    \ nodes_id.end()));\n    return false;\n}\n"
+    \ reverse() const {\n        if constexpr (!is_directed) {\n            return\
+    \ *this;\n        } else {\n            graph<WEIGHT, is_directed> ret(count_nodes());\n\
+    \            for (auto e : edges()) {\n                std::swap(e.from, e.to);\n\
+    \                ret.add_edge(e);\n            }\n            return ret;\n  \
+    \      }\n    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n  \
+    \   */\n    graph<WEIGHT, false> minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
+    \        graph<WEIGHT, false> ret(count_nodes());\n        std::vector<edge<WEIGHT>>\
+    \ E(edges());\n        std::sort(E.begin(), E.end());\n        for (auto &e :\
+    \ E)\n            if (!ret.are_connected(e.from, e.to)) {\n                ret.add_edge(e);\n\
+    \            }\n        return ret;\n    }\n\n    void print() const {\n     \
+    \   std::cout << this->N << \" \" << this->E.size() << std::endl;\n        for\
+    \ (const edge<WEIGHT> &e : this->E)\n            std::cout << e << std::endl;\n\
+    \    }\n};\n#line 6 \"graph/is_isomorphic.hpp\"\n\n// \u591A\u5206\u3042\u3063\
+    \u3066\u308B\u304F\u3089\u3044\u306E\u6C17\u6301\u3061\u3067...\n// \u540C\u578B\
+    \u5224\u5B9A\ntemplate <typename WEIGHT, bool is_directed>\nbool is_isomorphic(const\
+    \ graph<WEIGHT, is_directed> &G1,\n                   const graph<WEIGHT, is_directed>\
+    \ &G2) {\n    if (G1.count_nodes() != G2.count_nodes())\n        return false;\n\
+    \    if (G1.count_nodes() != G2.count_nodes())\n        return false;\n\n    int\
+    \ N = G1.count_nodes();\n    matrix<WEIGHT> adj1(G1.to_adjajency()), adj2(G2.to_adjajency());\n\
+    \n    std::vector<int> nodes_id(N);\n    std::iota(nodes_id.begin(), nodes_id.end(),\
+    \ 0);\n    do {\n        bool ok = true;\n        for (int i = 0; i < N; i++)\n\
+    \            for (int j = 0; j < N; j++) {\n                if (adj1[i][j] !=\
+    \ adj2[nodes_id[i]][nodes_id[j]]) {\n                    ok = false;\n       \
+    \             break;\n                }\n            }\n        if (ok)\n    \
+    \        return true;\n    } while (std::next_permutation(nodes_id.begin(), nodes_id.end()));\n\
+    \    return false;\n}\n"
   code: "#pragma once\n#include <numeric>\n\n#include \"../math/matrix.hpp\"\n#include\
     \ \"graph.hpp\"\n\n// \u591A\u5206\u3042\u3063\u3066\u308B\u304F\u3089\u3044\u306E\
     \u6C17\u6301\u3061\u3067...\n// \u540C\u578B\u5224\u5B9A\ntemplate <typename WEIGHT,\
@@ -296,7 +297,7 @@ data:
   isVerificationFile: false
   path: graph/is_isomorphic.hpp
   requiredBy: []
-  timestamp: '2023-07-03 18:02:22+09:00'
+  timestamp: '2023-07-03 18:10:59+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/is_isomorphic.hpp

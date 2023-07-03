@@ -1,16 +1,16 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
@@ -19,9 +19,9 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
@@ -228,7 +228,7 @@ data:
     \  return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\
     \u306B bfs\n     * @attention \u30B0\u30E9\u30D5\u306F\u9023\u7D50\u3067\u3042\
     \u308B\u3053\u3068\u304C\u5FC5\u8981\n    */\n    std::vector<int> preorder(int\
-    \ start) const {\n        assert(uf.count_groups() == 1);\n        std::vector<int>\
+    \ start) {\n        assert(uf.count_groups() == 1);\n        std::vector<int>\
     \ result;\n        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
     \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
@@ -237,7 +237,7 @@ data:
     \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
     \ {\n                    visited[to] = true;\n                    stk.push({to,\
     \ 0});\n                }\n            }\n        }\n        return result;\n\
-    \    }\n    \n    std::vector<int> inorder(int start) const {\n        std::vector<int>\
+    \    }\n    \n    std::vector<int> inorder(int start) {\n        std::vector<int>\
     \ result;\n        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        stk.push({start, 0});\n\n        while\
     \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
@@ -246,7 +246,7 @@ data:
     \  if (!visited[to]) {\n                    visited[to] = true;\n            \
     \        stk.push({to, 0});\n                    result.push_back(cu);\n     \
     \           }\n            }\n        }\n        return result;\n    }\n\n   \
-    \ std::vector<int> postorder(int start) const {\n        std::vector<int> result;\n\
+    \ std::vector<int> postorder(int start) {\n        std::vector<int> result;\n\
     \        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
     \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
     \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
@@ -255,35 +255,36 @@ data:
     \ G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
     \ = true;\n                    stk.push({to, 0});\n                }\n       \
     \     }\n        }\n        return result;\n    }\n\n    graph<WEIGHT, is_directed>\
-    \ reverse() const {\n        if (!is_directed)\n            return *this;\n  \
-    \      graph<WEIGHT, is_directed> ret(count_nodes());\n        for (auto e : edges())\
-    \ {\n            std::swap(e.from, e.to);\n            ret.add_edge(e);\n    \
-    \    }\n        return ret;\n    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\
-    \u57DF\u68EE\n     */\n    graph<WEIGHT, false> minimum_spanning_tree() const\
-    \ {\n        static_assert(!is_directed);\n        graph<WEIGHT, false> ret(count_nodes());\n\
-    \        std::vector<edge<WEIGHT>> E(edges());\n        std::sort(E.begin(), E.end());\n\
-    \        for (auto &e : E)\n            if (!ret.are_connected(e.from, e.to))\
-    \ {\n                ret.add_edge(e);\n            }\n        return ret;\n  \
-    \  }\n\n    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
-    \ << std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
-    \ << e << std::endl;\n    }\n};\n#line 5 \"graph/lowlink.hpp\"\n\n/**\n * @brief\
-    \ \u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\u6A4B\
-    \u3092\u6C42\u3081\u308B\n * @attention \u9023\u7D50\u3067\u306A\u3044\u3068\u304D\
-    \u306E verify \u304C\u3067\u304D\u3066\u306A\u3044\u3002\u591A\u5206\u3042\u3063\
-    \u3066\u308B\u3051\u3069...\n */\ntemplate <typename WEIGHT> class lowlink {\n\
-    \  private:\n    std::vector<int> ord, low, apts;\n    std::vector<edge<WEIGHT>>\
-    \ brids;\n\n    void dfs(const graph<WEIGHT, false> &g, int cu, int pa, int &cnt,\n\
-    \             const std::vector<int> &id, std::vector<bool> &is_apt,\n       \
-    \      std::vector<bool> &is_bridge) {\n        ord[cu] = low[cu] = cnt++;\n \
-    \       for (auto &e : g[cu]) {\n            if (e.to == pa)\n               \
-    \ continue;\n            if (ord[e.to] == -1) {\n                dfs(g, e.to,\
-    \ cu, cnt, id, is_apt, is_bridge);\n                if (low[cu] > low[e.to])\n\
-    \                    low[cu] = low[e.to];\n                if (ord[cu] < low[e.to])\n\
-    \                    is_bridge[e.id] = true;\n                if (pa != -1 &&\
-    \ ord[cu] <= low[e.to])\n                    is_apt[id[cu]] = true;\n        \
-    \    } else if (low[cu] > ord[e.to])\n                low[cu] = ord[e.to];\n \
-    \       }\n    }\n\n  public:\n    lowlink(graph<WEIGHT, false> &G)\n        :\
-    \ ord(G.count_nodes(), -1), low(G.count_nodes(), -1) {\n        int C = G.count_connected_components(),\
+    \ reverse() const {\n        if constexpr (!is_directed) {\n            return\
+    \ *this;\n        } else {\n            graph<WEIGHT, is_directed> ret(count_nodes());\n\
+    \            for (auto e : edges()) {\n                std::swap(e.from, e.to);\n\
+    \                ret.add_edge(e);\n            }\n            return ret;\n  \
+    \      }\n    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n  \
+    \   */\n    graph<WEIGHT, false> minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
+    \        graph<WEIGHT, false> ret(count_nodes());\n        std::vector<edge<WEIGHT>>\
+    \ E(edges());\n        std::sort(E.begin(), E.end());\n        for (auto &e :\
+    \ E)\n            if (!ret.are_connected(e.from, e.to)) {\n                ret.add_edge(e);\n\
+    \            }\n        return ret;\n    }\n\n    void print() const {\n     \
+    \   std::cout << this->N << \" \" << this->E.size() << std::endl;\n        for\
+    \ (const edge<WEIGHT> &e : this->E)\n            std::cout << e << std::endl;\n\
+    \    }\n};\n#line 5 \"graph/lowlink.hpp\"\n\n/**\n * @brief \u5358\u7D14\u7121\
+    \u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\u6A4B\u3092\u6C42\u3081\
+    \u308B\n * @attention \u9023\u7D50\u3067\u306A\u3044\u3068\u304D\u306E verify\
+    \ \u304C\u3067\u304D\u3066\u306A\u3044\u3002\u591A\u5206\u3042\u3063\u3066\u308B\
+    \u3051\u3069...\n */\ntemplate <typename WEIGHT> class lowlink {\n  private:\n\
+    \    std::vector<int> ord, low, apts;\n    std::vector<edge<WEIGHT>> brids;\n\n\
+    \    void dfs(const graph<WEIGHT, false> &g, int cu, int pa, int &cnt,\n     \
+    \        const std::vector<int> &id, std::vector<bool> &is_apt,\n            \
+    \ std::vector<bool> &is_bridge) {\n        ord[cu] = low[cu] = cnt++;\n      \
+    \  for (auto &e : g[cu]) {\n            if (e.to == pa)\n                continue;\n\
+    \            if (ord[e.to] == -1) {\n                dfs(g, e.to, cu, cnt, id,\
+    \ is_apt, is_bridge);\n                if (low[cu] > low[e.to])\n            \
+    \        low[cu] = low[e.to];\n                if (ord[cu] < low[e.to])\n    \
+    \                is_bridge[e.id] = true;\n                if (pa != -1 && ord[cu]\
+    \ <= low[e.to])\n                    is_apt[id[cu]] = true;\n            } else\
+    \ if (low[cu] > ord[e.to])\n                low[cu] = ord[e.to];\n        }\n\
+    \    }\n\n  public:\n    lowlink(graph<WEIGHT, false> &G)\n        : ord(G.count_nodes(),\
+    \ -1), low(G.count_nodes(), -1) {\n        int C = G.count_connected_components(),\
     \ N = G.count_nodes(),\n            M = G.count_edges();\n        std::vector<bool>\
     \ is_apt(N, false), is_bridge(M, false);\n        auto [decomposed, gr_id, nd_id]\
     \ = G.decompose();\n        std::vector<std::vector<int>> id(\n            N);\
@@ -329,8 +330,8 @@ data:
   isVerificationFile: true
   path: test/grl-3-a.test.cpp
   requiredBy: []
-  timestamp: '2023-07-03 18:02:22+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2023-07-03 18:10:59+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-3-a.test.cpp
 layout: document

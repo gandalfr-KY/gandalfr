@@ -1,16 +1,16 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':x:'
     path: data_structure/union_find.hpp
     title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/Warshall_Floyd.hpp
     title: graph/Warshall_Floyd.hpp
-  - icon: ':question:'
+  - icon: ':x:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':question:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   - icon: ':question:'
@@ -18,16 +18,16 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_C
     links:
     - https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_C
   bundledCode: "#line 1 \"test/grl-1-c.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_C\"\
-    \n#include <bits/stdc++.h>\n#line 6 \"graph/graph.hpp\"\n\n#line 3 \"data_structure/union_find.hpp\"\
+    \n#include <bits/stdc++.h>\n#line 7 \"graph/graph.hpp\"\n\n#line 3 \"data_structure/union_find.hpp\"\
     \n\n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
     \    int N;\n    std::vector<int> par, group_siz, nxt;\n    int group_num; //\
     \ \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find() : N(0) {}\n    union_find(int\
@@ -146,26 +146,27 @@ data:
     \ const override {\n        os << this->from << \" \" << this->to;\n    }\n  \
     \  int compare(const internal::_base_edge<edge<int>, int> &e) const override {\n\
     \        if (this->from == e.from) {\n            return this->to - e.to;\n  \
-    \      }\n        return this->from - e.from;\n    }\n};\n#line 10 \"graph/graph.hpp\"\
+    \      }\n        return this->from - e.from;\n    }\n};\n#line 11 \"graph/graph.hpp\"\
     \n\n/**\n * @brief \u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\
     \u30B9\u3002\n * @tparam WEIGHT int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\
     \u305D\u3046\u3067\u306A\u3044\u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\
     \u30D5\n * @tparam is_directed \u6709\u5411\u30B0\u30E9\u30D5\u304B\u3068\u3046\
     \u304B\n */\ntemplate <typename WEIGHT, bool is_directed> class graph {\n  private:\n\
     \    int N;\n    std::vector<std::vector<edge<WEIGHT>>> G;\n    std::vector<edge<WEIGHT>>\
-    \ E;\n    union_find uf;\n    WEIGHT W = 0;\n\n  public:\n    graph() : N(0),\
-    \ G(0), uf(0){};\n    graph(int n) : N(n), G(n), uf(n){};\n\n    /**\n     * @brief\
-    \ \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059\n\
-    \     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\u306E\u30CE\u30FC\
-    \u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\u3057\u305F\u3068\
-    \u304D\u3001\u5909\u5316\u306A\u3057\n     */\n    void expand(int n) {\n    \
-    \    if (n <= N)\n            return;\n        N = n;\n        G.resize(n);\n\
-    \        uf.expand(n);\n    }\n\n    /**\n     * @return \u30CE\u30FC\u30C9\u306E\
-    \u6570\n     */\n    int count_nodes() const { return N; }\n\n    /**\n     *\
-    \ @return \u8FBA\u306E\u6570\n     */\n    int count_edges() const { return E.size();\
-    \ }\n\n    /**\n     * @param n \u30CE\u30FC\u30C9\u756A\u53F7\n     * @return\
-    \ \u30CE\u30FC\u30C9 n \u304B\u3089\u306E\u96A3\u63A5\u9802\u70B9\u306E\u30EA\u30B9\
-    \u30C8\u306E const \u53C2\u7167\n     */\n    const std::vector<edge<WEIGHT>>\
+    \ E;\n    union_find uf;\n    WEIGHT W = 0;\n\n    std::vector<bool> visited;\n\
+    \n  public:\n    graph() : N(0), G(0), uf(0), visited(0) {};\n    graph(int n)\
+    \ : N(n), G(n), uf(n), visited(n) {};\n\n    /**\n     * @brief \u30CE\u30FC\u30C9\
+    \u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059\n     * @param n \u30B5\
+    \u30A4\u30BA\n     * @attention \u4ECA\u306E\u30CE\u30FC\u30C9\u6570\u3088\u308A\
+    \u5C0F\u3055\u3044\u6570\u3092\u6E21\u3057\u305F\u3068\u304D\u3001\u5909\u5316\
+    \u306A\u3057\n     */\n    void expand(int n) {\n        if (n <= N)\n       \
+    \     return;\n        N = n;\n        G.resize(n);\n        uf.expand(n);\n \
+    \       visited.resize(n);\n    }\n\n    /**\n     * @return \u30CE\u30FC\u30C9\
+    \u306E\u6570\n     */\n    int count_nodes() const { return N; }\n\n    /**\n\
+    \     * @return \u8FBA\u306E\u6570\n     */\n    int count_edges() const { return\
+    \ E.size(); }\n\n    /**\n     * @param n \u30CE\u30FC\u30C9\u756A\u53F7\n   \
+    \  * @return \u30CE\u30FC\u30C9 n \u304B\u3089\u306E\u96A3\u63A5\u9802\u70B9\u306E\
+    \u30EA\u30B9\u30C8\u306E const \u53C2\u7167\n     */\n    const std::vector<edge<WEIGHT>>\
     \ &operator[](int n) const { return G[n]; }\n\n    /**\n     * @return \u30B0\u30E9\
     \u30D5\u5168\u4F53\u306E\u8FBA\u306E\u30EA\u30B9\u30C8\u306E const \u53C2\u7167\
     \n     */\n    const std::vector<edge<WEIGHT>> &edges() const { return E; }\n\n\
@@ -178,9 +179,9 @@ data:
     \u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> connected_components()\
     \ const { return uf.all_groups(); }\n\n    /**\n     * @return \u6728\u304B\n\
     \     */\n    bool is_tree() const {\n        return (uf.count_groups() == 1 &&\
-    \ E.size() == N - 1);\n    }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\
-    \u91CD\u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n  \
-    \   * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\
+    \ (int)E.size() == N - 1);\n    }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\
+    \u306E\u91CD\u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n\
+    \     * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\
     \u4FDD\u6301\u3055\u308C\u308B\n     */\n    void add_edge(edge<WEIGHT> e) {\n\
     \        uf.merge(e.from, e.to);\n        E.emplace_back(e);\n        G[e.from].emplace_back(e);\n\
     \        if (!is_directed && e.from != e.to) {\n            std::swap(e.from,\
@@ -195,8 +196,8 @@ data:
     \u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\n     * @attention\
     \ WEIGHT \u304C int \u4EE5\u5916\u3060\u3068\u30A8\u30E9\u30FC\n     */\n    void\
     \ add_edge(int from, int to) {\n        static_assert(std::is_same<WEIGHT, int>::value);\n\
-    \        if(!is_directed && from > to)\n            std::swap(from, to);\n   \
-    \     add_edge(edge<int>(from, to, E.size()));\n    }\n\n    /**\n     * @brief\
+    \        if (!is_directed && from > to)\n            std::swap(from, to);\n  \
+    \      add_edge(edge<int>(from, to, E.size()));\n    }\n\n    /**\n     * @brief\
     \ \u30B0\u30E9\u30D5\u3092\u9023\u7D50\u306A\u30B0\u30E9\u30D5\u306B\u5206\u3051\
     \u3066\u30EA\u30B9\u30C8\u306B\u3057\u3066\u8FD4\u3059\n     * @example auto[Gs,\
     \ gr, nd] = G.decompose();\n     * @returns\n     * 1.\u30B0\u30E9\u30D5\u306E\
@@ -222,32 +223,47 @@ data:
     \ N, invalid);\n        for (int i = 0; i < N; i++)\n            ret[i][i] = 0;\n\
     \        for (int i = 0; i < N; i++) {\n            for (auto &e : G[i]) {\n \
     \               ret[e.from][e.to] = e.cost;\n            }\n        }\n      \
-    \  return ret;\n    }\n\n    std::vector<int> preorder(int start) const {\n  \
-    \      std::vector<int> result;\n        std::vector<bool> visited(N, false);\n\
-    \        std::stack<int> stk;\n        visited[start] = true;\n        stk.push(start);\n\
-    \n        while (!stk.empty()) {\n            int cu = stk.top(); stk.pop();\n\
-    \            result.push_back(cu);\n            for (int i = G[cu].size() - 1;\
-    \ i >= 0; --i) {\n                int to = G[cu][i];\n                if (!visited[to])\
-    \ {\n                    visited[to] = true;\n                    stk.push(to);\n\
-    \                }\n            }\n        }\n        return result;\n    }\n\n\
-    \    std::vector<int> inorder(int start) const {\n        std::vector<int> result;\n\
-    \        std::vector<bool> visited(N, false);\n        std::stack<int> stk;\n\
-    \        visited[start] = true;\n        stk.push(start);\n\n        while (!stk.empty())\
-    \ {\n            int cu = stk.top();\n            for (int i = G[cu].size() -\
-    \ 1; i >= 0; --i) {\n                int to = G[cu][i];\n                if (!visited[to])\
-    \ {\n                    visited[to] = true;\n                    result.push_back(to);\n\
-    \                    stk.push(to);\n                }\n            }\n       \
-    \     stk.pop();\n            result.push_back(cu);\n        }\n        return\
-    \ result;\n    }\n\n    std::vector<int> postorder(int start) const {\n      \
-    \  std::vector<int> result;\n        std::vector<bool> visited(N, false);\n  \
-    \      std::stack<int> stk;\n        visited[start] = true;\n        stk.push(start);\n\
-    \n        while (!stk.empty()) {\n            int cu = stk.top();\n          \
-    \  for (int i = G[cu].size() - 1; i >= 0; --i) {\n                int to = G[cu][i];\n\
-    \                if (!visited[to]) {\n                    visited[to] = true;\n\
-    \                    stk.push(to);\n                }\n            }\n       \
-    \     result.push_back(cu);\n        }\n        return result;\n    }\n\n    void\
-    \ print() const {\n        std::cout << this->N << \" \" << this->E.size() <<\
-    \ std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
+    \  return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\
+    \u306B bfs\n     * @attention \u30B0\u30E9\u30D5\u306F\u9023\u7D50\u3067\u3042\
+    \u308B\u3053\u3068\u304C\u5FC5\u8981\n    */\n    std::vector<int> preorder(int\
+    \ start) const {\n        assert(uf.count_groups() == 1);\n        std::vector<int>\
+    \ result;\n        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
+    \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
+    \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
+    \            if (idx == 0)\n                result.push_back(cu);\n          \
+    \  if (idx == G[cu].size()) {\n                stk.pop();\n            } else\
+    \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
+    \ {\n                    visited[to] = true;\n                    stk.push({to,\
+    \ 0});\n                }\n            }\n        }\n        return result;\n\
+    \    }\n    \n    std::vector<int> inorder(int start) const {\n        std::vector<int>\
+    \ result;\n        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
+    \            visited[x] = false;\n        stk.push({start, 0});\n\n        while\
+    \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
+    \ == G[cu].size()) {\n                stk.pop();\n                result.push_back(cu);\n\
+    \            } else {\n                int to = G[cu][idx++];\n              \
+    \  if (!visited[to]) {\n                    visited[to] = true;\n            \
+    \        stk.push({to, 0});\n                    result.push_back(cu);\n     \
+    \           }\n            }\n        }\n        return result;\n    }\n\n   \
+    \ std::vector<int> postorder(int start) const {\n        std::vector<int> result;\n\
+    \        std::stack<std::pair<int, int>> stk;\n        for(int x : uf.contained_group(start))\n\
+    \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
+    \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
+    \            if (idx == G[cu].size()) {\n                stk.pop();\n        \
+    \        result.push_back(cu);\n            } else {\n                int to =\
+    \ G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
+    \ = true;\n                    stk.push({to, 0});\n                }\n       \
+    \     }\n        }\n        return result;\n    }\n\n    graph<WEIGHT, is_directed>\
+    \ reverse() const {\n        if (!is_directed)\n            return *this;\n  \
+    \      graph<WEIGHT, is_directed> ret(count_nodes());\n        for (auto e : edges())\
+    \ {\n            std::swap(e.from, e.to);\n            ret.add_edge(e);\n    \
+    \    }\n        return ret;\n    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\
+    \u57DF\u68EE\n     */\n    graph<WEIGHT, false> minimum_spanning_tree() const\
+    \ {\n        static_assert(!is_directed);\n        graph<WEIGHT, false> ret(count_nodes());\n\
+    \        std::vector<edge<WEIGHT>> E(edges());\n        std::sort(E.begin(), E.end());\n\
+    \        for (auto &e : E)\n            if (!ret.are_connected(e.from, e.to))\
+    \ {\n                ret.add_edge(e);\n            }\n        return ret;\n  \
+    \  }\n\n    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
+    \ << std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
     \ << e << std::endl;\n    }\n};\n#line 3 \"graph/Warshall_Floyd.hpp\"\n\ntemplate\
     \ <class T> matrix<T> Warshall_Floyd(matrix<T> mt) {\n    int N = mt.size_H();\n\
     \    for (int k = 0; k < N; k++) {         // \u7D4C\u7531\u3059\u308B\u9802\u70B9\
@@ -286,8 +302,8 @@ data:
   isVerificationFile: true
   path: test/grl-1-c.test.cpp
   requiredBy: []
-  timestamp: '2023-07-03 16:57:02+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2023-07-03 18:02:22+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test/grl-1-c.test.cpp
 layout: document

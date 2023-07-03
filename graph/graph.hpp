@@ -22,10 +22,10 @@ template <typename WEIGHT, bool is_directed> class graph {
     union_find uf;
     WEIGHT W = 0;
 
-    std::vector<bool> visited;
+    mutable std::vector<bool> visited;
 
   public:
-    graph() : N(0), G(0), uf(0), visited(0) {};
+    graph() : N(0) {};
     graph(int n) : N(n), G(n), uf(n), visited(n) {};
 
     /**
@@ -68,7 +68,7 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @param y ノード番号
      * @return x, y が連結かどうか
      */
-    bool are_connected(int x, int y) { return uf.same(x, y); }
+    bool are_connected(int x, int y) const { return uf.same(x, y); }
 
     /**
      * @return 連結成分の数
@@ -180,7 +180,7 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @brief 行きがけ順に bfs
      * @attention グラフは連結であることが必要
     */
-    std::vector<int> preorder(int start) {
+    std::vector<int> preorder(int start) const {
         assert(uf.count_groups() == 1);
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
@@ -206,7 +206,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         return result;
     }
     
-    std::vector<int> inorder(int start) {
+    std::vector<int> inorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
         for(int x : uf.contained_group(start))
@@ -230,7 +230,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         return result;
     }
 
-    std::vector<int> postorder(int start) {
+    std::vector<int> postorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
         for(int x : uf.contained_group(start))

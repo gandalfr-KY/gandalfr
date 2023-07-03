@@ -7,7 +7,8 @@
 class union_find {
   private:
     int N;
-    std::vector<int> par, group_siz, nxt;
+    mutable std::vector<int> par;
+    std::vector<int> nxt;
     int group_num; // 集合の数
 
   public:
@@ -32,11 +33,11 @@ class union_find {
         N = n;
     }
 
-    int leader(int x) {
+    int leader(int x) const {
         return (par[x] < 0 ? x : par[x] = leader(par[x]));
     }
 
-    bool same(int x, int y) { return leader(x) == leader(y); }
+    bool same(int x, int y) const { return leader(x) == leader(y); }
 
     bool merge(int x, int y) {
         if ((x = leader(x)) == (y = leader(y)))
@@ -54,12 +55,12 @@ class union_find {
     /**
      * @brief x の属するグループのサイズを返す
      */
-    int size(int x) { return -par[leader(x)]; }
+    int size(int x) const { return -par[leader(x)]; }
 
     /**
      * @brief すべてのノードの数
      */
-    int size() { return N; }
+    int size() const { return N; }
 
     std::vector<int> contained_group(int x) const {
         std::vector<int> ret{x};

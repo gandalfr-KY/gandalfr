@@ -9,9 +9,6 @@ data:
   - icon: ':heavy_check_mark:'
     path: graph/Warshall_Floyd.hpp
     title: graph/Warshall_Floyd.hpp
-  - icon: ':heavy_check_mark:'
-    path: graph/diameter.hpp
-    title: "\u6728\u306E\u76F4\u5F84"
   - icon: ':warning:'
     path: graph/doubling.hpp
     title: graph/doubling.hpp
@@ -29,9 +26,6 @@ data:
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
-  - icon: ':heavy_check_mark:'
-    path: graph/shortest_path.hpp
-    title: graph/shortest_path.hpp
   - icon: ':warning:'
     path: graph/topological_sort.hpp
     title: graph/topological_sort.hpp
@@ -210,9 +204,7 @@ data:
   - graph/Warshall_Floyd.hpp
   - graph/doubling.hpp
   - graph/topological_sort.hpp
-  - graph/diameter.hpp
   - graph/lowlink.hpp
-  - graph/shortest_path.hpp
   - graph/traveling_salesman.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
   timestamp: '2023-06-19 01:54:04+09:00'

@@ -37,7 +37,7 @@ data:
     \u3068\u3059\u308B\u3068\u304D\u306E\u6574\u6570\u578B;\ntemplate <int mod> class\
     \ mod_integer {\n  private:\n    long long val; // \u5024\u306F\u5FC5\u305A 0\
     \ <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    static inline lru_cache<int,\
-    \ int> modinv_cache {8}; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\n\
+    \ int> modinv_cache{8}; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\n\
     \    friend mod_integer operator+(const mod_integer &a) { return a; }\n    friend\
     \ mod_integer operator-(const mod_integer &a) { return -a.val; }\n    friend mod_integer\
     \ operator+(const mod_integer &a, const mod_integer &b) {\n        return mod_integer(a.val\
@@ -80,7 +80,7 @@ data:
     \u3068\u3059\u308B\u3068\u304D\u306E\u6574\u6570\u578B;\ntemplate <int mod> class\
     \ mod_integer {\n  private:\n    long long val; // \u5024\u306F\u5FC5\u305A 0\
     \ <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    static inline lru_cache<int,\
-    \ int> modinv_cache {8}; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\n\
+    \ int> modinv_cache{8}; // \u9006\u5143\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\n\
     \    friend mod_integer operator+(const mod_integer &a) { return a; }\n    friend\
     \ mod_integer operator-(const mod_integer &a) { return -a.val; }\n    friend mod_integer\
     \ operator+(const mod_integer &a, const mod_integer &b) {\n        return mod_integer(a.val\
@@ -125,7 +125,7 @@ data:
   path: standard/mod_integer.hpp
   requiredBy:
   - math/binomial_coefficients.hpp
-  timestamp: '2023-07-03 16:57:02+09:00'
+  timestamp: '2023-07-04 13:58:45+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

@@ -75,23 +75,23 @@ data:
     \    static matrix<T> E(int N) {\n        matrix<T> ret(N, N);\n        for (int\
     \ i = 0; i < N; i++)\n            ret[i][i] = 1;\n        return ret;\n    }\n\
     };\n#line 3 \"graph/Warshall_Floyd.hpp\"\n\ntemplate <class T> matrix<T> Warshall_Floyd(matrix<T>\
-    \ mt) {\n    int N = mt.size_H();\n    for (int k = 0; k < N; k++) {         //\
-    \ \u7D4C\u7531\u3059\u308B\u9802\u70B9\n        for (int i = 0; i < N; i++) {\
-    \     // \u59CB\u70B9\n            for (int j = 0; j < N; j++) { // \u7D42\u70B9\
-    \n                mt[i][j] = std::min(mt[i][j], mt[i][k] + mt[k][j]);\n      \
-    \      }\n        }\n    }\n    return mt;\n}\n"
+    \ mt) {\n    int N = mt.size_H();\n    for (int k = 0; k < N; k++)         //\
+    \ \u7D4C\u7531\u3059\u308B\u9802\u70B9\n        for (int i = 0; i < N; i++)  \
+    \   // \u59CB\u70B9\n            for (int j = 0; j < N; j++) // \u7D42\u70B9\n\
+    \                mt[i][j] = std::min(mt[i][j], mt[i][k] + mt[k][j]);\n    return\
+    \ mt;\n}\n"
   code: "#pragma once\n#include \"../math/matrix.hpp\"\n\ntemplate <class T> matrix<T>\
     \ Warshall_Floyd(matrix<T> mt) {\n    int N = mt.size_H();\n    for (int k = 0;\
-    \ k < N; k++) {         // \u7D4C\u7531\u3059\u308B\u9802\u70B9\n        for (int\
-    \ i = 0; i < N; i++) {     // \u59CB\u70B9\n            for (int j = 0; j < N;\
-    \ j++) { // \u7D42\u70B9\n                mt[i][j] = std::min(mt[i][j], mt[i][k]\
-    \ + mt[k][j]);\n            }\n        }\n    }\n    return mt;\n}\n"
+    \ k < N; k++)         // \u7D4C\u7531\u3059\u308B\u9802\u70B9\n        for (int\
+    \ i = 0; i < N; i++)     // \u59CB\u70B9\n            for (int j = 0; j < N; j++)\
+    \ // \u7D42\u70B9\n                mt[i][j] = std::min(mt[i][j], mt[i][k] + mt[k][j]);\n\
+    \    return mt;\n}\n"
   dependsOn:
   - math/matrix.hpp
   isVerificationFile: false
   path: graph/Warshall_Floyd.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-07-04 13:58:45+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-1-c.test.cpp

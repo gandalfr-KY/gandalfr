@@ -2,27 +2,27 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':question:'
+  - icon: ':x:'
     path: graph/Manhattan_minimum_spanning_tree.hpp
     title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
       \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/Warshall_Floyd.hpp
     title: graph/Warshall_Floyd.hpp
   - icon: ':warning:'
     path: graph/doubling.hpp
     title: graph/doubling.hpp
-  - icon: ':question:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   - icon: ':warning:'
     path: graph/is_isomorphic.hpp
     title: graph/is_isomorphic.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowest_common_ancestor.hpp
     title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
       \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
@@ -33,25 +33,25 @@ data:
     path: other/random.hpp
     title: other/random.hpp
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-1-a.test.cpp
     title: test/grl-1-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-1-c.test.cpp
     title: test/grl-1-c.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-2-a.test.cpp
     title: test/grl-2-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-b.test.cpp
     title: test/grl-3-b.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-c.test.cpp
     title: test/grl-5-c.test.cpp
   - icon: ':heavy_check_mark:'
@@ -60,7 +60,7 @@ data:
   - icon: ':x:'
     path: test/jsc2021-g.test.cpp
     title: test/jsc2021-g.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/manhattan-mst.test.cpp
     title: test/manhattan-mst.test.cpp
   _isVerificationFailed: true

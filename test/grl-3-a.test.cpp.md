@@ -1,16 +1,16 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':x:'
     path: data_structure/union_find.hpp
     title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
-  - icon: ':question:'
+  - icon: ':x:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':question:'
+  - icon: ':x:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
@@ -19,9 +19,9 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
@@ -179,13 +179,13 @@ data:
     \n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\u30C8\u306E\
     \u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> weakly_connected_components()\
     \ const {\n        return uf.all_groups();\n    }\n\n    /**\n     * @return \u6728\
-    \u304B\n     */\n    bool is_tree() const {\n        return forest_flag && uf.count_groups()\
-    \ == 1;\n    }\n\n    /**\n     * @return \u68EE\u304B\n     */\n    bool is_forest()\
-    \ const {\n        return forest_flag;\n    }\n\n    /**\n     * @return \u30B0\
-    \u30E9\u30D5\u306E\u91CD\u307F\n     */\n    WEIGHT weight() const { return W;\
-    \ }\n\n    /**\n     * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\
-    \u306E id \u306F\u4FDD\u6301\u3055\u308C\u308B\n     */\n    void add_edge(edge<WEIGHT>\
-    \ e) {\n        forest_flag &= uf.merge(e.from, e.to);\n        E.emplace_back(e);\n\
+    \u304B\n     */\n    bool is_tree() const { return forest_flag && uf.count_groups()\
+    \ == 1; }\n\n    /**\n     * @return \u68EE\u304B\n     */\n    bool is_forest()\
+    \ const { return forest_flag; }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\
+    \u91CD\u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n  \
+    \   * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\
+    \u4FDD\u6301\u3055\u308C\u308B\n     */\n    void add_edge(edge<WEIGHT> e) {\n\
+    \        forest_flag &= uf.merge(e.from, e.to);\n        E.emplace_back(e);\n\
     \        G[e.from].emplace_back(e);\n        if (!is_directed && e.from != e.to)\
     \ {\n            std::swap(e.from, e.to);\n            G[e.from].emplace_back(e);\n\
     \        }\n        W += e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E\
@@ -225,27 +225,27 @@ data:
     \u6210\u5206\u306F 0\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid\
     \ = 0) const {\n        matrix<WEIGHT> ret(N, N, invalid);\n        for (int i\
     \ = 0; i < N; i++)\n            ret[i][i] = 0;\n        for (int i = 0; i < N;\
-    \ i++)\n            for (auto &e : G[i])\n                ret[e.from][e.to] =\
-    \ e.cost;\n        return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\
-    \u3051\u9806\u306B bfs\n     */\n    std::vector<int> preorder(int start) const\
-    \ {\n        std::vector<int> result;\n        std::stack<std::pair<int, int>>\
-    \ stk;\n        for (int x : uf.contained_group(start))\n            visited[x]\
+    \ i++)\n            for (int to : G[i])\n                ret[i][to] = e.cost;\n\
+    \        return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\
+    \u9806\u306B bfs\n     */\n    std::vector<int> preorder(int start) const {\n\
+    \        std::vector<int> result;\n        std::stack<std::pair<int, int>> stk;\n\
+    \        for (int x : uf.contained_group(start))\n            visited[x] = false;\n\
+    \        visited[start] = true;\n        stk.push({start, 0});\n\n        while\
+    \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
+    \ == 0)\n                result.push_back(cu);\n            if (idx == G[cu].size())\
+    \ {\n                stk.pop();\n            } else {\n                int to\
+    \ = G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
+    \ = true;\n                    stk.push({to, 0});\n                }\n       \
+    \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u901A\
+    \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> inorder(int\
+    \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
+    \ int>> stk;\n        for (int x : uf.contained_group(start))\n            visited[x]\
     \ = false;\n        visited[start] = true;\n        stk.push({start, 0});\n\n\
     \        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n  \
-    \          if (idx == 0)\n                result.push_back(cu);\n            if\
-    \ (idx == G[cu].size()) {\n                stk.pop();\n            } else {\n\
-    \                int to = G[cu][idx++];\n                if (!visited[to]) {\n\
-    \                    visited[to] = true;\n                    stk.push({to, 0});\n\
-    \                }\n            }\n        }\n        return result;\n    }\n\n\
-    \    /**\n     * @brief \u901A\u308A\u304C\u3051\u9806\u306B bfs\n     */\n  \
-    \  std::vector<int> inorder(int start) const {\n        std::vector<int> result;\n\
-    \        std::stack<std::pair<int, int>> stk;\n        for (int x : uf.contained_group(start))\n\
-    \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
-    \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
-    \            if (idx == G[cu].size()) {\n                stk.pop();\n        \
-    \        result.push_back(cu);\n            } else {\n                int to =\
-    \ G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
-    \ = true;\n                    stk.push({to, 0});\n                    result.push_back(cu);\n\
+    \          if (idx == G[cu].size()) {\n                stk.pop();\n          \
+    \      result.push_back(cu);\n            } else {\n                int to = G[cu][idx++];\n\
+    \                if (!visited[to]) {\n                    visited[to] = true;\n\
+    \                    stk.push({to, 0});\n                    result.push_back(cu);\n\
     \                }\n            }\n        }\n        return result;\n    }\n\n\
     \    /**\n     * @brief \u5E30\u308A\u304C\u3051\u9806\u306B bfs\n     */\n  \
     \  std::vector<int> postorder(int start) const {\n        std::vector<int> result;\n\
@@ -270,7 +270,7 @@ data:
     \            visited[cu] = true;\n\n            for (auto &e : G[cu]) {\n    \
     \            WEIGHT alt = cur_dist + e.cost;\n                if (dist[e.to] <=\
     \ alt)\n                    continue;\n                dist[e.to] = alt;\n   \
-    \             q.push({alt, e.to});\n            }\n        }\n    }\n\npublic:\n\
+    \             q.push({alt, e.to});\n            }\n        }\n    }\n\n  public:\n\
     \    /**\n     * @brief \u6700\u77ED\u8DDD\u96E2\u3092\u8A08\u7B97\u3059\u308B\
     \n     * @param start_node \u59CB\u70B9\n     * @param invalid \u5230\u9054\u4E0D\
     \u80FD\u306A\u9802\u70B9\u306B\u683C\u7D0D\u3055\u308C\u308B\u5024\n     * @return\
@@ -302,8 +302,8 @@ data:
     \           int cu = q.front();\n            q.pop();\n            for (int to\
     \ : G[cu]) {\n                if (!--indeg[to])\n                    q.push(to);\n\
     \            }\n            sorted.push_back(cu);\n        }\n        return sorted;\n\
-    \    }\n\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n\
-    \    graph minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
+    \    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n  \
+    \  graph minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
     \        graph ret(N);\n        std::vector<edge<WEIGHT>> tmp(edges());\n    \
     \    std::sort(tmp.begin(), tmp.end());\n        for (auto &e : tmp)\n       \
     \     if (!ret.are_connected(e.from, e.to))\n                ret.add_edge(e);\n\
@@ -372,8 +372,8 @@ data:
   isVerificationFile: true
   path: test/grl-3-a.test.cpp
   requiredBy: []
-  timestamp: '2023-07-04 14:50:57+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2023-07-04 15:47:08+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test/grl-3-a.test.cpp
 layout: document

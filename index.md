@@ -61,9 +61,6 @@ data:
       path: graph/strongly_connected_components.hpp
       title: graph/strongly_connected_components.hpp
     - icon: ':warning:'
-      path: graph/topological_sort.hpp
-      title: graph/topological_sort.hpp
-    - icon: ':warning:'
       path: graph/traveling_salesman.hpp
       title: graph/traveling_salesman.hpp
   - name: math

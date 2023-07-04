@@ -24,6 +24,7 @@ template <typename WEIGHT, bool is_directed> class graph {
     WEIGHT W = 0;
 
     mutable std::vector<bool> visited; // dfs / bfs のための領域
+    bool forest_flag = true;
 
   public:
     graph() : N(0){};
@@ -79,7 +80,7 @@ template <typename WEIGHT, bool is_directed> class graph {
     /**
      * @return 連結成分のリストのリスト
      */
-    std::vector<std::vector<int>> connected_components() const {
+    std::vector<std::vector<int>> weakly_connected_components() const {
         return uf.all_groups();
     }
 
@@ -87,7 +88,14 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @return 木か
      */
     bool is_tree() const {
-        return (uf.count_groups() == 1 && (int)E.size() == N - 1);
+        return forest_flag && uf.count_groups() == 1;
+    }
+
+    /**
+     * @return 森か
+     */
+    bool is_forest() const {
+        return forest_flag;
     }
 
     /**
@@ -100,7 +108,7 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @attention 渡した辺の id は保持される
      */
     void add_edge(edge<WEIGHT> e) {
-        uf.merge(e.from, e.to);
+        forest_flag &= uf.merge(e.from, e.to);
         E.emplace_back(e);
         G[e.from].emplace_back(e);
         if (!is_directed && e.from != e.to) {
@@ -116,8 +124,9 @@ template <typename WEIGHT, bool is_directed> class graph {
      */
     void add_edge(int from, int to, WEIGHT cost) {
         static_assert(!std::is_same<WEIGHT, int>::value);
-        if (!is_directed && from > to)
-            std::swap(from, to);
+        if constexpr (!is_directed)
+            if (from > to)
+                std::swap(from, to);
         add_edge(edge<WEIGHT>(from, to, cost, E.size()));
     }
 
@@ -127,8 +136,9 @@ template <typename WEIGHT, bool is_directed> class graph {
      */
     void add_edge(int from, int to) {
         static_assert(std::is_same<WEIGHT, int>::value);
-        if (!is_directed && from > to)
-            std::swap(from, to);
+        if constexpr (!is_directed)
+            if (from > to)
+                std::swap(from, to);
         add_edge(edge<int>(from, to, E.size()));
     }
 
@@ -167,7 +177,6 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @attention G に自己ループが含まれていない限り、対角成分は 0
      */
     matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0) const {
-        int N = count_nodes();
         matrix<WEIGHT> ret(N, N, invalid);
         for (int i = 0; i < N; i++)
             ret[i][i] = 0;
@@ -179,7 +188,6 @@ template <typename WEIGHT, bool is_directed> class graph {
 
     /**
      * @brief 行きがけ順に bfs
-     * @attention グラフは連結であることが必要
      */
     std::vector<int> preorder(int start) const {
         std::vector<int> result;
@@ -206,6 +214,9 @@ template <typename WEIGHT, bool is_directed> class graph {
         return result;
     }
 
+    /**
+     * @brief 通りがけ順に bfs
+     */
     std::vector<int> inorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
@@ -231,6 +242,9 @@ template <typename WEIGHT, bool is_directed> class graph {
         return result;
     }
 
+    /**
+     * @brief 帰りがけ順に bfs
+     */
     std::vector<int> postorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
@@ -293,7 +307,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         }
     }
 
-  public:
+public:
     /**
      * @brief 最短距離を計算する
      * @param start_node 始点
@@ -338,7 +352,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         if constexpr (!is_directed) {
             return *this;
         } else {
-            graph ret(count_nodes());
+            graph ret(N);
             for (auto e : E) {
                 std::swap(e.from, e.to);
                 ret.add_edge(e);
@@ -347,12 +361,35 @@ template <typename WEIGHT, bool is_directed> class graph {
         }
     }
 
+    std::vector<int> topological_sort() {
+        static_assert(is_directed);
+        std::vector<int> indeg(N, 0), sorted;
+        for (int to : E)
+            indeg[to]++;
+
+        std::queue<int> q;
+        for (int i = 0; i < N; i++)
+            if (!indeg[i])
+                q.push(i);
+        while (!q.empty()) {
+            int cu = q.front();
+            q.pop();
+            for (int to : G[cu]) {
+                if (!--indeg[to])
+                    q.push(to);
+            }
+            sorted.push_back(cu);
+        }
+        return sorted;
+    }
+
+
     /**
      * @return 最小全域森
      */
     graph minimum_spanning_tree() const {
         static_assert(!is_directed);
-        graph ret(count_nodes());
+        graph ret(N);
         std::vector<edge<WEIGHT>> tmp(edges());
         std::sort(tmp.begin(), tmp.end());
         for (auto &e : tmp)

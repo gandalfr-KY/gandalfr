@@ -87,16 +87,12 @@ template <typename WEIGHT, bool is_directed> class graph {
     /**
      * @return 木か
      */
-    bool is_tree() const {
-        return forest_flag && uf.count_groups() == 1;
-    }
+    bool is_tree() const { return forest_flag && uf.count_groups() == 1; }
 
     /**
      * @return 森か
      */
-    bool is_forest() const {
-        return forest_flag;
-    }
+    bool is_forest() const { return forest_flag; }
 
     /**
      * @return グラフの重み
@@ -181,8 +177,8 @@ template <typename WEIGHT, bool is_directed> class graph {
         for (int i = 0; i < N; i++)
             ret[i][i] = 0;
         for (int i = 0; i < N; i++)
-            for (auto &e : G[i])
-                ret[e.from][e.to] = e.cost;
+            for (int to : G[i])
+                ret[i][to] = e.cost;
         return ret;
     }
 
@@ -307,7 +303,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         }
     }
 
-public:
+  public:
     /**
      * @brief 最短距離を計算する
      * @param start_node 始点
@@ -382,7 +378,6 @@ public:
         }
         return sorted;
     }
-
 
     /**
      * @return 最小全域森

@@ -1,6 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_A"
 #include <bits/stdc++.h>
-#include "../graph/shortest_path.hpp"
+#include "../graph/graph.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
@@ -20,7 +20,7 @@ int main(void){
  
     //calculate
     
-    auto dist = shortest_path(G, K);
+    auto dist = G.calculate_shortest_distances(K, -1);
     for(auto x : dist){
         if(x == -1) cout << "INF" << endl;
         else cout << x << endl;

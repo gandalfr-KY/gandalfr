@@ -13,8 +13,7 @@ class union_find {
 
   public:
     union_find() : N(0) {}
-    union_find(int n)
-        : N(n), par(n, -1), nxt(n), group_num(n) {
+    union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n) {
         std::iota(nxt.begin(), nxt.end(), 0);
     }
 
@@ -64,7 +63,7 @@ class union_find {
 
     std::vector<int> contained_group(int x) const {
         std::vector<int> ret{x};
-        for(int cu = nxt[x]; cu != ret[0]; cu = nxt[cu])
+        for (int cu = nxt[x]; cu != ret[0]; cu = nxt[cu])
             ret.push_back(cu);
         return ret;
     }
@@ -81,7 +80,6 @@ class union_find {
                 for (int x : result.back()) {
                     used[x] = true;
                 }
-                
             }
         }
         return result;

@@ -1,11 +1,10 @@
 #pragma once
 
-#include <unordered_map>
 #include <list>
+#include <unordered_map>
 
-template <typename KeyType, typename ValueType>
-class lru_cache {
-private:
+template <typename KeyType, typename ValueType> class lru_cache {
+  private:
     using Item = std::pair<KeyType, ValueType>;
     using ItemList = std::list<Item>;
     using ItemMap = std::unordered_map<KeyType, typename ItemList::iterator>;
@@ -14,12 +13,12 @@ private:
     ItemMap item_map;
     size_t capacity;
 
-public:
+  public:
     using iterator = typename ItemList::iterator;
 
     lru_cache(size_t size) : capacity(size) {}
 
-    void put(const KeyType& key, const ValueType& value) {
+    void put(const KeyType &key, const ValueType &value) {
         auto found = item_map.find(key);
         if (found != item_map.end()) {
             item_list.erase(found->second);
@@ -33,7 +32,7 @@ public:
         item_map[key] = std::prev(item_list.end());
     }
 
-    iterator get(const KeyType& key) {
+    iterator get(const KeyType &key) {
         auto found = item_map.find(key);
         if (found == item_map.end()) {
             return end();
@@ -44,7 +43,7 @@ public:
 
     iterator begin() { return item_list.begin(); }
     iterator end() { return item_list.end(); }
-    iterator find(const KeyType& key) {
+    iterator find(const KeyType &key) {
         auto found = item_map.find(key);
         return found != item_map.end() ? found->second : item_list.end();
     }

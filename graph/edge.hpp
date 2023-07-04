@@ -7,6 +7,7 @@ template <class DERIVED, class WEIGHT> struct _base_edge {
     int to;
     WEIGHT cost;
     int id;
+    _base_edge() {}
     _base_edge(int _from, int _to, WEIGHT _cost, int _id)
         : from(_from), to(_to), cost(_cost), id(_id) {}
 
@@ -41,7 +42,6 @@ template <class DERIVED, class WEIGHT> struct _base_edge {
 
 template <class WEIGHT>
 struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT> {
-    edge() : internal::_base_edge<edge<WEIGHT>, WEIGHT>(0, 0, 0, 0) {}
     using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;
 
   protected:
@@ -51,9 +51,8 @@ struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT> {
     int compare(
         const internal::_base_edge<edge<WEIGHT>, WEIGHT> &e) const override {
         if (this->cost == e.cost) {
-            if (this->from == e.from) {
+            if (this->from == e.from)
                 return this->to - e.to;
-            }
             return this->from - e.from;
         }
         return this->cost - e.cost;
@@ -61,8 +60,8 @@ struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT> {
 };
 
 template <> struct edge<int> : public internal::_base_edge<edge<int>, int> {
-    static const int cost = 1;
-    edge() : internal::_base_edge<edge<int>, int>(0, 0, 0, 0) {}
+    static inline const int cost = 1;
+    using internal::_base_edge<edge<int>, int>::_base_edge;
     edge(int _from, int _to, int _id)
         : _base_edge<edge<int>, int>(_from, _to, 0, _id) {}
 
@@ -71,9 +70,8 @@ template <> struct edge<int> : public internal::_base_edge<edge<int>, int> {
         os << this->from << " " << this->to;
     }
     int compare(const internal::_base_edge<edge<int>, int> &e) const override {
-        if (this->from == e.from) {
+        if (this->from == e.from)
             return this->to - e.to;
-        }
         return this->from - e.from;
     }
 };

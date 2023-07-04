@@ -9,7 +9,7 @@
 template <int mod> class mod_integer {
   private:
     long long val; // 値は必ず 0 <= val < mod に保たれる
-    static inline lru_cache<int, int> modinv_cache {8}; // 逆元のキャッシュ
+    static inline lru_cache<int, int> modinv_cache{8}; // 逆元のキャッシュ
     friend mod_integer operator+(const mod_integer &a) { return a; }
     friend mod_integer operator-(const mod_integer &a) { return -a.val; }
     friend mod_integer operator+(const mod_integer &a, const mod_integer &b) {

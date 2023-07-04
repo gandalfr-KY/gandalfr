@@ -1,6 +1,6 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_A"
 #include <bits/stdc++.h>
-#include "../graph/diameter.hpp"
+#include "../graph/graph.hpp"
 using namespace std;
 using ll = long long;
 #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
@@ -20,6 +20,6 @@ int main(void){
  
     //calculate
 
-    cout << diameter(G) << endl;
+    cout << G.diameter() << endl;
  
 }

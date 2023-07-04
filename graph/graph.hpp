@@ -1,9 +1,10 @@
 #pragma once
 #include <algorithm>
+#include <assert.h>
+#include <queue>
 #include <stack>
 #include <tuple>
 #include <vector>
-#include <assert.h>
 
 #include "../data_structure/union_find.hpp"
 #include "../math/matrix.hpp"
@@ -22,11 +23,11 @@ template <typename WEIGHT, bool is_directed> class graph {
     union_find uf;
     WEIGHT W = 0;
 
-    mutable std::vector<bool> visited;
+    mutable std::vector<bool> visited; // dfs / bfs のための領域
 
   public:
-    graph() : N(0) {};
-    graph(int n) : N(n), G(n), uf(n), visited(n) {};
+    graph() : N(0){};
+    graph(int n) : N(n), G(n), uf(n), visited(n){};
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -78,7 +79,9 @@ template <typename WEIGHT, bool is_directed> class graph {
     /**
      * @return 連結成分のリストのリスト
      */
-    std::vector<std::vector<int>> connected_components() const { return uf.all_groups(); }
+    std::vector<std::vector<int>> connected_components() const {
+        return uf.all_groups();
+    }
 
     /**
      * @return 木か
@@ -142,9 +145,9 @@ template <typename WEIGHT, bool is_directed> class graph {
         std::vector<graph> Gs(uf.count_groups());
         std::vector<std::vector<int>> groups(uf.all_groups());
         std::vector<int> group_id(N), node_id(N);
-        for (int i = 0; i < groups.size(); i++) {
+        for (int i = 0; i < (int)groups.size(); i++) {
             Gs[i].expand(groups[i].size());
-            for (int j = 0; j < groups[i].size(); j++) {
+            for (int j = 0; j < (int)groups[i].size(); j++) {
                 group_id[groups[i][j]] = i;
                 node_id[groups[i][j]] = j;
             }
@@ -168,23 +171,20 @@ template <typename WEIGHT, bool is_directed> class graph {
         matrix<WEIGHT> ret(N, N, invalid);
         for (int i = 0; i < N; i++)
             ret[i][i] = 0;
-        for (int i = 0; i < N; i++) {
-            for (auto &e : G[i]) {
+        for (int i = 0; i < N; i++)
+            for (auto &e : G[i])
                 ret[e.from][e.to] = e.cost;
-            }
-        }
         return ret;
     }
 
     /**
      * @brief 行きがけ順に bfs
      * @attention グラフは連結であることが必要
-    */
+     */
     std::vector<int> preorder(int start) const {
-        assert(uf.count_groups() == 1);
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        for(int x : uf.contained_group(start))
+        for (int x : uf.contained_group(start))
             visited[x] = false;
         visited[start] = true;
         stk.push({start, 0});
@@ -205,12 +205,13 @@ template <typename WEIGHT, bool is_directed> class graph {
         }
         return result;
     }
-    
+
     std::vector<int> inorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        for(int x : uf.contained_group(start))
+        for (int x : uf.contained_group(start))
             visited[x] = false;
+        visited[start] = true;
         stk.push({start, 0});
 
         while (!stk.empty()) {
@@ -233,7 +234,7 @@ template <typename WEIGHT, bool is_directed> class graph {
     std::vector<int> postorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        for(int x : uf.contained_group(start))
+        for (int x : uf.contained_group(start))
             visited[x] = false;
         visited[start] = true;
         stk.push({start, 0});
@@ -254,12 +255,91 @@ template <typename WEIGHT, bool is_directed> class graph {
         return result;
     }
 
-    graph<WEIGHT, is_directed> reverse() const {
+  private:
+    using PAIR = std::pair<WEIGHT, int>;
+    using Dijkstra_queue =
+        std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;
+
+    void run_bfs(std::vector<int> &dist, std::queue<int> &q) const {
+        while (!q.empty()) {
+            int cu = q.front();
+            q.pop();
+            for (auto &e : G[cu]) {
+                if (dist[e.to] != std::numeric_limits<WEIGHT>::max())
+                    continue;
+                dist[e.to] = dist[cu] + 1;
+                q.push(e.to);
+            }
+        }
+    }
+
+    void run_Dijkstra(std::vector<WEIGHT> &dist, Dijkstra_queue &q) const {
+        while (!q.empty()) {
+            WEIGHT cur_dist = q.top().first;
+            int cu = q.top().second;
+            q.pop();
+
+            if (visited[cu])
+                continue;
+            visited[cu] = true;
+
+            for (auto &e : G[cu]) {
+                WEIGHT alt = cur_dist + e.cost;
+                if (dist[e.to] <= alt)
+                    continue;
+                dist[e.to] = alt;
+                q.push({alt, e.to});
+            }
+        }
+    }
+
+  public:
+    /**
+     * @brief 最短距離を計算する
+     * @param start_node 始点
+     * @param invalid 到達不能な頂点に格納される値
+     * @return 各ノードまでの最短距離のリスト
+     */
+    std::vector<WEIGHT> calculate_shortest_distances(int start_node,
+                                                     WEIGHT invalid) const {
+        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());
+        dist[start_node] = 0;
+
+        if constexpr (std::is_same<WEIGHT, int>::value) {
+            // BFS algorithm
+            std::queue<int> q;
+            q.push(start_node);
+            run_bfs(dist, q);
+        } else {
+            // Dijkstra's algorithm
+            std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>> q;
+            q.push({0, start_node});
+            for (int x : uf.contained_group(start_node))
+                visited[x] = false;
+            run_Dijkstra(dist, q);
+        }
+
+        for (auto &x : dist)
+            if (x == std::numeric_limits<WEIGHT>::max())
+                x = invalid;
+        return dist;
+    }
+
+    WEIGHT diameter() const {
+        static_assert(!is_directed);
+        assert(is_tree());
+        std::vector<WEIGHT> dist(calculate_shortest_distances(0, -1));
+        dist = calculate_shortest_distances(
+            std::max_element(dist.begin(), dist.end()) - dist.begin(), -1);
+        return *std::max_element(dist.begin(), dist.end());
+    }
+
+    graph reverse() const {
         if constexpr (!is_directed) {
             return *this;
         } else {
-            graph<WEIGHT, is_directed> ret(count_nodes());
-            for (auto e : edges()) {
+            graph ret(count_nodes());
+            for (auto e : E) {
                 std::swap(e.from, e.to);
                 ret.add_edge(e);
             }
@@ -270,15 +350,14 @@ template <typename WEIGHT, bool is_directed> class graph {
     /**
      * @return 最小全域森
      */
-    graph<WEIGHT, false> minimum_spanning_tree() const {
+    graph minimum_spanning_tree() const {
         static_assert(!is_directed);
-        graph<WEIGHT, false> ret(count_nodes());
-        std::vector<edge<WEIGHT>> E(edges());
-        std::sort(E.begin(), E.end());
-        for (auto &e : E)
-            if (!ret.are_connected(e.from, e.to)) {
+        graph ret(count_nodes());
+        std::vector<edge<WEIGHT>> tmp(edges());
+        std::sort(tmp.begin(), tmp.end());
+        for (auto &e : tmp)
+            if (!ret.are_connected(e.from, e.to))
                 ret.add_edge(e);
-            }
         return ret;
     }
 

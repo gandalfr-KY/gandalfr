@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #include "../data_structure/sparse_table.hpp"
-#include "shortest_path.hpp"
+#include "graph.hpp"
 
 /**
  * @brief 無向単純木の最小共通祖先を求めるクラス
@@ -31,7 +31,7 @@ template <typename WEIGHT> class lowest_common_ancestor {
 
   public:
     lowest_common_ancestor(const graph<WEIGHT, false> &G)
-        : idx(G.count_nodes()), dist(shortest_path(G, 0)) {
+        : idx(G.count_nodes()), dist(G.calculate_shortest_distances(0, -1)) {
         assert(G.is_tree());
         int cnt = 0;
         Euler_tour(G, 0, -1, 0, cnt);

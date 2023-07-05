@@ -25,7 +25,7 @@ struct grid {
         return (a.h == b.h && a.w == b.w);
     }
     inline friend bool operator!=(const grid &a, const grid &b) {
-        return (a.h != b.h || a.w != b.w);
+        return std::rel_ops::operator!=(a, b);
     }
     void operator+=(const grid &a) { h += a.h, w += a.w; }
     void operator-=(const grid &a) { h -= a.h, w -= a.w; }
@@ -40,19 +40,13 @@ struct grid {
         return a.h < b.h;
     }
     friend bool operator<=(const grid &a, const grid &b) {
-        if (a.h == b.h)
-            return a.w <= b.w;
-        return a.h < b.h;
+        return std::rel_ops::operator<=(a, b);
     }
     friend bool operator>(const grid &a, const grid &b) {
-        if (a.h == b.h)
-            return a.w > b.w;
-        return a.h > b.h;
+        return std::rel_ops::operator>(a, b);
     }
     friend bool operator>=(const grid &a, const grid &b) {
-        if (a.h == b.h)
-            return a.w >= b.w;
-        return a.h > b.h;
+        return std::rel_ops::operator>=(a, b);
     }
     friend std::istream &operator>>(std::istream &is, grid &g) {
         is >> g.h >> g.w;

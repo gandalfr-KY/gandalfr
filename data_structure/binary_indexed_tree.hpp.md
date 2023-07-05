@@ -47,8 +47,8 @@ data:
   timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/alds1-5-d.test.cpp
   - test/dsl-2-b.test.cpp
+  - test/alds1-5-d.test.cpp
 documentation_of: data_structure/binary_indexed_tree.hpp
 layout: document
 redirect_from:

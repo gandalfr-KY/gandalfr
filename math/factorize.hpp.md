@@ -89,8 +89,8 @@ data:
   timestamp: '2023-06-19 01:54:04+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/ntl-1-a.test.cpp
   - test/ntl-1-d.test.cpp
+  - test/ntl-1-a.test.cpp
 documentation_of: math/factorize.hpp
 layout: document
 redirect_from:

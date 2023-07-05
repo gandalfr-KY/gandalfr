@@ -177,8 +177,8 @@ template <typename WEIGHT, bool is_directed> class graph {
         for (int i = 0; i < N; i++)
             ret[i][i] = 0;
         for (int i = 0; i < N; i++)
-            for (int to : G[i])
-                ret[i][to] = e.cost;
+            for (auto &e : G[i])
+                ret[i][e.to] = e.cost;
         return ret;
     }
 

@@ -1,16 +1,16 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
@@ -19,9 +19,9 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B
@@ -225,7 +225,7 @@ data:
     \u6210\u5206\u306F 0\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid\
     \ = 0) const {\n        matrix<WEIGHT> ret(N, N, invalid);\n        for (int i\
     \ = 0; i < N; i++)\n            ret[i][i] = 0;\n        for (int i = 0; i < N;\
-    \ i++)\n            for (int to : G[i])\n                ret[i][to] = e.cost;\n\
+    \ i++)\n            for (auto &e : G[i])\n                ret[i][e.to] = e.cost;\n\
     \        return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\
     \u9806\u306B bfs\n     */\n    std::vector<int> preorder(int start) const {\n\
     \        std::vector<int> result;\n        std::stack<std::pair<int, int>> stk;\n\
@@ -373,8 +373,8 @@ data:
   isVerificationFile: true
   path: test/grl-3-b.test.cpp
   requiredBy: []
-  timestamp: '2023-07-04 15:47:08+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2023-07-05 14:15:50+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-3-b.test.cpp
 layout: document

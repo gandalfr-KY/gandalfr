@@ -1,17 +1,17 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: data_structure/sparse_table.hpp
     title: "\u7D50\u5408\u5247\u30FB\u51AA\u7B49\u6027\u3092\u6E80\u305F\u3059\u6F14\
       \u7B97\u306E\u66F4\u65B0\u7121\u3057\u533A\u9593\u30AF\u30A8\u30EA\u51E6\u7406"
-  - icon: ':x:'
+  - icon: ':question:'
     path: data_structure/union_find.hpp
     title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/edge.hpp
     title: graph/edge.hpp
-  - icon: ':x:'
+  - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
   - icon: ':question:'
@@ -19,12 +19,12 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test/grl-5-c.test.cpp
     title: test/grl-5-c.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     document_title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\
       \u5148\u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
@@ -253,7 +253,7 @@ data:
     \u6210\u5206\u306F 0\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid\
     \ = 0) const {\n        matrix<WEIGHT> ret(N, N, invalid);\n        for (int i\
     \ = 0; i < N; i++)\n            ret[i][i] = 0;\n        for (int i = 0; i < N;\
-    \ i++)\n            for (int to : G[i])\n                ret[i][to] = e.cost;\n\
+    \ i++)\n            for (auto &e : G[i])\n                ret[i][e.to] = e.cost;\n\
     \        return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\
     \u9806\u306B bfs\n     */\n    std::vector<int> preorder(int start) const {\n\
     \        std::vector<int> result;\n        std::stack<std::pair<int, int>> stk;\n\
@@ -384,8 +384,8 @@ data:
   isVerificationFile: false
   path: graph/lowest_common_ancestor.hpp
   requiredBy: []
-  timestamp: '2023-07-04 15:47:08+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2023-07-05 14:15:50+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-5-c.test.cpp
 documentation_of: graph/lowest_common_ancestor.hpp

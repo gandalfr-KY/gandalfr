@@ -13,6 +13,9 @@ data:
       path: data_structure/dual_segment_tree.hpp
       title: data_structure/dual_segment_tree.hpp
     - icon: ':warning:'
+      path: data_structure/healthy_2d_segment_tree.hpp
+      title: data_structure/healthy_2d_segment_tree.hpp
+    - icon: ':warning:'
       path: data_structure/my_multiset.hpp
       title: data_structure/my_multiset.hpp
     - icon: ':warning:'

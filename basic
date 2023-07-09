@@ -16,6 +16,7 @@
 #include "data_structure/union_find.hpp"
 #include "data_structure/my_multiset.hpp"
 #include "data_structure/LRU_cache.hpp"
+#include "data_structure/healthy_2d_segment_tree.hpp"
 #include "standard/fraction.hpp"
 #include "standard/rolling_hash.hpp"
 #include "standard/inversion.hpp"

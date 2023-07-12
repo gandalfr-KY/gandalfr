@@ -15,7 +15,7 @@ data:
     links:
     - https://onlinejudge.u-aizu.ac.jp/problems/ITP1_7_D
   bundledCode: "#line 1 \"test/itp1-t-d.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ITP1_7_D\"\
-    \n#include <bits/stdc++.h>\n#line 3 \"math/matrix.hpp\"\n\n#line 7 \"math/matrix.hpp\"\
+    \n#include <bits/stdc++.h>\n#line 3 \"math/matrix.hpp\"\n\n#line 8 \"math/matrix.hpp\"\
     \n\ntemplate <class T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n  public:\n    matrix() = default;\n    matrix(int _H, int _W, T val\
     \ = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const\
@@ -52,33 +52,33 @@ data:
     \        assert(W == a.H);\n        matrix<T> a_t(a.transpose()), ret(H, a.W);\n\
     \        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < a.W; j++)\
     \ {\n                ret[i][j] = (this->table[i] * a_t.table[j]).sum();\n    \
-    \        }\n        }\n        return *this = ret;\n    }\n    matrix<T> &operator/=(const\
-    \ T &a) {\n        this->table /= a;\n        return *this;\n    }\n    /**\n\
-    \     * @brief \u884C\u5217\u306E\u51AA\u4E57\u3002\n     * @param n \u6307\u6570\
-    \n     * @attention n \u304C 0 \u306A\u3089\u5358\u4F4D\u884C\u5217\u3002\n  \
-    \   * @attention \u6F14\u7B97\u5B50\u306E\u512A\u5148\u5EA6\u306B\u6CE8\u610F\u3002\
-    \n     */\n    matrix<T> operator^=(long long n) {\n        assert(H == W);\n\
-    \        if (n == 0)\n            return *this = E(H);\n        n--;\n       \
-    \ matrix<T> x(*this);\n        while (n) {\n            if (n & 1)\n         \
-    \       *this *= x;\n            x *= x;\n            n >>= 1;\n        }\n  \
-    \      return *this;\n    }\n\n    matrix<T> operator+() { return *this; }\n \
-    \   matrix<T> operator-() { return matrix<T>(*this) *= -1; }\n    matrix<T> operator+(const\
-    \ matrix<T> &a) { return matrix<T>(*this) += a; }\n    matrix<T> operator-(const\
-    \ matrix<T> &a) { return matrix<T>(*this) -= a; }\n    template <typename S> matrix<T>\
-    \ operator*(const S &a) {\n        return matrix<T>(*this) *= a;\n    }\n    matrix<T>\
-    \ operator/(const T &a) { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long\
-    \ long n) { return matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int\
-    \ h) { return table[h]; }\n    friend std::istream &operator>>(std::istream &is,\
-    \ matrix<T> &mt) {\n        for (auto &arr : mt.table)\n            for (auto\
-    \ &x : arr)\n                is >> x;\n        return is;\n    }\n    /**\n  \
-    \   * @brief \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n\
-    \    static matrix<T> E(int N) {\n        matrix<T> ret(N, N);\n        for (int\
-    \ i = 0; i < N; i++)\n            ret[i][i] = 1;\n        return ret;\n    }\n\
-    };\n#line 4 \"test/itp1-t-d.test.cpp\"\nusing namespace std;\nusing ll = long\
-    \ long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\nint main(void){\n\
-    \ \n    //input\n \n    int H, W, L;\n    cin >> H >> W >> L;\n    matrix<ll>\
-    \ A(H, W), B(W, L);\n    cin >> A >> B;\n\n    //calculate\n \n    (A * B).print();\n\
-    \ \n}\n"
+    \        }\n        }\n        *this = std::move(ret);\n        return *this;\n\
+    \    }\n    matrix<T> &operator/=(const T &a) {\n        this->table /= a;\n \
+    \       return *this;\n    }\n    /**\n     * @brief \u884C\u5217\u306E\u51AA\u4E57\
+    \u3002\n     * @param n \u6307\u6570\n     * @attention n \u304C 0 \u306A\u3089\
+    \u5358\u4F4D\u884C\u5217\u3002\n     * @attention \u6F14\u7B97\u5B50\u306E\u512A\
+    \u5148\u5EA6\u306B\u6CE8\u610F\u3002\n     */\n    matrix<T> operator^=(long long\
+    \ n) {\n        assert(H == W);\n        if (n == 0)\n            return *this\
+    \ = E(H);\n        n--;\n        matrix<T> x(*this);\n        while (n) {\n  \
+    \          if (n & 1)\n                *this *= x;\n            x *= x;\n    \
+    \        n >>= 1;\n        }\n        return *this;\n    }\n\n    matrix<T> operator+()\
+    \ { return *this; }\n    matrix<T> operator-() { return matrix<T>(*this) *= -1;\
+    \ }\n    matrix<T> operator+(const matrix<T> &a) { return matrix<T>(*this) +=\
+    \ a; }\n    matrix<T> operator-(const matrix<T> &a) { return matrix<T>(*this)\
+    \ -= a; }\n    template <typename S> matrix<T> operator*(const S &a) {\n     \
+    \   return matrix<T>(*this) *= a;\n    }\n    matrix<T> operator/(const T &a)\
+    \ { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long long n) { return\
+    \ matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int h) { return table[h];\
+    \ }\n    friend std::istream &operator>>(std::istream &is, matrix<T> &mt) {\n\
+    \        for (auto &arr : mt.table)\n            for (auto &x : arr)\n       \
+    \         is >> x;\n        return is;\n    }\n    /**\n     * @brief \u30B5\u30A4\
+    \u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T> E(int\
+    \ N) {\n        matrix<T> ret(N, N);\n        for (int i = 0; i < N; i++)\n  \
+    \          ret[i][i] = 1;\n        return ret;\n    }\n};\n#line 4 \"test/itp1-t-d.test.cpp\"\
+    \nusing namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i =\
+    \ (ll)(j); i < (ll)(n); i++)\n\nint main(void){\n \n    //input\n \n    int H,\
+    \ W, L;\n    cin >> H >> W >> L;\n    matrix<ll> A(H, W), B(W, L);\n    cin >>\
+    \ A >> B;\n\n    //calculate\n \n    (A * B).print();\n \n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/ITP1_7_D\"\n\
     #include <bits/stdc++.h>\n#include \"../math/matrix.hpp\"\nusing namespace std;\n\
     using ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
@@ -90,7 +90,7 @@ data:
   isVerificationFile: true
   path: test/itp1-t-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-07-13 01:00:21+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/itp1-t-d.test.cpp

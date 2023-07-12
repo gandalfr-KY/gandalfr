@@ -22,13 +22,13 @@ data:
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1
   bundledCode: "#line 2 \"math/matrix.hpp\"\n#include <assert.h>\n\n#include <iostream>\n\
-    #include <valarray>\n#include <vector>\n\ntemplate <class T> class matrix {\n\
-    \  private:\n    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n\
-    \    matrix() = default;\n    matrix(int _H, int _W, T val = 0)\n        : H(_H),\
-    \ W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const std::vector<std::vector<T>>\
-    \ &vv)\n        : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H)\
-    \ {\n        for (int i = 0; i < H; i++)\n            for (int j = 0; j < W; j++)\n\
-    \                table[i][j] = vv[i][j];\n    }\n    matrix(const std::valarray<std::valarray<T>>\
+    #include <valarray>\n#include <vector>\n#include <utility>\n\ntemplate <class\
+    \ T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
+    \ table;\n\n  public:\n    matrix() = default;\n    matrix(int _H, int _W, T val\
+    \ = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const\
+    \ std::vector<std::vector<T>> &vv)\n        : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W),\
+    \ H) {\n        for (int i = 0; i < H; i++)\n            for (int j = 0; j < W;\
+    \ j++)\n                table[i][j] = vv[i][j];\n    }\n    matrix(const std::valarray<std::valarray<T>>\
     \ &vv)\n        : H(vv.size()), W(vv[0].size()), table(vv) {}\n\n    /**\n   \
     \  * @brief \u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002\n   \
     \  * @param val \u62E1\u5F35\u90E8\u5206\u306E\u5024\n     */\n    void resize(int\
@@ -59,44 +59,45 @@ data:
     \        assert(W == a.H);\n        matrix<T> a_t(a.transpose()), ret(H, a.W);\n\
     \        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < a.W; j++)\
     \ {\n                ret[i][j] = (this->table[i] * a_t.table[j]).sum();\n    \
-    \        }\n        }\n        return *this = ret;\n    }\n    matrix<T> &operator/=(const\
-    \ T &a) {\n        this->table /= a;\n        return *this;\n    }\n    /**\n\
-    \     * @brief \u884C\u5217\u306E\u51AA\u4E57\u3002\n     * @param n \u6307\u6570\
-    \n     * @attention n \u304C 0 \u306A\u3089\u5358\u4F4D\u884C\u5217\u3002\n  \
-    \   * @attention \u6F14\u7B97\u5B50\u306E\u512A\u5148\u5EA6\u306B\u6CE8\u610F\u3002\
-    \n     */\n    matrix<T> operator^=(long long n) {\n        assert(H == W);\n\
-    \        if (n == 0)\n            return *this = E(H);\n        n--;\n       \
-    \ matrix<T> x(*this);\n        while (n) {\n            if (n & 1)\n         \
-    \       *this *= x;\n            x *= x;\n            n >>= 1;\n        }\n  \
-    \      return *this;\n    }\n\n    matrix<T> operator+() { return *this; }\n \
-    \   matrix<T> operator-() { return matrix<T>(*this) *= -1; }\n    matrix<T> operator+(const\
-    \ matrix<T> &a) { return matrix<T>(*this) += a; }\n    matrix<T> operator-(const\
-    \ matrix<T> &a) { return matrix<T>(*this) -= a; }\n    template <typename S> matrix<T>\
-    \ operator*(const S &a) {\n        return matrix<T>(*this) *= a;\n    }\n    matrix<T>\
-    \ operator/(const T &a) { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long\
-    \ long n) { return matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int\
-    \ h) { return table[h]; }\n    friend std::istream &operator>>(std::istream &is,\
-    \ matrix<T> &mt) {\n        for (auto &arr : mt.table)\n            for (auto\
-    \ &x : arr)\n                is >> x;\n        return is;\n    }\n    /**\n  \
-    \   * @brief \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n\
-    \    static matrix<T> E(int N) {\n        matrix<T> ret(N, N);\n        for (int\
-    \ i = 0; i < N; i++)\n            ret[i][i] = 1;\n        return ret;\n    }\n\
-    };\n#line 2 \"graph/graph.hpp\"\n#include <algorithm>\n#line 4 \"graph/graph.hpp\"\
-    \n#include <queue>\n#include <stack>\n#include <tuple>\n#line 8 \"graph/graph.hpp\"\
-    \n\n#line 3 \"data_structure/union_find.hpp\"\n\n#line 6 \"data_structure/union_find.hpp\"\
-    \n\nclass union_find {\n  private:\n    int N;\n    mutable std::vector<int> par;\n\
-    \    std::vector<int> nxt;\n    int group_num; // \u96C6\u5408\u306E\u6570\n\n\
-    \  public:\n    union_find() : N(0) {}\n    union_find(int n) : N(n), par(n, -1),\
-    \ nxt(n), group_num(n) {\n        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n\
-    \n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n\
-    \     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n\
-    \    void expand(int n) {\n        if (n <= N)\n            return;\n        par.resize(n,\
-    \ -1);\n        nxt.resize(n);\n        for (int i = N; i < n; ++i)\n        \
-    \    nxt[i] = i;\n        group_num += n - N;\n        N = n;\n    }\n\n    int\
-    \ leader(int x) const {\n        return (par[x] < 0 ? x : par[x] = leader(par[x]));\n\
-    \    }\n\n    bool same(int x, int y) const { return leader(x) == leader(y); }\n\
-    \n    bool merge(int x, int y) {\n        if ((x = leader(x)) == (y = leader(y)))\n\
-    \            return false;\n        if (-par[x] > -par[y])\n            std::swap(x,\
+    \        }\n        }\n        *this = std::move(ret);\n        return *this;\n\
+    \    }\n    matrix<T> &operator/=(const T &a) {\n        this->table /= a;\n \
+    \       return *this;\n    }\n    /**\n     * @brief \u884C\u5217\u306E\u51AA\u4E57\
+    \u3002\n     * @param n \u6307\u6570\n     * @attention n \u304C 0 \u306A\u3089\
+    \u5358\u4F4D\u884C\u5217\u3002\n     * @attention \u6F14\u7B97\u5B50\u306E\u512A\
+    \u5148\u5EA6\u306B\u6CE8\u610F\u3002\n     */\n    matrix<T> operator^=(long long\
+    \ n) {\n        assert(H == W);\n        if (n == 0)\n            return *this\
+    \ = E(H);\n        n--;\n        matrix<T> x(*this);\n        while (n) {\n  \
+    \          if (n & 1)\n                *this *= x;\n            x *= x;\n    \
+    \        n >>= 1;\n        }\n        return *this;\n    }\n\n    matrix<T> operator+()\
+    \ { return *this; }\n    matrix<T> operator-() { return matrix<T>(*this) *= -1;\
+    \ }\n    matrix<T> operator+(const matrix<T> &a) { return matrix<T>(*this) +=\
+    \ a; }\n    matrix<T> operator-(const matrix<T> &a) { return matrix<T>(*this)\
+    \ -= a; }\n    template <typename S> matrix<T> operator*(const S &a) {\n     \
+    \   return matrix<T>(*this) *= a;\n    }\n    matrix<T> operator/(const T &a)\
+    \ { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long long n) { return\
+    \ matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int h) { return table[h];\
+    \ }\n    friend std::istream &operator>>(std::istream &is, matrix<T> &mt) {\n\
+    \        for (auto &arr : mt.table)\n            for (auto &x : arr)\n       \
+    \         is >> x;\n        return is;\n    }\n    /**\n     * @brief \u30B5\u30A4\
+    \u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T> E(int\
+    \ N) {\n        matrix<T> ret(N, N);\n        for (int i = 0; i < N; i++)\n  \
+    \          ret[i][i] = 1;\n        return ret;\n    }\n};\n#line 2 \"graph/graph.hpp\"\
+    \n#include <algorithm>\n#line 4 \"graph/graph.hpp\"\n#include <queue>\n#include\
+    \ <stack>\n#include <tuple>\n#line 8 \"graph/graph.hpp\"\n\n#line 3 \"data_structure/union_find.hpp\"\
+    \n\n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
+    \    int N;\n    mutable std::vector<int> par;\n    std::vector<int> nxt;\n  \
+    \  int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find() :\
+    \ N(0) {}\n    union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n) {\n\
+    \        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n\n    /**\n     * @brief\
+    \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
+    \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
+    \        if (n <= N)\n            return;\n        par.resize(n, -1);\n      \
+    \  nxt.resize(n);\n        for (int i = N; i < n; ++i)\n            nxt[i] = i;\n\
+    \        group_num += n - N;\n        N = n;\n    }\n\n    int leader(int x) const\
+    \ {\n        return (par[x] < 0 ? x : par[x] = leader(par[x]));\n    }\n\n   \
+    \ bool same(int x, int y) const { return leader(x) == leader(y); }\n\n    bool\
+    \ merge(int x, int y) {\n        if ((x = leader(x)) == (y = leader(y)))\n   \
+    \         return false;\n        if (-par[x] > -par[y])\n            std::swap(x,\
     \ y);\n\n        par[x] += par[y];\n        par[y] = x;\n        std::swap(nxt[x],\
     \ nxt[y]);\n        group_num--;\n        return true;\n    }\n\n    /**\n   \
     \  * @brief x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\
@@ -337,7 +338,7 @@ data:
   isVerificationFile: false
   path: graph/traveling_salesman.hpp
   requiredBy: []
-  timestamp: '2023-07-12 15:11:45+09:00'
+  timestamp: '2023-07-13 01:00:21+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/traveling_salesman.hpp

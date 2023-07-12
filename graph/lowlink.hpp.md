@@ -60,7 +60,7 @@ data:
     \     result.emplace_back(contained_group(i));\n                for (int x : result.back())\
     \ {\n                    used[x] = true;\n                }\n            }\n \
     \       }\n        return result;\n    }\n};\n#line 3 \"math/matrix.hpp\"\n\n\
-    #include <iostream>\n#include <valarray>\n#line 7 \"math/matrix.hpp\"\n\ntemplate\
+    #include <iostream>\n#include <valarray>\n#line 8 \"math/matrix.hpp\"\n\ntemplate\
     \ <class T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n  public:\n    matrix() = default;\n    matrix(int _H, int _W, T val\
     \ = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const\
@@ -97,45 +97,45 @@ data:
     \        assert(W == a.H);\n        matrix<T> a_t(a.transpose()), ret(H, a.W);\n\
     \        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < a.W; j++)\
     \ {\n                ret[i][j] = (this->table[i] * a_t.table[j]).sum();\n    \
-    \        }\n        }\n        return *this = ret;\n    }\n    matrix<T> &operator/=(const\
-    \ T &a) {\n        this->table /= a;\n        return *this;\n    }\n    /**\n\
-    \     * @brief \u884C\u5217\u306E\u51AA\u4E57\u3002\n     * @param n \u6307\u6570\
-    \n     * @attention n \u304C 0 \u306A\u3089\u5358\u4F4D\u884C\u5217\u3002\n  \
-    \   * @attention \u6F14\u7B97\u5B50\u306E\u512A\u5148\u5EA6\u306B\u6CE8\u610F\u3002\
-    \n     */\n    matrix<T> operator^=(long long n) {\n        assert(H == W);\n\
-    \        if (n == 0)\n            return *this = E(H);\n        n--;\n       \
-    \ matrix<T> x(*this);\n        while (n) {\n            if (n & 1)\n         \
-    \       *this *= x;\n            x *= x;\n            n >>= 1;\n        }\n  \
-    \      return *this;\n    }\n\n    matrix<T> operator+() { return *this; }\n \
-    \   matrix<T> operator-() { return matrix<T>(*this) *= -1; }\n    matrix<T> operator+(const\
-    \ matrix<T> &a) { return matrix<T>(*this) += a; }\n    matrix<T> operator-(const\
-    \ matrix<T> &a) { return matrix<T>(*this) -= a; }\n    template <typename S> matrix<T>\
-    \ operator*(const S &a) {\n        return matrix<T>(*this) *= a;\n    }\n    matrix<T>\
-    \ operator/(const T &a) { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long\
-    \ long n) { return matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int\
-    \ h) { return table[h]; }\n    friend std::istream &operator>>(std::istream &is,\
-    \ matrix<T> &mt) {\n        for (auto &arr : mt.table)\n            for (auto\
-    \ &x : arr)\n                is >> x;\n        return is;\n    }\n    /**\n  \
-    \   * @brief \u30B5\u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n\
-    \    static matrix<T> E(int N) {\n        matrix<T> ret(N, N);\n        for (int\
-    \ i = 0; i < N; i++)\n            ret[i][i] = 1;\n        return ret;\n    }\n\
-    };\n#line 3 \"graph/edge.hpp\"\n\nnamespace internal {\ntemplate <class DERIVED,\
-    \ class WEIGHT> struct _base_edge {\n    int from;\n    int to;\n    WEIGHT cost;\n\
-    \    int id;\n    _base_edge() {}\n    _base_edge(int _from, int _to, WEIGHT _cost,\
-    \ int _id)\n        : from(_from), to(_to), cost(_cost), id(_id) {}\n\n    friend\
-    \ bool operator>(const _base_edge &e1, const _base_edge &e) {\n        return\
-    \ e1.compare(e) > 0;\n    }\n    friend bool operator>=(const _base_edge &e1,\
-    \ const _base_edge &e) {\n        return e1.compare(e) >= 0;\n    }\n    friend\
-    \ bool operator<(const _base_edge &e1, const _base_edge &e) {\n        return\
-    \ e1.compare(e) < 0;\n    }\n    friend bool operator<=(const _base_edge &e1,\
-    \ const _base_edge &e) {\n        return e1.compare(e) <= 0;\n    }\n    friend\
-    \ std::ostream &operator<<(std::ostream &os,\n                               \
-    \     const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n        return\
-    \ os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\n  \
-    \  virtual ~_base_edge() = default;\n\n    operator int() const { return to; }\n\
-    \n  protected:\n    virtual void print(std::ostream &os) const = 0;\n    virtual\
-    \ int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\n\
-    template <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    \        }\n        }\n        *this = std::move(ret);\n        return *this;\n\
+    \    }\n    matrix<T> &operator/=(const T &a) {\n        this->table /= a;\n \
+    \       return *this;\n    }\n    /**\n     * @brief \u884C\u5217\u306E\u51AA\u4E57\
+    \u3002\n     * @param n \u6307\u6570\n     * @attention n \u304C 0 \u306A\u3089\
+    \u5358\u4F4D\u884C\u5217\u3002\n     * @attention \u6F14\u7B97\u5B50\u306E\u512A\
+    \u5148\u5EA6\u306B\u6CE8\u610F\u3002\n     */\n    matrix<T> operator^=(long long\
+    \ n) {\n        assert(H == W);\n        if (n == 0)\n            return *this\
+    \ = E(H);\n        n--;\n        matrix<T> x(*this);\n        while (n) {\n  \
+    \          if (n & 1)\n                *this *= x;\n            x *= x;\n    \
+    \        n >>= 1;\n        }\n        return *this;\n    }\n\n    matrix<T> operator+()\
+    \ { return *this; }\n    matrix<T> operator-() { return matrix<T>(*this) *= -1;\
+    \ }\n    matrix<T> operator+(const matrix<T> &a) { return matrix<T>(*this) +=\
+    \ a; }\n    matrix<T> operator-(const matrix<T> &a) { return matrix<T>(*this)\
+    \ -= a; }\n    template <typename S> matrix<T> operator*(const S &a) {\n     \
+    \   return matrix<T>(*this) *= a;\n    }\n    matrix<T> operator/(const T &a)\
+    \ { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long long n) { return\
+    \ matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int h) { return table[h];\
+    \ }\n    friend std::istream &operator>>(std::istream &is, matrix<T> &mt) {\n\
+    \        for (auto &arr : mt.table)\n            for (auto &x : arr)\n       \
+    \         is >> x;\n        return is;\n    }\n    /**\n     * @brief \u30B5\u30A4\
+    \u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T> E(int\
+    \ N) {\n        matrix<T> ret(N, N);\n        for (int i = 0; i < N; i++)\n  \
+    \          ret[i][i] = 1;\n        return ret;\n    }\n};\n#line 3 \"graph/edge.hpp\"\
+    \n\nnamespace internal {\ntemplate <class DERIVED, class WEIGHT> struct _base_edge\
+    \ {\n    int from;\n    int to;\n    WEIGHT cost;\n    int id;\n    _base_edge()\
+    \ {}\n    _base_edge(int _from, int _to, WEIGHT _cost, int _id)\n        : from(_from),\
+    \ to(_to), cost(_cost), id(_id) {}\n\n    friend bool operator>(const _base_edge\
+    \ &e1, const _base_edge &e) {\n        return e1.compare(e) > 0;\n    }\n    friend\
+    \ bool operator>=(const _base_edge &e1, const _base_edge &e) {\n        return\
+    \ e1.compare(e) >= 0;\n    }\n    friend bool operator<(const _base_edge &e1,\
+    \ const _base_edge &e) {\n        return e1.compare(e) < 0;\n    }\n    friend\
+    \ bool operator<=(const _base_edge &e1, const _base_edge &e) {\n        return\
+    \ e1.compare(e) <= 0;\n    }\n    friend std::ostream &operator<<(std::ostream\
+    \ &os,\n                                    const _base_edge<DERIVED, WEIGHT>\
+    \ &e) {\n        e.print(os);\n        return os;\n    }\n    _base_edge &operator=(const\
+    \ _base_edge &e) = default;\n\n    virtual ~_base_edge() = default;\n\n    operator\
+    \ int() const { return to; }\n\n  protected:\n    virtual void print(std::ostream\
+    \ &os) const = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n\
+    } // namespace internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\
     \n  protected:\n    void print(std::ostream &os) const override {\n        os\
     \ << this->from << \" \" << this->to << \" \" << this->cost;\n    }\n    int compare(\n\
@@ -400,7 +400,7 @@ data:
   isVerificationFile: false
   path: graph/lowlink.hpp
   requiredBy: []
-  timestamp: '2023-07-12 15:11:45+09:00'
+  timestamp: '2023-07-13 01:00:21+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-3-a.test.cpp

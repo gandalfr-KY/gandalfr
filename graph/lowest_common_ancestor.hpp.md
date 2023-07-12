@@ -309,40 +309,39 @@ data:
     \        dist[start_node] = 0;\n\n        if constexpr (std::is_same<WEIGHT, int>::value)\
     \ {\n            // BFS algorithm\n            std::queue<int> q;\n          \
     \  q.push(start_node);\n            run_bfs(dist, q);\n        } else {\n    \
-    \        // Dijkstra's algorithm\n            std::priority_queue<PAIR, std::vector<PAIR>,\
-    \ std::greater<PAIR>> q;\n            q.push({0, start_node});\n            for\
-    \ (int x : uf.contained_group(start_node))\n                visited[x] = false;\n\
-    \            run_Dijkstra(dist, q);\n        }\n\n        for (auto &x : dist)\n\
-    \            if (x == std::numeric_limits<WEIGHT>::max())\n                x =\
-    \ invalid;\n        return dist;\n    }\n\n    WEIGHT diameter() const {\n   \
-    \     static_assert(!is_directed);\n        assert(is_tree());\n        std::vector<WEIGHT>\
-    \ dist(calculate_shortest_distances(0, -1));\n        dist = calculate_shortest_distances(\n\
-    \            std::max_element(dist.begin(), dist.end()) - dist.begin(), -1);\n\
-    \        return *std::max_element(dist.begin(), dist.end());\n    }\n\n    graph\
-    \ reverse() const {\n        if constexpr (!is_directed) {\n            return\
-    \ *this;\n        } else {\n            graph ret(N);\n            for (auto e\
-    \ : E) {\n                std::swap(e.from, e.to);\n                ret.add_edge(e);\n\
-    \            }\n            return ret;\n        }\n    }\n\n    std::vector<int>\
-    \ topological_sort() {\n        static_assert(is_directed);\n        std::vector<int>\
-    \ indeg(N, 0), sorted;\n        for (int to : E)\n            indeg[to]++;\n\n\
-    \        std::queue<int> q;\n        for (int i = 0; i < N; i++)\n           \
-    \ if (!indeg[i])\n                q.push(i);\n        while (!q.empty()) {\n \
-    \           int cu = q.front();\n            q.pop();\n            for (int to\
-    \ : G[cu]) {\n                if (!--indeg[to])\n                    q.push(to);\n\
-    \            }\n            sorted.push_back(cu);\n        }\n        return sorted;\n\
-    \    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n  \
-    \  graph minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
-    \        graph ret(N);\n        std::vector<edge<WEIGHT>> tmp(edges());\n    \
-    \    std::sort(tmp.begin(), tmp.end());\n        for (auto &e : tmp)\n       \
-    \     if (!ret.are_connected(e.from, e.to))\n                ret.add_edge(e);\n\
-    \        return ret;\n    }\n\n    void print() const {\n        std::cout <<\
-    \ this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
-    \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n#line 6\
-    \ \"graph/lowest_common_ancestor.hpp\"\n\n/**\n * @brief \u7121\u5411\u5358\u7D14\
-    \u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\u3092\u6C42\u3081\u308B\u30AF\
-    \u30E9\u30B9\n */\ntemplate <typename WEIGHT> class lowest_common_ancestor {\n\
-    \  private:\n    using PAIR = std::pair<int, int>;\n\n    std::vector<int> idx;\n\
-    \    std::vector<PAIR> depth;\n    RmQ_sparse_table<PAIR> sps;\n    std::vector<WEIGHT>\
+    \        // Dijkstra's algorithm\n            Dijkstra_queue q;\n            q.push({0,\
+    \ start_node});\n            for (int x : uf.contained_group(start_node))\n  \
+    \              visited[x] = false;\n            run_Dijkstra(dist, q);\n     \
+    \   }\n\n        for (auto &x : dist)\n            if (x == std::numeric_limits<WEIGHT>::max())\n\
+    \                x = invalid;\n        return dist;\n    }\n\n    WEIGHT diameter()\
+    \ const {\n        static_assert(!is_directed);\n        assert(is_tree());\n\
+    \        std::vector<WEIGHT> dist(calculate_shortest_distances(0, -1));\n    \
+    \    dist = calculate_shortest_distances(\n            std::max_element(dist.begin(),\
+    \ dist.end()) - dist.begin(), -1);\n        return *std::max_element(dist.begin(),\
+    \ dist.end());\n    }\n\n    graph reverse() const {\n        if constexpr (!is_directed)\
+    \ {\n            return *this;\n        } else {\n            graph ret(N);\n\
+    \            for (auto e : E) {\n                std::swap(e.from, e.to);\n  \
+    \              ret.add_edge(e);\n            }\n            return ret;\n    \
+    \    }\n    }\n\n    std::vector<int> topological_sort() {\n        static_assert(is_directed);\n\
+    \        std::vector<int> indeg(N, 0), sorted;\n        for (int to : E)\n   \
+    \         indeg[to]++;\n\n        std::queue<int> q;\n        for (int i = 0;\
+    \ i < N; i++)\n            if (!indeg[i])\n                q.push(i);\n      \
+    \  while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
+    \            for (int to : G[cu]) {\n                if (!--indeg[to])\n     \
+    \               q.push(to);\n            }\n            sorted.push_back(cu);\n\
+    \        }\n        return sorted;\n    }\n\n    /**\n     * @return \u6700\u5C0F\
+    \u5168\u57DF\u68EE\n     */\n    graph minimum_spanning_tree() const {\n     \
+    \   static_assert(!is_directed);\n        graph ret(N);\n        std::vector<edge<WEIGHT>>\
+    \ tmp(edges());\n        std::sort(tmp.begin(), tmp.end());\n        for (auto\
+    \ &e : tmp)\n            if (!ret.are_connected(e.from, e.to))\n             \
+    \   ret.add_edge(e);\n        return ret;\n    }\n\n    void print() const {\n\
+    \        std::cout << this->N << \" \" << this->E.size() << std::endl;\n     \
+    \   for (const edge<WEIGHT> &e : this->E)\n            std::cout << e << std::endl;\n\
+    \    }\n};\n#line 6 \"graph/lowest_common_ancestor.hpp\"\n\n/**\n * @brief \u7121\
+    \u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\u3092\u6C42\
+    \u3081\u308B\u30AF\u30E9\u30B9\n */\ntemplate <typename WEIGHT> class lowest_common_ancestor\
+    \ {\n  private:\n    using PAIR = std::pair<int, int>;\n\n    std::vector<int>\
+    \ idx;\n    std::vector<PAIR> depth;\n    RmQ_sparse_table<PAIR> sps;\n    std::vector<WEIGHT>\
     \ dist;\n\n    void Euler_tour(const graph<WEIGHT, false> &G, int cu, int pa,\
     \ int dep,\n                    int &cnt) {\n        idx[cu] = cnt;\n        for\
     \ (auto &e : G[cu]) {\n            if (e.to == pa)\n                continue;\n\
@@ -384,7 +383,7 @@ data:
   isVerificationFile: false
   path: graph/lowest_common_ancestor.hpp
   requiredBy: []
-  timestamp: '2023-07-05 14:15:50+09:00'
+  timestamp: '2023-07-12 15:11:45+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-5-c.test.cpp

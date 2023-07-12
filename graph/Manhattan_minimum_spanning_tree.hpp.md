@@ -285,40 +285,40 @@ data:
     \        dist[start_node] = 0;\n\n        if constexpr (std::is_same<WEIGHT, int>::value)\
     \ {\n            // BFS algorithm\n            std::queue<int> q;\n          \
     \  q.push(start_node);\n            run_bfs(dist, q);\n        } else {\n    \
-    \        // Dijkstra's algorithm\n            std::priority_queue<PAIR, std::vector<PAIR>,\
-    \ std::greater<PAIR>> q;\n            q.push({0, start_node});\n            for\
-    \ (int x : uf.contained_group(start_node))\n                visited[x] = false;\n\
-    \            run_Dijkstra(dist, q);\n        }\n\n        for (auto &x : dist)\n\
-    \            if (x == std::numeric_limits<WEIGHT>::max())\n                x =\
-    \ invalid;\n        return dist;\n    }\n\n    WEIGHT diameter() const {\n   \
-    \     static_assert(!is_directed);\n        assert(is_tree());\n        std::vector<WEIGHT>\
-    \ dist(calculate_shortest_distances(0, -1));\n        dist = calculate_shortest_distances(\n\
-    \            std::max_element(dist.begin(), dist.end()) - dist.begin(), -1);\n\
-    \        return *std::max_element(dist.begin(), dist.end());\n    }\n\n    graph\
-    \ reverse() const {\n        if constexpr (!is_directed) {\n            return\
-    \ *this;\n        } else {\n            graph ret(N);\n            for (auto e\
-    \ : E) {\n                std::swap(e.from, e.to);\n                ret.add_edge(e);\n\
-    \            }\n            return ret;\n        }\n    }\n\n    std::vector<int>\
-    \ topological_sort() {\n        static_assert(is_directed);\n        std::vector<int>\
-    \ indeg(N, 0), sorted;\n        for (int to : E)\n            indeg[to]++;\n\n\
-    \        std::queue<int> q;\n        for (int i = 0; i < N; i++)\n           \
-    \ if (!indeg[i])\n                q.push(i);\n        while (!q.empty()) {\n \
-    \           int cu = q.front();\n            q.pop();\n            for (int to\
-    \ : G[cu]) {\n                if (!--indeg[to])\n                    q.push(to);\n\
-    \            }\n            sorted.push_back(cu);\n        }\n        return sorted;\n\
-    \    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n  \
-    \  graph minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
-    \        graph ret(N);\n        std::vector<edge<WEIGHT>> tmp(edges());\n    \
-    \    std::sort(tmp.begin(), tmp.end());\n        for (auto &e : tmp)\n       \
-    \     if (!ret.are_connected(e.from, e.to))\n                ret.add_edge(e);\n\
-    \        return ret;\n    }\n\n    void print() const {\n        std::cout <<\
-    \ this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
-    \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n#line 6\
-    \ \"graph/Manhattan_minimum_spanning_tree.hpp\"\n\n/**\n * @see https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n\
-    \ * @brief \u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
-    \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002\n * @param xs \u5404\
-    \u30CE\u30FC\u30C9\u306E x \u5EA7\u6A19\n * @param ys \u5404\u30CE\u30FC\u30C9\
-    \u306E y \u5EA7\u6A19\n */\ntemplate <typename WEIGHT> class Manhattan_minimum_spanning_tree\
+    \        // Dijkstra's algorithm\n            Dijkstra_queue q;\n            q.push({0,\
+    \ start_node});\n            for (int x : uf.contained_group(start_node))\n  \
+    \              visited[x] = false;\n            run_Dijkstra(dist, q);\n     \
+    \   }\n\n        for (auto &x : dist)\n            if (x == std::numeric_limits<WEIGHT>::max())\n\
+    \                x = invalid;\n        return dist;\n    }\n\n    WEIGHT diameter()\
+    \ const {\n        static_assert(!is_directed);\n        assert(is_tree());\n\
+    \        std::vector<WEIGHT> dist(calculate_shortest_distances(0, -1));\n    \
+    \    dist = calculate_shortest_distances(\n            std::max_element(dist.begin(),\
+    \ dist.end()) - dist.begin(), -1);\n        return *std::max_element(dist.begin(),\
+    \ dist.end());\n    }\n\n    graph reverse() const {\n        if constexpr (!is_directed)\
+    \ {\n            return *this;\n        } else {\n            graph ret(N);\n\
+    \            for (auto e : E) {\n                std::swap(e.from, e.to);\n  \
+    \              ret.add_edge(e);\n            }\n            return ret;\n    \
+    \    }\n    }\n\n    std::vector<int> topological_sort() {\n        static_assert(is_directed);\n\
+    \        std::vector<int> indeg(N, 0), sorted;\n        for (int to : E)\n   \
+    \         indeg[to]++;\n\n        std::queue<int> q;\n        for (int i = 0;\
+    \ i < N; i++)\n            if (!indeg[i])\n                q.push(i);\n      \
+    \  while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
+    \            for (int to : G[cu]) {\n                if (!--indeg[to])\n     \
+    \               q.push(to);\n            }\n            sorted.push_back(cu);\n\
+    \        }\n        return sorted;\n    }\n\n    /**\n     * @return \u6700\u5C0F\
+    \u5168\u57DF\u68EE\n     */\n    graph minimum_spanning_tree() const {\n     \
+    \   static_assert(!is_directed);\n        graph ret(N);\n        std::vector<edge<WEIGHT>>\
+    \ tmp(edges());\n        std::sort(tmp.begin(), tmp.end());\n        for (auto\
+    \ &e : tmp)\n            if (!ret.are_connected(e.from, e.to))\n             \
+    \   ret.add_edge(e);\n        return ret;\n    }\n\n    void print() const {\n\
+    \        std::cout << this->N << \" \" << this->E.size() << std::endl;\n     \
+    \   for (const edge<WEIGHT> &e : this->E)\n            std::cout << e << std::endl;\n\
+    \    }\n};\n#line 6 \"graph/Manhattan_minimum_spanning_tree.hpp\"\n\n/**\n * @see\
+    \ https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n * @brief \u30DE\
+    \u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\u307F\u5168\
+    \u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002\n * @param xs \u5404\u30CE\u30FC\
+    \u30C9\u306E x \u5EA7\u6A19\n * @param ys \u5404\u30CE\u30FC\u30C9\u306E y \u5EA7\
+    \u6A19\n */\ntemplate <typename WEIGHT> class Manhattan_minimum_spanning_tree\
     \ {\n  private:\n    graph<WEIGHT, false> mst;\n\n  public:\n    Manhattan_minimum_spanning_tree(std::vector<WEIGHT>\
     \ &xs,\n                                    std::vector<WEIGHT> &ys)\n       \
     \ : mst(xs.size()) {\n        int N = xs.size();\n        std::vector<edge<WEIGHT>>\
@@ -379,7 +379,7 @@ data:
   isVerificationFile: false
   path: graph/Manhattan_minimum_spanning_tree.hpp
   requiredBy: []
-  timestamp: '2023-07-05 14:15:50+09:00'
+  timestamp: '2023-07-12 15:11:45+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

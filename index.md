@@ -68,7 +68,7 @@ data:
       title: graph/traveling_salesman.hpp
   - name: math
     pages:
-    - icon: ':x:'
+    - icon: ':warning:'
       path: math/Bezout_coefficients.hpp
       title: math/Bezout_coefficients.hpp
     - icon: ':warning:'

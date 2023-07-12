@@ -4,6 +4,7 @@
 #include <iostream>
 #include <valarray>
 #include <vector>
+#include <utility>
 
 template <class T> class matrix {
   private:
@@ -95,7 +96,8 @@ template <class T> class matrix {
                 ret[i][j] = (this->table[i] * a_t.table[j]).sum();
             }
         }
-        return *this = ret;
+        *this = std::move(ret);
+        return *this;
     }
     matrix<T> &operator/=(const T &a) {
         this->table /= a;

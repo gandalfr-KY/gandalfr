@@ -1,19 +1,19 @@
 #pragma once
-#include <cstdlib>
+#include <tuple>
 #include <utility>
 
 namespace internal {
-long long extgcd(long long a, long long b, long long &s, long long &t) {
-    if (b == 0) {
-        s = 1;
-        t = 0;
-        return a;
-    } else {
-        auto d = std::lldiv(a, b);
-        long long tmp = extgcd(b, d.rem, t, s);
-        t -= d.quot * s;
-        return tmp;
+    
+long long extgcd(long long a, long long b, long long &x, long long &y) {
+    x = 1, y = 0;
+    long long nx = 0, ny = 1;
+    while(b) {
+        long long q = a / b;
+        std::tie(a, b) = std::make_pair(b, a % b);
+        std::tie(x, nx) = std::make_pair(nx, x - nx*q);
+        std::tie(y, ny) = std::make_pair(ny, y - ny*q);
     }
+    return a;
 }
 } // namespace internal
 

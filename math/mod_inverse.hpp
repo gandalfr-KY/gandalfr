@@ -1,12 +1,16 @@
 #pragma once
 #include <assert.h>
+#include <algorithm>
 
-#include "Bezout_coefficients.hpp"
-
-long long mod_inverse(long long x, int mod) {
+inline long long mod_inverse(long long a, int mod) {
     assert(mod > 0);
-    x %= mod;
-    auto [a, b] = Bezout_coefficients(x, mod);
-    assert(a * x == -b * mod + 1);
-    return (a >= 0 ? a : a + mod);
+    long long b = mod, u = 1, v = 0;
+    while (b) {
+        long long t = a / b;
+        a -= t * b, std::swap(a, b);
+        u -= t * v, std::swap(u, v);
+    }
+    u %= mod; 
+    if (u < 0) u += mod;
+    return u;
 }

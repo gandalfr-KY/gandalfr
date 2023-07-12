@@ -9,7 +9,6 @@
 template <int mod> class mod_integer {
   private:
     long long val; // 値は必ず 0 <= val < mod に保たれる
-    static inline lru_cache<int, int> modinv_cache{8}; // 逆元のキャッシュ
     friend mod_integer operator+(const mod_integer &a) { return a; }
     friend mod_integer operator-(const mod_integer &a) { return -a.val; }
     friend mod_integer operator+(const mod_integer &a, const mod_integer &b) {
@@ -22,7 +21,7 @@ template <int mod> class mod_integer {
         return mod_integer(a.val * b.val);
     }
     friend mod_integer operator/(const mod_integer &a, const mod_integer &b) {
-        return mod_integer(a.val * mod_inverse(b.val, mod));
+        return mod_integer((a.val * mod_inverse(b.val, mod)) % mod);
     }
 
     friend bool operator==(const mod_integer &a, const mod_integer &b) {
@@ -64,16 +63,7 @@ template <int mod> class mod_integer {
         return *this;
     }
     mod_integer &operator/=(const mod_integer &a) {
-        auto iter = modinv_cache.get(a.val);
-        if (iter != modinv_cache.end()) {
-            // キャッシュに存在する場合、キャッシュの値を使用する
-            (val *= iter->second) %= mod;
-        } else {
-            // キャッシュに存在しない場合、逆元を計算してキャッシュに保存
-            int inv = mod_inverse(a.val, mod);
-            (val *= inv) %= mod;
-            modinv_cache.put(a.val, inv);
-        }
+        (val *= mod_inverse(a.val, mod)) %= mod;
         return *this;
     }
 

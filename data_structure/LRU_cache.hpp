@@ -3,17 +3,17 @@
 #include <list>
 #include <unordered_map>
 
-template <typename KeyType, typename ValueType> class lru_cache {
-  private:
+template <typename KeyType, typename ValueType, typename Hash = std::hash<KeyType>> class lru_cache {
+private:
     using Item = std::pair<KeyType, ValueType>;
     using ItemList = std::list<Item>;
-    using ItemMap = std::unordered_map<KeyType, typename ItemList::iterator>;
+    using ItemMap = std::unordered_map<KeyType, typename ItemList::iterator, Hash>;
 
     ItemList item_list;
     ItemMap item_map;
     size_t capacity;
 
-  public:
+public:
     using iterator = typename ItemList::iterator;
 
     lru_cache(size_t size) : capacity(size) {}

@@ -322,7 +322,7 @@ template <typename WEIGHT, bool is_directed> class graph {
             run_bfs(dist, q);
         } else {
             // Dijkstra's algorithm
-            std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>> q;
+            Dijkstra_queue q;
             q.push({0, start_node});
             for (int x : uf.contained_group(start_node))
                 visited[x] = false;

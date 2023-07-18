@@ -13,12 +13,12 @@ data:
     links:
     - https://kopricky.github.io/code/Computation_Advanced/garner.html
   bundledCode: "#line 2 \"math/Garner.hpp\"\n#include <vector>\n\n#line 2 \"math/mod_inverse.hpp\"\
-    \n#include <assert.h>\n#include <algorithm>\n\ninline long long mod_inverse(long\
+    \n#include <algorithm>\n#include <assert.h>\n\ninline long long mod_inverse(long\
     \ long a, int mod) {\n    assert(mod > 0);\n    long long b = mod, u = 1, v =\
     \ 0;\n    while (b) {\n        long long t = a / b;\n        a -= t * b, std::swap(a,\
-    \ b);\n        u -= t * v, std::swap(u, v);\n    }\n    u %= mod; \n    if (u\
-    \ < 0) u += mod;\n    return u;\n}\n#line 5 \"math/Garner.hpp\"\n\n/*\n * O(N)\n\
-    \ * from : https://kopricky.github.io/code/Computation_Advanced/garner.html\n\
+    \ b);\n        u -= t * v, std::swap(u, v);\n    }\n    u %= mod;\n    if (u <\
+    \ 0)\n        u += mod;\n    return u;\n}\n#line 5 \"math/Garner.hpp\"\n\n/*\n\
+    \ * O(N)\n * from : https://kopricky.github.io/code/Computation_Advanced/garner.html\n\
     \ */\nlong long Garner(std::vector<long long> a, std::vector<long long> p,\n \
     \                const int mod) {\n    for (long long &x : a)\n        x %= mod;\n\
     \    int sz = a.size();\n    std::vector<long long> kp(sz + 1, 0), rmult(sz +\
@@ -42,7 +42,7 @@ data:
   isVerificationFile: false
   path: math/Garner.hpp
   requiredBy: []
-  timestamp: '2023-07-12 15:11:45+09:00'
+  timestamp: '2023-07-19 02:36:54+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: math/Garner.hpp

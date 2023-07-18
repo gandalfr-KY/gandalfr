@@ -6,8 +6,8 @@ data:
     path: math/Garner.hpp
     title: math/Garner.hpp
   - icon: ':warning:'
-    path: math/binomial_coefficients.hpp
-    title: math/binomial_coefficients.hpp
+    path: math/enumeration_utility.hpp
+    title: math/enumeration_utility.hpp
   - icon: ':warning:'
     path: standard/fraction.hpp
     title: standard/fraction.hpp
@@ -23,25 +23,26 @@ data:
   _verificationStatusIcon: ':x:'
   attributes:
     links: []
-  bundledCode: "#line 2 \"math/mod_inverse.hpp\"\n#include <assert.h>\n#include <algorithm>\n\
+  bundledCode: "#line 2 \"math/mod_inverse.hpp\"\n#include <algorithm>\n#include <assert.h>\n\
     \ninline long long mod_inverse(long long a, int mod) {\n    assert(mod > 0);\n\
     \    long long b = mod, u = 1, v = 0;\n    while (b) {\n        long long t =\
     \ a / b;\n        a -= t * b, std::swap(a, b);\n        u -= t * v, std::swap(u,\
-    \ v);\n    }\n    u %= mod; \n    if (u < 0) u += mod;\n    return u;\n}\n"
-  code: "#pragma once\n#include <assert.h>\n#include <algorithm>\n\ninline long long\
+    \ v);\n    }\n    u %= mod;\n    if (u < 0)\n        u += mod;\n    return u;\n\
+    }\n"
+  code: "#pragma once\n#include <algorithm>\n#include <assert.h>\n\ninline long long\
     \ mod_inverse(long long a, int mod) {\n    assert(mod > 0);\n    long long b =\
     \ mod, u = 1, v = 0;\n    while (b) {\n        long long t = a / b;\n        a\
     \ -= t * b, std::swap(a, b);\n        u -= t * v, std::swap(u, v);\n    }\n  \
-    \  u %= mod; \n    if (u < 0) u += mod;\n    return u;\n}\n"
+    \  u %= mod;\n    if (u < 0)\n        u += mod;\n    return u;\n}\n"
   dependsOn: []
   isVerificationFile: false
   path: math/mod_inverse.hpp
   requiredBy:
-  - math/binomial_coefficients.hpp
+  - math/enumeration_utility.hpp
   - math/Garner.hpp
   - standard/mod_integer.hpp
   - standard/fraction.hpp
-  timestamp: '2023-07-12 15:11:45+09:00'
+  timestamp: '2023-07-19 02:36:54+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

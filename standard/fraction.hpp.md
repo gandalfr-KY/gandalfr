@@ -13,20 +13,21 @@ data:
     links:
     - https://atcoder.jp/contests/abc168/submissions/39533747
   bundledCode: "#line 2 \"standard/fraction.hpp\"\n#include <assert.h>\n\n#include\
-    \ <iostream>\n#include <numeric>\n\n#line 3 \"math/mod_inverse.hpp\"\n#include\
-    \ <algorithm>\n\ninline long long mod_inverse(long long a, int mod) {\n    assert(mod\
-    \ > 0);\n    long long b = mod, u = 1, v = 0;\n    while (b) {\n        long long\
-    \ t = a / b;\n        a -= t * b, std::swap(a, b);\n        u -= t * v, std::swap(u,\
-    \ v);\n    }\n    u %= mod; \n    if (u < 0) u += mod;\n    return u;\n}\n#line\
-    \ 8 \"standard/fraction.hpp\"\n\nnamespace internal {\n\n__int128_t __gcd(__int128_t\
-    \ a, __int128_t b) {\n    if (a % b == 0)\n        return b;\n    return __gcd(b,\
-    \ a % b);\n}\n\n// \u7D76\u5BFE\u5024\u306E GCD \u3092\u8FD4\u3059\u3002\u7247\
-    \u65B9\u304C 0 \u306A\u3089\u3082\u3046\u4E00\u65B9\u306E\u7D76\u5BFE\u5024\u3002\
-    \n__int128_t gcd(__int128_t a, __int128_t b) {\n    if (b == 0)\n        return\
-    \ (a >= 0 ? a : -a);\n    return internal::__gcd((a >= 0 ? a : -a), (b >= 0 ?\
-    \ b : -b));\n}\n\ninline void simplify(__int128_t &num, __int128_t &den) {\n \
-    \   __int128_t d = internal::gcd(num, den);\n    num /= (den >= 0 ? d : -d);\n\
-    \    den /= (den >= 0 ? d : -d);\n}\n}; // namespace internal\n\n// verify : https://atcoder.jp/contests/abc168/submissions/39533747\n\
+    \ <iostream>\n#include <numeric>\n\n#line 2 \"math/mod_inverse.hpp\"\n#include\
+    \ <algorithm>\n#line 4 \"math/mod_inverse.hpp\"\n\ninline long long mod_inverse(long\
+    \ long a, int mod) {\n    assert(mod > 0);\n    long long b = mod, u = 1, v =\
+    \ 0;\n    while (b) {\n        long long t = a / b;\n        a -= t * b, std::swap(a,\
+    \ b);\n        u -= t * v, std::swap(u, v);\n    }\n    u %= mod;\n    if (u <\
+    \ 0)\n        u += mod;\n    return u;\n}\n#line 8 \"standard/fraction.hpp\"\n\
+    \nnamespace internal {\n\n__int128_t __gcd(__int128_t a, __int128_t b) {\n   \
+    \ if (a % b == 0)\n        return b;\n    return __gcd(b, a % b);\n}\n\n// \u7D76\
+    \u5BFE\u5024\u306E GCD \u3092\u8FD4\u3059\u3002\u7247\u65B9\u304C 0 \u306A\u3089\
+    \u3082\u3046\u4E00\u65B9\u306E\u7D76\u5BFE\u5024\u3002\n__int128_t gcd(__int128_t\
+    \ a, __int128_t b) {\n    if (b == 0)\n        return (a >= 0 ? a : -a);\n   \
+    \ return internal::__gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));\n}\n\ninline void\
+    \ simplify(__int128_t &num, __int128_t &den) {\n    __int128_t d = internal::gcd(num,\
+    \ den);\n    num /= (den >= 0 ? d : -d);\n    den /= (den >= 0 ? d : -d);\n}\n\
+    }; // namespace internal\n\n// verify : https://atcoder.jp/contests/abc168/submissions/39533747\n\
     // \u6F14\u7B97\u7D50\u679C\u306E\u5206\u5B50\u30FB\u5206\u6BCD\u304C\u3068\u3082\
     \u306B 64bit \u6574\u6570\u306E\u7BC4\u56F2\u3067\u306E\u307F\u52D5\u4F5C\u3092\
     \u4FDD\u8A3C\nclass fraction {\n  private:\n    long long num, den;\n\n    friend\
@@ -194,7 +195,7 @@ data:
   isVerificationFile: false
   path: standard/fraction.hpp
   requiredBy: []
-  timestamp: '2023-07-12 15:11:45+09:00'
+  timestamp: '2023-07-19 02:36:54+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: standard/fraction.hpp

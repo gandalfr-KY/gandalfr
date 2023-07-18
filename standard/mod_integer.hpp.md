@@ -6,8 +6,8 @@ data:
     title: math/mod_inverse.hpp
   _extendedRequiredBy:
   - icon: ':warning:'
-    path: math/binomial_coefficients.hpp
-    title: math/binomial_coefficients.hpp
+    path: math/enumeration_utility.hpp
+    title: math/enumeration_utility.hpp
   _extendedVerifiedWith:
   - icon: ':x:'
     path: test/jsc2021-g.test.cpp
@@ -18,15 +18,15 @@ data:
   attributes:
     links: []
   bundledCode: "#line 2 \"standard/mod_integer.hpp\"\n#include <iostream>\n#include\
-    \ <queue>\n#include <utility>\n\n#line 2 \"math/mod_inverse.hpp\"\n#include <assert.h>\n\
-    #include <algorithm>\n\ninline long long mod_inverse(long long a, int mod) {\n\
+    \ <queue>\n#include <utility>\n\n#line 2 \"math/mod_inverse.hpp\"\n#include <algorithm>\n\
+    #include <assert.h>\n\ninline long long mod_inverse(long long a, int mod) {\n\
     \    assert(mod > 0);\n    long long b = mod, u = 1, v = 0;\n    while (b) {\n\
     \        long long t = a / b;\n        a -= t * b, std::swap(a, b);\n        u\
-    \ -= t * v, std::swap(u, v);\n    }\n    u %= mod; \n    if (u < 0) u += mod;\n\
-    \    return u;\n}\n#line 7 \"standard/mod_integer.hpp\"\n\n// mod_integer<P> a\
-    \ := P\u3092\u6CD5\u3068\u3059\u308B\u3068\u304D\u306E\u6574\u6570\u578B;\ntemplate\
-    \ <int mod> class mod_integer {\n  private:\n    long long val; // \u5024\u306F\
-    \u5FC5\u305A 0 <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    friend mod_integer\
+    \ -= t * v, std::swap(u, v);\n    }\n    u %= mod;\n    if (u < 0)\n        u\
+    \ += mod;\n    return u;\n}\n#line 7 \"standard/mod_integer.hpp\"\n\n// mod_integer<P>\
+    \ a := P\u3092\u6CD5\u3068\u3059\u308B\u3068\u304D\u306E\u6574\u6570\u578B;\n\
+    template <int mod> class mod_integer {\n  private:\n    long long val; // \u5024\
+    \u306F\u5FC5\u305A 0 <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    friend mod_integer\
     \ operator+(const mod_integer &a) { return a; }\n    friend mod_integer operator-(const\
     \ mod_integer &a) { return -a.val; }\n    friend mod_integer operator+(const mod_integer\
     \ &a, const mod_integer &b) {\n        return mod_integer(a.val + b.val);\n  \
@@ -97,8 +97,8 @@ data:
   isVerificationFile: false
   path: standard/mod_integer.hpp
   requiredBy:
-  - math/binomial_coefficients.hpp
-  timestamp: '2023-07-12 15:11:45+09:00'
+  - math/enumeration_utility.hpp
+  timestamp: '2023-07-19 02:36:54+09:00'
   verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

@@ -15,7 +15,7 @@ data:
   attributes:
     links: []
   bundledCode: "#line 2 \"math/matrix.hpp\"\n#include <assert.h>\n\n#include <iostream>\n\
-    #include <valarray>\n#include <vector>\n#include <utility>\n\ntemplate <class\
+    #include <utility>\n#include <valarray>\n#include <vector>\n\ntemplate <class\
     \ T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n  public:\n    matrix() = default;\n    matrix(int _H, int _W, T val\
     \ = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const\
@@ -91,7 +91,7 @@ data:
   isVerificationFile: false
   path: graph/Warshall_Floyd.hpp
   requiredBy: []
-  timestamp: '2023-07-13 01:00:21+09:00'
+  timestamp: '2023-07-19 02:36:54+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-1-c.test.cpp

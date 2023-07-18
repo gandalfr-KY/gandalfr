@@ -75,11 +75,11 @@ data:
       path: math/Garner.hpp
       title: math/Garner.hpp
     - icon: ':warning:'
-      path: math/binomial_coefficients.hpp
-      title: math/binomial_coefficients.hpp
-    - icon: ':warning:'
       path: math/divisors.hpp
       title: math/divisors.hpp
+    - icon: ':warning:'
+      path: math/enumeration_utility.hpp
+      title: math/enumeration_utility.hpp
     - icon: ':heavy_check_mark:'
       path: math/factorize.hpp
       title: "\u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B"
@@ -96,7 +96,7 @@ data:
       path: math/prime_number_utility.hpp
       title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
         \u3059\u308B\u30AF\u30E9\u30B9"
-    - icon: ':heavy_check_mark:'
+    - icon: ':warning:'
       path: math/totient.hpp
       title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
         \u6570"
@@ -135,9 +135,6 @@ data:
     - icon: ':x:'
       path: standard/mod_integer.hpp
       title: standard/mod_integer.hpp
-    - icon: ':heavy_check_mark:'
-      path: standard/power.hpp
-      title: standard/power.hpp
     - icon: ':question:'
       path: standard/rolling_hash.hpp
       title: "rolling_hash\u30A2\u30EB\u30B4\u30EA\u30BA\u30E0\u3067\u6587\u5B57\u5217\
@@ -198,7 +195,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/ntl-1-a.test.cpp
       title: test/ntl-1-a.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/ntl-1-d.test.cpp
       title: test/ntl-1-d.test.cpp
 layout: toppage

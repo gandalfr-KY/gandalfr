@@ -22,7 +22,7 @@ data:
     links:
     - https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1
   bundledCode: "#line 2 \"math/matrix.hpp\"\n#include <assert.h>\n\n#include <iostream>\n\
-    #include <valarray>\n#include <vector>\n#include <utility>\n\ntemplate <class\
+    #include <utility>\n#include <valarray>\n#include <vector>\n\ntemplate <class\
     \ T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n  public:\n    matrix() = default;\n    matrix(int _H, int _W, T val\
     \ = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const\
@@ -87,8 +87,8 @@ data:
     \n\n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
     \    int N;\n    mutable std::vector<int> par;\n    std::vector<int> nxt;\n  \
     \  int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find() :\
-    \ N(0) {}\n    union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n) {\n\
-    \        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n\n    /**\n     * @brief\
+    \ N(0), group_num(0){}\n    union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n)\
+    \ {\n        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n\n    /**\n     * @brief\
     \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
     \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
     \        if (n <= N)\n            return;\n        par.resize(n, -1);\n      \
@@ -148,40 +148,45 @@ data:
     \ int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\u305D\u3046\u3067\u306A\u3044\
     \u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\u30D5\n * @tparam is_directed\
     \ \u6709\u5411\u30B0\u30E9\u30D5\u304B\u3068\u3046\u304B\n */\ntemplate <typename\
-    \ WEIGHT, bool is_directed> class graph {\n  private:\n    int N;\n    std::vector<std::vector<edge<WEIGHT>>>\
-    \ G;\n    std::vector<edge<WEIGHT>> E;\n    union_find uf;\n    WEIGHT W = 0;\n\
-    \n    mutable std::vector<bool> visited; // dfs / bfs \u306E\u305F\u3081\u306E\
-    \u9818\u57DF\n    bool forest_flag = true;\n\n  public:\n    graph() : N(0){};\n\
-    \    graph(int n) : N(n), G(n), uf(n), visited(n){};\n\n    /**\n     * @brief\
-    \ \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059\n\
-    \     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\u306E\u30CE\u30FC\
-    \u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\u3057\u305F\u3068\
-    \u304D\u3001\u5909\u5316\u306A\u3057\n     */\n    void expand(int n) {\n    \
-    \    if (n <= N)\n            return;\n        N = n;\n        G.resize(n);\n\
-    \        uf.expand(n);\n        visited.resize(n);\n    }\n\n    /**\n     * @return\
-    \ \u30CE\u30FC\u30C9\u306E\u6570\n     */\n    int count_nodes() const { return\
-    \ N; }\n\n    /**\n     * @return \u8FBA\u306E\u6570\n     */\n    int count_edges()\
-    \ const { return E.size(); }\n\n    /**\n     * @param n \u30CE\u30FC\u30C9\u756A\
-    \u53F7\n     * @return \u30CE\u30FC\u30C9 n \u304B\u3089\u306E\u96A3\u63A5\u9802\
-    \u70B9\u306E\u30EA\u30B9\u30C8\u306E const \u53C2\u7167\n     */\n    const std::vector<edge<WEIGHT>>\
+    \ WEIGHT, bool is_directed, bool enable_unionfind = true>\nclass graph {\n  private:\n\
+    \    int N;\n    std::vector<std::vector<edge<WEIGHT>>> G;\n    std::vector<edge<WEIGHT>>\
+    \ E;\n    union_find uf;\n    WEIGHT W = 0;\n\n    mutable std::vector<bool> visited;\
+    \ // dfs / bfs \u306E\u305F\u3081\u306E\u9818\u57DF\n    bool forest_flag = true;\n\
+    \n  public:\n    graph() : N(0){};\n    graph(int n) : N(n), G(n), visited(n)\
+    \ {\n        if constexpr (enable_unionfind)\n            uf.expand(n);\n    };\n\
+    \n    /**\n     * @brief \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\
+    \u5897\u3084\u3059\n     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\
+    \u306E\u30CE\u30FC\u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\
+    \u3057\u305F\u3068\u304D\u3001\u5909\u5316\u306A\u3057\n     */\n    void expand(int\
+    \ n) {\n        if (n <= N)\n            return;\n        N = n;\n        G.resize(n);\n\
+    \        visited.resize(n);\n        if constexpr (enable_unionfind)\n       \
+    \     uf.expand(n);\n    }\n\n    /**\n     * @return \u30CE\u30FC\u30C9\u306E\
+    \u6570\n     */\n    int count_nodes() const { return N; }\n\n    /**\n     *\
+    \ @return \u8FBA\u306E\u6570\n     */\n    int count_edges() const { return E.size();\
+    \ }\n\n    /**\n     * @param n \u30CE\u30FC\u30C9\u756A\u53F7\n     * @return\
+    \ \u30CE\u30FC\u30C9 n \u304B\u3089\u306E\u96A3\u63A5\u9802\u70B9\u306E\u30EA\u30B9\
+    \u30C8\u306E const \u53C2\u7167\n     */\n    const std::vector<edge<WEIGHT>>\
     \ &operator[](int n) const { return G[n]; }\n\n    /**\n     * @return \u30B0\u30E9\
     \u30D5\u5168\u4F53\u306E\u8FBA\u306E\u30EA\u30B9\u30C8\u306E const \u53C2\u7167\
     \n     */\n    const std::vector<edge<WEIGHT>> &edges() const { return E; }\n\n\
     \    /**\n     * @param x \u30CE\u30FC\u30C9\u756A\u53F7\n     * @param y \u30CE\
     \u30FC\u30C9\u756A\u53F7\n     * @return x, y \u304C\u9023\u7D50\u304B\u3069\u3046\
-    \u304B\n     */\n    bool are_connected(int x, int y) const { return uf.same(x,\
-    \ y); }\n\n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u6570\n    \
-    \ */\n    int count_connected_components() const { return uf.count_groups(); }\n\
-    \n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\u30C8\u306E\
-    \u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> weakly_connected_components()\
-    \ const {\n        return uf.all_groups();\n    }\n\n    /**\n     * @return \u6728\
-    \u304B\n     */\n    bool is_tree() const { return forest_flag && uf.count_groups()\
-    \ == 1; }\n\n    /**\n     * @return \u68EE\u304B\n     */\n    bool is_forest()\
-    \ const { return forest_flag; }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\
-    \u91CD\u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n  \
-    \   * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\
-    \u4FDD\u6301\u3055\u308C\u308B\n     */\n    void add_edge(edge<WEIGHT> e) {\n\
-    \        forest_flag &= uf.merge(e.from, e.to);\n        E.emplace_back(e);\n\
+    \u304B\n     */\n    bool are_connected(int x, int y) const {\n        static_assert(enable_unionfind);\n\
+    \        return uf.same(x, y);\n    }\n\n    /**\n     * @return \u9023\u7D50\u6210\
+    \u5206\u306E\u6570\n     */\n    int count_connected_components() const {\n  \
+    \      static_assert(enable_unionfind);\n        return uf.count_groups();\n \
+    \   }\n\n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\u30C8\
+    \u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> weakly_connected_components()\
+    \ const {\n        static_assert(enable_unionfind);\n        return uf.all_groups();\n\
+    \    }\n\n    /**\n     * @return \u6728\u304B\n     */\n    bool is_tree() const\
+    \ {\n        static_assert(enable_unionfind);\n        return forest_flag && uf.count_groups()\
+    \ == 1;\n    }\n\n    /**\n     * @return \u68EE\u304B\n     */\n    bool is_forest()\
+    \ const {\n        static_assert(enable_unionfind);\n        return forest_flag;\n\
+    \    }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\u307F\n     */\n\
+    \    WEIGHT weight() const { return W; }\n\n    /**\n     * @param e \u8FBA\n\
+    \     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\u3055\u308C\
+    \u308B\n     */\n    void add_edge(edge<WEIGHT> e) {\n        if constexpr (enable_unionfind)\n\
+    \            forest_flag &= uf.merge(e.from, e.to);\n        E.emplace_back(e);\n\
     \        G[e.from].emplace_back(e);\n        if (!is_directed && e.from != e.to)\
     \ {\n            std::swap(e.from, e.to);\n            G[e.from].emplace_back(e);\n\
     \        }\n        W += e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E\
@@ -204,62 +209,68 @@ data:
     \u30C9\u304C\u30B0\u30E9\u30D5\u306E\u30EA\u30B9\u30C8\u306E\u4F55\u756A\u76EE\
     \u306B\u5C5E\u3059\u308B\u304B\n     * 3.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\
     \u30D5\u306E\u3069\u306E\u30CE\u30FC\u30C9\u306B\u306A\u3063\u3066\u3044\u308B\
-    \u304B\n     */\n    std::tuple<std::vector<graph>, std::vector<int>, std::vector<int>>\n\
-    \    decompose() const {\n        std::vector<graph> Gs(uf.count_groups());\n\
-    \        std::vector<std::vector<int>> groups(uf.all_groups());\n        std::vector<int>\
+    \u304B\n     */\n    template <bool __enable_unionfind = true>\n    std::tuple<std::vector<graph<WEIGHT,\
+    \ is_directed, __enable_unionfind>>,\n               std::vector<int>, std::vector<int>>\n\
+    \    decompose() const {\n        static_assert(enable_unionfind);\n        std::vector<graph<WEIGHT,\
+    \ is_directed, __enable_unionfind>> Gs(\n            uf.count_groups());\n   \
+    \     std::vector<std::vector<int>> groups(uf.all_groups());\n        std::vector<int>\
     \ group_id(N), node_id(N);\n        for (int i = 0; i < (int)groups.size(); i++)\
     \ {\n            Gs[i].expand(groups[i].size());\n            for (int j = 0;\
     \ j < (int)groups[i].size(); j++) {\n                group_id[groups[i][j]] =\
     \ i;\n                node_id[groups[i][j]] = j;\n            }\n        }\n \
     \       for (auto e : E) {\n            int id = group_id[e.from];\n         \
     \   e.from = node_id[e.from];\n            e.to = node_id[e.to];\n           \
-    \ Gs[id].add_edge(e);\n        }\n        return std::make_tuple(Gs, group_id,\
-    \ node_id);\n    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\u96A3\u63A5\
-    \u884C\u5217\u306B\u5909\u63DB\n     * @param invalid \u8FBA\u306E\u306A\u3044\
-    \u3068\u304D\u306E\u5024\n     * @attention G \u306B\u81EA\u5DF1\u30EB\u30FC\u30D7\
-    \u304C\u542B\u307E\u308C\u3066\u3044\u306A\u3044\u9650\u308A\u3001\u5BFE\u89D2\
-    \u6210\u5206\u306F 0\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid\
-    \ = 0) const {\n        matrix<WEIGHT> ret(N, N, invalid);\n        for (int i\
-    \ = 0; i < N; i++)\n            ret[i][i] = 0;\n        for (int i = 0; i < N;\
-    \ i++)\n            for (auto &e : G[i])\n                ret[i][e.to] = e.cost;\n\
-    \        return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\
-    \u9806\u306B bfs\n     */\n    std::vector<int> preorder(int start) const {\n\
-    \        std::vector<int> result;\n        std::stack<std::pair<int, int>> stk;\n\
-    \        for (int x : uf.contained_group(start))\n            visited[x] = false;\n\
-    \        visited[start] = true;\n        stk.push({start, 0});\n\n        while\
-    \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
-    \ == 0)\n                result.push_back(cu);\n            if (idx == G[cu].size())\
-    \ {\n                stk.pop();\n            } else {\n                int to\
-    \ = G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
-    \ = true;\n                    stk.push({to, 0});\n                }\n       \
-    \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u901A\
-    \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> inorder(int\
-    \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
-    \ int>> stk;\n        for (int x : uf.contained_group(start))\n            visited[x]\
-    \ = false;\n        visited[start] = true;\n        stk.push({start, 0});\n\n\
-    \        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n  \
-    \          if (idx == G[cu].size()) {\n                stk.pop();\n          \
-    \      result.push_back(cu);\n            } else {\n                int to = G[cu][idx++];\n\
+    \ Gs[id].add_edge(e);\n        }\n        return std::make_tuple(std::move(Gs),\
+    \ std::move(group_id), std::move(node_id));\n    }\n\n    /**\n     * @brief \u30B0\
+    \u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB\n     * @param invalid\
+    \ \u8FBA\u306E\u306A\u3044\u3068\u304D\u306E\u5024\n     * @attention G \u306B\
+    \u81EA\u5DF1\u30EB\u30FC\u30D7\u304C\u542B\u307E\u308C\u3066\u3044\u306A\u3044\
+    \u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\u306F 0\n     */\n    matrix<WEIGHT>\
+    \ to_adjajency(WEIGHT invalid = 0) const {\n        matrix<WEIGHT> ret(N, N, invalid);\n\
+    \        for (int i = 0; i < N; i++)\n            ret[i][i] = 0;\n        for\
+    \ (int i = 0; i < N; i++)\n            for (auto &e : G[i])\n                ret[i][e.to]\
+    \ = e.cost;\n        return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\
+    \u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> preorder(int start)\
+    \ const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
+    \ int>> stk;\n        if constexpr (enable_unionfind)\n            for (int x\
+    \ : uf.contained_group(start))\n                visited[x] = false;\n        else\n\
+    \            visited.assign(N, false);\n        visited[start] = true;\n     \
+    \   stk.push({start, 0});\n\n        while (!stk.empty()) {\n            auto\
+    \ &[cu, idx] = stk.top();\n            if (idx == 0)\n                result.push_back(cu);\n\
+    \            if (idx == G[cu].size()) {\n                stk.pop();\n        \
+    \    } else {\n                int to = G[cu][idx++];\n                if (!visited[to])\
+    \ {\n                    visited[to] = true;\n                    stk.push({to,\
+    \ 0});\n                }\n            }\n        }\n        return result;\n\
+    \    }\n\n    /**\n     * @brief \u901A\u308A\u304C\u3051\u9806\u306B bfs\n  \
+    \   */\n    std::vector<int> inorder(int start) const {\n        std::vector<int>\
+    \ result;\n        std::stack<std::pair<int, int>> stk;\n        if constexpr\
+    \ (enable_unionfind)\n            for (int x : uf.contained_group(start))\n  \
+    \              visited[x] = false;\n        else\n            visited.assign(N,\
+    \ false);\n        visited[start] = true;\n        stk.push({start, 0});\n\n \
+    \       while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n   \
+    \         if (idx == G[cu].size()) {\n                stk.pop();\n           \
+    \     result.push_back(cu);\n            } else {\n                int to = G[cu][idx++];\n\
     \                if (!visited[to]) {\n                    visited[to] = true;\n\
     \                    stk.push({to, 0});\n                    result.push_back(cu);\n\
     \                }\n            }\n        }\n        return result;\n    }\n\n\
     \    /**\n     * @brief \u5E30\u308A\u304C\u3051\u9806\u306B bfs\n     */\n  \
     \  std::vector<int> postorder(int start) const {\n        std::vector<int> result;\n\
-    \        std::stack<std::pair<int, int>> stk;\n        for (int x : uf.contained_group(start))\n\
-    \            visited[x] = false;\n        visited[start] = true;\n        stk.push({start,\
-    \ 0});\n\n        while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n\
-    \            if (idx == G[cu].size()) {\n                stk.pop();\n        \
-    \        result.push_back(cu);\n            } else {\n                int to =\
-    \ G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
-    \ = true;\n                    stk.push({to, 0});\n                }\n       \
-    \     }\n        }\n        return result;\n    }\n\n  private:\n    using PAIR\
-    \ = std::pair<WEIGHT, int>;\n    using Dijkstra_queue =\n        std::priority_queue<PAIR,\
-    \ std::vector<PAIR>, std::greater<PAIR>>;\n\n    void run_bfs(std::vector<int>\
-    \ &dist, std::queue<int> &q) const {\n        while (!q.empty()) {\n         \
-    \   int cu = q.front();\n            q.pop();\n            for (auto &e : G[cu])\
-    \ {\n                if (dist[e.to] != std::numeric_limits<WEIGHT>::max())\n \
-    \                   continue;\n                dist[e.to] = dist[cu] + 1;\n  \
-    \              q.push(e.to);\n            }\n        }\n    }\n\n    void run_Dijkstra(std::vector<WEIGHT>\
+    \        std::stack<std::pair<int, int>> stk;\n        if constexpr (enable_unionfind)\n\
+    \            for (int x : uf.contained_group(start))\n                visited[x]\
+    \ = false;\n        else\n            visited.assign(N, false);\n        visited[start]\
+    \ = true;\n        stk.push({start, 0});\n\n        while (!stk.empty()) {\n \
+    \           auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size())\
+    \ {\n                stk.pop();\n                result.push_back(cu);\n     \
+    \       } else {\n                int to = G[cu][idx++];\n                if (!visited[to])\
+    \ {\n                    visited[to] = true;\n                    stk.push({to,\
+    \ 0});\n                }\n            }\n        }\n        return result;\n\
+    \    }\n\n  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
+    \ =\n        std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;\n\
+    \n    void run_bfs(std::vector<int> &dist, std::queue<int> &q) const {\n     \
+    \   while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
+    \            for (auto &e : G[cu]) {\n                if (dist[e.to] != std::numeric_limits<WEIGHT>::max())\n\
+    \                    continue;\n                dist[e.to] = dist[cu] + 1;\n \
+    \               q.push(e.to);\n            }\n        }\n    }\n\n    void run_Dijkstra(std::vector<WEIGHT>\
     \ &dist, Dijkstra_queue &q) const {\n        while (!q.empty()) {\n          \
     \  WEIGHT cur_dist = q.top().first;\n            int cu = q.top().second;\n  \
     \          q.pop();\n\n            if (visited[cu])\n                continue;\n\
@@ -278,34 +289,38 @@ data:
     \ {\n            // BFS algorithm\n            std::queue<int> q;\n          \
     \  q.push(start_node);\n            run_bfs(dist, q);\n        } else {\n    \
     \        // Dijkstra's algorithm\n            Dijkstra_queue q;\n            q.push({0,\
-    \ start_node});\n            for (int x : uf.contained_group(start_node))\n  \
-    \              visited[x] = false;\n            run_Dijkstra(dist, q);\n     \
-    \   }\n\n        for (auto &x : dist)\n            if (x == std::numeric_limits<WEIGHT>::max())\n\
-    \                x = invalid;\n        return dist;\n    }\n\n    WEIGHT diameter()\
-    \ const {\n        static_assert(!is_directed);\n        assert(is_tree());\n\
-    \        std::vector<WEIGHT> dist(calculate_shortest_distances(0, -1));\n    \
-    \    dist = calculate_shortest_distances(\n            std::max_element(dist.begin(),\
-    \ dist.end()) - dist.begin(), -1);\n        return *std::max_element(dist.begin(),\
-    \ dist.end());\n    }\n\n    graph reverse() const {\n        if constexpr (!is_directed)\
-    \ {\n            return *this;\n        } else {\n            graph ret(N);\n\
-    \            for (auto e : E) {\n                std::swap(e.from, e.to);\n  \
-    \              ret.add_edge(e);\n            }\n            return ret;\n    \
-    \    }\n    }\n\n    std::vector<int> topological_sort() {\n        static_assert(is_directed);\n\
-    \        std::vector<int> indeg(N, 0), sorted;\n        for (int to : E)\n   \
-    \         indeg[to]++;\n\n        std::queue<int> q;\n        for (int i = 0;\
-    \ i < N; i++)\n            if (!indeg[i])\n                q.push(i);\n      \
-    \  while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
-    \            for (int to : G[cu]) {\n                if (!--indeg[to])\n     \
-    \               q.push(to);\n            }\n            sorted.push_back(cu);\n\
-    \        }\n        return sorted;\n    }\n\n    /**\n     * @return \u6700\u5C0F\
-    \u5168\u57DF\u68EE\n     */\n    graph minimum_spanning_tree() const {\n     \
-    \   static_assert(!is_directed);\n        graph ret(N);\n        std::vector<edge<WEIGHT>>\
-    \ tmp(edges());\n        std::sort(tmp.begin(), tmp.end());\n        for (auto\
-    \ &e : tmp)\n            if (!ret.are_connected(e.from, e.to))\n             \
-    \   ret.add_edge(e);\n        return ret;\n    }\n\n    void print() const {\n\
-    \        std::cout << this->N << \" \" << this->E.size() << std::endl;\n     \
-    \   for (const edge<WEIGHT> &e : this->E)\n            std::cout << e << std::endl;\n\
-    \    }\n};\n#line 4 \"graph/traveling_salesman.hpp\"\n\n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1\n\
+    \ start_node});\n            if constexpr (enable_unionfind)\n               \
+    \ for (int x : uf.contained_group(start_node))\n                    visited[x]\
+    \ = false;\n            else\n                visited.assign(N, false);\n    \
+    \        run_Dijkstra(dist, q);\n        }\n\n        for (auto &x : dist)\n \
+    \           if (x == std::numeric_limits<WEIGHT>::max())\n                x =\
+    \ invalid;\n        return dist;\n    }\n\n    WEIGHT diameter() const {\n   \
+    \     static_assert(!is_directed);\n        assert(is_tree());\n        std::vector<WEIGHT>\
+    \ dist(calculate_shortest_distances(0, -1));\n        dist = calculate_shortest_distances(\n\
+    \            std::max_element(dist.begin(), dist.end()) - dist.begin(), -1);\n\
+    \        return *std::max_element(dist.begin(), dist.end());\n    }\n\n    template\
+    \ <bool __enable_unionfind = true> graph reverse() const {\n        if constexpr\
+    \ (!is_directed) {\n            return *this;\n        } else {\n            graph<WEIGHT,\
+    \ is_directed, __enable_unionfind> ret(N);\n            for (auto e : E) {\n \
+    \               std::swap(e.from, e.to);\n                ret.add_edge(e);\n \
+    \           }\n            return ret;\n        }\n    }\n\n    std::vector<int>\
+    \ topological_sort() {\n        static_assert(is_directed);\n        std::vector<int>\
+    \ indeg(N, 0), sorted;\n        for (int to : E)\n            indeg[to]++;\n\n\
+    \        std::queue<int> q;\n        for (int i = 0; i < N; i++)\n           \
+    \ if (!indeg[i])\n                q.push(i);\n        while (!q.empty()) {\n \
+    \           int cu = q.front();\n            q.pop();\n            for (int to\
+    \ : G[cu]) {\n                if (!--indeg[to])\n                    q.push(to);\n\
+    \            }\n            sorted.push_back(cu);\n        }\n        return sorted;\n\
+    \    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n  \
+    \  template <bool __enable_unionfind = true>\n    graph minimum_spanning_tree()\
+    \ const {\n        static_assert(!is_directed);\n        graph<WEIGHT, is_directed,\
+    \ __enable_unionfind> ret(N);\n        std::vector<edge<WEIGHT>> tmp(edges());\n\
+    \        std::sort(tmp.begin(), tmp.end());\n        for (auto &e : tmp)\n   \
+    \         if (!ret.are_connected(e.from, e.to))\n                ret.add_edge(e);\n\
+    \        return ret;\n    }\n\n    void print() const {\n        std::cout <<\
+    \ this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
+    \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n#line 4\
+    \ \"graph/traveling_salesman.hpp\"\n\n/*\n * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1\n\
     \ */\ntemplate <class WEIGHT, bool is_directed>\nWEIGHT traveling_salesman(const\
     \ graph<WEIGHT, is_directed> &G) {\n    matrix<WEIGHT> adj(G, -1);\n    const\
     \ WEIGHT MAX = std::numeric_limits<WEIGHT>::max() / 2;\n    int N = G.count_nodes();\n\
@@ -338,7 +353,7 @@ data:
   isVerificationFile: false
   path: graph/traveling_salesman.hpp
   requiredBy: []
-  timestamp: '2023-07-13 01:00:21+09:00'
+  timestamp: '2023-07-19 02:36:54+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: graph/traveling_salesman.hpp

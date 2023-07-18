@@ -70,7 +70,7 @@ data:
     document_title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
     links: []
   bundledCode: "#line 2 \"math/matrix.hpp\"\n#include <assert.h>\n\n#include <iostream>\n\
-    #include <valarray>\n#include <vector>\n#include <utility>\n\ntemplate <class\
+    #include <utility>\n#include <valarray>\n#include <vector>\n\ntemplate <class\
     \ T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n  public:\n    matrix() = default;\n    matrix(int _H, int _W, T val\
     \ = 0)\n        : H(_H), W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const\
@@ -130,9 +130,9 @@ data:
     \u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T> E(int\
     \ N) {\n        matrix<T> ret(N, N);\n        for (int i = 0; i < N; i++)\n  \
     \          ret[i][i] = 1;\n        return ret;\n    }\n};\n"
-  code: "#pragma once\n#include <assert.h>\n\n#include <iostream>\n#include <valarray>\n\
-    #include <vector>\n#include <utility>\n\ntemplate <class T> class matrix {\n \
-    \ private:\n    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n\
+  code: "#pragma once\n#include <assert.h>\n\n#include <iostream>\n#include <utility>\n\
+    #include <valarray>\n#include <vector>\n\ntemplate <class T> class matrix {\n\
+    \  private:\n    int H, W;\n    std::valarray<std::valarray<T>> table;\n\n  public:\n\
     \    matrix() = default;\n    matrix(int _H, int _W, T val = 0)\n        : H(_H),\
     \ W(_W), table(std::valarray<T>(val, _W), _H) {}\n    matrix(const std::vector<std::vector<T>>\
     \ &vv)\n        : H(vv.size()), W(vv[0].size()), table(std::valarray<T>(W), H)\
@@ -204,7 +204,7 @@ data:
   - graph/doubling.hpp
   - graph/is_isomorphic.hpp
   - graph/Warshall_Floyd.hpp
-  timestamp: '2023-07-13 01:00:21+09:00'
+  timestamp: '2023-07-19 02:36:54+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

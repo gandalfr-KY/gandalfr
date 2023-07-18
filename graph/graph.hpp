@@ -15,7 +15,8 @@
  * @tparam WEIGHT int なら重みなし、そうでないなら重みつきグラフ
  * @tparam is_directed 有向グラフかとうか
  */
-template <typename WEIGHT, bool is_directed> class graph {
+template <typename WEIGHT, bool is_directed, bool enable_unionfind = true>
+class graph {
   private:
     int N;
     std::vector<std::vector<edge<WEIGHT>>> G;
@@ -28,7 +29,10 @@ template <typename WEIGHT, bool is_directed> class graph {
 
   public:
     graph() : N(0){};
-    graph(int n) : N(n), G(n), uf(n), visited(n){};
+    graph(int n) : N(n), G(n), visited(n) {
+        if constexpr (enable_unionfind)
+            uf.expand(n);
+    };
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -40,8 +44,9 @@ template <typename WEIGHT, bool is_directed> class graph {
             return;
         N = n;
         G.resize(n);
-        uf.expand(n);
         visited.resize(n);
+        if constexpr (enable_unionfind)
+            uf.expand(n);
     }
 
     /**
@@ -70,29 +75,42 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @param y ノード番号
      * @return x, y が連結かどうか
      */
-    bool are_connected(int x, int y) const { return uf.same(x, y); }
+    bool are_connected(int x, int y) const {
+        static_assert(enable_unionfind);
+        return uf.same(x, y);
+    }
 
     /**
      * @return 連結成分の数
      */
-    int count_connected_components() const { return uf.count_groups(); }
+    int count_connected_components() const {
+        static_assert(enable_unionfind);
+        return uf.count_groups();
+    }
 
     /**
      * @return 連結成分のリストのリスト
      */
     std::vector<std::vector<int>> weakly_connected_components() const {
+        static_assert(enable_unionfind);
         return uf.all_groups();
     }
 
     /**
      * @return 木か
      */
-    bool is_tree() const { return forest_flag && uf.count_groups() == 1; }
+    bool is_tree() const {
+        static_assert(enable_unionfind);
+        return forest_flag && uf.count_groups() == 1;
+    }
 
     /**
      * @return 森か
      */
-    bool is_forest() const { return forest_flag; }
+    bool is_forest() const {
+        static_assert(enable_unionfind);
+        return forest_flag;
+    }
 
     /**
      * @return グラフの重み
@@ -104,7 +122,8 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @attention 渡した辺の id は保持される
      */
     void add_edge(edge<WEIGHT> e) {
-        forest_flag &= uf.merge(e.from, e.to);
+        if constexpr (enable_unionfind)
+            forest_flag &= uf.merge(e.from, e.to);
         E.emplace_back(e);
         G[e.from].emplace_back(e);
         if (!is_directed && e.from != e.to) {
@@ -146,9 +165,13 @@ template <typename WEIGHT, bool is_directed> class graph {
      * 2.各ノードがグラフのリストの何番目に属するか
      * 3.各ノードがグラフのどのノードになっているか
      */
-    std::tuple<std::vector<graph>, std::vector<int>, std::vector<int>>
+    template <bool __enable_unionfind = true>
+    std::tuple<std::vector<graph<WEIGHT, is_directed, __enable_unionfind>>,
+               std::vector<int>, std::vector<int>>
     decompose() const {
-        std::vector<graph> Gs(uf.count_groups());
+        static_assert(enable_unionfind);
+        std::vector<graph<WEIGHT, is_directed, __enable_unionfind>> Gs(
+            uf.count_groups());
         std::vector<std::vector<int>> groups(uf.all_groups());
         std::vector<int> group_id(N), node_id(N);
         for (int i = 0; i < (int)groups.size(); i++) {
@@ -164,7 +187,7 @@ template <typename WEIGHT, bool is_directed> class graph {
             e.to = node_id[e.to];
             Gs[id].add_edge(e);
         }
-        return std::make_tuple(Gs, group_id, node_id);
+        return std::make_tuple(std::move(Gs), std::move(group_id), std::move(node_id));
     }
 
     /**
@@ -188,8 +211,11 @@ template <typename WEIGHT, bool is_directed> class graph {
     std::vector<int> preorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        for (int x : uf.contained_group(start))
-            visited[x] = false;
+        if constexpr (enable_unionfind)
+            for (int x : uf.contained_group(start))
+                visited[x] = false;
+        else
+            visited.assign(N, false);
         visited[start] = true;
         stk.push({start, 0});
 
@@ -216,8 +242,11 @@ template <typename WEIGHT, bool is_directed> class graph {
     std::vector<int> inorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        for (int x : uf.contained_group(start))
-            visited[x] = false;
+        if constexpr (enable_unionfind)
+            for (int x : uf.contained_group(start))
+                visited[x] = false;
+        else
+            visited.assign(N, false);
         visited[start] = true;
         stk.push({start, 0});
 
@@ -244,8 +273,11 @@ template <typename WEIGHT, bool is_directed> class graph {
     std::vector<int> postorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        for (int x : uf.contained_group(start))
-            visited[x] = false;
+        if constexpr (enable_unionfind)
+            for (int x : uf.contained_group(start))
+                visited[x] = false;
+        else
+            visited.assign(N, false);
         visited[start] = true;
         stk.push({start, 0});
 
@@ -324,8 +356,11 @@ template <typename WEIGHT, bool is_directed> class graph {
             // Dijkstra's algorithm
             Dijkstra_queue q;
             q.push({0, start_node});
-            for (int x : uf.contained_group(start_node))
-                visited[x] = false;
+            if constexpr (enable_unionfind)
+                for (int x : uf.contained_group(start_node))
+                    visited[x] = false;
+            else
+                visited.assign(N, false);
             run_Dijkstra(dist, q);
         }
 
@@ -344,11 +379,11 @@ template <typename WEIGHT, bool is_directed> class graph {
         return *std::max_element(dist.begin(), dist.end());
     }
 
-    graph reverse() const {
+    template <bool __enable_unionfind = true> graph reverse() const {
         if constexpr (!is_directed) {
             return *this;
         } else {
-            graph ret(N);
+            graph<WEIGHT, is_directed, __enable_unionfind> ret(N);
             for (auto e : E) {
                 std::swap(e.from, e.to);
                 ret.add_edge(e);
@@ -382,9 +417,10 @@ template <typename WEIGHT, bool is_directed> class graph {
     /**
      * @return 最小全域森
      */
+    template <bool __enable_unionfind = true>
     graph minimum_spanning_tree() const {
         static_assert(!is_directed);
-        graph ret(N);
+        graph<WEIGHT, is_directed, __enable_unionfind> ret(N);
         std::vector<edge<WEIGHT>> tmp(edges());
         std::sort(tmp.begin(), tmp.end());
         for (auto &e : tmp)

@@ -12,7 +12,7 @@ class union_find {
     int group_num; // 集合の数
 
   public:
-    union_find() : N(0) {}
+    union_find() : N(0), group_num(0){}
     union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n) {
         std::iota(nxt.begin(), nxt.end(), 0);
     }

@@ -1,6 +1,6 @@
 #pragma once
-#include <assert.h>
 #include <algorithm>
+#include <assert.h>
 
 inline long long mod_inverse(long long a, int mod) {
     assert(mod > 0);
@@ -10,7 +10,8 @@ inline long long mod_inverse(long long a, int mod) {
         a -= t * b, std::swap(a, b);
         u -= t * v, std::swap(u, v);
     }
-    u %= mod; 
-    if (u < 0) u += mod;
+    u %= mod;
+    if (u < 0)
+        u += mod;
     return u;
 }

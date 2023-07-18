@@ -2,9 +2,9 @@
 #include <assert.h>
 
 #include <iostream>
+#include <utility>
 #include <valarray>
 #include <vector>
-#include <utility>
 
 template <class T> class matrix {
   private:

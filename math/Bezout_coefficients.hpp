@@ -3,15 +3,15 @@
 #include <utility>
 
 namespace internal {
-    
+
 long long extgcd(long long a, long long b, long long &x, long long &y) {
     x = 1, y = 0;
     long long nx = 0, ny = 1;
-    while(b) {
+    while (b) {
         long long q = a / b;
         std::tie(a, b) = std::make_pair(b, a % b);
-        std::tie(x, nx) = std::make_pair(nx, x - nx*q);
-        std::tie(y, ny) = std::make_pair(ny, y - ny*q);
+        std::tie(x, nx) = std::make_pair(nx, x - nx * q);
+        std::tie(y, ny) = std::make_pair(ny, y - ny * q);
     }
     return a;
 }

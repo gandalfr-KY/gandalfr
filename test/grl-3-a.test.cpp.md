@@ -32,8 +32,8 @@ data:
     \n\n#line 3 \"data_structure/union_find.hpp\"\n\n#line 6 \"data_structure/union_find.hpp\"\
     \n\nclass union_find {\n  private:\n    int N;\n    mutable std::vector<int> par;\n\
     \    std::vector<int> nxt;\n    int group_num; // \u96C6\u5408\u306E\u6570\n\n\
-    \  public:\n    union_find() : N(0), group_num(0){}\n    union_find(int n) : N(n),\
-    \ par(n, -1), nxt(n), group_num(n) {\n        std::iota(nxt.begin(), nxt.end(),\
+    \  public:\n    union_find() : N(0), group_num(0) {}\n    union_find(int n) :\
+    \ N(n), par(n, -1), nxt(n), group_num(n) {\n        std::iota(nxt.begin(), nxt.end(),\
     \ 0);\n    }\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\
     \u3084\u3059\n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\
     \n     */\n    void expand(int n) {\n        if (n <= N)\n            return;\n\
@@ -227,40 +227,29 @@ data:
     \       for (auto e : E) {\n            int id = group_id[e.from];\n         \
     \   e.from = node_id[e.from];\n            e.to = node_id[e.to];\n           \
     \ Gs[id].add_edge(e);\n        }\n        return std::make_tuple(std::move(Gs),\
-    \ std::move(group_id), std::move(node_id));\n    }\n\n    /**\n     * @brief \u30B0\
-    \u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\u306B\u5909\u63DB\n     * @param invalid\
-    \ \u8FBA\u306E\u306A\u3044\u3068\u304D\u306E\u5024\n     * @attention G \u306B\
-    \u81EA\u5DF1\u30EB\u30FC\u30D7\u304C\u542B\u307E\u308C\u3066\u3044\u306A\u3044\
-    \u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\u306F 0\n     */\n    matrix<WEIGHT>\
-    \ to_adjajency(WEIGHT invalid = 0) const {\n        matrix<WEIGHT> ret(N, N, invalid);\n\
-    \        for (int i = 0; i < N; i++)\n            ret[i][i] = 0;\n        for\
-    \ (int i = 0; i < N; i++)\n            for (auto &e : G[i])\n                ret[i][e.to]\
-    \ = e.cost;\n        return ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\
-    \u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> preorder(int start)\
-    \ const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
-    \ int>> stk;\n        if constexpr (enable_unionfind)\n            for (int x\
-    \ : uf.contained_group(start))\n                visited[x] = false;\n        else\n\
-    \            visited.assign(N, false);\n        visited[start] = true;\n     \
-    \   stk.push({start, 0});\n\n        while (!stk.empty()) {\n            auto\
-    \ &[cu, idx] = stk.top();\n            if (idx == 0)\n                result.push_back(cu);\n\
-    \            if (idx == G[cu].size()) {\n                stk.pop();\n        \
-    \    } else {\n                int to = G[cu][idx++];\n                if (!visited[to])\
-    \ {\n                    visited[to] = true;\n                    stk.push({to,\
-    \ 0});\n                }\n            }\n        }\n        return result;\n\
-    \    }\n\n    /**\n     * @brief \u901A\u308A\u304C\u3051\u9806\u306B bfs\n  \
-    \   */\n    std::vector<int> inorder(int start) const {\n        std::vector<int>\
+    \ std::move(group_id),\n                               std::move(node_id));\n\
+    \    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\
+    \u306B\u5909\u63DB\n     * @param invalid \u8FBA\u306E\u306A\u3044\u3068\u304D\
+    \u306E\u5024\n     * @attention G \u306B\u81EA\u5DF1\u30EB\u30FC\u30D7\u304C\u542B\
+    \u307E\u308C\u3066\u3044\u306A\u3044\u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\
+    \u306F 0\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0) const {\n\
+    \        matrix<WEIGHT> ret(N, N, invalid);\n        for (int i = 0; i < N; i++)\n\
+    \            ret[i][i] = 0;\n        for (int i = 0; i < N; i++)\n           \
+    \ for (auto &e : G[i])\n                ret[i][e.to] = e.cost;\n        return\
+    \ ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\u306B bfs\n\
+    \     */\n    std::vector<int> preorder(int start) const {\n        std::vector<int>\
     \ result;\n        std::stack<std::pair<int, int>> stk;\n        if constexpr\
     \ (enable_unionfind)\n            for (int x : uf.contained_group(start))\n  \
     \              visited[x] = false;\n        else\n            visited.assign(N,\
     \ false);\n        visited[start] = true;\n        stk.push({start, 0});\n\n \
     \       while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n   \
-    \         if (idx == G[cu].size()) {\n                stk.pop();\n           \
-    \     result.push_back(cu);\n            } else {\n                int to = G[cu][idx++];\n\
-    \                if (!visited[to]) {\n                    visited[to] = true;\n\
-    \                    stk.push({to, 0});\n                    result.push_back(cu);\n\
+    \         if (idx == 0)\n                result.push_back(cu);\n            if\
+    \ (idx == G[cu].size()) {\n                stk.pop();\n            } else {\n\
+    \                int to = G[cu][idx++];\n                if (!visited[to]) {\n\
+    \                    visited[to] = true;\n                    stk.push({to, 0});\n\
     \                }\n            }\n        }\n        return result;\n    }\n\n\
-    \    /**\n     * @brief \u5E30\u308A\u304C\u3051\u9806\u306B bfs\n     */\n  \
-    \  std::vector<int> postorder(int start) const {\n        std::vector<int> result;\n\
+    \    /**\n     * @brief \u901A\u308A\u304C\u3051\u9806\u306B bfs\n     */\n  \
+    \  std::vector<int> inorder(int start) const {\n        std::vector<int> result;\n\
     \        std::stack<std::pair<int, int>> stk;\n        if constexpr (enable_unionfind)\n\
     \            for (int x : uf.contained_group(start))\n                visited[x]\
     \ = false;\n        else\n            visited.assign(N, false);\n        visited[start]\
@@ -269,8 +258,20 @@ data:
     \ {\n                stk.pop();\n                result.push_back(cu);\n     \
     \       } else {\n                int to = G[cu][idx++];\n                if (!visited[to])\
     \ {\n                    visited[to] = true;\n                    stk.push({to,\
-    \ 0});\n                }\n            }\n        }\n        return result;\n\
-    \    }\n\n  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
+    \ 0});\n                    result.push_back(cu);\n                }\n       \
+    \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u5E30\
+    \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> postorder(int\
+    \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
+    \ int>> stk;\n        if constexpr (enable_unionfind)\n            for (int x\
+    \ : uf.contained_group(start))\n                visited[x] = false;\n        else\n\
+    \            visited.assign(N, false);\n        visited[start] = true;\n     \
+    \   stk.push({start, 0});\n\n        while (!stk.empty()) {\n            auto\
+    \ &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n          \
+    \      stk.pop();\n                result.push_back(cu);\n            } else {\n\
+    \                int to = G[cu][idx++];\n                if (!visited[to]) {\n\
+    \                    visited[to] = true;\n                    stk.push({to, 0});\n\
+    \                }\n            }\n        }\n        return result;\n    }\n\n\
+    \  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
     \ =\n        std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;\n\
     \n    void run_bfs(std::vector<int> &dist, std::queue<int> &q) const {\n     \
     \   while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
@@ -388,7 +389,7 @@ data:
   isVerificationFile: true
   path: test/grl-3-a.test.cpp
   requiredBy: []
-  timestamp: '2023-07-19 02:36:54+09:00'
+  timestamp: '2023-07-20 02:56:32+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-3-a.test.cpp

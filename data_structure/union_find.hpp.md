@@ -67,7 +67,7 @@ data:
     #include <algorithm>\n#include <vector>\n\nclass union_find {\n  private:\n  \
     \  int N;\n    mutable std::vector<int> par;\n    std::vector<int> nxt;\n    int\
     \ group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find() : N(0),\
-    \ group_num(0){}\n    union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n)\
+    \ group_num(0) {}\n    union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n)\
     \ {\n        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n\n    /**\n     * @brief\
     \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
     \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
@@ -96,8 +96,8 @@ data:
   code: "#pragma once\n#include <assert.h>\n\n#include <algorithm>\n#include <vector>\n\
     \nclass union_find {\n  private:\n    int N;\n    mutable std::vector<int> par;\n\
     \    std::vector<int> nxt;\n    int group_num; // \u96C6\u5408\u306E\u6570\n\n\
-    \  public:\n    union_find() : N(0), group_num(0){}\n    union_find(int n) : N(n),\
-    \ par(n, -1), nxt(n), group_num(n) {\n        std::iota(nxt.begin(), nxt.end(),\
+    \  public:\n    union_find() : N(0), group_num(0) {}\n    union_find(int n) :\
+    \ N(n), par(n, -1), nxt(n), group_num(n) {\n        std::iota(nxt.begin(), nxt.end(),\
     \ 0);\n    }\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\
     \u3084\u3059\n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\
     \n     */\n    void expand(int n) {\n        if (n <= N)\n            return;\n\
@@ -135,7 +135,7 @@ data:
   - graph/traveling_salesman.hpp
   - graph/doubling.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-07-19 02:36:54+09:00'
+  timestamp: '2023-07-20 02:56:32+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

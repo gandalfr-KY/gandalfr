@@ -19,8 +19,7 @@ data:
   attributes:
     document_title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\
       \u9593\u3067\u6307\u5B9A\u3057\u3001\u8EE2\u5012\u6570\u3092\u6C42\u3081\u308B"
-    links:
-    - https://atcoder.jp/contests/arc120/submissions/42083168
+    links: []
   bundledCode: "#line 2 \"standard/inversion.hpp\"\n#include <set>\n#include <type_traits>\n\
     #include <vector>\n\n#line 3 \"data_structure/binary_indexed_tree.hpp\"\n\n/**\n\
     \ * @brief \u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97\n\
@@ -59,20 +58,18 @@ data:
     \u65B9\u3092\u3082\u3046\u4E00\u65B9\u3068\u540C\u3058\u3088\u3046\u306B\u4E26\
     \u3079\u66FF\u3048\u308B\u305F\u3081\u306E\n * swap \u306E\u30B3\u30B9\u30C8\n\
     \ * @attention \u8981\u7D20\u306E\u96C6\u5408\u304C\u4E0D\u4E00\u81F4\u306A\u3089\
-    \u3070 -1\u3001\u533A\u9593\u9577\u304C 0 \u306A\u3089\u3070 0\n * @see <a\n *\
-    \ href=\"https://atcoder.jp/contests/arc120/submissions/42083168\">verify</a>\n\
-    \ */\ntemplate <typename InputIterator>\nlong long inversion(const InputIterator\
-    \ &__begin1, const InputIterator &__end1,\n                    const InputIterator\
-    \ &__begin2,\n                    const InputIterator &__end2) {\n    int N =\
-    \ std::distance(__begin1, __end1);\n    if (N != std::distance(__begin2, __end2))\n\
-    \        return -1;\n    if (N == 0)\n        return 0;\n    std::multiset<typename\
-    \ std::iterator_traits<InputIterator>::value_type> st1(\n        __begin1, __end1),\n\
-    \        st2(__begin2, __end2);\n    if (st1 != st2)\n        return -1;\n\n \
-    \   std::vector<int> cmp1 = compress(__begin1, __end1),\n                    \
-    \ cmp2 = compress(__begin2, __end2);\n    std::vector<std::vector<int>> ord(\n\
-    \        *std::max_element(cmp2.begin(), cmp2.end()) + 1);\n    for (int i = 0;\
-    \ i < N; i++)\n        ord[cmp2[i]].push_back(i);\n    for (int i = N - 1; i >=\
-    \ 0; i--) {\n        int tmp = ord[cmp1[i]].back();\n        ord[cmp1[i]].pop_back();\n\
+    \u3070 -1\u3001\u533A\u9593\u9577\u304C 0 \u306A\u3089\u3070 0\n */\ntemplate\
+    \ <typename InputIterator>\nlong long inversion(const InputIterator &__begin1,\
+    \ const InputIterator &__end1,\n                    const InputIterator &__begin2,\n\
+    \                    const InputIterator &__end2) {\n    int N = std::distance(__begin1,\
+    \ __end1);\n    if (N != std::distance(__begin2, __end2))\n        return -1;\n\
+    \    if (N == 0)\n        return 0;\n    std::multiset<typename std::iterator_traits<InputIterator>::value_type>\
+    \ st1(\n        __begin1, __end1),\n        st2(__begin2, __end2);\n    if (st1\
+    \ != st2)\n        return -1;\n\n    std::vector<int> cmp1 = compress(__begin1,\
+    \ __end1),\n                     cmp2 = compress(__begin2, __end2);\n    std::vector<std::vector<int>>\
+    \ ord(\n        *std::max_element(cmp2.begin(), cmp2.end()) + 1);\n    for (int\
+    \ i = 0; i < N; i++)\n        ord[cmp2[i]].push_back(i);\n    for (int i = N -\
+    \ 1; i >= 0; i--) {\n        int tmp = ord[cmp1[i]].back();\n        ord[cmp1[i]].pop_back();\n\
     \        cmp1[i] = tmp;\n    }\n    return inversion(cmp1.begin(), cmp1.end());\n\
     }\n"
   code: "#pragma once\n#include <set>\n#include <type_traits>\n#include <vector>\n\
@@ -91,20 +88,18 @@ data:
     \u65B9\u3092\u3082\u3046\u4E00\u65B9\u3068\u540C\u3058\u3088\u3046\u306B\u4E26\
     \u3079\u66FF\u3048\u308B\u305F\u3081\u306E\n * swap \u306E\u30B3\u30B9\u30C8\n\
     \ * @attention \u8981\u7D20\u306E\u96C6\u5408\u304C\u4E0D\u4E00\u81F4\u306A\u3089\
-    \u3070 -1\u3001\u533A\u9593\u9577\u304C 0 \u306A\u3089\u3070 0\n * @see <a\n *\
-    \ href=\"https://atcoder.jp/contests/arc120/submissions/42083168\">verify</a>\n\
-    \ */\ntemplate <typename InputIterator>\nlong long inversion(const InputIterator\
-    \ &__begin1, const InputIterator &__end1,\n                    const InputIterator\
-    \ &__begin2,\n                    const InputIterator &__end2) {\n    int N =\
-    \ std::distance(__begin1, __end1);\n    if (N != std::distance(__begin2, __end2))\n\
-    \        return -1;\n    if (N == 0)\n        return 0;\n    std::multiset<typename\
-    \ std::iterator_traits<InputIterator>::value_type> st1(\n        __begin1, __end1),\n\
-    \        st2(__begin2, __end2);\n    if (st1 != st2)\n        return -1;\n\n \
-    \   std::vector<int> cmp1 = compress(__begin1, __end1),\n                    \
-    \ cmp2 = compress(__begin2, __end2);\n    std::vector<std::vector<int>> ord(\n\
-    \        *std::max_element(cmp2.begin(), cmp2.end()) + 1);\n    for (int i = 0;\
-    \ i < N; i++)\n        ord[cmp2[i]].push_back(i);\n    for (int i = N - 1; i >=\
-    \ 0; i--) {\n        int tmp = ord[cmp1[i]].back();\n        ord[cmp1[i]].pop_back();\n\
+    \u3070 -1\u3001\u533A\u9593\u9577\u304C 0 \u306A\u3089\u3070 0\n */\ntemplate\
+    \ <typename InputIterator>\nlong long inversion(const InputIterator &__begin1,\
+    \ const InputIterator &__end1,\n                    const InputIterator &__begin2,\n\
+    \                    const InputIterator &__end2) {\n    int N = std::distance(__begin1,\
+    \ __end1);\n    if (N != std::distance(__begin2, __end2))\n        return -1;\n\
+    \    if (N == 0)\n        return 0;\n    std::multiset<typename std::iterator_traits<InputIterator>::value_type>\
+    \ st1(\n        __begin1, __end1),\n        st2(__begin2, __end2);\n    if (st1\
+    \ != st2)\n        return -1;\n\n    std::vector<int> cmp1 = compress(__begin1,\
+    \ __end1),\n                     cmp2 = compress(__begin2, __end2);\n    std::vector<std::vector<int>>\
+    \ ord(\n        *std::max_element(cmp2.begin(), cmp2.end()) + 1);\n    for (int\
+    \ i = 0; i < N; i++)\n        ord[cmp2[i]].push_back(i);\n    for (int i = N -\
+    \ 1; i >= 0; i--) {\n        int tmp = ord[cmp1[i]].back();\n        ord[cmp1[i]].pop_back();\n\
     \        cmp1[i] = tmp;\n    }\n    return inversion(cmp1.begin(), cmp1.end());\n\
     }\n"
   dependsOn:
@@ -113,7 +108,7 @@ data:
   isVerificationFile: false
   path: standard/inversion.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-07-20 02:56:32+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/alds1-5-d.test.cpp

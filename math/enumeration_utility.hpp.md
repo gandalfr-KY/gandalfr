@@ -1,28 +1,31 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':x:'
-    path: math/mod_inverse.hpp
-    title: math/mod_inverse.hpp
-  - icon: ':x:'
+  - icon: ':question:'
     path: standard/mod_integer.hpp
     title: standard/mod_integer.hpp
-  _extendedRequiredBy: []
-  _extendedVerifiedWith: []
+  _extendedRequiredBy:
+  - icon: ':heavy_check_mark:'
+    path: math/totient.hpp
+    title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
+      \u6570"
+  _extendedVerifiedWith:
+  - icon: ':heavy_check_mark:'
+    path: test/ntl-1-d.test.cpp
+    title: test/ntl-1-d.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':warning:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 2 \"math/enumeration_utility.hpp\"\n#include <algorithm>\n#include\
     \ <map>\n#include <utility>\n#include <vector>\n\n#line 2 \"standard/mod_integer.hpp\"\
     \n#include <iostream>\n#include <queue>\n#line 5 \"standard/mod_integer.hpp\"\n\
-    \n#line 3 \"math/mod_inverse.hpp\"\n#include <assert.h>\n\ninline long long mod_inverse(long\
-    \ long a, int mod) {\n    assert(mod > 0);\n    long long b = mod, u = 1, v =\
-    \ 0;\n    while (b) {\n        long long t = a / b;\n        a -= t * b, std::swap(a,\
-    \ b);\n        u -= t * v, std::swap(u, v);\n    }\n    u %= mod;\n    if (u <\
-    \ 0)\n        u += mod;\n    return u;\n}\n#line 7 \"standard/mod_integer.hpp\"\
-    \n\n// mod_integer<P> a := P\u3092\u6CD5\u3068\u3059\u308B\u3068\u304D\u306E\u6574\
+    \ninline long long mod_inverse(long long a, int mod) {\n    assert(mod > 0);\n\
+    \    long long b = mod, u = 1, v = 0;\n    while (b) {\n        long long t =\
+    \ a / b;\n        a -= t * b, std::swap(a, b);\n        u -= t * v, std::swap(u,\
+    \ v);\n    }\n    u %= mod;\n    if (u < 0)\n        u += mod;\n    return u;\n\
+    }\n\n// mod_integer<P> a := P\u3092\u6CD5\u3068\u3059\u308B\u3068\u304D\u306E\u6574\
     \u6570\u578B;\ntemplate <int mod> class mod_integer {\n  private:\n    long long\
     \ val; // \u5024\u306F\u5FC5\u305A 0 <= val < mod \u306B\u4FDD\u305F\u308C\u308B\
     \n    friend mod_integer operator+(const mod_integer &a) { return a; }\n    friend\
@@ -103,13 +106,14 @@ data:
     \ = combination<_mint>;\n"
   dependsOn:
   - standard/mod_integer.hpp
-  - math/mod_inverse.hpp
   isVerificationFile: false
   path: math/enumeration_utility.hpp
-  requiredBy: []
-  timestamp: '2023-07-19 02:36:54+09:00'
-  verificationStatus: LIBRARY_NO_TESTS
-  verifiedWith: []
+  requiredBy:
+  - math/totient.hpp
+  timestamp: '2023-07-19 13:18:35+09:00'
+  verificationStatus: LIBRARY_ALL_AC
+  verifiedWith:
+  - test/ntl-1-d.test.cpp
 documentation_of: math/enumeration_utility.hpp
 layout: document
 redirect_from:

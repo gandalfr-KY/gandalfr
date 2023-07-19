@@ -77,7 +77,7 @@ data:
     - icon: ':warning:'
       path: math/divisors.hpp
       title: math/divisors.hpp
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: math/enumeration_utility.hpp
       title: math/enumeration_utility.hpp
     - icon: ':heavy_check_mark:'
@@ -86,9 +86,6 @@ data:
     - icon: ':question:'
       path: math/matrix.hpp
       title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
-    - icon: ':x:'
-      path: math/mod_inverse.hpp
-      title: math/mod_inverse.hpp
     - icon: ':warning:'
       path: math/polynomial.hpp
       title: math/polynomial.hpp
@@ -96,7 +93,7 @@ data:
       path: math/prime_number_utility.hpp
       title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
         \u3059\u308B\u30AF\u30E9\u30B9"
-    - icon: ':warning:'
+    - icon: ':heavy_check_mark:'
       path: math/totient.hpp
       title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
         \u6570"
@@ -132,7 +129,7 @@ data:
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
         \u3067\u6307\u5B9A\u3057\u3001\u6700\u9577\u90E8\u5206\u5897\u52A0\u5217\u306E\
         \u306E\u9577\u3055\u3092\u6C42\u3081\u308B"
-    - icon: ':x:'
+    - icon: ':question:'
       path: standard/mod_integer.hpp
       title: standard/mod_integer.hpp
     - icon: ':question:'
@@ -195,7 +192,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/ntl-1-a.test.cpp
       title: test/ntl-1-a.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test/ntl-1-d.test.cpp
       title: test/ntl-1-d.test.cpp
 layout: toppage

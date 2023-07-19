@@ -1,5 +1,5 @@
 #pragma once
-#include "../standard/power.hpp"
+#include "enumeration_utility.hpp"
 #include "factorize.hpp"
 
 /**

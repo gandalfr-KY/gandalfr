@@ -4,7 +4,7 @@
 #include <iostream>
 #include <numeric>
 
-#include "../math/mod_inverse.hpp"
+#include "mod_integer.hpp"
 
 namespace internal {
 

@@ -27,7 +27,6 @@
 #include "other/stopwatch.hpp"
 #include "other/random.hpp"
 #include "other/io_supporter.hpp"
-#include "math/mod_inverse.hpp"
 #include "math/totient.hpp"
 #include "math/prime_number_utility.hpp"
 #include "math/factorize.hpp"

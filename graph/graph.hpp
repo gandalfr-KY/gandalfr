@@ -187,7 +187,8 @@ class graph {
             e.to = node_id[e.to];
             Gs[id].add_edge(e);
         }
-        return std::make_tuple(std::move(Gs), std::move(group_id), std::move(node_id));
+        return std::make_tuple(std::move(Gs), std::move(group_id),
+                               std::move(node_id));
     }
 
     /**

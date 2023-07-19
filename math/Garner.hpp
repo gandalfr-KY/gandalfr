@@ -1,8 +1,6 @@
 #pragma once
 #include <vector>
 
-#include "mod_inverse.hpp"
-
 /*
  * O(N)
  * from : https://kopricky.github.io/code/Computation_Advanced/garner.html

@@ -31,8 +31,6 @@ long long inversion(const InputIterator &__begin, const InputIterator &__end) {
  * 要素の集合が等しい半開区間を2つ指定。一方をもう一方と同じように並べ替えるための
  * swap のコスト
  * @attention 要素の集合が不一致ならば -1、区間長が 0 ならば 0
- * @see <a
- * href="https://atcoder.jp/contests/arc120/submissions/42083168">verify</a>
  */
 template <typename InputIterator>
 long long inversion(const InputIterator &__begin1, const InputIterator &__end1,

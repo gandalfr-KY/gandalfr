@@ -1,33 +1,48 @@
 #pragma once
+#define ENABLE_MULTI_FOR
 
+#include <algorithm>
+#include <utility>
 #include <vector>
 
-class multi_iter {
-private:
-    int* lim;
-    int* it;
-    int depth;
-    int d;
+using multirange = std::vector<std::pair<int, int>>;
 
-public:
-    multi_iter() : lim(nullptr), it(nullptr), depth(0), d(0) {}
-    multi_iter(const std::vector<int>& limits) : depth(limits.size()), d(0) {
+class multi_iter {
+  private:
+    int *lim;
+    int *bs;
+    int *it;
+    int depth, d;
+
+  public:
+    multi_iter(const std::vector<int> &limits) : depth(limits.size()), d(0) {
         lim = new int[depth];
+        bs = new int[depth];
         it = new int[depth];
         for (int i = 0; i < depth; ++i) {
             lim[i] = limits[i];
-            it[i] = 0;
+            bs[i] = it[i] = 0;
+        }
+    }
+    multi_iter(const multirange &rngs) : depth(rngs.size()), d(0) {
+        lim = new int[depth];
+        bs = new int[depth];
+        it = new int[depth];
+        for (int i = 0; i < depth; ++i) {
+            lim[i] = rngs[i].second;
+            bs[i] = it[i] = rngs[i].first;
         }
     }
 
     ~multi_iter() {
         delete[] lim;
+        delete[] bs;
         delete[] it;
     }
 
-    multi_iter& operator++() {
+    multi_iter &operator++() {
         for (d = 0; d < depth && ++it[d] == lim[d]; ++d)
-            it[d] = 0;
+            it[d] = bs[d];
         return *this;
     }
 
@@ -37,7 +52,7 @@ public:
         return tmp;
     }
 
-    void init() { std::fill(it, it + depth, 0), d = 0; }
+    void init() { std::copy(bs, bs + depth, it); }
 
     bool fin() const { return d == depth; }
 

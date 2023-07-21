@@ -24,5 +24,4 @@ void Yes(bool ok){ std::cout << (ok ? "Yes" : "No") << std::endl; }
 int main(void){
 
 
-
 }

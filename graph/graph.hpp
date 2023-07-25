@@ -199,10 +199,10 @@ class graph {
     matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0) const {
         matrix<WEIGHT> ret(N, N, invalid);
         for (int i = 0; i < N; i++)
-            ret[i][i] = 0;
+            ret(i, i) = 0;
         for (int i = 0; i < N; i++)
             for (auto &e : G[i])
-                ret[i][e.to] = e.cost;
+                ret(i, e.to) = e.cost;
         return ret;
     }
 

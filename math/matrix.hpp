@@ -41,12 +41,17 @@ template <class T> class matrix {
     }
     int size_H() const { return H; }
     int size_W() const { return W; }
-    matrix<T> transpose() const {
+    void transpose() {
         matrix<T> ret(W, H);
         for (int i = 0; i < H; i++)
             for (int j = 0; j < W; j++)
-                ret[j][i] = table[i][j];
-        return ret;
+                ret.table[j][i] = table[i][j];
+        *this = std::move(ret);
+    }
+
+    void row_assign(int i, const std::valarray<T> &row) {
+        assert(W == (int)row.size());
+        table[i] = std::move(row);
     }
 
     void row_swap(int i, int j) {
@@ -58,22 +63,24 @@ template <class T> class matrix {
     /**
      * @attention O(n^3)
      * @attention 整数型では正しく計算できない。double や fraction を使うこと。
+     * @attention 枢軸選びをしていないので double では誤差が出るかも。
      */
     operations_history sweep_method() {
         operations_history hist;
         T ret = 1;
         for (int h = 0, w = 0; h < H && w < W; w++) {
-            for (int piv = h + 1; piv < H; piv++) {
-                if (table[h][w] < table[piv][w]) {
-                    hist.push_back({SWAP, h, piv, 0});
-                    row_swap(h, piv);
-                    
+            if (table[h][w] == 0) {
+                for (int piv = h + 1; piv < H; piv++) {
+                    if (table[piv][w] != 0) {
+                        hist.push_back({SWAP, h, piv, 0});
+                        row_swap(h, piv);
+                        break;
+                    }
+                }
+                if (table[h][w] == 0) {
+                    continue;
                 }
             }
-            if (table[h][w] == 0) {
-                continue;
-            }
-
             T inv = 1 / table[h][w];
             hist.push_back({SCALE, -1, w, inv});
             table[h] *= inv;
@@ -89,10 +96,10 @@ template <class T> class matrix {
     int rank() {
         auto U(*this);
         U.sweep_method();
-        int r = 0; // rank
+        int r = 0;
         for (int i = 0; i < H; ++i) {
-            for (int j = 0; j < W; ++j) {
-                if (U[i][j] != 0) {
+            for (int j = i; j < W; ++j) {
+                if (U.table[i][j] != 0) {
                     r++;
                     break;
                 }
@@ -103,10 +110,10 @@ template <class T> class matrix {
 
     T determinant() const {
         assert(H == W);
-        auto U(*this);
+        matrix<T> U(*this);
         T det = 1;
         auto hist = U.sweep_method();
-        if (U[H-1][H-1] == 0) return 0;
+        if (U.table[H-1][H-1] == 0) return 0;
         for (auto &[op, tar, res, scl] : hist) {
             switch (op) {
             case SCALE:
@@ -123,9 +130,9 @@ template <class T> class matrix {
     std::vector<T> solve_system_of_equations(const std::vector<T> &y) {
         assert(H == W);
         std::vector<T> x(y);
-        auto U(*this);
+        matrix<T> U(*this);
         auto hist = U.sweep_method();
-        if (U[H-1][H-1] == 0) return {};
+        if (U.table[H-1][H-1] == 0) return {};
 
         for (auto &[op, tar, res, scl] : hist) {
             switch (op) {
@@ -143,7 +150,7 @@ template <class T> class matrix {
         
         for (int i = H - 1; i >= 0; --i) {
             for (int j = 0; j < i; ++j) {
-                x[j] -= U[j][i] * x[i];
+                x[j] -= U.table[j][i] * x[i];
             }
         }
         return x;
@@ -151,28 +158,27 @@ template <class T> class matrix {
 
     matrix<T> inverse() {
         assert(H == W);
-        auto INV(matrix<T>::E(H));
-        auto U(*this);
+        matrix<T> INV(matrix<T>::E(H)), U(*this);
         auto hist = U.sweep_method();
-        if (U[H-1][H-1] == 0) return matrix<T>(0, 0);
+        if (U.table[H-1][H-1] == 0) return matrix<T>(0, 0);
 
         for (auto &[op, tar, res, scl] : hist) {
             switch (op) {
             case SCALE:
-                INV[res] *= scl;
+                INV.table[res] *= scl;
                 break;
             case SWAP:
-                std::swap(INV[tar], INV[res]);
+                std::swap(INV.table[tar], INV.table[res]);
                 break;
             case ADD:
-                INV[res] += INV[tar] * scl;
+                INV.table[res] += INV.table[tar] * scl;
                 break;
             }
         }
         
         for (int i = H - 1; i >= 0; --i) {
             for (int j = 0; j < i; ++j) {
-                INV[j] -= INV[i] * U[j][i];
+                INV.table[j] -= INV.table[i] * U.table[j][i];
             }
         }
         return INV;
@@ -202,10 +208,11 @@ template <class T> class matrix {
     }
     matrix<T> &operator*=(const matrix<T> &a) {
         assert(W == a.H);
-        matrix<T> a_t(a.transpose()), ret(H, a.W);
+        matrix<T> a_t(a), ret(H, a.W);
+        a_t.transpose();
         for (int i = 0; i < H; i++) {
-            for (int j = 0; j < a.W; j++) {
-                ret[i][j] = (this->table[i] * a_t.table[j]).sum();
+            for (int j = 0; j < a_t.H; j++) {
+                ret.table[i][j] = (table[i] * a_t.table[j]).sum();
             }
         }
         *this = std::move(ret);
@@ -245,12 +252,15 @@ template <class T> class matrix {
     }
     matrix<T> operator/(const T &a) { return matrix<T>(*this) /= a; }
     matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }
-    std::valarray<T> &operator[](int h) { return table[h]; }
     friend std::istream &operator>>(std::istream &is, matrix<T> &mt) {
         for (auto &arr : mt.table)
             for (auto &x : arr)
                 is >> x;
         return is;
+    }
+    T& operator()(int h, int w) {
+        assert(0 <= h && h < H && 0 <= w && w <= W);
+        return table[h][w];
     }
 
     /**
@@ -259,7 +269,7 @@ template <class T> class matrix {
     static matrix<T> E(int N) {
         matrix<T> ret(N, N);
         for (int i = 0; i < N; i++)
-            ret[i][i] = 1;
+            ret.table[i][i] = 1;
         return ret;
     }
 };

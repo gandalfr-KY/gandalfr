@@ -6,12 +6,12 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test/grl-1-c.test.cpp
     title: test/grl-1-c.test.cpp
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: hpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
   bundledCode: "#line 2 \"math/matrix.hpp\"\n#include <assert.h>\n\n#include <iostream>\n\
@@ -123,21 +123,21 @@ data:
     \ntemplate <class T> matrix<T> Warshall_Floyd(matrix<T> mt) {\n    int N = mt.size_H();\n\
     \    for (int k = 0; k < N; k++)         // \u7D4C\u7531\u3059\u308B\u9802\u70B9\
     \n        for (int i = 0; i < N; i++)     // \u59CB\u70B9\n            for (int\
-    \ j = 0; j < N; j++) // \u7D42\u70B9\n                mt[i][j] = std::min(mt[i][j],\
-    \ mt[i][k] + mt[k][j]);\n    return mt;\n}\n"
+    \ j = 0; j < N; j++) // \u7D42\u70B9\n                mt(i, j) = std::min(mt(i,\
+    \ j), mt(i, k) + mt(k, j));\n    return mt;\n}\n"
   code: "#pragma once\n#include \"../math/matrix.hpp\"\n\ntemplate <class T> matrix<T>\
     \ Warshall_Floyd(matrix<T> mt) {\n    int N = mt.size_H();\n    for (int k = 0;\
     \ k < N; k++)         // \u7D4C\u7531\u3059\u308B\u9802\u70B9\n        for (int\
     \ i = 0; i < N; i++)     // \u59CB\u70B9\n            for (int j = 0; j < N; j++)\
-    \ // \u7D42\u70B9\n                mt[i][j] = std::min(mt[i][j], mt[i][k] + mt[k][j]);\n\
-    \    return mt;\n}\n"
+    \ // \u7D42\u70B9\n                mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k,\
+    \ j));\n    return mt;\n}\n"
   dependsOn:
   - math/matrix.hpp
   isVerificationFile: false
   path: graph/Warshall_Floyd.hpp
   requiredBy: []
-  timestamp: '2023-07-25 15:05:29+09:00'
-  verificationStatus: LIBRARY_ALL_WA
+  timestamp: '2023-07-25 15:24:17+09:00'
+  verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/grl-1-c.test.cpp
 documentation_of: graph/Warshall_Floyd.hpp

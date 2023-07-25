@@ -4,7 +4,7 @@ data:
   - icon: ':question:'
     path: data_structure/union_find.hpp
     title: "\u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059"
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: graph/Warshall_Floyd.hpp
     title: graph/Warshall_Floyd.hpp
   - icon: ':question:'
@@ -18,9 +18,9 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: true
+  _isVerificationFailed: false
   _pathExtension: cpp
-  _verificationStatusIcon: ':x:'
+  _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_C
@@ -373,29 +373,29 @@ data:
     \ mt) {\n    int N = mt.size_H();\n    for (int k = 0; k < N; k++)         //\
     \ \u7D4C\u7531\u3059\u308B\u9802\u70B9\n        for (int i = 0; i < N; i++)  \
     \   // \u59CB\u70B9\n            for (int j = 0; j < N; j++) // \u7D42\u70B9\n\
-    \                mt[i][j] = std::min(mt[i][j], mt[i][k] + mt[k][j]);\n    return\
+    \                mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k, j));\n    return\
     \ mt;\n}\n#line 5 \"test/grl-1-c.test.cpp\"\nusing namespace std;\nusing ll =\
     \ long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\nconst\
     \ ll INFLL = 1001001001001001001;\n\nint main(void){\n\n    //input\n \n    int\
     \ N, M;\n    cin >> N >> M;\n    graph<ll, true> G(N);\n    rep(i,0,M){\n    \
-    \    int a, b, c;\n        cin >> a>> b >> c;\n        G.add_edge(a, b, c);\n\
+    \    int a, b, c;\n        cin >> a >> b >> c;\n        G.add_edge(a, b, c);\n\
     \    }\n \n    //calculate\n    \n    auto mt = G.to_adjajency(INFLL);\n    rep(i,0,N)\
-    \ mt[i][i] = 0;\n    auto dist = Warshall_Floyd(mt);\n\n    rep(i,0,N){\n    \
-    \    if(dist[i][i] < 0){\n            cout << \"NEGATIVE CYCLE\" << endl;\n  \
+    \ mt(i, i) = 0;\n    auto dist = Warshall_Floyd(mt);\n\n    rep(i,0,N){\n    \
+    \    if(dist(i, i) < 0){\n            cout << \"NEGATIVE CYCLE\" << endl;\n  \
     \          return 0;\n        }\n    }\n\n    rep(i,0,N){\n        rep(j,0,N){\n\
-    \            cout << (dist[i][j] >= INFLL / 2 ? \"INF\" : to_string(dist[i][j]))\
+    \            cout << (dist(i, j) >= INFLL / 2 ? \"INF\" : to_string(dist(i, j)))\
     \ << (j == N - 1 ? '\\n' : ' ');\n        }\n    }\n \n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_1_C\"\n#include\
     \ <bits/stdc++.h>\n#include \"../graph/graph.hpp\"\n#include \"../graph/Warshall_Floyd.hpp\"\
     \nusing namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i =\
     \ (ll)(j); i < (ll)(n); i++)\nconst ll INFLL = 1001001001001001001;\n\nint main(void){\n\
     \n    //input\n \n    int N, M;\n    cin >> N >> M;\n    graph<ll, true> G(N);\n\
-    \    rep(i,0,M){\n        int a, b, c;\n        cin >> a>> b >> c;\n        G.add_edge(a,\
+    \    rep(i,0,M){\n        int a, b, c;\n        cin >> a >> b >> c;\n        G.add_edge(a,\
     \ b, c);\n    }\n \n    //calculate\n    \n    auto mt = G.to_adjajency(INFLL);\n\
-    \    rep(i,0,N) mt[i][i] = 0;\n    auto dist = Warshall_Floyd(mt);\n\n    rep(i,0,N){\n\
-    \        if(dist[i][i] < 0){\n            cout << \"NEGATIVE CYCLE\" << endl;\n\
+    \    rep(i,0,N) mt(i, i) = 0;\n    auto dist = Warshall_Floyd(mt);\n\n    rep(i,0,N){\n\
+    \        if(dist(i, i) < 0){\n            cout << \"NEGATIVE CYCLE\" << endl;\n\
     \            return 0;\n        }\n    }\n\n    rep(i,0,N){\n        rep(j,0,N){\n\
-    \            cout << (dist[i][j] >= INFLL / 2 ? \"INF\" : to_string(dist[i][j]))\
+    \            cout << (dist(i, j) >= INFLL / 2 ? \"INF\" : to_string(dist(i, j)))\
     \ << (j == N - 1 ? '\\n' : ' ');\n        }\n    }\n \n}"
   dependsOn:
   - graph/graph.hpp
@@ -406,8 +406,8 @@ data:
   isVerificationFile: true
   path: test/grl-1-c.test.cpp
   requiredBy: []
-  timestamp: '2023-07-25 15:05:29+09:00'
-  verificationStatus: TEST_WRONG_ANSWER
+  timestamp: '2023-07-25 15:24:17+09:00'
+  verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-1-c.test.cpp
 layout: document

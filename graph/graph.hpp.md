@@ -39,7 +39,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-1-a.test.cpp
     title: test/grl-1-a.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test/grl-1-c.test.cpp
     title: test/grl-1-c.test.cpp
   - icon: ':heavy_check_mark:'

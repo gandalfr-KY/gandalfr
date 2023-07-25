@@ -99,69 +99,75 @@ data:
     \  * @param val \u62E1\u5F35\u90E8\u5206\u306E\u5024\n     */\n    void resize(int\
     \ _H, int _W, T val = 0) {\n        H = _H, W = _W;\n        table.resize(_H,\
     \ std::valarray<T>(val, _H));\n    }\n    int size_H() const { return H; }\n \
-    \   int size_W() const { return W; }\n    matrix<T> transpose() const {\n    \
-    \    matrix<T> ret(W, H);\n        for (int i = 0; i < H; i++)\n            for\
-    \ (int j = 0; j < W; j++)\n                ret[j][i] = table[i][j];\n        return\
-    \ ret;\n    }\n\n    void row_swap(int i, int j) {\n        assert(0 <= i && i\
-    \ < H);\n        assert(0 <= j && j < H);\n        table[i].swap(table[j]);\n\
-    \    }\n    \n    /**\n     * @attention O(n^3)\n     * @attention \u6574\u6570\
-    \u578B\u3067\u306F\u6B63\u3057\u304F\u8A08\u7B97\u3067\u304D\u306A\u3044\u3002\
-    double \u3084 fraction \u3092\u4F7F\u3046\u3053\u3068\u3002\n     */\n    operations_history\
+    \   int size_W() const { return W; }\n    void transpose() {\n        matrix<T>\
+    \ ret(W, H);\n        for (int i = 0; i < H; i++)\n            for (int j = 0;\
+    \ j < W; j++)\n                ret.table[j][i] = table[i][j];\n        *this =\
+    \ std::move(ret);\n    }\n\n    void row_assign(int i, const std::valarray<T>\
+    \ &row) {\n        assert(W == (int)row.size());\n        table[i] = std::move(row);\n\
+    \    }\n\n    void row_swap(int i, int j) {\n        assert(0 <= i && i < H);\n\
+    \        assert(0 <= j && j < H);\n        table[i].swap(table[j]);\n    }\n \
+    \   \n    /**\n     * @attention O(n^3)\n     * @attention \u6574\u6570\u578B\u3067\
+    \u306F\u6B63\u3057\u304F\u8A08\u7B97\u3067\u304D\u306A\u3044\u3002double \u3084\
+    \ fraction \u3092\u4F7F\u3046\u3053\u3068\u3002\n     * @attention \u67A2\u8EF8\
+    \u9078\u3073\u3092\u3057\u3066\u3044\u306A\u3044\u306E\u3067 double \u3067\u306F\
+    \u8AA4\u5DEE\u304C\u51FA\u308B\u304B\u3082\u3002\n     */\n    operations_history\
     \ sweep_method() {\n        operations_history hist;\n        T ret = 1;\n   \
-    \     for (int h = 0, w = 0; h < H && w < W; w++) {\n            for (int piv\
-    \ = h + 1; piv < H; piv++) {\n                if (table[h][w] < table[piv][w])\
-    \ {\n                    hist.push_back({SWAP, h, piv, 0});\n                \
-    \    row_swap(h, piv);\n                    \n                }\n            }\n\
-    \            if (table[h][w] == 0) {\n                continue;\n            }\n\
-    \n            T inv = 1 / table[h][w];\n            hist.push_back({SCALE, -1,\
-    \ w, inv});\n            table[h] *= inv;\n            for (int j = h + 1; j <\
-    \ H; j++) {\n                hist.push_back({ADD, h, j, - table[j][w]});\n   \
-    \             table[j] -= table[h] * table[j][w];\n            }\n           \
-    \ h++;\n        }\n        return hist;\n    }\n\n    int rank() {\n        auto\
-    \ U(*this);\n        U.sweep_method();\n        int r = 0; // rank\n        for\
-    \ (int i = 0; i < H; ++i) {\n            for (int j = 0; j < W; ++j) {\n     \
-    \           if (U[i][j] != 0) {\n                    r++;\n                  \
-    \  break;\n                }\n            }\n        }\n        return r;\n  \
-    \  }\n\n    T determinant() const {\n        assert(H == W);\n        auto U(*this);\n\
-    \        T det = 1;\n        auto hist = U.sweep_method();\n        if (U[H-1][H-1]\
-    \ == 0) return 0;\n        for (auto &[op, tar, res, scl] : hist) {\n        \
-    \    switch (op) {\n            case SCALE:\n                det /= scl;\n   \
-    \             break;\n            case SWAP:\n                det *= -1;\n   \
-    \             break;\n            }\n        }\n        return det;\n    }\n\n\
-    \    std::vector<T> solve_system_of_equations(const std::vector<T> &y) {\n   \
-    \     assert(H == W);\n        std::vector<T> x(y);\n        auto U(*this);\n\
-    \        auto hist = U.sweep_method();\n        if (U[H-1][H-1] == 0) return {};\n\
-    \n        for (auto &[op, tar, res, scl] : hist) {\n            switch (op) {\n\
-    \            case SCALE:\n                x[res] *= scl;\n                break;\n\
-    \            case SWAP:\n                std::swap(x[tar], x[res]);\n        \
-    \        break;\n            case ADD:\n                x[res] += x[tar] * scl;\n\
-    \                break;\n            }\n        }\n        \n        for (int\
-    \ i = H - 1; i >= 0; --i) {\n            for (int j = 0; j < i; ++j) {\n     \
-    \           x[j] -= U[j][i] * x[i];\n            }\n        }\n        return\
-    \ x;\n    }\n\n    matrix<T> inverse() {\n        assert(H == W);\n        auto\
-    \ INV(matrix<T>::E(H));\n        auto U(*this);\n        auto hist = U.sweep_method();\n\
-    \        if (U[H-1][H-1] == 0) return matrix<T>(0, 0);\n\n        for (auto &[op,\
-    \ tar, res, scl] : hist) {\n            switch (op) {\n            case SCALE:\n\
-    \                INV[res] *= scl;\n                break;\n            case SWAP:\n\
-    \                std::swap(INV[tar], INV[res]);\n                break;\n    \
-    \        case ADD:\n                INV[res] += INV[tar] * scl;\n            \
-    \    break;\n            }\n        }\n        \n        for (int i = H - 1; i\
-    \ >= 0; --i) {\n            for (int j = 0; j < i; ++j) {\n                INV[j]\
-    \ -= INV[i] * U[j][i];\n            }\n        }\n        return INV;\n    }\n\
-    \n\n    void print() const {\n        for (int i = 0; i < H; i++) {\n        \
-    \    for (int j = 0; j < W; j++) {\n                std::cout << table[i][j] <<\
-    \ (j == W - 1 ? \"\" : \" \");\n            }\n            std::cout << std::endl;\n\
-    \        }\n    }\n\n    matrix<T> &operator+=(const matrix<T> &a) {\n       \
-    \ this->table += a.table;\n        return *this;\n    }\n    matrix<T> &operator-=(const\
-    \ matrix<T> &a) {\n        this->table -= a.table;\n        return *this;\n  \
-    \  }\n    matrix<T> &operator*=(const T &a) {\n        this->table *= a;\n   \
-    \     return *this;\n    }\n    matrix<T> &operator*=(const matrix<T> &a) {\n\
-    \        assert(W == a.H);\n        matrix<T> a_t(a.transpose()), ret(H, a.W);\n\
-    \        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < a.W; j++)\
-    \ {\n                ret[i][j] = (this->table[i] * a_t.table[j]).sum();\n    \
-    \        }\n        }\n        *this = std::move(ret);\n        return *this;\n\
-    \    }\n    matrix<T> &operator/=(const T &a) {\n        this->table /= a;\n \
-    \       return *this;\n    }\n    /**\n     * @brief \u884C\u5217\u306E\u51AA\u4E57\
+    \     for (int h = 0, w = 0; h < H && w < W; w++) {\n            if (table[h][w]\
+    \ == 0) {\n                for (int piv = h + 1; piv < H; piv++) {\n         \
+    \           if (table[piv][w] != 0) {\n                        hist.push_back({SWAP,\
+    \ h, piv, 0});\n                        row_swap(h, piv);\n                  \
+    \      break;\n                    }\n                }\n                if (table[h][w]\
+    \ == 0) {\n                    continue;\n                }\n            }\n \
+    \           T inv = 1 / table[h][w];\n            hist.push_back({SCALE, -1, w,\
+    \ inv});\n            table[h] *= inv;\n            for (int j = h + 1; j < H;\
+    \ j++) {\n                hist.push_back({ADD, h, j, - table[j][w]});\n      \
+    \          table[j] -= table[h] * table[j][w];\n            }\n            h++;\n\
+    \        }\n        return hist;\n    }\n\n    int rank() {\n        auto U(*this);\n\
+    \        U.sweep_method();\n        int r = 0;\n        for (int i = 0; i < H;\
+    \ ++i) {\n            for (int j = i; j < W; ++j) {\n                if (U.table[i][j]\
+    \ != 0) {\n                    r++;\n                    break;\n            \
+    \    }\n            }\n        }\n        return r;\n    }\n\n    T determinant()\
+    \ const {\n        assert(H == W);\n        matrix<T> U(*this);\n        T det\
+    \ = 1;\n        auto hist = U.sweep_method();\n        if (U.table[H-1][H-1] ==\
+    \ 0) return 0;\n        for (auto &[op, tar, res, scl] : hist) {\n           \
+    \ switch (op) {\n            case SCALE:\n                det /= scl;\n      \
+    \          break;\n            case SWAP:\n                det *= -1;\n      \
+    \          break;\n            }\n        }\n        return det;\n    }\n\n  \
+    \  std::vector<T> solve_system_of_equations(const std::vector<T> &y) {\n     \
+    \   assert(H == W);\n        std::vector<T> x(y);\n        matrix<T> U(*this);\n\
+    \        auto hist = U.sweep_method();\n        if (U.table[H-1][H-1] == 0) return\
+    \ {};\n\n        for (auto &[op, tar, res, scl] : hist) {\n            switch\
+    \ (op) {\n            case SCALE:\n                x[res] *= scl;\n          \
+    \      break;\n            case SWAP:\n                std::swap(x[tar], x[res]);\n\
+    \                break;\n            case ADD:\n                x[res] += x[tar]\
+    \ * scl;\n                break;\n            }\n        }\n        \n       \
+    \ for (int i = H - 1; i >= 0; --i) {\n            for (int j = 0; j < i; ++j)\
+    \ {\n                x[j] -= U.table[j][i] * x[i];\n            }\n        }\n\
+    \        return x;\n    }\n\n    matrix<T> inverse() {\n        assert(H == W);\n\
+    \        matrix<T> INV(matrix<T>::E(H)), U(*this);\n        auto hist = U.sweep_method();\n\
+    \        if (U.table[H-1][H-1] == 0) return matrix<T>(0, 0);\n\n        for (auto\
+    \ &[op, tar, res, scl] : hist) {\n            switch (op) {\n            case\
+    \ SCALE:\n                INV.table[res] *= scl;\n                break;\n   \
+    \         case SWAP:\n                std::swap(INV.table[tar], INV.table[res]);\n\
+    \                break;\n            case ADD:\n                INV.table[res]\
+    \ += INV.table[tar] * scl;\n                break;\n            }\n        }\n\
+    \        \n        for (int i = H - 1; i >= 0; --i) {\n            for (int j\
+    \ = 0; j < i; ++j) {\n                INV.table[j] -= INV.table[i] * U.table[j][i];\n\
+    \            }\n        }\n        return INV;\n    }\n\n\n    void print() const\
+    \ {\n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W;\
+    \ j++) {\n                std::cout << table[i][j] << (j == W - 1 ? \"\" : \"\
+    \ \");\n            }\n            std::cout << std::endl;\n        }\n    }\n\
+    \n    matrix<T> &operator+=(const matrix<T> &a) {\n        this->table += a.table;\n\
+    \        return *this;\n    }\n    matrix<T> &operator-=(const matrix<T> &a) {\n\
+    \        this->table -= a.table;\n        return *this;\n    }\n    matrix<T>\
+    \ &operator*=(const T &a) {\n        this->table *= a;\n        return *this;\n\
+    \    }\n    matrix<T> &operator*=(const matrix<T> &a) {\n        assert(W == a.H);\n\
+    \        matrix<T> a_t(a), ret(H, a.W);\n        a_t.transpose();\n        for\
+    \ (int i = 0; i < H; i++) {\n            for (int j = 0; j < a_t.H; j++) {\n \
+    \               ret.table[i][j] = (table[i] * a_t.table[j]).sum();\n         \
+    \   }\n        }\n        *this = std::move(ret);\n        return *this;\n   \
+    \ }\n    matrix<T> &operator/=(const T &a) {\n        this->table /= a;\n    \
+    \    return *this;\n    }\n    /**\n     * @brief \u884C\u5217\u306E\u51AA\u4E57\
     \u3002\n     * @param n \u6307\u6570\n     * @attention n \u304C 0 \u306A\u3089\
     \u5358\u4F4D\u884C\u5217\u3002\n     * @attention \u6F14\u7B97\u5B50\u306E\u512A\
     \u5148\u5EA6\u306B\u6CE8\u610F\u3002\n     */\n    matrix<T> operator^=(long long\
@@ -175,16 +181,17 @@ data:
     \ -= a; }\n    template <typename S> matrix<T> operator*(const S &a) {\n     \
     \   return matrix<T>(*this) *= a;\n    }\n    matrix<T> operator/(const T &a)\
     \ { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long long n) { return\
-    \ matrix<T>(*this) ^= n; }\n    std::valarray<T> &operator[](int h) { return table[h];\
-    \ }\n    friend std::istream &operator>>(std::istream &is, matrix<T> &mt) {\n\
-    \        for (auto &arr : mt.table)\n            for (auto &x : arr)\n       \
-    \         is >> x;\n        return is;\n    }\n\n    /**\n     * @brief \u30B5\
-    \u30A4\u30BA n \u306E\u5358\u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T>\
-    \ E(int N) {\n        matrix<T> ret(N, N);\n        for (int i = 0; i < N; i++)\n\
-    \            ret[i][i] = 1;\n        return ret;\n    }\n};\n#line 3 \"graph/edge.hpp\"\
-    \n\nnamespace internal {\ntemplate <class DERIVED, class WEIGHT> struct _base_edge\
-    \ {\n    int from;\n    int to;\n    WEIGHT cost;\n    int id;\n    _base_edge()\
-    \ {}\n    _base_edge(int _from, int _to, WEIGHT _cost, int _id)\n        : from(_from),\
+    \ matrix<T>(*this) ^= n; }\n    friend std::istream &operator>>(std::istream &is,\
+    \ matrix<T> &mt) {\n        for (auto &arr : mt.table)\n            for (auto\
+    \ &x : arr)\n                is >> x;\n        return is;\n    }\n    T& operator()(int\
+    \ h, int w) {\n        assert(0 <= h && h < H && 0 <= w && w <= W);\n        return\
+    \ table[h][w];\n    }\n\n    /**\n     * @brief \u30B5\u30A4\u30BA n \u306E\u5358\
+    \u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T> E(int N) {\n        matrix<T>\
+    \ ret(N, N);\n        for (int i = 0; i < N; i++)\n            ret.table[i][i]\
+    \ = 1;\n        return ret;\n    }\n};\n#line 3 \"graph/edge.hpp\"\n\nnamespace\
+    \ internal {\ntemplate <class DERIVED, class WEIGHT> struct _base_edge {\n   \
+    \ int from;\n    int to;\n    WEIGHT cost;\n    int id;\n    _base_edge() {}\n\
+    \    _base_edge(int _from, int _to, WEIGHT _cost, int _id)\n        : from(_from),\
     \ to(_to), cost(_cost), id(_id) {}\n\n    friend bool operator>(const _base_edge\
     \ &e1, const _base_edge &e) {\n        return e1.compare(e) > 0;\n    }\n    friend\
     \ bool operator>=(const _base_edge &e1, const _base_edge &e) {\n        return\
@@ -297,8 +304,8 @@ data:
     \u307E\u308C\u3066\u3044\u306A\u3044\u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\
     \u306F 0\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0) const {\n\
     \        matrix<WEIGHT> ret(N, N, invalid);\n        for (int i = 0; i < N; i++)\n\
-    \            ret[i][i] = 0;\n        for (int i = 0; i < N; i++)\n           \
-    \ for (auto &e : G[i])\n                ret[i][e.to] = e.cost;\n        return\
+    \            ret(i, i) = 0;\n        for (int i = 0; i < N; i++)\n           \
+    \ for (auto &e : G[i])\n                ret(i, e.to) = e.cost;\n        return\
     \ ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\u306B bfs\n\
     \     */\n    std::vector<int> preorder(int start) const {\n        std::vector<int>\
     \ result;\n        std::stack<std::pair<int, int>> stk;\n        if constexpr\
@@ -435,7 +442,7 @@ data:
   isVerificationFile: true
   path: test/grl-5-c.test.cpp
   requiredBy: []
-  timestamp: '2023-07-21 23:18:32+09:00'
+  timestamp: '2023-07-25 15:05:29+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-5-c.test.cpp

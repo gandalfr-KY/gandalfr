@@ -16,18 +16,18 @@ int main(void){
     graph<ll, true> G(N);
     rep(i,0,M){
         int a, b, c;
-        cin >> a>> b >> c;
+        cin >> a >> b >> c;
         G.add_edge(a, b, c);
     }
  
     //calculate
     
     auto mt = G.to_adjajency(INFLL);
-    rep(i,0,N) mt[i][i] = 0;
+    rep(i,0,N) mt(i, i) = 0;
     auto dist = Warshall_Floyd(mt);
 
     rep(i,0,N){
-        if(dist[i][i] < 0){
+        if(dist(i, i) < 0){
             cout << "NEGATIVE CYCLE" << endl;
             return 0;
         }
@@ -35,7 +35,7 @@ int main(void){
 
     rep(i,0,N){
         rep(j,0,N){
-            cout << (dist[i][j] >= INFLL / 2 ? "INF" : to_string(dist[i][j])) << (j == N - 1 ? '\n' : ' ');
+            cout << (dist(i, j) >= INFLL / 2 ? "INF" : to_string(dist(i, j))) << (j == N - 1 ? '\n' : ' ');
         }
     }
  

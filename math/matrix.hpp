@@ -59,7 +59,7 @@ template <class T> class matrix {
         assert(0 <= j && j < H);
         table[i].swap(table[j]);
     }
-    
+
     /**
      * @attention O(n^3)
      * @attention 整数型では正しく計算できない。double や fraction を使うこと。
@@ -85,7 +85,7 @@ template <class T> class matrix {
             hist.push_back({SCALE, -1, w, inv});
             table[h] *= inv;
             for (int j = h + 1; j < H; j++) {
-                hist.push_back({ADD, h, j, - table[j][w]});
+                hist.push_back({ADD, h, j, -table[j][w]});
                 table[j] -= table[h] * table[j][w];
             }
             h++;
@@ -113,7 +113,8 @@ template <class T> class matrix {
         matrix<T> U(*this);
         T det = 1;
         auto hist = U.sweep_method();
-        if (U.table[H-1][H-1] == 0) return 0;
+        if (U.table[H - 1][H - 1] == 0)
+            return 0;
         for (auto &[op, tar, res, scl] : hist) {
             switch (op) {
             case SCALE:
@@ -132,7 +133,8 @@ template <class T> class matrix {
         std::vector<T> x(y);
         matrix<T> U(*this);
         auto hist = U.sweep_method();
-        if (U.table[H-1][H-1] == 0) return {};
+        if (U.table[H - 1][H - 1] == 0)
+            return {};
 
         for (auto &[op, tar, res, scl] : hist) {
             switch (op) {
@@ -147,7 +149,7 @@ template <class T> class matrix {
                 break;
             }
         }
-        
+
         for (int i = H - 1; i >= 0; --i) {
             for (int j = 0; j < i; ++j) {
                 x[j] -= U.table[j][i] * x[i];
@@ -160,7 +162,8 @@ template <class T> class matrix {
         assert(H == W);
         matrix<T> INV(matrix<T>::E(H)), U(*this);
         auto hist = U.sweep_method();
-        if (U.table[H-1][H-1] == 0) return matrix<T>(0, 0);
+        if (U.table[H - 1][H - 1] == 0)
+            return matrix<T>(0, 0);
 
         for (auto &[op, tar, res, scl] : hist) {
             switch (op) {
@@ -175,7 +178,7 @@ template <class T> class matrix {
                 break;
             }
         }
-        
+
         for (int i = H - 1; i >= 0; --i) {
             for (int j = 0; j < i; ++j) {
                 INV.table[j] -= INV.table[i] * U.table[j][i];
@@ -183,7 +186,6 @@ template <class T> class matrix {
         }
         return INV;
     }
-
 
     void print() const {
         for (int i = 0; i < H; i++) {
@@ -258,7 +260,7 @@ template <class T> class matrix {
                 is >> x;
         return is;
     }
-    T& operator()(int h, int w) {
+    T &operator()(int h, int w) {
         assert(0 <= h && h < H && 0 <= w && w <= W);
         return table[h][w];
     }

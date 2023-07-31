@@ -20,7 +20,7 @@ int main(void){
  
     //calculate
     
-    auto dist = G.calculate_shortest_distances(K, -1);
+    auto dist = G.distances(K, -1);
     for(auto x : dist){
         if(x == -1) cout << "INF" << endl;
         else cout << x << endl;

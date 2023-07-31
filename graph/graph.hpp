@@ -27,6 +27,14 @@ class graph {
     mutable std::vector<bool> visited; // dfs / bfs のための領域
     bool forest_flag = true;
 
+    void reset_visited_flag(int node) const {
+        if constexpr (enable_unionfind)
+            for (int x : uf.contained_group(node))
+                visited[x] = false;
+        else
+            visited.assign(N, false);
+    }
+
   public:
     graph() : N(0){};
     graph(int n) : N(n), G(n), visited(n) {
@@ -212,11 +220,7 @@ class graph {
     std::vector<int> preorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        if constexpr (enable_unionfind)
-            for (int x : uf.contained_group(start))
-                visited[x] = false;
-        else
-            visited.assign(N, false);
+        reset_visited_flag(start);
         visited[start] = true;
         stk.push({start, 0});
 
@@ -243,11 +247,7 @@ class graph {
     std::vector<int> inorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        if constexpr (enable_unionfind)
-            for (int x : uf.contained_group(start))
-                visited[x] = false;
-        else
-            visited.assign(N, false);
+        reset_visited_flag(start);
         visited[start] = true;
         stk.push({start, 0});
 
@@ -274,11 +274,7 @@ class graph {
     std::vector<int> postorder(int start) const {
         std::vector<int> result;
         std::stack<std::pair<int, int>> stk;
-        if constexpr (enable_unionfind)
-            for (int x : uf.contained_group(start))
-                visited[x] = false;
-        else
-            visited.assign(N, false);
+        reset_visited_flag(start);
         visited[start] = true;
         stk.push({start, 0});
 
@@ -343,8 +339,7 @@ class graph {
      * @param invalid 到達不能な頂点に格納される値
      * @return 各ノードまでの最短距離のリスト
      */
-    std::vector<WEIGHT> calculate_shortest_distances(int start_node,
-                                                     WEIGHT invalid) const {
+    std::vector<WEIGHT> distances(int start_node, WEIGHT invalid) const {
         std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());
         dist[start_node] = 0;
 
@@ -357,11 +352,7 @@ class graph {
             // Dijkstra's algorithm
             Dijkstra_queue q;
             q.push({0, start_node});
-            if constexpr (enable_unionfind)
-                for (int x : uf.contained_group(start_node))
-                    visited[x] = false;
-            else
-                visited.assign(N, false);
+            reset_visited_flag(start_node);
             run_Dijkstra(dist, q);
         }
 
@@ -371,11 +362,45 @@ class graph {
         return dist;
     }
 
+    /**
+     * @brief 復元付き最短経路
+     * @attention 到達可能でないとき、空の配列で返る
+     */
+    std::vector<edge<WEIGHT>> shortest_path(int start_node, int end_node) {
+        if (start_node == end_node)
+            return {};
+
+        auto dist = distances(start_node, std::numeric_limits<WEIGHT>::max());
+        if (dist[end_node] == std::numeric_limits<WEIGHT>::max())
+            return {};
+
+        auto R(this->reverse());
+        reset_visited_flag(end_node);
+        visited[end_node] = true;
+
+        int cu = end_node;
+        std::vector<edge<WEIGHT>> route;
+        while (cu != start_node) {
+            for (auto e : R[cu]) {
+                if (visited[e.to])
+                    continue;
+                if (dist[cu] - e.cost == dist[e.to]) {
+                    visited[cu = e.to] = true;
+                    std::swap(e.from, e.to);
+                    route.push_back(e);
+                    break;
+                }
+            }
+        }
+        std::reverse(route.begin(), route.end());
+        return route;
+    }
+
     WEIGHT diameter() const {
         static_assert(!is_directed);
         assert(is_tree());
-        std::vector<WEIGHT> dist(calculate_shortest_distances(0, -1));
-        dist = calculate_shortest_distances(
+        std::vector<WEIGHT> dist(distances(0, -1));
+        dist = distances(
             std::max_element(dist.begin(), dist.end()) - dist.begin(), -1);
         return *std::max_element(dist.begin(), dist.end());
     }
@@ -424,9 +449,19 @@ class graph {
         graph<WEIGHT, is_directed, __enable_unionfind> ret(N);
         std::vector<edge<WEIGHT>> tmp(edges());
         std::sort(tmp.begin(), tmp.end());
-        for (auto &e : tmp)
-            if (!ret.are_connected(e.from, e.to))
-                ret.add_edge(e);
+        if constexpr (__enable_unionfind) {
+            for (auto &e : tmp)
+                if (!ret.are_connected(e.from, e.to))
+                    ret.add_edge(e);
+        } else {
+            union_find uf(N);
+            for (auto &e : tmp) {
+                if (!uf.same(e.from, e.to)) {
+                    ret.add_edge(e);
+                    uf.merge(e.from, e.to);
+                }
+            }
+        }
         return ret;
     }
 

@@ -10,10 +10,6 @@ data:
   - icon: ':question:'
     path: graph/graph.hpp
     title: "\u30B0\u30E9\u30D5\u3092\u7BA1\u7406\u3059\u308B\u30AF\u30E9\u30B9\u3002"
-  - icon: ':heavy_check_mark:'
-    path: graph/lowlink.hpp
-    title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
-      \u6A4B\u3092\u6C42\u3081\u308B"
   - icon: ':question:'
     path: math/matrix.hpp
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
@@ -24,35 +20,34 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
+    PROBLEM: https://judge.yosupo.jp/problem/shortest_path
     links:
-    - https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A
-  bundledCode: "#line 1 \"test/grl-3-a.test.cpp\"\n#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A\"\
-    \n#include <bits/stdc++.h>\n#line 3 \"graph/lowlink.hpp\"\n\n#line 8 \"graph/graph.hpp\"\
-    \n\n#line 3 \"data_structure/union_find.hpp\"\n\n#line 6 \"data_structure/union_find.hpp\"\
-    \n\nclass union_find {\n  private:\n    int N;\n    mutable std::vector<int> par;\n\
-    \    std::vector<int> nxt;\n    int group_num; // \u96C6\u5408\u306E\u6570\n\n\
-    \  public:\n    union_find() : N(0), group_num(0) {}\n    union_find(int n) :\
-    \ N(n), par(n, -1), nxt(n), group_num(n) {\n        std::iota(nxt.begin(), nxt.end(),\
-    \ 0);\n    }\n\n    /**\n     * @brief \u9802\u70B9\u3092 n \u500B\u306B\u5897\
-    \u3084\u3059\n     * @attention \u5C0F\u3055\u304F\u306F\u3067\u304D\u306A\u3044\
-    \n     */\n    void expand(int n) {\n        if (n <= N)\n            return;\n\
-    \        par.resize(n, -1);\n        nxt.resize(n);\n        for (int i = N; i\
-    \ < n; ++i)\n            nxt[i] = i;\n        group_num += n - N;\n        N =\
-    \ n;\n    }\n\n    int leader(int x) const {\n        return (par[x] < 0 ? x :\
-    \ par[x] = leader(par[x]));\n    }\n\n    bool same(int x, int y) const { return\
-    \ leader(x) == leader(y); }\n\n    bool merge(int x, int y) {\n        if ((x\
-    \ = leader(x)) == (y = leader(y)))\n            return false;\n        if (-par[x]\
-    \ > -par[y])\n            std::swap(x, y);\n\n        par[x] += par[y];\n    \
-    \    par[y] = x;\n        std::swap(nxt[x], nxt[y]);\n        group_num--;\n \
-    \       return true;\n    }\n\n    /**\n     * @brief x \u306E\u5C5E\u3059\u308B\
-    \u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n     */\n\
-    \    int size(int x) const { return -par[leader(x)]; }\n\n    /**\n     * @brief\
-    \ \u3059\u3079\u3066\u306E\u30CE\u30FC\u30C9\u306E\u6570\n     */\n    int size()\
-    \ const { return N; }\n\n    std::vector<int> contained_group(int x) const {\n\
-    \        std::vector<int> ret{x};\n        for (int cu = nxt[x]; cu != ret[0];\
-    \ cu = nxt[cu])\n            ret.push_back(cu);\n        return ret;\n    }\n\n\
-    \    int count_groups() const { return group_num; }\n\n    std::vector<std::vector<int>>\
+    - https://judge.yosupo.jp/problem/shortest_path
+  bundledCode: "#line 1 \"test/shortest_path.test.cpp\"\n#define PROBLEM \"https://judge.yosupo.jp/problem/shortest_path\"\
+    \n#include <bits/stdc++.h>\n#line 8 \"graph/graph.hpp\"\n\n#line 3 \"data_structure/union_find.hpp\"\
+    \n\n#line 6 \"data_structure/union_find.hpp\"\n\nclass union_find {\n  private:\n\
+    \    int N;\n    mutable std::vector<int> par;\n    std::vector<int> nxt;\n  \
+    \  int group_num; // \u96C6\u5408\u306E\u6570\n\n  public:\n    union_find() :\
+    \ N(0), group_num(0) {}\n    union_find(int n) : N(n), par(n, -1), nxt(n), group_num(n)\
+    \ {\n        std::iota(nxt.begin(), nxt.end(), 0);\n    }\n\n    /**\n     * @brief\
+    \ \u9802\u70B9\u3092 n \u500B\u306B\u5897\u3084\u3059\n     * @attention \u5C0F\
+    \u3055\u304F\u306F\u3067\u304D\u306A\u3044\n     */\n    void expand(int n) {\n\
+    \        if (n <= N)\n            return;\n        par.resize(n, -1);\n      \
+    \  nxt.resize(n);\n        for (int i = N; i < n; ++i)\n            nxt[i] = i;\n\
+    \        group_num += n - N;\n        N = n;\n    }\n\n    int leader(int x) const\
+    \ {\n        return (par[x] < 0 ? x : par[x] = leader(par[x]));\n    }\n\n   \
+    \ bool same(int x, int y) const { return leader(x) == leader(y); }\n\n    bool\
+    \ merge(int x, int y) {\n        if ((x = leader(x)) == (y = leader(y)))\n   \
+    \         return false;\n        if (-par[x] > -par[y])\n            std::swap(x,\
+    \ y);\n\n        par[x] += par[y];\n        par[y] = x;\n        std::swap(nxt[x],\
+    \ nxt[y]);\n        group_num--;\n        return true;\n    }\n\n    /**\n   \
+    \  * @brief x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\
+    \u30BA\u3092\u8FD4\u3059\n     */\n    int size(int x) const { return -par[leader(x)];\
+    \ }\n\n    /**\n     * @brief \u3059\u3079\u3066\u306E\u30CE\u30FC\u30C9\u306E\
+    \u6570\n     */\n    int size() const { return N; }\n\n    std::vector<int> contained_group(int\
+    \ x) const {\n        std::vector<int> ret{x};\n        for (int cu = nxt[x];\
+    \ cu != ret[0]; cu = nxt[cu])\n            ret.push_back(cu);\n        return\
+    \ ret;\n    }\n\n    int count_groups() const { return group_num; }\n\n    std::vector<std::vector<int>>\
     \ all_groups() const {\n        std::vector<std::vector<int>> result;\n      \
     \  result.reserve(group_num);\n        std::vector<bool> used(N, false);\n   \
     \     for (int i = 0; i < N; ++i) {\n            if (!used[i]) {\n           \
@@ -381,76 +376,40 @@ data:
     \                    uf.merge(e.from, e.to);\n                }\n            }\n\
     \        }\n        return ret;\n    }\n\n    void print() const {\n        std::cout\
     \ << this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
-    \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n#line 5\
-    \ \"graph/lowlink.hpp\"\n\n/**\n * @brief \u5358\u7D14\u7121\u5411\u30B0\u30E9\
-    \u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\u6A4B\u3092\u6C42\u3081\u308B\n * @attention\
-    \ \u9023\u7D50\u3067\u306A\u3044\u3068\u304D\u306E verify \u304C\u3067\u304D\u3066\
-    \u306A\u3044\u3002\u591A\u5206\u3042\u3063\u3066\u308B\u3051\u3069...\n */\ntemplate\
-    \ <typename WEIGHT> class lowlink {\n  private:\n    std::vector<int> ord, low,\
-    \ apts;\n    std::vector<edge<WEIGHT>> brids;\n\n    void dfs(const graph<WEIGHT,\
-    \ false> &g, int cu, int pa, int &cnt,\n             const std::vector<int> &id,\
-    \ std::vector<bool> &is_apt,\n             std::vector<bool> &is_bridge) {\n \
-    \       ord[cu] = low[cu] = cnt++;\n        for (auto &e : g[cu]) {\n        \
-    \    if (e.to == pa)\n                continue;\n            if (ord[e.to] ==\
-    \ -1) {\n                dfs(g, e.to, cu, cnt, id, is_apt, is_bridge);\n     \
-    \           if (low[cu] > low[e.to])\n                    low[cu] = low[e.to];\n\
-    \                if (ord[cu] < low[e.to])\n                    is_bridge[e.id]\
-    \ = true;\n                if (pa != -1 && ord[cu] <= low[e.to])\n           \
-    \         is_apt[id[cu]] = true;\n            } else if (low[cu] > ord[e.to])\n\
-    \                low[cu] = ord[e.to];\n        }\n    }\n\n  public:\n    lowlink(graph<WEIGHT,\
-    \ false> &G)\n        : ord(G.count_nodes(), -1), low(G.count_nodes(), -1) {\n\
-    \        int C = G.count_connected_components(), N = G.count_nodes(),\n      \
-    \      M = G.count_edges();\n        std::vector<bool> is_apt(N, false), is_bridge(M,\
-    \ false);\n        auto [decomposed, gr_id, nd_id] = G.decompose();\n        std::vector<std::vector<int>>\
-    \ id(\n            N); // i \u756A\u76EE\u306E\u30B0\u30E9\u30D5\u306E\u30CE\u30FC\
-    \u30C9 j \u306E\u3001\u3082\u3068\u306E\u30B0\u30E9\u30D5\u306E\u30CE\u30FC\u30C9\
-    \u306E\u756A\u53F7\n        for (int c = 0; c < C; c++)\n            id[c].resize(decomposed[c].count_nodes());\n\
-    \        for (int i = 0; i < N; i++)\n            id[gr_id[i]][nd_id[i]] = i;\n\
-    \n        std::vector<std::pair<int, int>> st(C, {0x7fffffff, -1}); // <\u6B21\
-    \u6570, id>\n        for (int c = 0; c < C; c++) {\n            // \u6B21\u6570\
-    \u304C\u6700\u5C0F\u306E\u30CE\u30FC\u30C9\u306F\u5FC5\u305A\u95A2\u7BC0\u70B9\
-    \u3067\u306A\u3044\n            // \u305D\u3053\u304B\u3089DFS\u3059\u308C\u3070\
-    \u3001\u6839\u30CE\u30FC\u30C9\u306E\u95A2\u7BC0\u70B9\u5224\u5B9A\u3092\u884C\
-    \u308F\u306A\u304F\u3066\u3088\u3044\n            for (int i = 0; i < decomposed[c].count_nodes();\
-    \ i++) {\n                st[c] = std::min(st[c], {(int)decomposed[c][i].size(),\
-    \ i});\n            }\n        }\n\n        for (int c = 0; c < C; c++) {\n  \
-    \          int cnt = 0;\n            dfs(decomposed[c], st[c].second, -1, cnt,\
-    \ id[c], is_apt, is_bridge);\n        }\n        for (int i = 0; i < N; i++)\n\
-    \            if (is_apt[i])\n                apts.push_back(i);\n        for (int\
-    \ i = 0; i < M; i++)\n            if (is_bridge[i])\n\n                brids.emplace_back(G.edges()[i]);\n\
-    \    }\n\n    // unsorted \u3067\u3042\u308B\u3053\u3068\u306B\u6CE8\u610F\n \
-    \   const std::vector<int> &articulation_points() { return apts; }\n    const\
-    \ std::vector<edge<WEIGHT>> &bridges() { return brids; }\n};\n#line 4 \"test/grl-3-a.test.cpp\"\
-    \nusing namespace std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i =\
-    \ (ll)(j); i < (ll)(n); i++)\n#define all(a) (a).begin(),(a).end()\n\nint main(void){\n\
-    \n    int N, M;\n    cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n\
-    \        int a, b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n\
-    \    lowlink LL(G);\n    auto ans(LL.articulation_points());\n    sort(all(ans));\n\
-    \    for(auto x : ans) cout << x << endl;\n\n}\n"
-  code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_A\"\n#include\
-    \ <bits/stdc++.h>\n#include \"../graph/lowlink.hpp\"\nusing namespace std;\nusing\
+    \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n#line 4\
+    \ \"test/shortest_path.test.cpp\"\nusing namespace std;\nusing ll = long long;\n\
+    #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\nint main(void){\n\
+    \n    int N, M, s, t;\n    cin >> N >> M >> s >> t;\n    graph<ll, true> G(N);\n\
+    \    rep(i,0,M){\n        int a, b, c;\n        cin >> a >> b >> c;\n        G.add_edge(a,b,c);\n\
+    \    }\n\n    auto E(G.shortest_path(s, t));\n    if (s != t && E.empty()) {\n\
+    \        cout << -1 << endl;\n        return 0;\n    }\n    ll ans = 0;\n    for\
+    \ (auto e : E) ans += e.cost;\n    cout << ans << \" \" << E.size() << endl;\n\
+    \    for (auto e : E) cout << e.from << \" \" << e.to << endl;\n\n}\n"
+  code: "#define PROBLEM \"https://judge.yosupo.jp/problem/shortest_path\"\n#include\
+    \ <bits/stdc++.h>\n#include \"../graph/graph.hpp\"\nusing namespace std;\nusing\
     \ ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
-    #define all(a) (a).begin(),(a).end()\n\nint main(void){\n\n    int N, M;\n   \
-    \ cin >> N >> M;\n    graph<int, false> G(N);\n    rep(i,0,M){\n        int a,\
-    \ b;\n        cin >> a >> b;\n        G.add_edge(a, b);\n    }\n    lowlink LL(G);\n\
-    \    auto ans(LL.articulation_points());\n    sort(all(ans));\n    for(auto x\
-    \ : ans) cout << x << endl;\n\n}"
+    \nint main(void){\n\n    int N, M, s, t;\n    cin >> N >> M >> s >> t;\n    graph<ll,\
+    \ true> G(N);\n    rep(i,0,M){\n        int a, b, c;\n        cin >> a >> b >>\
+    \ c;\n        G.add_edge(a,b,c);\n    }\n\n    auto E(G.shortest_path(s, t));\n\
+    \    if (s != t && E.empty()) {\n        cout << -1 << endl;\n        return 0;\n\
+    \    }\n    ll ans = 0;\n    for (auto e : E) ans += e.cost;\n    cout << ans\
+    \ << \" \" << E.size() << endl;\n    for (auto e : E) cout << e.from << \" \"\
+    \ << e.to << endl;\n\n}\n"
   dependsOn:
-  - graph/lowlink.hpp
   - graph/graph.hpp
   - data_structure/union_find.hpp
   - math/matrix.hpp
   - graph/edge.hpp
   isVerificationFile: true
-  path: test/grl-3-a.test.cpp
+  path: test/shortest_path.test.cpp
   requiredBy: []
   timestamp: '2023-07-31 19:01:50+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
-documentation_of: test/grl-3-a.test.cpp
+documentation_of: test/shortest_path.test.cpp
 layout: document
 redirect_from:
-- /verify/test/grl-3-a.test.cpp
-- /verify/test/grl-3-a.test.cpp.html
-title: test/grl-3-a.test.cpp
+- /verify/test/shortest_path.test.cpp
+- /verify/test/shortest_path.test.cpp.html
+title: test/shortest_path.test.cpp
 ---

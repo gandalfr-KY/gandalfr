@@ -57,6 +57,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/manhattan-mst.test.cpp
     title: test/manhattan-mst.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/shortest_path.test.cpp
+    title: test/shortest_path.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
   _verificationStatusIcon: ':question:'
@@ -149,6 +152,7 @@ data:
   - test/grl-1-a.test.cpp
   - test/grl-1-c.test.cpp
   - test/grl-3-b.test.cpp
+  - test/shortest_path.test.cpp
   - test/grl-5-a.test.cpp
 documentation_of: graph/edge.hpp
 layout: document

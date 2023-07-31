@@ -63,6 +63,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/manhattan-mst.test.cpp
     title: test/manhattan-mst.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/shortest_path.test.cpp
+    title: test/shortest_path.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
   _verificationStatusIcon: ':question:'
@@ -123,8 +126,8 @@ data:
     \ std::move(ret);\n    }\n\n    void row_assign(int i, const std::valarray<T>\
     \ &row) {\n        assert(W == (int)row.size());\n        table[i] = std::move(row);\n\
     \    }\n\n    void row_swap(int i, int j) {\n        assert(0 <= i && i < H);\n\
-    \        assert(0 <= j && j < H);\n        table[i].swap(table[j]);\n    }\n \
-    \   \n    /**\n     * @attention O(n^3)\n     * @attention \u6574\u6570\u578B\u3067\
+    \        assert(0 <= j && j < H);\n        table[i].swap(table[j]);\n    }\n\n\
+    \    /**\n     * @attention O(n^3)\n     * @attention \u6574\u6570\u578B\u3067\
     \u306F\u6B63\u3057\u304F\u8A08\u7B97\u3067\u304D\u306A\u3044\u3002double \u3084\
     \ fraction \u3092\u4F7F\u3046\u3053\u3068\u3002\n     * @attention \u67A2\u8EF8\
     \u9078\u3073\u3092\u3057\u3066\u3044\u306A\u3044\u306E\u3067 double \u3067\u306F\
@@ -138,70 +141,70 @@ data:
     \ == 0) {\n                    continue;\n                }\n            }\n \
     \           T inv = 1 / table[h][w];\n            hist.push_back({SCALE, -1, w,\
     \ inv});\n            table[h] *= inv;\n            for (int j = h + 1; j < H;\
-    \ j++) {\n                hist.push_back({ADD, h, j, - table[j][w]});\n      \
-    \          table[j] -= table[h] * table[j][w];\n            }\n            h++;\n\
+    \ j++) {\n                hist.push_back({ADD, h, j, -table[j][w]});\n       \
+    \         table[j] -= table[h] * table[j][w];\n            }\n            h++;\n\
     \        }\n        return hist;\n    }\n\n    int rank() {\n        auto U(*this);\n\
     \        U.sweep_method();\n        int r = 0;\n        for (int i = 0; i < H;\
     \ ++i) {\n            for (int j = i; j < W; ++j) {\n                if (U.table[i][j]\
     \ != 0) {\n                    r++;\n                    break;\n            \
     \    }\n            }\n        }\n        return r;\n    }\n\n    T determinant()\
     \ const {\n        assert(H == W);\n        matrix<T> U(*this);\n        T det\
-    \ = 1;\n        auto hist = U.sweep_method();\n        if (U.table[H-1][H-1] ==\
-    \ 0) return 0;\n        for (auto &[op, tar, res, scl] : hist) {\n           \
-    \ switch (op) {\n            case SCALE:\n                det /= scl;\n      \
-    \          break;\n            case SWAP:\n                det *= -1;\n      \
-    \          break;\n            }\n        }\n        return det;\n    }\n\n  \
-    \  std::vector<T> solve_system_of_equations(const std::vector<T> &y) {\n     \
-    \   assert(H == W);\n        std::vector<T> x(y);\n        matrix<T> U(*this);\n\
-    \        auto hist = U.sweep_method();\n        if (U.table[H-1][H-1] == 0) return\
-    \ {};\n\n        for (auto &[op, tar, res, scl] : hist) {\n            switch\
-    \ (op) {\n            case SCALE:\n                x[res] *= scl;\n          \
-    \      break;\n            case SWAP:\n                std::swap(x[tar], x[res]);\n\
-    \                break;\n            case ADD:\n                x[res] += x[tar]\
-    \ * scl;\n                break;\n            }\n        }\n        \n       \
-    \ for (int i = H - 1; i >= 0; --i) {\n            for (int j = 0; j < i; ++j)\
-    \ {\n                x[j] -= U.table[j][i] * x[i];\n            }\n        }\n\
-    \        return x;\n    }\n\n    matrix<T> inverse() {\n        assert(H == W);\n\
-    \        matrix<T> INV(matrix<T>::E(H)), U(*this);\n        auto hist = U.sweep_method();\n\
-    \        if (U.table[H-1][H-1] == 0) return matrix<T>(0, 0);\n\n        for (auto\
-    \ &[op, tar, res, scl] : hist) {\n            switch (op) {\n            case\
-    \ SCALE:\n                INV.table[res] *= scl;\n                break;\n   \
-    \         case SWAP:\n                std::swap(INV.table[tar], INV.table[res]);\n\
-    \                break;\n            case ADD:\n                INV.table[res]\
-    \ += INV.table[tar] * scl;\n                break;\n            }\n        }\n\
-    \        \n        for (int i = H - 1; i >= 0; --i) {\n            for (int j\
-    \ = 0; j < i; ++j) {\n                INV.table[j] -= INV.table[i] * U.table[j][i];\n\
-    \            }\n        }\n        return INV;\n    }\n\n\n    void print() const\
-    \ {\n        for (int i = 0; i < H; i++) {\n            for (int j = 0; j < W;\
-    \ j++) {\n                std::cout << table[i][j] << (j == W - 1 ? \"\" : \"\
-    \ \");\n            }\n            std::cout << std::endl;\n        }\n    }\n\
-    \n    matrix<T> &operator+=(const matrix<T> &a) {\n        this->table += a.table;\n\
-    \        return *this;\n    }\n    matrix<T> &operator-=(const matrix<T> &a) {\n\
-    \        this->table -= a.table;\n        return *this;\n    }\n    matrix<T>\
-    \ &operator*=(const T &a) {\n        this->table *= a;\n        return *this;\n\
-    \    }\n    matrix<T> &operator*=(const matrix<T> &a) {\n        assert(W == a.H);\n\
-    \        matrix<T> a_t(a), ret(H, a.W);\n        a_t.transpose();\n        for\
-    \ (int i = 0; i < H; i++) {\n            for (int j = 0; j < a_t.H; j++) {\n \
-    \               ret.table[i][j] = (table[i] * a_t.table[j]).sum();\n         \
-    \   }\n        }\n        *this = std::move(ret);\n        return *this;\n   \
-    \ }\n    matrix<T> &operator/=(const T &a) {\n        this->table /= a;\n    \
-    \    return *this;\n    }\n    /**\n     * @brief \u884C\u5217\u306E\u51AA\u4E57\
-    \u3002\n     * @param n \u6307\u6570\n     * @attention n \u304C 0 \u306A\u3089\
-    \u5358\u4F4D\u884C\u5217\u3002\n     * @attention \u6F14\u7B97\u5B50\u306E\u512A\
-    \u5148\u5EA6\u306B\u6CE8\u610F\u3002\n     */\n    matrix<T> operator^=(long long\
-    \ n) {\n        assert(H == W);\n        if (n == 0)\n            return *this\
-    \ = E(H);\n        n--;\n        matrix<T> x(*this);\n        while (n) {\n  \
-    \          if (n & 1)\n                *this *= x;\n            x *= x;\n    \
-    \        n >>= 1;\n        }\n        return *this;\n    }\n\n    matrix<T> operator+()\
-    \ { return *this; }\n    matrix<T> operator-() { return matrix<T>(*this) *= -1;\
-    \ }\n    matrix<T> operator+(const matrix<T> &a) { return matrix<T>(*this) +=\
-    \ a; }\n    matrix<T> operator-(const matrix<T> &a) { return matrix<T>(*this)\
-    \ -= a; }\n    template <typename S> matrix<T> operator*(const S &a) {\n     \
-    \   return matrix<T>(*this) *= a;\n    }\n    matrix<T> operator/(const T &a)\
-    \ { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long long n) { return\
-    \ matrix<T>(*this) ^= n; }\n    friend std::istream &operator>>(std::istream &is,\
-    \ matrix<T> &mt) {\n        for (auto &arr : mt.table)\n            for (auto\
-    \ &x : arr)\n                is >> x;\n        return is;\n    }\n    T& operator()(int\
+    \ = 1;\n        auto hist = U.sweep_method();\n        if (U.table[H - 1][H -\
+    \ 1] == 0)\n            return 0;\n        for (auto &[op, tar, res, scl] : hist)\
+    \ {\n            switch (op) {\n            case SCALE:\n                det /=\
+    \ scl;\n                break;\n            case SWAP:\n                det *=\
+    \ -1;\n                break;\n            }\n        }\n        return det;\n\
+    \    }\n\n    std::vector<T> solve_system_of_equations(const std::vector<T> &y)\
+    \ {\n        assert(H == W);\n        std::vector<T> x(y);\n        matrix<T>\
+    \ U(*this);\n        auto hist = U.sweep_method();\n        if (U.table[H - 1][H\
+    \ - 1] == 0)\n            return {};\n\n        for (auto &[op, tar, res, scl]\
+    \ : hist) {\n            switch (op) {\n            case SCALE:\n            \
+    \    x[res] *= scl;\n                break;\n            case SWAP:\n        \
+    \        std::swap(x[tar], x[res]);\n                break;\n            case\
+    \ ADD:\n                x[res] += x[tar] * scl;\n                break;\n    \
+    \        }\n        }\n\n        for (int i = H - 1; i >= 0; --i) {\n        \
+    \    for (int j = 0; j < i; ++j) {\n                x[j] -= U.table[j][i] * x[i];\n\
+    \            }\n        }\n        return x;\n    }\n\n    matrix<T> inverse()\
+    \ {\n        assert(H == W);\n        matrix<T> INV(matrix<T>::E(H)), U(*this);\n\
+    \        auto hist = U.sweep_method();\n        if (U.table[H - 1][H - 1] == 0)\n\
+    \            return matrix<T>(0, 0);\n\n        for (auto &[op, tar, res, scl]\
+    \ : hist) {\n            switch (op) {\n            case SCALE:\n            \
+    \    INV.table[res] *= scl;\n                break;\n            case SWAP:\n\
+    \                std::swap(INV.table[tar], INV.table[res]);\n                break;\n\
+    \            case ADD:\n                INV.table[res] += INV.table[tar] * scl;\n\
+    \                break;\n            }\n        }\n\n        for (int i = H -\
+    \ 1; i >= 0; --i) {\n            for (int j = 0; j < i; ++j) {\n             \
+    \   INV.table[j] -= INV.table[i] * U.table[j][i];\n            }\n        }\n\
+    \        return INV;\n    }\n\n    void print() const {\n        for (int i =\
+    \ 0; i < H; i++) {\n            for (int j = 0; j < W; j++) {\n              \
+    \  std::cout << table[i][j] << (j == W - 1 ? \"\" : \" \");\n            }\n \
+    \           std::cout << std::endl;\n        }\n    }\n\n    matrix<T> &operator+=(const\
+    \ matrix<T> &a) {\n        this->table += a.table;\n        return *this;\n  \
+    \  }\n    matrix<T> &operator-=(const matrix<T> &a) {\n        this->table -=\
+    \ a.table;\n        return *this;\n    }\n    matrix<T> &operator*=(const T &a)\
+    \ {\n        this->table *= a;\n        return *this;\n    }\n    matrix<T> &operator*=(const\
+    \ matrix<T> &a) {\n        assert(W == a.H);\n        matrix<T> a_t(a), ret(H,\
+    \ a.W);\n        a_t.transpose();\n        for (int i = 0; i < H; i++) {\n   \
+    \         for (int j = 0; j < a_t.H; j++) {\n                ret.table[i][j] =\
+    \ (table[i] * a_t.table[j]).sum();\n            }\n        }\n        *this =\
+    \ std::move(ret);\n        return *this;\n    }\n    matrix<T> &operator/=(const\
+    \ T &a) {\n        this->table /= a;\n        return *this;\n    }\n    /**\n\
+    \     * @brief \u884C\u5217\u306E\u51AA\u4E57\u3002\n     * @param n \u6307\u6570\
+    \n     * @attention n \u304C 0 \u306A\u3089\u5358\u4F4D\u884C\u5217\u3002\n  \
+    \   * @attention \u6F14\u7B97\u5B50\u306E\u512A\u5148\u5EA6\u306B\u6CE8\u610F\u3002\
+    \n     */\n    matrix<T> operator^=(long long n) {\n        assert(H == W);\n\
+    \        if (n == 0)\n            return *this = E(H);\n        n--;\n       \
+    \ matrix<T> x(*this);\n        while (n) {\n            if (n & 1)\n         \
+    \       *this *= x;\n            x *= x;\n            n >>= 1;\n        }\n  \
+    \      return *this;\n    }\n\n    matrix<T> operator+() { return *this; }\n \
+    \   matrix<T> operator-() { return matrix<T>(*this) *= -1; }\n    matrix<T> operator+(const\
+    \ matrix<T> &a) { return matrix<T>(*this) += a; }\n    matrix<T> operator-(const\
+    \ matrix<T> &a) { return matrix<T>(*this) -= a; }\n    template <typename S> matrix<T>\
+    \ operator*(const S &a) {\n        return matrix<T>(*this) *= a;\n    }\n    matrix<T>\
+    \ operator/(const T &a) { return matrix<T>(*this) /= a; }\n    matrix<T> operator^(long\
+    \ long n) { return matrix<T>(*this) ^= n; }\n    friend std::istream &operator>>(std::istream\
+    \ &is, matrix<T> &mt) {\n        for (auto &arr : mt.table)\n            for (auto\
+    \ &x : arr)\n                is >> x;\n        return is;\n    }\n    T &operator()(int\
     \ h, int w) {\n        assert(0 <= h && h < H && 0 <= w && w <= W);\n        return\
     \ table[h][w];\n    }\n\n    /**\n     * @brief \u30B5\u30A4\u30BA n \u306E\u5358\
     \u4F4D\u884C\u5217\u3002\n     */\n    static matrix<T> E(int N) {\n        matrix<T>\
@@ -246,13 +249,16 @@ data:
     \    int N;\n    std::vector<std::vector<edge<WEIGHT>>> G;\n    std::vector<edge<WEIGHT>>\
     \ E;\n    union_find uf;\n    WEIGHT W = 0;\n\n    mutable std::vector<bool> visited;\
     \ // dfs / bfs \u306E\u305F\u3081\u306E\u9818\u57DF\n    bool forest_flag = true;\n\
-    \n  public:\n    graph() : N(0){};\n    graph(int n) : N(n), G(n), visited(n)\
-    \ {\n        if constexpr (enable_unionfind)\n            uf.expand(n);\n    };\n\
-    \n    /**\n     * @brief \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\
-    \u5897\u3084\u3059\n     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\
-    \u306E\u30CE\u30FC\u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\
-    \u3057\u305F\u3068\u304D\u3001\u5909\u5316\u306A\u3057\n     */\n    void expand(int\
-    \ n) {\n        if (n <= N)\n            return;\n        N = n;\n        G.resize(n);\n\
+    \n    void reset_visited_flag(int node) const {\n        if constexpr (enable_unionfind)\n\
+    \            for (int x : uf.contained_group(node))\n                visited[x]\
+    \ = false;\n        else\n            visited.assign(N, false);\n    }\n\n  public:\n\
+    \    graph() : N(0){};\n    graph(int n) : N(n), G(n), visited(n) {\n        if\
+    \ constexpr (enable_unionfind)\n            uf.expand(n);\n    };\n\n    /**\n\
+    \     * @brief \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\
+    \u3059\n     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\u306E\u30CE\
+    \u30FC\u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\u3057\u305F\
+    \u3068\u304D\u3001\u5909\u5316\u306A\u3057\n     */\n    void expand(int n) {\n\
+    \        if (n <= N)\n            return;\n        N = n;\n        G.resize(n);\n\
     \        visited.resize(n);\n        if constexpr (enable_unionfind)\n       \
     \     uf.expand(n);\n    }\n\n    /**\n     * @return \u30CE\u30FC\u30C9\u306E\
     \u6570\n     */\n    int count_nodes() const { return N; }\n\n    /**\n     *\
@@ -326,40 +332,34 @@ data:
     \ for (auto &e : G[i])\n                ret(i, e.to) = e.cost;\n        return\
     \ ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\u306B bfs\n\
     \     */\n    std::vector<int> preorder(int start) const {\n        std::vector<int>\
-    \ result;\n        std::stack<std::pair<int, int>> stk;\n        if constexpr\
-    \ (enable_unionfind)\n            for (int x : uf.contained_group(start))\n  \
-    \              visited[x] = false;\n        else\n            visited.assign(N,\
-    \ false);\n        visited[start] = true;\n        stk.push({start, 0});\n\n \
-    \       while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n   \
-    \         if (idx == 0)\n                result.push_back(cu);\n            if\
-    \ (idx == G[cu].size()) {\n                stk.pop();\n            } else {\n\
-    \                int to = G[cu][idx++];\n                if (!visited[to]) {\n\
-    \                    visited[to] = true;\n                    stk.push({to, 0});\n\
-    \                }\n            }\n        }\n        return result;\n    }\n\n\
-    \    /**\n     * @brief \u901A\u308A\u304C\u3051\u9806\u306B bfs\n     */\n  \
-    \  std::vector<int> inorder(int start) const {\n        std::vector<int> result;\n\
-    \        std::stack<std::pair<int, int>> stk;\n        if constexpr (enable_unionfind)\n\
-    \            for (int x : uf.contained_group(start))\n                visited[x]\
-    \ = false;\n        else\n            visited.assign(N, false);\n        visited[start]\
-    \ = true;\n        stk.push({start, 0});\n\n        while (!stk.empty()) {\n \
-    \           auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size())\
-    \ {\n                stk.pop();\n                result.push_back(cu);\n     \
-    \       } else {\n                int to = G[cu][idx++];\n                if (!visited[to])\
+    \ result;\n        std::stack<std::pair<int, int>> stk;\n        reset_visited_flag(start);\n\
+    \        visited[start] = true;\n        stk.push({start, 0});\n\n        while\
+    \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
+    \ == 0)\n                result.push_back(cu);\n            if (idx == G[cu].size())\
+    \ {\n                stk.pop();\n            } else {\n                int to\
+    \ = G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
+    \ = true;\n                    stk.push({to, 0});\n                }\n       \
+    \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u901A\
+    \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> inorder(int\
+    \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
+    \ int>> stk;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
+    \        stk.push({start, 0});\n\n        while (!stk.empty()) {\n           \
+    \ auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n     \
+    \           stk.pop();\n                result.push_back(cu);\n            } else\
+    \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
     \ {\n                    visited[to] = true;\n                    stk.push({to,\
     \ 0});\n                    result.push_back(cu);\n                }\n       \
     \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u5E30\
     \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> postorder(int\
     \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
-    \ int>> stk;\n        if constexpr (enable_unionfind)\n            for (int x\
-    \ : uf.contained_group(start))\n                visited[x] = false;\n        else\n\
-    \            visited.assign(N, false);\n        visited[start] = true;\n     \
-    \   stk.push({start, 0});\n\n        while (!stk.empty()) {\n            auto\
-    \ &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n          \
-    \      stk.pop();\n                result.push_back(cu);\n            } else {\n\
-    \                int to = G[cu][idx++];\n                if (!visited[to]) {\n\
-    \                    visited[to] = true;\n                    stk.push({to, 0});\n\
-    \                }\n            }\n        }\n        return result;\n    }\n\n\
-    \  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
+    \ int>> stk;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
+    \        stk.push({start, 0});\n\n        while (!stk.empty()) {\n           \
+    \ auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n     \
+    \           stk.pop();\n                result.push_back(cu);\n            } else\
+    \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
+    \ {\n                    visited[to] = true;\n                    stk.push({to,\
+    \ 0});\n                }\n            }\n        }\n        return result;\n\
+    \    }\n\n  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
     \ =\n        std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;\n\
     \n    void run_bfs(std::vector<int> &dist, std::queue<int> &q) const {\n     \
     \   while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
@@ -377,43 +377,57 @@ data:
     \n     * @param start_node \u59CB\u70B9\n     * @param invalid \u5230\u9054\u4E0D\
     \u80FD\u306A\u9802\u70B9\u306B\u683C\u7D0D\u3055\u308C\u308B\u5024\n     * @return\
     \ \u5404\u30CE\u30FC\u30C9\u307E\u3067\u306E\u6700\u77ED\u8DDD\u96E2\u306E\u30EA\
-    \u30B9\u30C8\n     */\n    std::vector<WEIGHT> calculate_shortest_distances(int\
-    \ start_node,\n                                                     WEIGHT invalid)\
-    \ const {\n        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());\n\
+    \u30B9\u30C8\n     */\n    std::vector<WEIGHT> distances(int start_node, WEIGHT\
+    \ invalid) const {\n        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());\n\
     \        dist[start_node] = 0;\n\n        if constexpr (std::is_same<WEIGHT, int>::value)\
     \ {\n            // BFS algorithm\n            std::queue<int> q;\n          \
     \  q.push(start_node);\n            run_bfs(dist, q);\n        } else {\n    \
     \        // Dijkstra's algorithm\n            Dijkstra_queue q;\n            q.push({0,\
-    \ start_node});\n            if constexpr (enable_unionfind)\n               \
-    \ for (int x : uf.contained_group(start_node))\n                    visited[x]\
-    \ = false;\n            else\n                visited.assign(N, false);\n    \
-    \        run_Dijkstra(dist, q);\n        }\n\n        for (auto &x : dist)\n \
-    \           if (x == std::numeric_limits<WEIGHT>::max())\n                x =\
-    \ invalid;\n        return dist;\n    }\n\n    WEIGHT diameter() const {\n   \
-    \     static_assert(!is_directed);\n        assert(is_tree());\n        std::vector<WEIGHT>\
-    \ dist(calculate_shortest_distances(0, -1));\n        dist = calculate_shortest_distances(\n\
-    \            std::max_element(dist.begin(), dist.end()) - dist.begin(), -1);\n\
-    \        return *std::max_element(dist.begin(), dist.end());\n    }\n\n    template\
-    \ <bool __enable_unionfind = true> graph reverse() const {\n        if constexpr\
-    \ (!is_directed) {\n            return *this;\n        } else {\n            graph<WEIGHT,\
-    \ is_directed, __enable_unionfind> ret(N);\n            for (auto e : E) {\n \
-    \               std::swap(e.from, e.to);\n                ret.add_edge(e);\n \
-    \           }\n            return ret;\n        }\n    }\n\n    std::vector<int>\
-    \ topological_sort() {\n        static_assert(is_directed);\n        std::vector<int>\
-    \ indeg(N, 0), sorted;\n        for (int to : E)\n            indeg[to]++;\n\n\
-    \        std::queue<int> q;\n        for (int i = 0; i < N; i++)\n           \
-    \ if (!indeg[i])\n                q.push(i);\n        while (!q.empty()) {\n \
-    \           int cu = q.front();\n            q.pop();\n            for (int to\
-    \ : G[cu]) {\n                if (!--indeg[to])\n                    q.push(to);\n\
-    \            }\n            sorted.push_back(cu);\n        }\n        return sorted;\n\
-    \    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n  \
-    \  template <bool __enable_unionfind = true>\n    graph minimum_spanning_tree()\
-    \ const {\n        static_assert(!is_directed);\n        graph<WEIGHT, is_directed,\
-    \ __enable_unionfind> ret(N);\n        std::vector<edge<WEIGHT>> tmp(edges());\n\
-    \        std::sort(tmp.begin(), tmp.end());\n        for (auto &e : tmp)\n   \
-    \         if (!ret.are_connected(e.from, e.to))\n                ret.add_edge(e);\n\
-    \        return ret;\n    }\n\n    void print() const {\n        std::cout <<\
-    \ this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
+    \ start_node});\n            reset_visited_flag(start_node);\n            run_Dijkstra(dist,\
+    \ q);\n        }\n\n        for (auto &x : dist)\n            if (x == std::numeric_limits<WEIGHT>::max())\n\
+    \                x = invalid;\n        return dist;\n    }\n\n    /**\n     *\
+    \ @brief \u5FA9\u5143\u4ED8\u304D\u6700\u77ED\u7D4C\u8DEF\n     * @attention \u5230\
+    \u9054\u53EF\u80FD\u3067\u306A\u3044\u3068\u304D\u3001\u7A7A\u306E\u914D\u5217\
+    \u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>> shortest_path(int start_node,\
+    \ int end_node) {\n        if (start_node == end_node)\n            return {};\n\
+    \n        auto dist = distances(start_node, std::numeric_limits<WEIGHT>::max());\n\
+    \        if (dist[end_node] == std::numeric_limits<WEIGHT>::max())\n         \
+    \   return {};\n\n        auto R(this->reverse());\n        reset_visited_flag(end_node);\n\
+    \        visited[end_node] = true;\n\n        int cu = end_node;\n        std::vector<edge<WEIGHT>>\
+    \ route;\n        while (cu != start_node) {\n            for (auto e : R[cu])\
+    \ {\n                if (visited[e.to])\n                    continue;\n     \
+    \           if (dist[cu] - e.cost == dist[e.to]) {\n                    visited[cu\
+    \ = e.to] = true;\n                    std::swap(e.from, e.to);\n            \
+    \        route.push_back(e);\n                    break;\n                }\n\
+    \            }\n        }\n        std::reverse(route.begin(), route.end());\n\
+    \        return route;\n    }\n\n    WEIGHT diameter() const {\n        static_assert(!is_directed);\n\
+    \        assert(is_tree());\n        std::vector<WEIGHT> dist(distances(0, -1));\n\
+    \        dist = distances(\n            std::max_element(dist.begin(), dist.end())\
+    \ - dist.begin(), -1);\n        return *std::max_element(dist.begin(), dist.end());\n\
+    \    }\n\n    template <bool __enable_unionfind = true> graph reverse() const\
+    \ {\n        if constexpr (!is_directed) {\n            return *this;\n      \
+    \  } else {\n            graph<WEIGHT, is_directed, __enable_unionfind> ret(N);\n\
+    \            for (auto e : E) {\n                std::swap(e.from, e.to);\n  \
+    \              ret.add_edge(e);\n            }\n            return ret;\n    \
+    \    }\n    }\n\n    std::vector<int> topological_sort() {\n        static_assert(is_directed);\n\
+    \        std::vector<int> indeg(N, 0), sorted;\n        for (int to : E)\n   \
+    \         indeg[to]++;\n\n        std::queue<int> q;\n        for (int i = 0;\
+    \ i < N; i++)\n            if (!indeg[i])\n                q.push(i);\n      \
+    \  while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
+    \            for (int to : G[cu]) {\n                if (!--indeg[to])\n     \
+    \               q.push(to);\n            }\n            sorted.push_back(cu);\n\
+    \        }\n        return sorted;\n    }\n\n    /**\n     * @return \u6700\u5C0F\
+    \u5168\u57DF\u68EE\n     */\n    template <bool __enable_unionfind = true>\n \
+    \   graph minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
+    \        graph<WEIGHT, is_directed, __enable_unionfind> ret(N);\n        std::vector<edge<WEIGHT>>\
+    \ tmp(edges());\n        std::sort(tmp.begin(), tmp.end());\n        if constexpr\
+    \ (__enable_unionfind) {\n            for (auto &e : tmp)\n                if\
+    \ (!ret.are_connected(e.from, e.to))\n                    ret.add_edge(e);\n \
+    \       } else {\n            union_find uf(N);\n            for (auto &e : tmp)\
+    \ {\n                if (!uf.same(e.from, e.to)) {\n                    ret.add_edge(e);\n\
+    \                    uf.merge(e.from, e.to);\n                }\n            }\n\
+    \        }\n        return ret;\n    }\n\n    void print() const {\n        std::cout\
+    \ << this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
     \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n"
   code: "#pragma once\n#include <algorithm>\n#include <assert.h>\n#include <queue>\n\
     #include <stack>\n#include <tuple>\n#include <vector>\n\n#include \"../data_structure/union_find.hpp\"\
@@ -426,13 +440,16 @@ data:
     \    int N;\n    std::vector<std::vector<edge<WEIGHT>>> G;\n    std::vector<edge<WEIGHT>>\
     \ E;\n    union_find uf;\n    WEIGHT W = 0;\n\n    mutable std::vector<bool> visited;\
     \ // dfs / bfs \u306E\u305F\u3081\u306E\u9818\u57DF\n    bool forest_flag = true;\n\
-    \n  public:\n    graph() : N(0){};\n    graph(int n) : N(n), G(n), visited(n)\
-    \ {\n        if constexpr (enable_unionfind)\n            uf.expand(n);\n    };\n\
-    \n    /**\n     * @brief \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\
-    \u5897\u3084\u3059\n     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\
-    \u306E\u30CE\u30FC\u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\
-    \u3057\u305F\u3068\u304D\u3001\u5909\u5316\u306A\u3057\n     */\n    void expand(int\
-    \ n) {\n        if (n <= N)\n            return;\n        N = n;\n        G.resize(n);\n\
+    \n    void reset_visited_flag(int node) const {\n        if constexpr (enable_unionfind)\n\
+    \            for (int x : uf.contained_group(node))\n                visited[x]\
+    \ = false;\n        else\n            visited.assign(N, false);\n    }\n\n  public:\n\
+    \    graph() : N(0){};\n    graph(int n) : N(n), G(n), visited(n) {\n        if\
+    \ constexpr (enable_unionfind)\n            uf.expand(n);\n    };\n\n    /**\n\
+    \     * @brief \u30CE\u30FC\u30C9\u306E\u6570\u3092n\u500B\u307E\u3067\u5897\u3084\
+    \u3059\n     * @param n \u30B5\u30A4\u30BA\n     * @attention \u4ECA\u306E\u30CE\
+    \u30FC\u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\u6570\u3092\u6E21\u3057\u305F\
+    \u3068\u304D\u3001\u5909\u5316\u306A\u3057\n     */\n    void expand(int n) {\n\
+    \        if (n <= N)\n            return;\n        N = n;\n        G.resize(n);\n\
     \        visited.resize(n);\n        if constexpr (enable_unionfind)\n       \
     \     uf.expand(n);\n    }\n\n    /**\n     * @return \u30CE\u30FC\u30C9\u306E\
     \u6570\n     */\n    int count_nodes() const { return N; }\n\n    /**\n     *\
@@ -506,40 +523,34 @@ data:
     \ for (auto &e : G[i])\n                ret(i, e.to) = e.cost;\n        return\
     \ ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\u306B bfs\n\
     \     */\n    std::vector<int> preorder(int start) const {\n        std::vector<int>\
-    \ result;\n        std::stack<std::pair<int, int>> stk;\n        if constexpr\
-    \ (enable_unionfind)\n            for (int x : uf.contained_group(start))\n  \
-    \              visited[x] = false;\n        else\n            visited.assign(N,\
-    \ false);\n        visited[start] = true;\n        stk.push({start, 0});\n\n \
-    \       while (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n   \
-    \         if (idx == 0)\n                result.push_back(cu);\n            if\
-    \ (idx == G[cu].size()) {\n                stk.pop();\n            } else {\n\
-    \                int to = G[cu][idx++];\n                if (!visited[to]) {\n\
-    \                    visited[to] = true;\n                    stk.push({to, 0});\n\
-    \                }\n            }\n        }\n        return result;\n    }\n\n\
-    \    /**\n     * @brief \u901A\u308A\u304C\u3051\u9806\u306B bfs\n     */\n  \
-    \  std::vector<int> inorder(int start) const {\n        std::vector<int> result;\n\
-    \        std::stack<std::pair<int, int>> stk;\n        if constexpr (enable_unionfind)\n\
-    \            for (int x : uf.contained_group(start))\n                visited[x]\
-    \ = false;\n        else\n            visited.assign(N, false);\n        visited[start]\
-    \ = true;\n        stk.push({start, 0});\n\n        while (!stk.empty()) {\n \
-    \           auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size())\
-    \ {\n                stk.pop();\n                result.push_back(cu);\n     \
-    \       } else {\n                int to = G[cu][idx++];\n                if (!visited[to])\
+    \ result;\n        std::stack<std::pair<int, int>> stk;\n        reset_visited_flag(start);\n\
+    \        visited[start] = true;\n        stk.push({start, 0});\n\n        while\
+    \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
+    \ == 0)\n                result.push_back(cu);\n            if (idx == G[cu].size())\
+    \ {\n                stk.pop();\n            } else {\n                int to\
+    \ = G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
+    \ = true;\n                    stk.push({to, 0});\n                }\n       \
+    \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u901A\
+    \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> inorder(int\
+    \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
+    \ int>> stk;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
+    \        stk.push({start, 0});\n\n        while (!stk.empty()) {\n           \
+    \ auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n     \
+    \           stk.pop();\n                result.push_back(cu);\n            } else\
+    \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
     \ {\n                    visited[to] = true;\n                    stk.push({to,\
     \ 0});\n                    result.push_back(cu);\n                }\n       \
     \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u5E30\
     \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> postorder(int\
     \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
-    \ int>> stk;\n        if constexpr (enable_unionfind)\n            for (int x\
-    \ : uf.contained_group(start))\n                visited[x] = false;\n        else\n\
-    \            visited.assign(N, false);\n        visited[start] = true;\n     \
-    \   stk.push({start, 0});\n\n        while (!stk.empty()) {\n            auto\
-    \ &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n          \
-    \      stk.pop();\n                result.push_back(cu);\n            } else {\n\
-    \                int to = G[cu][idx++];\n                if (!visited[to]) {\n\
-    \                    visited[to] = true;\n                    stk.push({to, 0});\n\
-    \                }\n            }\n        }\n        return result;\n    }\n\n\
-    \  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
+    \ int>> stk;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
+    \        stk.push({start, 0});\n\n        while (!stk.empty()) {\n           \
+    \ auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n     \
+    \           stk.pop();\n                result.push_back(cu);\n            } else\
+    \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
+    \ {\n                    visited[to] = true;\n                    stk.push({to,\
+    \ 0});\n                }\n            }\n        }\n        return result;\n\
+    \    }\n\n  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
     \ =\n        std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;\n\
     \n    void run_bfs(std::vector<int> &dist, std::queue<int> &q) const {\n     \
     \   while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
@@ -557,43 +568,57 @@ data:
     \n     * @param start_node \u59CB\u70B9\n     * @param invalid \u5230\u9054\u4E0D\
     \u80FD\u306A\u9802\u70B9\u306B\u683C\u7D0D\u3055\u308C\u308B\u5024\n     * @return\
     \ \u5404\u30CE\u30FC\u30C9\u307E\u3067\u306E\u6700\u77ED\u8DDD\u96E2\u306E\u30EA\
-    \u30B9\u30C8\n     */\n    std::vector<WEIGHT> calculate_shortest_distances(int\
-    \ start_node,\n                                                     WEIGHT invalid)\
-    \ const {\n        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());\n\
+    \u30B9\u30C8\n     */\n    std::vector<WEIGHT> distances(int start_node, WEIGHT\
+    \ invalid) const {\n        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());\n\
     \        dist[start_node] = 0;\n\n        if constexpr (std::is_same<WEIGHT, int>::value)\
     \ {\n            // BFS algorithm\n            std::queue<int> q;\n          \
     \  q.push(start_node);\n            run_bfs(dist, q);\n        } else {\n    \
     \        // Dijkstra's algorithm\n            Dijkstra_queue q;\n            q.push({0,\
-    \ start_node});\n            if constexpr (enable_unionfind)\n               \
-    \ for (int x : uf.contained_group(start_node))\n                    visited[x]\
-    \ = false;\n            else\n                visited.assign(N, false);\n    \
-    \        run_Dijkstra(dist, q);\n        }\n\n        for (auto &x : dist)\n \
-    \           if (x == std::numeric_limits<WEIGHT>::max())\n                x =\
-    \ invalid;\n        return dist;\n    }\n\n    WEIGHT diameter() const {\n   \
-    \     static_assert(!is_directed);\n        assert(is_tree());\n        std::vector<WEIGHT>\
-    \ dist(calculate_shortest_distances(0, -1));\n        dist = calculate_shortest_distances(\n\
-    \            std::max_element(dist.begin(), dist.end()) - dist.begin(), -1);\n\
-    \        return *std::max_element(dist.begin(), dist.end());\n    }\n\n    template\
-    \ <bool __enable_unionfind = true> graph reverse() const {\n        if constexpr\
-    \ (!is_directed) {\n            return *this;\n        } else {\n            graph<WEIGHT,\
-    \ is_directed, __enable_unionfind> ret(N);\n            for (auto e : E) {\n \
-    \               std::swap(e.from, e.to);\n                ret.add_edge(e);\n \
-    \           }\n            return ret;\n        }\n    }\n\n    std::vector<int>\
-    \ topological_sort() {\n        static_assert(is_directed);\n        std::vector<int>\
-    \ indeg(N, 0), sorted;\n        for (int to : E)\n            indeg[to]++;\n\n\
-    \        std::queue<int> q;\n        for (int i = 0; i < N; i++)\n           \
-    \ if (!indeg[i])\n                q.push(i);\n        while (!q.empty()) {\n \
-    \           int cu = q.front();\n            q.pop();\n            for (int to\
-    \ : G[cu]) {\n                if (!--indeg[to])\n                    q.push(to);\n\
-    \            }\n            sorted.push_back(cu);\n        }\n        return sorted;\n\
-    \    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n  \
-    \  template <bool __enable_unionfind = true>\n    graph minimum_spanning_tree()\
-    \ const {\n        static_assert(!is_directed);\n        graph<WEIGHT, is_directed,\
-    \ __enable_unionfind> ret(N);\n        std::vector<edge<WEIGHT>> tmp(edges());\n\
-    \        std::sort(tmp.begin(), tmp.end());\n        for (auto &e : tmp)\n   \
-    \         if (!ret.are_connected(e.from, e.to))\n                ret.add_edge(e);\n\
-    \        return ret;\n    }\n\n    void print() const {\n        std::cout <<\
-    \ this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
+    \ start_node});\n            reset_visited_flag(start_node);\n            run_Dijkstra(dist,\
+    \ q);\n        }\n\n        for (auto &x : dist)\n            if (x == std::numeric_limits<WEIGHT>::max())\n\
+    \                x = invalid;\n        return dist;\n    }\n\n    /**\n     *\
+    \ @brief \u5FA9\u5143\u4ED8\u304D\u6700\u77ED\u7D4C\u8DEF\n     * @attention \u5230\
+    \u9054\u53EF\u80FD\u3067\u306A\u3044\u3068\u304D\u3001\u7A7A\u306E\u914D\u5217\
+    \u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>> shortest_path(int start_node,\
+    \ int end_node) {\n        if (start_node == end_node)\n            return {};\n\
+    \n        auto dist = distances(start_node, std::numeric_limits<WEIGHT>::max());\n\
+    \        if (dist[end_node] == std::numeric_limits<WEIGHT>::max())\n         \
+    \   return {};\n\n        auto R(this->reverse());\n        reset_visited_flag(end_node);\n\
+    \        visited[end_node] = true;\n\n        int cu = end_node;\n        std::vector<edge<WEIGHT>>\
+    \ route;\n        while (cu != start_node) {\n            for (auto e : R[cu])\
+    \ {\n                if (visited[e.to])\n                    continue;\n     \
+    \           if (dist[cu] - e.cost == dist[e.to]) {\n                    visited[cu\
+    \ = e.to] = true;\n                    std::swap(e.from, e.to);\n            \
+    \        route.push_back(e);\n                    break;\n                }\n\
+    \            }\n        }\n        std::reverse(route.begin(), route.end());\n\
+    \        return route;\n    }\n\n    WEIGHT diameter() const {\n        static_assert(!is_directed);\n\
+    \        assert(is_tree());\n        std::vector<WEIGHT> dist(distances(0, -1));\n\
+    \        dist = distances(\n            std::max_element(dist.begin(), dist.end())\
+    \ - dist.begin(), -1);\n        return *std::max_element(dist.begin(), dist.end());\n\
+    \    }\n\n    template <bool __enable_unionfind = true> graph reverse() const\
+    \ {\n        if constexpr (!is_directed) {\n            return *this;\n      \
+    \  } else {\n            graph<WEIGHT, is_directed, __enable_unionfind> ret(N);\n\
+    \            for (auto e : E) {\n                std::swap(e.from, e.to);\n  \
+    \              ret.add_edge(e);\n            }\n            return ret;\n    \
+    \    }\n    }\n\n    std::vector<int> topological_sort() {\n        static_assert(is_directed);\n\
+    \        std::vector<int> indeg(N, 0), sorted;\n        for (int to : E)\n   \
+    \         indeg[to]++;\n\n        std::queue<int> q;\n        for (int i = 0;\
+    \ i < N; i++)\n            if (!indeg[i])\n                q.push(i);\n      \
+    \  while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
+    \            for (int to : G[cu]) {\n                if (!--indeg[to])\n     \
+    \               q.push(to);\n            }\n            sorted.push_back(cu);\n\
+    \        }\n        return sorted;\n    }\n\n    /**\n     * @return \u6700\u5C0F\
+    \u5168\u57DF\u68EE\n     */\n    template <bool __enable_unionfind = true>\n \
+    \   graph minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
+    \        graph<WEIGHT, is_directed, __enable_unionfind> ret(N);\n        std::vector<edge<WEIGHT>>\
+    \ tmp(edges());\n        std::sort(tmp.begin(), tmp.end());\n        if constexpr\
+    \ (__enable_unionfind) {\n            for (auto &e : tmp)\n                if\
+    \ (!ret.are_connected(e.from, e.to))\n                    ret.add_edge(e);\n \
+    \       } else {\n            union_find uf(N);\n            for (auto &e : tmp)\
+    \ {\n                if (!uf.same(e.from, e.to)) {\n                    ret.add_edge(e);\n\
+    \                    uf.merge(e.from, e.to);\n                }\n            }\n\
+    \        }\n        return ret;\n    }\n\n    void print() const {\n        std::cout\
+    \ << this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
     \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n"
   dependsOn:
   - data_structure/union_find.hpp
@@ -609,7 +634,7 @@ data:
   - graph/traveling_salesman.hpp
   - graph/doubling.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-07-25 15:05:29+09:00'
+  timestamp: '2023-07-31 19:01:50+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp
@@ -620,6 +645,7 @@ data:
   - test/grl-1-a.test.cpp
   - test/grl-1-c.test.cpp
   - test/grl-3-b.test.cpp
+  - test/shortest_path.test.cpp
   - test/grl-5-a.test.cpp
 documentation_of: graph/graph.hpp
 layout: document

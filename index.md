@@ -198,5 +198,8 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/ntl-1-d.test.cpp
       title: test/ntl-1-d.test.cpp
+    - icon: ':heavy_check_mark:'
+      path: test/shortest_path.test.cpp
+      title: test/shortest_path.test.cpp
 layout: toppage
 ---

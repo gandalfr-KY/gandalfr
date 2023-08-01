@@ -32,6 +32,10 @@ template <class DERIVED, class WEIGHT> struct _base_edge {
 
     virtual ~_base_edge() = default;
 
+    DERIVED reverse() const {
+        return {to, from, cost, id};
+    }
+
     operator int() const { return to; }
 
   protected:

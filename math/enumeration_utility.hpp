@@ -7,7 +7,7 @@
 #include "../standard/mod_integer.hpp"
 
 template <class T> T power(T x, long long n) {
-    T ret = T(1);
+    T ret = static_cast<T>(1);
     while (n > 0) {
         if (n & 1)
             ret = ret * x;

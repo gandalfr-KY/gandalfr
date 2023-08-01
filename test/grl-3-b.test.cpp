@@ -1,4 +1,5 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_3_B"
+#define IGNORE
 #include <bits/stdc++.h>
 #include "../graph/lowlink.hpp"
 using namespace std;

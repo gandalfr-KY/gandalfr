@@ -6,7 +6,7 @@
 struct random_utility {
     random_utility(int seed = 0) { mt.seed(seed); }
 
-    long long random_int(long long min_value, long long max_value) {
+    long long random_64i(long long min_value, long long max_value) {
         std::uniform_int_distribution<long long> distribution(min_value,
                                                               max_value);
         return distribution(mt);

@@ -129,14 +129,20 @@ class graph {
      * @param e 辺
      * @attention 渡した辺の id は保持される
      */
-    void add_edge(edge<WEIGHT> e) {
+    void add_edge(const edge<WEIGHT> &e) {
         if constexpr (enable_unionfind)
             forest_flag &= uf.merge(e.from, e.to);
-        E.emplace_back(e);
+            
         G[e.from].emplace_back(e);
-        if (!is_directed && e.from != e.to) {
-            std::swap(e.from, e.to);
-            G[e.from].emplace_back(e);
+        if (!is_directed && e.from != e.to) 
+            G[e.to].emplace_back(e.reverse());
+
+        if constexpr (is_directed) {
+            E.emplace_back(e);
+        } else {
+            int from = std::min(e.from, e.to);
+            int to = std::max(e.from, e.to);
+            E.push_back({from, to, e.cost, e.to});
         }
         W += e.cost;
     }
@@ -147,10 +153,7 @@ class graph {
      */
     void add_edge(int from, int to, WEIGHT cost) {
         static_assert(!std::is_same<WEIGHT, int>::value);
-        if constexpr (!is_directed)
-            if (from > to)
-                std::swap(from, to);
-        add_edge(edge<WEIGHT>(from, to, cost, E.size()));
+        add_edge({from, to, cost, (int)E.size()});
     }
 
     /**
@@ -159,10 +162,7 @@ class graph {
      */
     void add_edge(int from, int to) {
         static_assert(std::is_same<WEIGHT, int>::value);
-        if constexpr (!is_directed)
-            if (from > to)
-                std::swap(from, to);
-        add_edge(edge<int>(from, to, E.size()));
+        add_edge({from, to, (int)E.size()});
     }
 
     /**
@@ -386,8 +386,7 @@ class graph {
                     continue;
                 if (dist[cu] - e.cost == dist[e.to]) {
                     visited[cu = e.to] = true;
-                    std::swap(e.from, e.to);
-                    route.push_back(e);
+                    route.push_back(e.reverse());
                     break;
                 }
             }
@@ -410,9 +409,8 @@ class graph {
             return *this;
         } else {
             graph<WEIGHT, is_directed, __enable_unionfind> ret(N);
-            for (auto e : E) {
-                std::swap(e.from, e.to);
-                ret.add_edge(e);
+            for (auto &e : E) {
+                ret.add_edge(e.reverse());
             }
             return ret;
         }

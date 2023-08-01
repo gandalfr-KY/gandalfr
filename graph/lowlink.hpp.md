@@ -15,15 +15,15 @@ data:
     title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-b.test.cpp
     title: test/grl-3-b.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     document_title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\
       \u30FB\u6A4B\u3092\u6C42\u3081\u308B"
@@ -177,7 +177,8 @@ data:
     \ e1.compare(e) <= 0;\n    }\n    friend std::ostream &operator<<(std::ostream\
     \ &os,\n                                    const _base_edge<DERIVED, WEIGHT>\
     \ &e) {\n        e.print(os);\n        return os;\n    }\n    _base_edge &operator=(const\
-    \ _base_edge &e) = default;\n\n    virtual ~_base_edge() = default;\n\n    operator\
+    \ _base_edge &e) = default;\n\n    virtual ~_base_edge() = default;\n\n    DERIVED\
+    \ reverse() const {\n        return {to, from, cost, id};\n    }\n\n    operator\
     \ int() const { return to; }\n\n  protected:\n    virtual void print(std::ostream\
     \ &os) const = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n\
     } // namespace internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
@@ -240,32 +241,32 @@ data:
     \    }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\u307F\n     */\n\
     \    WEIGHT weight() const { return W; }\n\n    /**\n     * @param e \u8FBA\n\
     \     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\u3055\u308C\
-    \u308B\n     */\n    void add_edge(edge<WEIGHT> e) {\n        if constexpr (enable_unionfind)\n\
-    \            forest_flag &= uf.merge(e.from, e.to);\n        E.emplace_back(e);\n\
-    \        G[e.from].emplace_back(e);\n        if (!is_directed && e.from != e.to)\
-    \ {\n            std::swap(e.from, e.to);\n            G[e.from].emplace_back(e);\n\
-    \        }\n        W += e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E\
-    \ id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\
-    \u632F\u3089\u308C\u308B\n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\
-    \u30E9\u30FC\n     */\n    void add_edge(int from, int to, WEIGHT cost) {\n  \
-    \      static_assert(!std::is_same<WEIGHT, int>::value);\n        if constexpr\
-    \ (!is_directed)\n            if (from > to)\n                std::swap(from,\
-    \ to);\n        add_edge(edge<WEIGHT>(from, to, cost, E.size()));\n    }\n\n \
-    \   /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\
+    \u308B\n     */\n    void add_edge(const edge<WEIGHT> &e) {\n        if constexpr\
+    \ (enable_unionfind)\n            forest_flag &= uf.merge(e.from, e.to);\n   \
+    \         \n        G[e.from].emplace_back(e);\n        if (!is_directed && e.from\
+    \ != e.to) \n            G[e.to].emplace_back(e.reverse());\n\n        if constexpr\
+    \ (is_directed) {\n            E.emplace_back(e);\n        } else {\n        \
+    \    int from = std::min(e.from, e.to);\n            int to = std::max(e.from,\
+    \ e.to);\n            E.push_back({from, to, e.cost, e.to});\n        }\n    \
+    \    W += e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E id \u306F\u3001\
+    (\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\
+    \u308B\n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\u30FC\n \
+    \    */\n    void add_edge(int from, int to, WEIGHT cost) {\n        static_assert(!std::is_same<WEIGHT,\
+    \ int>::value);\n        add_edge({from, to, cost, (int)E.size()});\n    }\n\n\
+    \    /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\
     \u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\n     * @attention\
     \ WEIGHT \u304C int \u4EE5\u5916\u3060\u3068\u30A8\u30E9\u30FC\n     */\n    void\
     \ add_edge(int from, int to) {\n        static_assert(std::is_same<WEIGHT, int>::value);\n\
-    \        if constexpr (!is_directed)\n            if (from > to)\n           \
-    \     std::swap(from, to);\n        add_edge(edge<int>(from, to, E.size()));\n\
-    \    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\u9023\u7D50\u306A\u30B0\
-    \u30E9\u30D5\u306B\u5206\u3051\u3066\u30EA\u30B9\u30C8\u306B\u3057\u3066\u8FD4\
-    \u3059\n     * @example auto[Gs, gr, nd] = G.decompose();\n     * @returns\n \
-    \    * 1.\u30B0\u30E9\u30D5\u306E\u30EA\u30B9\u30C8\n     * 2.\u5404\u30CE\u30FC\
-    \u30C9\u304C\u30B0\u30E9\u30D5\u306E\u30EA\u30B9\u30C8\u306E\u4F55\u756A\u76EE\
-    \u306B\u5C5E\u3059\u308B\u304B\n     * 3.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\
-    \u30D5\u306E\u3069\u306E\u30CE\u30FC\u30C9\u306B\u306A\u3063\u3066\u3044\u308B\
-    \u304B\n     */\n    template <bool __enable_unionfind = true>\n    std::tuple<std::vector<graph<WEIGHT,\
-    \ is_directed, __enable_unionfind>>,\n               std::vector<int>, std::vector<int>>\n\
+    \        add_edge({from, to, (int)E.size()});\n    }\n\n    /**\n     * @brief\
+    \ \u30B0\u30E9\u30D5\u3092\u9023\u7D50\u306A\u30B0\u30E9\u30D5\u306B\u5206\u3051\
+    \u3066\u30EA\u30B9\u30C8\u306B\u3057\u3066\u8FD4\u3059\n     * @example auto[Gs,\
+    \ gr, nd] = G.decompose();\n     * @returns\n     * 1.\u30B0\u30E9\u30D5\u306E\
+    \u30EA\u30B9\u30C8\n     * 2.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\
+    \u30EA\u30B9\u30C8\u306E\u4F55\u756A\u76EE\u306B\u5C5E\u3059\u308B\u304B\n   \
+    \  * 3.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\u3069\u306E\u30CE\
+    \u30FC\u30C9\u306B\u306A\u3063\u3066\u3044\u308B\u304B\n     */\n    template\
+    \ <bool __enable_unionfind = true>\n    std::tuple<std::vector<graph<WEIGHT, is_directed,\
+    \ __enable_unionfind>>,\n               std::vector<int>, std::vector<int>>\n\
     \    decompose() const {\n        static_assert(enable_unionfind);\n        std::vector<graph<WEIGHT,\
     \ is_directed, __enable_unionfind>> Gs(\n            uf.count_groups());\n   \
     \     std::vector<std::vector<int>> groups(uf.all_groups());\n        std::vector<int>\
@@ -352,61 +353,60 @@ data:
     \ route;\n        while (cu != start_node) {\n            for (auto e : R[cu])\
     \ {\n                if (visited[e.to])\n                    continue;\n     \
     \           if (dist[cu] - e.cost == dist[e.to]) {\n                    visited[cu\
-    \ = e.to] = true;\n                    std::swap(e.from, e.to);\n            \
-    \        route.push_back(e);\n                    break;\n                }\n\
-    \            }\n        }\n        std::reverse(route.begin(), route.end());\n\
-    \        return route;\n    }\n\n    WEIGHT diameter() const {\n        static_assert(!is_directed);\n\
-    \        assert(is_tree());\n        std::vector<WEIGHT> dist(distances(0, -1));\n\
-    \        dist = distances(\n            std::max_element(dist.begin(), dist.end())\
-    \ - dist.begin(), -1);\n        return *std::max_element(dist.begin(), dist.end());\n\
-    \    }\n\n    template <bool __enable_unionfind = true> graph reverse() const\
-    \ {\n        if constexpr (!is_directed) {\n            return *this;\n      \
-    \  } else {\n            graph<WEIGHT, is_directed, __enable_unionfind> ret(N);\n\
-    \            for (auto e : E) {\n                std::swap(e.from, e.to);\n  \
-    \              ret.add_edge(e);\n            }\n            return ret;\n    \
-    \    }\n    }\n\n    std::vector<int> topological_sort() {\n        static_assert(is_directed);\n\
-    \        std::vector<int> indeg(N, 0), sorted;\n        for (int to : E)\n   \
-    \         indeg[to]++;\n\n        std::queue<int> q;\n        for (int i = 0;\
-    \ i < N; i++)\n            if (!indeg[i])\n                q.push(i);\n      \
-    \  while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
-    \            for (int to : G[cu]) {\n                if (!--indeg[to])\n     \
-    \               q.push(to);\n            }\n            sorted.push_back(cu);\n\
-    \        }\n        return sorted;\n    }\n\n    /**\n     * @return \u6700\u5C0F\
-    \u5168\u57DF\u68EE\n     */\n    template <bool __enable_unionfind = true>\n \
-    \   graph minimum_spanning_tree() const {\n        static_assert(!is_directed);\n\
-    \        graph<WEIGHT, is_directed, __enable_unionfind> ret(N);\n        std::vector<edge<WEIGHT>>\
-    \ tmp(edges());\n        std::sort(tmp.begin(), tmp.end());\n        if constexpr\
-    \ (__enable_unionfind) {\n            for (auto &e : tmp)\n                if\
-    \ (!ret.are_connected(e.from, e.to))\n                    ret.add_edge(e);\n \
-    \       } else {\n            union_find uf(N);\n            for (auto &e : tmp)\
-    \ {\n                if (!uf.same(e.from, e.to)) {\n                    ret.add_edge(e);\n\
-    \                    uf.merge(e.from, e.to);\n                }\n            }\n\
-    \        }\n        return ret;\n    }\n\n    void print() const {\n        std::cout\
-    \ << this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
-    \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n#line 5\
-    \ \"graph/lowlink.hpp\"\n\n/**\n * @brief \u5358\u7D14\u7121\u5411\u30B0\u30E9\
-    \u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\u6A4B\u3092\u6C42\u3081\u308B\n * @attention\
-    \ \u9023\u7D50\u3067\u306A\u3044\u3068\u304D\u306E verify \u304C\u3067\u304D\u3066\
-    \u306A\u3044\u3002\u591A\u5206\u3042\u3063\u3066\u308B\u3051\u3069...\n */\ntemplate\
-    \ <typename WEIGHT> class lowlink {\n  private:\n    std::vector<int> ord, low,\
-    \ apts;\n    std::vector<edge<WEIGHT>> brids;\n\n    void dfs(const graph<WEIGHT,\
-    \ false> &g, int cu, int pa, int &cnt,\n             const std::vector<int> &id,\
-    \ std::vector<bool> &is_apt,\n             std::vector<bool> &is_bridge) {\n \
-    \       ord[cu] = low[cu] = cnt++;\n        for (auto &e : g[cu]) {\n        \
-    \    if (e.to == pa)\n                continue;\n            if (ord[e.to] ==\
-    \ -1) {\n                dfs(g, e.to, cu, cnt, id, is_apt, is_bridge);\n     \
-    \           if (low[cu] > low[e.to])\n                    low[cu] = low[e.to];\n\
-    \                if (ord[cu] < low[e.to])\n                    is_bridge[e.id]\
-    \ = true;\n                if (pa != -1 && ord[cu] <= low[e.to])\n           \
-    \         is_apt[id[cu]] = true;\n            } else if (low[cu] > ord[e.to])\n\
-    \                low[cu] = ord[e.to];\n        }\n    }\n\n  public:\n    lowlink(graph<WEIGHT,\
-    \ false> &G)\n        : ord(G.count_nodes(), -1), low(G.count_nodes(), -1) {\n\
-    \        int C = G.count_connected_components(), N = G.count_nodes(),\n      \
-    \      M = G.count_edges();\n        std::vector<bool> is_apt(N, false), is_bridge(M,\
-    \ false);\n        auto [decomposed, gr_id, nd_id] = G.decompose();\n        std::vector<std::vector<int>>\
-    \ id(\n            N); // i \u756A\u76EE\u306E\u30B0\u30E9\u30D5\u306E\u30CE\u30FC\
-    \u30C9 j \u306E\u3001\u3082\u3068\u306E\u30B0\u30E9\u30D5\u306E\u30CE\u30FC\u30C9\
-    \u306E\u756A\u53F7\n        for (int c = 0; c < C; c++)\n            id[c].resize(decomposed[c].count_nodes());\n\
+    \ = e.to] = true;\n                    route.push_back(e.reverse());\n       \
+    \             break;\n                }\n            }\n        }\n        std::reverse(route.begin(),\
+    \ route.end());\n        return route;\n    }\n\n    WEIGHT diameter() const {\n\
+    \        static_assert(!is_directed);\n        assert(is_tree());\n        std::vector<WEIGHT>\
+    \ dist(distances(0, -1));\n        dist = distances(\n            std::max_element(dist.begin(),\
+    \ dist.end()) - dist.begin(), -1);\n        return *std::max_element(dist.begin(),\
+    \ dist.end());\n    }\n\n    template <bool __enable_unionfind = true> graph reverse()\
+    \ const {\n        if constexpr (!is_directed) {\n            return *this;\n\
+    \        } else {\n            graph<WEIGHT, is_directed, __enable_unionfind>\
+    \ ret(N);\n            for (auto &e : E) {\n                ret.add_edge(e.reverse());\n\
+    \            }\n            return ret;\n        }\n    }\n\n    std::vector<int>\
+    \ topological_sort() {\n        static_assert(is_directed);\n        std::vector<int>\
+    \ indeg(N, 0), sorted;\n        for (int to : E)\n            indeg[to]++;\n\n\
+    \        std::queue<int> q;\n        for (int i = 0; i < N; i++)\n           \
+    \ if (!indeg[i])\n                q.push(i);\n        while (!q.empty()) {\n \
+    \           int cu = q.front();\n            q.pop();\n            for (int to\
+    \ : G[cu]) {\n                if (!--indeg[to])\n                    q.push(to);\n\
+    \            }\n            sorted.push_back(cu);\n        }\n        return sorted;\n\
+    \    }\n\n    /**\n     * @return \u6700\u5C0F\u5168\u57DF\u68EE\n     */\n  \
+    \  template <bool __enable_unionfind = true>\n    graph minimum_spanning_tree()\
+    \ const {\n        static_assert(!is_directed);\n        graph<WEIGHT, is_directed,\
+    \ __enable_unionfind> ret(N);\n        std::vector<edge<WEIGHT>> tmp(edges());\n\
+    \        std::sort(tmp.begin(), tmp.end());\n        if constexpr (__enable_unionfind)\
+    \ {\n            for (auto &e : tmp)\n                if (!ret.are_connected(e.from,\
+    \ e.to))\n                    ret.add_edge(e);\n        } else {\n           \
+    \ union_find uf(N);\n            for (auto &e : tmp) {\n                if (!uf.same(e.from,\
+    \ e.to)) {\n                    ret.add_edge(e);\n                    uf.merge(e.from,\
+    \ e.to);\n                }\n            }\n        }\n        return ret;\n \
+    \   }\n\n    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
+    \ << std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
+    \ << e << std::endl;\n    }\n};\n#line 5 \"graph/lowlink.hpp\"\n\n/**\n * @brief\
+    \ \u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\u6A4B\
+    \u3092\u6C42\u3081\u308B\n * @attention \u9023\u7D50\u3067\u306A\u3044\u3068\u304D\
+    \u306E verify \u304C\u3067\u304D\u3066\u306A\u3044\u3002\u591A\u5206\u3042\u3063\
+    \u3066\u308B\u3051\u3069...\n */\ntemplate <typename WEIGHT> class lowlink {\n\
+    \  private:\n    std::vector<int> ord, low, apts;\n    std::vector<edge<WEIGHT>>\
+    \ brids;\n\n    void dfs(const graph<WEIGHT, false> &g, int cu, int pa, int &cnt,\n\
+    \             const std::vector<int> &id, std::vector<bool> &is_apt,\n       \
+    \      std::vector<bool> &is_bridge) {\n        ord[cu] = low[cu] = cnt++;\n \
+    \       for (auto &e : g[cu]) {\n            if (e.to == pa)\n               \
+    \ continue;\n            if (ord[e.to] == -1) {\n                dfs(g, e.to,\
+    \ cu, cnt, id, is_apt, is_bridge);\n                if (low[cu] > low[e.to])\n\
+    \                    low[cu] = low[e.to];\n                if (ord[cu] < low[e.to])\n\
+    \                    is_bridge[e.id] = true;\n                if (pa != -1 &&\
+    \ ord[cu] <= low[e.to])\n                    is_apt[id[cu]] = true;\n        \
+    \    } else if (low[cu] > ord[e.to])\n                low[cu] = ord[e.to];\n \
+    \       }\n    }\n\n  public:\n    lowlink(graph<WEIGHT, false> &G)\n        :\
+    \ ord(G.count_nodes(), -1), low(G.count_nodes(), -1) {\n        int C = G.count_connected_components(),\
+    \ N = G.count_nodes(),\n            M = G.count_edges();\n        std::vector<bool>\
+    \ is_apt(N, false), is_bridge(M, false);\n        auto [decomposed, gr_id, nd_id]\
+    \ = G.decompose();\n        std::vector<std::vector<int>> id(\n            N);\
+    \ // i \u756A\u76EE\u306E\u30B0\u30E9\u30D5\u306E\u30CE\u30FC\u30C9 j \u306E\u3001\
+    \u3082\u3068\u306E\u30B0\u30E9\u30D5\u306E\u30CE\u30FC\u30C9\u306E\u756A\u53F7\
+    \n        for (int c = 0; c < C; c++)\n            id[c].resize(decomposed[c].count_nodes());\n\
     \        for (int i = 0; i < N; i++)\n            id[gr_id[i]][nd_id[i]] = i;\n\
     \n        std::vector<std::pair<int, int>> st(C, {0x7fffffff, -1}); // <\u6B21\
     \u6570, id>\n        for (int c = 0; c < C; c++) {\n            // \u6B21\u6570\
@@ -471,8 +471,8 @@ data:
   isVerificationFile: false
   path: graph/lowlink.hpp
   requiredBy: []
-  timestamp: '2023-07-31 19:01:50+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2023-08-01 15:12:36+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/grl-3-a.test.cpp
   - test/grl-3-b.test.cpp

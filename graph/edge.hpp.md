@@ -19,7 +19,7 @@ data:
     path: graph/lowest_common_ancestor.hpp
     title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
       \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
@@ -39,10 +39,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-2-a.test.cpp
     title: test/grl-2-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-b.test.cpp
     title: test/grl-3-b.test.cpp
   - icon: ':heavy_check_mark:'
@@ -78,9 +78,10 @@ data:
     \ friend std::ostream &operator<<(std::ostream &os,\n                        \
     \            const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n \
     \       return os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\
-    \n    virtual ~_base_edge() = default;\n\n    operator int() const { return to;\
-    \ }\n\n  protected:\n    virtual void print(std::ostream &os) const = 0;\n   \
-    \ virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\
+    \n    virtual ~_base_edge() = default;\n\n    DERIVED reverse() const {\n    \
+    \    return {to, from, cost, id};\n    }\n\n    operator int() const { return\
+    \ to; }\n\n  protected:\n    virtual void print(std::ostream &os) const = 0;\n\
+    \    virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\
     \ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\
     \n  protected:\n    void print(std::ostream &os) const override {\n        os\
@@ -110,9 +111,10 @@ data:
     \ friend std::ostream &operator<<(std::ostream &os,\n                        \
     \            const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n \
     \       return os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\
-    \n    virtual ~_base_edge() = default;\n\n    operator int() const { return to;\
-    \ }\n\n  protected:\n    virtual void print(std::ostream &os) const = 0;\n   \
-    \ virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\
+    \n    virtual ~_base_edge() = default;\n\n    DERIVED reverse() const {\n    \
+    \    return {to, from, cost, id};\n    }\n\n    operator int() const { return\
+    \ to; }\n\n  protected:\n    virtual void print(std::ostream &os) const = 0;\n\
+    \    virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace internal\n\
     \ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\
     \n  protected:\n    void print(std::ostream &os) const override {\n        os\
@@ -141,7 +143,7 @@ data:
   - graph/traveling_salesman.hpp
   - graph/doubling.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-07-04 13:58:45+09:00'
+  timestamp: '2023-08-01 15:12:36+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/jsc2021-g.test.cpp

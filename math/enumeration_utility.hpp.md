@@ -59,17 +59,17 @@ data:
     \ &os, const mod_integer &a) {\n        os << a.val;\n        return os;\n   \
     \ }\n};\n\nusing mint = mod_integer<1000000007>;\nusing _mint = mod_integer<998244353>;\n\
     #line 8 \"math/enumeration_utility.hpp\"\n\ntemplate <class T> T power(T x, long\
-    \ long n) {\n    T ret = T(1);\n    while (n > 0) {\n        if (n & 1)\n    \
-    \        ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return\
-    \ ret;\n}\n\nlong long power(long long x, long long n) {\n    long long ret =\
-    \ 1;\n    while (n > 0) {\n        if (n & 1)\n            ret = ret * x;\n  \
-    \      x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long\
-    \ long x, long long n, int MOD) {\n    long long ret = 1;\n    x %= MOD;\n   \
-    \ while (n > 0) {\n        if (n & 1)\n            ret = ret * x % MOD;\n    \
-    \    x = x * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n}\n\ntemplate\
-    \ <class T> class factorial {\n  private:\n    static inline std::vector<T> fact{1};\n\
-    \n  public:\n    factorial() = delete;\n    ~factorial() = delete;\n    static\
-    \ T get(int n) {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
+    \ long n) {\n    T ret = static_cast<T>(1);\n    while (n > 0) {\n        if (n\
+    \ & 1)\n            ret = ret * x;\n        x = x * x;\n        n >>= 1;\n   \
+    \ }\n    return ret;\n}\n\nlong long power(long long x, long long n) {\n    long\
+    \ long ret = 1;\n    while (n > 0) {\n        if (n & 1)\n            ret = ret\
+    \ * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n}\n\nlong\
+    \ long power(long long x, long long n, int MOD) {\n    long long ret = 1;\n  \
+    \  x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n            ret = ret *\
+    \ x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n\
+    }\n\ntemplate <class T> class factorial {\n  private:\n    static inline std::vector<T>\
+    \ fact{1};\n\n  public:\n    factorial() = delete;\n    ~factorial() = delete;\n\
+    \    static T get(int n) {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
     \ * fact.size());\n        return fact[n];\n    }\n};\n\ntemplate <class T> struct\
     \ permutation {\n    permutation() = delete;\n    ~permutation() = delete;\n \
     \   static T get(int n, int k) {\n        assert(0 <= k && k <= n);\n        return\
@@ -82,18 +82,18 @@ data:
     \ = combination<mint>;\nusing _comb = combination<_mint>;\n"
   code: "#pragma once\n#include <algorithm>\n#include <map>\n#include <utility>\n\
     #include <vector>\n\n#include \"../standard/mod_integer.hpp\"\n\ntemplate <class\
-    \ T> T power(T x, long long n) {\n    T ret = T(1);\n    while (n > 0) {\n   \
-    \     if (n & 1)\n            ret = ret * x;\n        x = x * x;\n        n >>=\
-    \ 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long long n) {\n\
-    \    long long ret = 1;\n    while (n > 0) {\n        if (n & 1)\n           \
-    \ ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n    return ret;\n\
-    }\n\nlong long power(long long x, long long n, int MOD) {\n    long long ret =\
-    \ 1;\n    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n            ret\
-    \ = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n    }\n    return\
-    \ ret;\n}\n\ntemplate <class T> class factorial {\n  private:\n    static inline\
-    \ std::vector<T> fact{1};\n\n  public:\n    factorial() = delete;\n    ~factorial()\
-    \ = delete;\n    static T get(int n) {\n        while (n >= fact.size())\n   \
-    \         fact.push_back(fact.back() * fact.size());\n        return fact[n];\n\
+    \ T> T power(T x, long long n) {\n    T ret = static_cast<T>(1);\n    while (n\
+    \ > 0) {\n        if (n & 1)\n            ret = ret * x;\n        x = x * x;\n\
+    \        n >>= 1;\n    }\n    return ret;\n}\n\nlong long power(long long x, long\
+    \ long n) {\n    long long ret = 1;\n    while (n > 0) {\n        if (n & 1)\n\
+    \            ret = ret * x;\n        x = x * x;\n        n >>= 1;\n    }\n   \
+    \ return ret;\n}\n\nlong long power(long long x, long long n, int MOD) {\n   \
+    \ long long ret = 1;\n    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n\
+    \            ret = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n\
+    \    }\n    return ret;\n}\n\ntemplate <class T> class factorial {\n  private:\n\
+    \    static inline std::vector<T> fact{1};\n\n  public:\n    factorial() = delete;\n\
+    \    ~factorial() = delete;\n    static T get(int n) {\n        while (n >= fact.size())\n\
+    \            fact.push_back(fact.back() * fact.size());\n        return fact[n];\n\
     \    }\n};\n\ntemplate <class T> struct permutation {\n    permutation() = delete;\n\
     \    ~permutation() = delete;\n    static T get(int n, int k) {\n        assert(0\
     \ <= k && k <= n);\n        return factorial<T>::get(n) / factorial<T>::get(n\
@@ -110,7 +110,7 @@ data:
   path: math/enumeration_utility.hpp
   requiredBy:
   - math/totient.hpp
-  timestamp: '2023-07-19 13:18:35+09:00'
+  timestamp: '2023-08-01 15:12:36+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp

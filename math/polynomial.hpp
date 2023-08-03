@@ -4,10 +4,11 @@
 #include <vector>
 
 /**
- * @deprecated 積がO(n^2)でおそい。強い人のライブラリを使おう。
+ * @deprecated FPSとは別物です。積がO(n^2)でおそい。強い人のライブラリを使おう。
  */
 template <class coef> class polynomial {
   private:
+    static inline int limit_order = INT32_MAX;
     std::vector<coef> p;
     std::string variable_name = "x";
 
@@ -23,6 +24,7 @@ template <class coef> class polynomial {
     friend const polynomial operator+(const polynomial &a,
                                       const polynomial &b) {
         int siz = std::max(a.p.size(), b.p.size());
+        siz = std::min(siz, limit_order);
         int siz1 = a.p.size(), siz2 = b.p.size();
         polynomial ret;
         ret.p.resize(siz);
@@ -53,9 +55,12 @@ template <class coef> class polynomial {
         int siz1 = a.p.size(), siz2 = b.p.size();
         polynomial ret;
         ret.p.resize(siz1 + siz2 - 1);
-        for (int i = 0; i < siz1; i++)
-            for (int j = 0; j < siz2; j++)
+        for (int i = 0; i < siz1; i++) {
+            for (int j = 0; j < siz2; j++) {
+                if (i + j > limit_order) break;
                 ret.p[i + j] += a.p[i] * b.p[j];
+            }
+        }
         return ret;
     }
 
@@ -141,6 +146,8 @@ template <class coef> class polynomial {
     polynomial(const coef &n = 0) : polynomial(std::vector<coef>{n}) {}
 
     int max_order() const { return p.size() - 1; }
+
+    static void set_upper_order(int order) { limit_order = order; }
 
     coef get_coef(int n) const {
         assert(0 <= n);

@@ -53,29 +53,20 @@ template <class T> class factorial {
         return fact[n];
     }
 };
+mint (*fact)(int) = factorial<mint>::get;
+_mint (*_fact)(int) = factorial<_mint>::get;
 
-template <class T> struct permutation {
-    permutation() = delete;
-    ~permutation() = delete;
-    static T get(int n, int k) {
-        assert(0 <= k && k <= n);
-        return factorial<T>::get(n) / factorial<T>::get(n - k);
-    }
-};
+template <class T> T permutation(int n, int k) {
+    assert(0 <= k && k <= n);
+    return factorial<T>::get(n) / factorial<T>::get(n - k);
+}
+mint (*perm)(int, int) = permutation<mint>;
+_mint (*_perm)(int, int) = permutation<_mint>;
 
-template <class T> struct combination {
-    combination() = delete;
-    ~combination() = delete;
-    static T get(int n, int k) {
-        assert(0 <= k && k <= n);
-        return factorial<T>::get(n) /
-               (factorial<T>::get(k) * factorial<T>::get(n - k));
-    }
-};
-
-using fact = factorial<mint>;
-using _fact = factorial<_mint>;
-using perm = permutation<mint>;
-using _perm = permutation<_mint>;
-using comb = combination<mint>;
-using _comb = combination<_mint>;
+template <class T> static T combnation(int n, int k) {
+    assert(0 <= k && k <= n);
+    return factorial<T>::get(n) /
+           (factorial<T>::get(k) * factorial<T>::get(n - k));
+}
+mint (*comb)(int, int) = combnation<mint>;
+_mint (*_comb)(int, int) = combnation<_mint>;

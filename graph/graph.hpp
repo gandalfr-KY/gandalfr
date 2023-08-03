@@ -132,9 +132,9 @@ class graph {
     void add_edge(const edge<WEIGHT> &e) {
         if constexpr (enable_unionfind)
             forest_flag &= uf.merge(e.from, e.to);
-            
+
         G[e.from].emplace_back(e);
-        if (!is_directed && e.from != e.to) 
+        if (!is_directed && e.from != e.to)
             G[e.to].emplace_back(e.reverse());
 
         if constexpr (is_directed) {

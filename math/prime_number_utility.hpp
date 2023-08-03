@@ -59,9 +59,34 @@ class prime_number_utility {
     }
 
     // 素数のリストを、末尾の数が lim を超えるまで拡張
-    static void set_minimum_limit(int lim) {
+    static void set_lower_limit(int lim) {
         while (primes.back() < lim)
             expand_list(primes.size() + 1);
+    }
+
+    /**
+     * @brief 素因数分解する
+     * @return prime_factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...}
+     * @attention prime_factorize(1) => {}
+     * @attention prime_factorize(0) => {{0, 1}}
+     */
+    static std::vector<std::pair<long long, int>> factorize(long long N) {
+        std::vector<std::pair<long long, int>> ret;
+        set_lower_limit(ceil(sqrt(N)));
+        for (long long p : primes) {
+            if (N == 1 || (__int128_t)p * p > N)
+                break;
+            while (N % p == 0) {
+                if (ret.empty() || ret.back().first != p)
+                    ret.push_back({p, 1});
+                else
+                    ret.back().second++;
+                N /= p;
+            }
+        }
+        if (N != 1)
+            ret.push_back({N, 1});
+        return ret;
     }
 
     static const std::vector<int> &list() { return primes; }

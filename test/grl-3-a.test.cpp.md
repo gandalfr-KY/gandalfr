@@ -178,10 +178,10 @@ data:
     \ &os,\n                                    const _base_edge<DERIVED, WEIGHT>\
     \ &e) {\n        e.print(os);\n        return os;\n    }\n    _base_edge &operator=(const\
     \ _base_edge &e) = default;\n\n    virtual ~_base_edge() = default;\n\n    DERIVED\
-    \ reverse() const {\n        return {to, from, cost, id};\n    }\n\n    operator\
-    \ int() const { return to; }\n\n  protected:\n    virtual void print(std::ostream\
-    \ &os) const = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n\
-    } // namespace internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    \ reverse() const { return {to, from, cost, id}; }\n\n    operator int() const\
+    \ { return to; }\n\n  protected:\n    virtual void print(std::ostream &os) const\
+    \ = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n} // namespace\
+    \ internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
     \ WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\
     \n  protected:\n    void print(std::ostream &os) const override {\n        os\
     \ << this->from << \" \" << this->to << \" \" << this->cost;\n    }\n    int compare(\n\
@@ -242,16 +242,16 @@ data:
     \    WEIGHT weight() const { return W; }\n\n    /**\n     * @param e \u8FBA\n\
     \     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\u3055\u308C\
     \u308B\n     */\n    void add_edge(const edge<WEIGHT> &e) {\n        if constexpr\
-    \ (enable_unionfind)\n            forest_flag &= uf.merge(e.from, e.to);\n   \
-    \         \n        G[e.from].emplace_back(e);\n        if (!is_directed && e.from\
-    \ != e.to) \n            G[e.to].emplace_back(e.reverse());\n\n        if constexpr\
-    \ (is_directed) {\n            E.emplace_back(e);\n        } else {\n        \
-    \    int from = std::min(e.from, e.to);\n            int to = std::max(e.from,\
-    \ e.to);\n            E.push_back({from, to, e.cost, e.to});\n        }\n    \
-    \    W += e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E id \u306F\u3001\
-    (\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\
-    \u308B\n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\u30FC\n \
-    \    */\n    void add_edge(int from, int to, WEIGHT cost) {\n        static_assert(!std::is_same<WEIGHT,\
+    \ (enable_unionfind)\n            forest_flag &= uf.merge(e.from, e.to);\n\n \
+    \       G[e.from].emplace_back(e);\n        if (!is_directed && e.from != e.to)\n\
+    \            G[e.to].emplace_back(e.reverse());\n\n        if constexpr (is_directed)\
+    \ {\n            E.emplace_back(e);\n        } else {\n            int from =\
+    \ std::min(e.from, e.to);\n            int to = std::max(e.from, e.to);\n    \
+    \        E.push_back({from, to, e.cost, e.to});\n        }\n        W += e.cost;\n\
+    \    }\n\n    /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\
+    \u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\n \
+    \    * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\u30FC\n     */\n\
+    \    void add_edge(int from, int to, WEIGHT cost) {\n        static_assert(!std::is_same<WEIGHT,\
     \ int>::value);\n        add_edge({from, to, cost, (int)E.size()});\n    }\n\n\
     \    /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\
     \u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\n     * @attention\
@@ -446,7 +446,7 @@ data:
   isVerificationFile: true
   path: test/grl-3-a.test.cpp
   requiredBy: []
-  timestamp: '2023-08-01 15:12:36+09:00'
+  timestamp: '2023-08-04 00:28:35+09:00'
   verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test/grl-3-a.test.cpp

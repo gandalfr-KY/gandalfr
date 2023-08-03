@@ -111,8 +111,8 @@ data:
   timestamp: '2023-07-19 13:18:35+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test/jsc2021-g.test.cpp
   - test/ntl-1-d.test.cpp
+  - test/jsc2021-g.test.cpp
 documentation_of: standard/mod_integer.hpp
 layout: document
 redirect_from:

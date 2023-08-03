@@ -70,16 +70,14 @@ data:
     }\n\ntemplate <class T> class factorial {\n  private:\n    static inline std::vector<T>\
     \ fact{1};\n\n  public:\n    factorial() = delete;\n    ~factorial() = delete;\n\
     \    static T get(int n) {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
-    \ * fact.size());\n        return fact[n];\n    }\n};\n\ntemplate <class T> struct\
-    \ permutation {\n    permutation() = delete;\n    ~permutation() = delete;\n \
-    \   static T get(int n, int k) {\n        assert(0 <= k && k <= n);\n        return\
-    \ factorial<T>::get(n) / factorial<T>::get(n - k);\n    }\n};\n\ntemplate <class\
-    \ T> struct combination {\n    combination() = delete;\n    ~combination() = delete;\n\
-    \    static T get(int n, int k) {\n        assert(0 <= k && k <= n);\n       \
-    \ return factorial<T>::get(n) /\n               (factorial<T>::get(k) * factorial<T>::get(n\
-    \ - k));\n    }\n};\n\nusing fact = factorial<mint>;\nusing _fact = factorial<_mint>;\n\
-    using perm = permutation<mint>;\nusing _perm = permutation<_mint>;\nusing comb\
-    \ = combination<mint>;\nusing _comb = combination<_mint>;\n"
+    \ * fact.size());\n        return fact[n];\n    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n\
+    _mint (*_fact)(int) = factorial<_mint>::get;\n\ntemplate <class T> T permutation(int\
+    \ n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
+    \ / factorial<T>::get(n - k);\n}\nmint (*perm)(int, int) = permutation<mint>;\n\
+    _mint (*_perm)(int, int) = permutation<_mint>;\n\ntemplate <class T> static T\
+    \ combnation(int n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
+    \ /\n           (factorial<T>::get(k) * factorial<T>::get(n - k));\n}\nmint (*comb)(int,\
+    \ int) = combnation<mint>;\n_mint (*_comb)(int, int) = combnation<_mint>;\n"
   code: "#pragma once\n#include <algorithm>\n#include <map>\n#include <utility>\n\
     #include <vector>\n\n#include \"../standard/mod_integer.hpp\"\n\ntemplate <class\
     \ T> T power(T x, long long n) {\n    T ret = static_cast<T>(1);\n    while (n\
@@ -94,23 +92,21 @@ data:
     \    static inline std::vector<T> fact{1};\n\n  public:\n    factorial() = delete;\n\
     \    ~factorial() = delete;\n    static T get(int n) {\n        while (n >= fact.size())\n\
     \            fact.push_back(fact.back() * fact.size());\n        return fact[n];\n\
-    \    }\n};\n\ntemplate <class T> struct permutation {\n    permutation() = delete;\n\
-    \    ~permutation() = delete;\n    static T get(int n, int k) {\n        assert(0\
-    \ <= k && k <= n);\n        return factorial<T>::get(n) / factorial<T>::get(n\
-    \ - k);\n    }\n};\n\ntemplate <class T> struct combination {\n    combination()\
-    \ = delete;\n    ~combination() = delete;\n    static T get(int n, int k) {\n\
-    \        assert(0 <= k && k <= n);\n        return factorial<T>::get(n) /\n  \
-    \             (factorial<T>::get(k) * factorial<T>::get(n - k));\n    }\n};\n\n\
-    using fact = factorial<mint>;\nusing _fact = factorial<_mint>;\nusing perm = permutation<mint>;\n\
-    using _perm = permutation<_mint>;\nusing comb = combination<mint>;\nusing _comb\
-    \ = combination<_mint>;\n"
+    \    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n_mint (*_fact)(int) = factorial<_mint>::get;\n\
+    \ntemplate <class T> T permutation(int n, int k) {\n    assert(0 <= k && k <=\
+    \ n);\n    return factorial<T>::get(n) / factorial<T>::get(n - k);\n}\nmint (*perm)(int,\
+    \ int) = permutation<mint>;\n_mint (*_perm)(int, int) = permutation<_mint>;\n\n\
+    template <class T> static T combnation(int n, int k) {\n    assert(0 <= k && k\
+    \ <= n);\n    return factorial<T>::get(n) /\n           (factorial<T>::get(k)\
+    \ * factorial<T>::get(n - k));\n}\nmint (*comb)(int, int) = combnation<mint>;\n\
+    _mint (*_comb)(int, int) = combnation<_mint>;\n"
   dependsOn:
   - standard/mod_integer.hpp
   isVerificationFile: false
   path: math/enumeration_utility.hpp
   requiredBy:
   - math/totient.hpp
-  timestamp: '2023-08-01 15:12:36+09:00'
+  timestamp: '2023-08-04 00:28:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp

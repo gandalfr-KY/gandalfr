@@ -3,9 +3,6 @@ data:
   libraryCategories:
   - name: data_structure
     pages:
-    - icon: ':warning:'
-      path: data_structure/LRU_cache.hpp
-      title: data_structure/LRU_cache.hpp
     - icon: ':heavy_check_mark:'
       path: data_structure/binary_indexed_tree.hpp
       title: "\u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97"
@@ -80,9 +77,6 @@ data:
     - icon: ':heavy_check_mark:'
       path: math/enumeration_utility.hpp
       title: math/enumeration_utility.hpp
-    - icon: ':heavy_check_mark:'
-      path: math/factorize.hpp
-      title: "\u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B"
     - icon: ':question:'
       path: math/matrix.hpp
       title: "\u884C\u5217\u3092\u30EA\u30B5\u30A4\u30BA\u3059\u308B\u3002"
@@ -192,7 +186,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/manhattan-mst.test.cpp
       title: test/manhattan-mst.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/ntl-1-a.test.cpp
       title: test/ntl-1-a.test.cpp
     - icon: ':heavy_check_mark:'

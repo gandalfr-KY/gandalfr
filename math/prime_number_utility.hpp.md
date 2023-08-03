@@ -3,16 +3,10 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: math/factorize.hpp
-    title: "\u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B"
-  - icon: ':heavy_check_mark:'
     path: math/totient.hpp
     title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
       \u6570"
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
-    path: test/ntl-1-a.test.cpp
-    title: test/ntl-1-a.test.cpp
   - icon: ':heavy_check_mark:'
     path: test/ntl-1-d.test.cpp
     title: test/ntl-1-d.test.cpp
@@ -52,10 +46,21 @@ data:
     \ += 2) {\n            if (is_prime(i))\n                primes.push_back(i);\n\
     \        }\n    }\n\n    // \u7D20\u6570\u306E\u30EA\u30B9\u30C8\u3092\u3001\u672B\
     \u5C3E\u306E\u6570\u304C lim \u3092\u8D85\u3048\u308B\u307E\u3067\u62E1\u5F35\n\
-    \    static void set_minimum_limit(int lim) {\n        while (primes.back() <\
-    \ lim)\n            expand_list(primes.size() + 1);\n    }\n\n    static const\
-    \ std::vector<int> &list() { return primes; }\n    static const std::vector<bool>\
-    \ &table() { return sieve; }\n};\n"
+    \    static void set_lower_limit(int lim) {\n        while (primes.back() < lim)\n\
+    \            expand_list(primes.size() + 1);\n    }\n\n    /**\n     * @brief\
+    \ \u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B\n     * @return prime_factorize(p1^e1\
+    \ * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...}\n     * @attention prime_factorize(1)\
+    \ => {}\n     * @attention prime_factorize(0) => {{0, 1}}\n     */\n    static\
+    \ std::vector<std::pair<long long, int>> factorize(long long N) {\n        std::vector<std::pair<long\
+    \ long, int>> ret;\n        set_lower_limit(ceil(sqrt(N)));\n        for (long\
+    \ long p : primes) {\n            if (N == 1 || (__int128_t)p * p > N)\n     \
+    \           break;\n            while (N % p == 0) {\n                if (ret.empty()\
+    \ || ret.back().first != p)\n                    ret.push_back({p, 1});\n    \
+    \            else\n                    ret.back().second++;\n                N\
+    \ /= p;\n            }\n        }\n        if (N != 1)\n            ret.push_back({N,\
+    \ 1});\n        return ret;\n    }\n\n    static const std::vector<int> &list()\
+    \ { return primes; }\n    static const std::vector<bool> &table() { return sieve;\
+    \ }\n};\n"
   code: "#pragma once\n#include <math.h>\n\n#include <vector>\n\n/**\n * @brief \u7D20\
     \u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\u3059\u308B\
     \u30AF\u30E9\u30B9\n * @brief \u7D20\u6570\u7BE9\u3092\u56FA\u5B9A\u30B5\u30A4\
@@ -84,21 +89,30 @@ data:
     \ primes.back() + 2; (int)primes.size() < siz; i += 2) {\n            if (is_prime(i))\n\
     \                primes.push_back(i);\n        }\n    }\n\n    // \u7D20\u6570\
     \u306E\u30EA\u30B9\u30C8\u3092\u3001\u672B\u5C3E\u306E\u6570\u304C lim \u3092\u8D85\
-    \u3048\u308B\u307E\u3067\u62E1\u5F35\n    static void set_minimum_limit(int lim)\
+    \u3048\u308B\u307E\u3067\u62E1\u5F35\n    static void set_lower_limit(int lim)\
     \ {\n        while (primes.back() < lim)\n            expand_list(primes.size()\
-    \ + 1);\n    }\n\n    static const std::vector<int> &list() { return primes; }\n\
-    \    static const std::vector<bool> &table() { return sieve; }\n};\n"
+    \ + 1);\n    }\n\n    /**\n     * @brief \u7D20\u56E0\u6570\u5206\u89E3\u3059\u308B\
+    \n     * @return prime_factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2],\
+    \ ...}\n     * @attention prime_factorize(1) => {}\n     * @attention prime_factorize(0)\
+    \ => {{0, 1}}\n     */\n    static std::vector<std::pair<long long, int>> factorize(long\
+    \ long N) {\n        std::vector<std::pair<long long, int>> ret;\n        set_lower_limit(ceil(sqrt(N)));\n\
+    \        for (long long p : primes) {\n            if (N == 1 || (__int128_t)p\
+    \ * p > N)\n                break;\n            while (N % p == 0) {\n       \
+    \         if (ret.empty() || ret.back().first != p)\n                    ret.push_back({p,\
+    \ 1});\n                else\n                    ret.back().second++;\n     \
+    \           N /= p;\n            }\n        }\n        if (N != 1)\n         \
+    \   ret.push_back({N, 1});\n        return ret;\n    }\n\n    static const std::vector<int>\
+    \ &list() { return primes; }\n    static const std::vector<bool> &table() { return\
+    \ sieve; }\n};\n"
   dependsOn: []
   isVerificationFile: false
   path: math/prime_number_utility.hpp
   requiredBy:
-  - math/factorize.hpp
   - math/totient.hpp
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-08-04 00:28:35+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp
-  - test/ntl-1-a.test.cpp
 documentation_of: math/prime_number_utility.hpp
 layout: document
 redirect_from:

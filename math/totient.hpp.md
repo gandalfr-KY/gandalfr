@@ -89,7 +89,7 @@ data:
     \u56FA\u5B9A\u30B5\u30A4\u30BA\u3067\u69CB\u7BC9\u3001\u305D\u308C\u3092\u3082\
     \u3068\u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\u3046\n */\nclass\
     \ prime_number_utility {\n  protected:\n    static const int init_seive_size =\
-    \ (1 << 26), sqrt_size = (1 << 13);\n    static inline std::vector<bool> sieve;\n\
+    \ (1 << 24), sqrt_size = (1 << 13);\n    static inline std::vector<bool> sieve;\n\
     \    static inline std::vector<int> primes{2, 3};\n\n  public:\n    prime_number_utility()\
     \ = delete;\n    ~prime_number_utility() = delete;\n\n    /**\n     * @brief n\
     \ \u304C\u7D20\u6570\u304B\u3092\u5224\u5B9A\n     * @attention if n < (1 << 26)\
@@ -143,7 +143,7 @@ data:
   isVerificationFile: false
   path: math/totient.hpp
   requiredBy: []
-  timestamp: '2023-08-04 00:28:35+09:00'
+  timestamp: '2023-08-05 15:29:22+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp

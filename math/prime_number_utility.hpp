@@ -9,7 +9,7 @@
  */
 class prime_number_utility {
   protected:
-    static const int init_seive_size = (1 << 26), sqrt_size = (1 << 13);
+    static const int init_seive_size = (1 << 24), sqrt_size = (1 << 13);
     static inline std::vector<bool> sieve;
     static inline std::vector<int> primes{2, 3};
 

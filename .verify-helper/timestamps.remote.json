@@ -10,6 +10,7 @@
 "test/grl-5-c.test.cpp": "2023-08-04 00:28:35 +0900",
 "test/itp1-t-d.test.cpp": "2023-07-31 19:01:50 +0900",
 "test/manhattan-mst.test.cpp": "2023-08-04 00:28:35 +0900",
-"test/ntl-1-d.test.cpp": "2023-08-05 15:29:22 +0900",
+"test/ntl-1-a.test.cpp": "2023-08-11 23:12:11 +0900",
+"test/ntl-1-d.test.cpp": "2023-08-11 23:12:11 +0900",
 "test/shortest_path.test.cpp": "2023-08-04 00:28:35 +0900"
 }

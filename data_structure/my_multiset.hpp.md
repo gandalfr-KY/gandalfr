@@ -17,10 +17,12 @@ data:
     \ false;\n        } else {\n            this->erase(it);\n            return true;\n\
     \        }\n    }\n    int erase_all(const _Key &__x) {\n        int ret = this->count(__x);\n\
     \        if (ret == 0) {\n            return 0;\n        } else {\n          \
-    \  this->erase(__x);\n            return ret;\n        }\n    }\n    friend std::ostream\
-    \ &operator<<(std::ostream &os, const my_multiset &ms) {\n        auto it = ms.begin();\n\
-    \        os << *it;\n        for (++it; it != ms.end(); ++it) {\n            os\
-    \ << ' ' << *it;\n        }\n        return os;\n    }\n};\n"
+    \  this->erase(__x);\n            return ret;\n        }\n    }\n    const _Key\
+    \ &front() const {\n        return *this->begin();\n    }\n    const _Key &back()\
+    \ const {\n        return *--this->end();\n    }\n    friend std::ostream &operator<<(std::ostream\
+    \ &os, const my_multiset &ms) {\n        auto it = ms.begin();\n        os <<\
+    \ *it;\n        for (++it; it != ms.end(); ++it) {\n            os << ' ' << *it;\n\
+    \        }\n        return os;\n    }\n};\n"
   code: "#pragma once\n\n#include <iostream>\n#include <set>\n\ntemplate <typename\
     \ _Key, typename _Compare = std ::less<_Key>,\n          typename _Alloc = std\
     \ ::allocator<_Key>>\nclass my_multiset : public std::multiset<_Key, _Compare,\
@@ -30,7 +32,9 @@ data:
     \            this->erase(it);\n            return true;\n        }\n    }\n  \
     \  int erase_all(const _Key &__x) {\n        int ret = this->count(__x);\n   \
     \     if (ret == 0) {\n            return 0;\n        } else {\n            this->erase(__x);\n\
-    \            return ret;\n        }\n    }\n    friend std::ostream &operator<<(std::ostream\
+    \            return ret;\n        }\n    }\n    const _Key &front() const {\n\
+    \        return *this->begin();\n    }\n    const _Key &back() const {\n     \
+    \   return *--this->end();\n    }\n    friend std::ostream &operator<<(std::ostream\
     \ &os, const my_multiset &ms) {\n        auto it = ms.begin();\n        os <<\
     \ *it;\n        for (++it; it != ms.end(); ++it) {\n            os << ' ' << *it;\n\
     \        }\n        return os;\n    }\n};\n"
@@ -38,7 +42,7 @@ data:
   isVerificationFile: false
   path: data_structure/my_multiset.hpp
   requiredBy: []
-  timestamp: '2023-06-19 02:32:35+09:00'
+  timestamp: '2023-08-11 23:12:11+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/my_multiset.hpp

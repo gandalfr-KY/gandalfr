@@ -8,6 +8,9 @@ data:
       \u6570"
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
+    path: test/ntl-1-a.test.cpp
+    title: test/ntl-1-a.test.cpp
+  - icon: ':heavy_check_mark:'
     path: test/ntl-1-d.test.cpp
     title: test/ntl-1-d.test.cpp
   _isVerificationFailed: false
@@ -112,6 +115,7 @@ data:
   timestamp: '2023-08-05 15:29:22+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/ntl-1-a.test.cpp
   - test/ntl-1-d.test.cpp
 documentation_of: math/prime_number_utility.hpp
 layout: document

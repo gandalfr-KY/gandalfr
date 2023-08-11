@@ -186,7 +186,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/manhattan-mst.test.cpp
       title: test/manhattan-mst.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test/ntl-1-a.test.cpp
       title: test/ntl-1-a.test.cpp
     - icon: ':heavy_check_mark:'

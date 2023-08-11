@@ -26,6 +26,12 @@ class my_multiset : public std::multiset<_Key, _Compare, _Alloc> {
             return ret;
         }
     }
+    const _Key &front() const {
+        return *this->begin();
+    }
+    const _Key &back() const {
+        return *--this->end();
+    }
     friend std::ostream &operator<<(std::ostream &os, const my_multiset &ms) {
         auto it = ms.begin();
         os << *it;

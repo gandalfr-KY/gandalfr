@@ -15,7 +15,7 @@
  * @tparam WEIGHT int なら重みなし、そうでないなら重みつきグラフ
  * @tparam is_directed 有向グラフかとうか
  */
-template <typename WEIGHT, bool is_directed, bool enable_unionfind = true>
+template <typename WEIGHT, bool is_directed>
 class graph {
   private:
     int N;
@@ -28,19 +28,13 @@ class graph {
     bool forest_flag = true;
 
     void reset_visited_flag(int node) const {
-        if constexpr (enable_unionfind)
-            for (int x : uf.contained_group(node))
-                visited[x] = false;
-        else
-            visited.assign(N, false);
+        for (int x : uf.contained_group(node))
+            visited[x] = false;
     }
 
   public:
-    graph() : N(0){};
-    graph(int n) : N(n), G(n), visited(n) {
-        if constexpr (enable_unionfind)
-            uf.expand(n);
-    };
+    graph() : N(0) {};
+    graph(int n) : N(n), G(n), visited(n), uf(n) {};
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -53,8 +47,7 @@ class graph {
         N = n;
         G.resize(n);
         visited.resize(n);
-        if constexpr (enable_unionfind)
-            uf.expand(n);
+        uf.expand(n);
     }
 
     /**
@@ -84,7 +77,6 @@ class graph {
      * @return x, y が連結かどうか
      */
     bool are_connected(int x, int y) const {
-        static_assert(enable_unionfind);
         return uf.same(x, y);
     }
 
@@ -92,7 +84,6 @@ class graph {
      * @return 連結成分の数
      */
     int count_connected_components() const {
-        static_assert(enable_unionfind);
         return uf.count_groups();
     }
 
@@ -100,7 +91,6 @@ class graph {
      * @return 連結成分のリストのリスト
      */
     std::vector<std::vector<int>> weakly_connected_components() const {
-        static_assert(enable_unionfind);
         return uf.all_groups();
     }
 
@@ -108,7 +98,6 @@ class graph {
      * @return 木か
      */
     bool is_tree() const {
-        static_assert(enable_unionfind);
         return forest_flag && uf.count_groups() == 1;
     }
 
@@ -116,7 +105,6 @@ class graph {
      * @return 森か
      */
     bool is_forest() const {
-        static_assert(enable_unionfind);
         return forest_flag;
     }
 
@@ -130,8 +118,7 @@ class graph {
      * @attention 渡した辺の id は保持される
      */
     void add_edge(const edge<WEIGHT> &e) {
-        if constexpr (enable_unionfind)
-            forest_flag &= uf.merge(e.from, e.to);
+        forest_flag &= uf.merge(e.from, e.to);
 
         G[e.from].emplace_back(e);
         if (!is_directed && e.from != e.to)
@@ -173,12 +160,9 @@ class graph {
      * 2.各ノードがグラフのリストの何番目に属するか
      * 3.各ノードがグラフのどのノードになっているか
      */
-    template <bool __enable_unionfind = true>
-    std::tuple<std::vector<graph<WEIGHT, is_directed, __enable_unionfind>>,
-               std::vector<int>, std::vector<int>>
+    std::tuple<std::vector<graph>, std::vector<int>, std::vector<int>>
     decompose() const {
-        static_assert(enable_unionfind);
-        std::vector<graph<WEIGHT, is_directed, __enable_unionfind>> Gs(
+        std::vector<graph> Gs(
             uf.count_groups());
         std::vector<std::vector<int>> groups(uf.all_groups());
         std::vector<int> group_id(N), node_id(N);
@@ -404,11 +388,11 @@ class graph {
         return *std::max_element(dist.begin(), dist.end());
     }
 
-    template <bool __enable_unionfind = true> graph reverse() const {
+    graph reverse() const {
         if constexpr (!is_directed) {
             return *this;
         } else {
-            graph<WEIGHT, is_directed, __enable_unionfind> ret(N);
+            graph ret(N);
             for (auto &e : E) {
                 ret.add_edge(e.reverse());
             }
@@ -441,25 +425,14 @@ class graph {
     /**
      * @return 最小全域森
      */
-    template <bool __enable_unionfind = true>
     graph minimum_spanning_tree() const {
         static_assert(!is_directed);
-        graph<WEIGHT, is_directed, __enable_unionfind> ret(N);
+        graph ret(N);
         std::vector<edge<WEIGHT>> tmp(edges());
         std::sort(tmp.begin(), tmp.end());
-        if constexpr (__enable_unionfind) {
-            for (auto &e : tmp)
-                if (!ret.are_connected(e.from, e.to))
-                    ret.add_edge(e);
-        } else {
-            union_find uf(N);
-            for (auto &e : tmp) {
-                if (!uf.same(e.from, e.to)) {
-                    ret.add_edge(e);
-                    uf.merge(e.from, e.to);
-                }
-            }
-        }
+        for (auto &e : tmp)
+            if (!ret.are_connected(e.from, e.to))
+                ret.add_edge(e);
         return ret;
     }
 
@@ -468,4 +441,6 @@ class graph {
         for (const edge<WEIGHT> &e : this->E)
             std::cout << e << std::endl;
     }
+
+
 };

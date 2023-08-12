@@ -19,7 +19,7 @@ data:
     path: graph/lowest_common_ancestor.hpp
     title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
       \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
-  - icon: ':x:'
+  - icon: ':warning:'
     path: graph/lowlink.hpp
     title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
       \u6A4B\u3092\u6C42\u3081\u308B"
@@ -39,10 +39,10 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-2-a.test.cpp
     title: test/grl-2-a.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test/grl-3-b.test.cpp
     title: test/grl-3-b.test.cpp
   - icon: ':heavy_check_mark:'
@@ -78,19 +78,21 @@ data:
     \ friend std::ostream &operator<<(std::ostream &os,\n                        \
     \            const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n \
     \       return os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\
-    \n    virtual ~_base_edge() = default;\n\n    DERIVED reverse() const { return\
-    \ {to, from, cost, id}; }\n\n    operator int() const { return to; }\n\n  protected:\n\
-    \    virtual void print(std::ostream &os) const = 0;\n    virtual int compare(const\
-    \ _base_edge &e) const = 0;\n};\n} // namespace internal\n\ntemplate <class WEIGHT>\n\
-    struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>,\
-    \ WEIGHT>::_base_edge;\n\n  protected:\n    void print(std::ostream &os) const\
-    \ override {\n        os << this->from << \" \" << this->to << \" \" << this->cost;\n\
-    \    }\n    int compare(\n        const internal::_base_edge<edge<WEIGHT>, WEIGHT>\
-    \ &e) const override {\n        if (this->cost == e.cost) {\n            if (this->from\
-    \ == e.from)\n                return this->to - e.to;\n            return this->from\
-    \ - e.from;\n        }\n        return this->cost - e.cost;\n    }\n};\n\ntemplate\
-    \ <> struct edge<int> : public internal::_base_edge<edge<int>, int> {\n    static\
-    \ inline const int cost = 1;\n    using internal::_base_edge<edge<int>, int>::_base_edge;\n\
+    \n    virtual ~_base_edge() = default;\n\n    DERIVED minmax() const {\n     \
+    \   auto [f, t] = std::minmax(from, to);\n        return {f, t, cost, id};\n \
+    \   }\n    DERIVED reverse() const { return {to, from, cost, id}; }\n\n    operator\
+    \ int() const { return to; }\n\n  protected:\n    virtual void print(std::ostream\
+    \ &os) const = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n\
+    } // namespace internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    \ WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\
+    \n  protected:\n    void print(std::ostream &os) const override {\n        os\
+    \ << this->from << \" \" << this->to << \" \" << this->cost;\n    }\n    int compare(\n\
+    \        const internal::_base_edge<edge<WEIGHT>, WEIGHT> &e) const override {\n\
+    \        if (this->cost == e.cost) {\n            if (this->from == e.from)\n\
+    \                return this->to - e.to;\n            return this->from - e.from;\n\
+    \        }\n        return this->cost - e.cost;\n    }\n};\n\ntemplate <> struct\
+    \ edge<int> : public internal::_base_edge<edge<int>, int> {\n    static inline\
+    \ const int cost = 1;\n    using internal::_base_edge<edge<int>, int>::_base_edge;\n\
     \    edge(int _from, int _to, int _id)\n        : _base_edge<edge<int>, int>(_from,\
     \ _to, 0, _id) {}\n\n  protected:\n    void print(std::ostream &os) const override\
     \ {\n        os << this->from << \" \" << this->to;\n    }\n    int compare(const\
@@ -110,19 +112,21 @@ data:
     \ friend std::ostream &operator<<(std::ostream &os,\n                        \
     \            const _base_edge<DERIVED, WEIGHT> &e) {\n        e.print(os);\n \
     \       return os;\n    }\n    _base_edge &operator=(const _base_edge &e) = default;\n\
-    \n    virtual ~_base_edge() = default;\n\n    DERIVED reverse() const { return\
-    \ {to, from, cost, id}; }\n\n    operator int() const { return to; }\n\n  protected:\n\
-    \    virtual void print(std::ostream &os) const = 0;\n    virtual int compare(const\
-    \ _base_edge &e) const = 0;\n};\n} // namespace internal\n\ntemplate <class WEIGHT>\n\
-    struct edge : public internal::_base_edge<edge<WEIGHT>, WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>,\
-    \ WEIGHT>::_base_edge;\n\n  protected:\n    void print(std::ostream &os) const\
-    \ override {\n        os << this->from << \" \" << this->to << \" \" << this->cost;\n\
-    \    }\n    int compare(\n        const internal::_base_edge<edge<WEIGHT>, WEIGHT>\
-    \ &e) const override {\n        if (this->cost == e.cost) {\n            if (this->from\
-    \ == e.from)\n                return this->to - e.to;\n            return this->from\
-    \ - e.from;\n        }\n        return this->cost - e.cost;\n    }\n};\n\ntemplate\
-    \ <> struct edge<int> : public internal::_base_edge<edge<int>, int> {\n    static\
-    \ inline const int cost = 1;\n    using internal::_base_edge<edge<int>, int>::_base_edge;\n\
+    \n    virtual ~_base_edge() = default;\n\n    DERIVED minmax() const {\n     \
+    \   auto [f, t] = std::minmax(from, to);\n        return {f, t, cost, id};\n \
+    \   }\n    DERIVED reverse() const { return {to, from, cost, id}; }\n\n    operator\
+    \ int() const { return to; }\n\n  protected:\n    virtual void print(std::ostream\
+    \ &os) const = 0;\n    virtual int compare(const _base_edge &e) const = 0;\n};\n\
+    } // namespace internal\n\ntemplate <class WEIGHT>\nstruct edge : public internal::_base_edge<edge<WEIGHT>,\
+    \ WEIGHT> {\n    using internal::_base_edge<edge<WEIGHT>, WEIGHT>::_base_edge;\n\
+    \n  protected:\n    void print(std::ostream &os) const override {\n        os\
+    \ << this->from << \" \" << this->to << \" \" << this->cost;\n    }\n    int compare(\n\
+    \        const internal::_base_edge<edge<WEIGHT>, WEIGHT> &e) const override {\n\
+    \        if (this->cost == e.cost) {\n            if (this->from == e.from)\n\
+    \                return this->to - e.to;\n            return this->from - e.from;\n\
+    \        }\n        return this->cost - e.cost;\n    }\n};\n\ntemplate <> struct\
+    \ edge<int> : public internal::_base_edge<edge<int>, int> {\n    static inline\
+    \ const int cost = 1;\n    using internal::_base_edge<edge<int>, int>::_base_edge;\n\
     \    edge(int _from, int _to, int _id)\n        : _base_edge<edge<int>, int>(_from,\
     \ _to, 0, _id) {}\n\n  protected:\n    void print(std::ostream &os) const override\
     \ {\n        os << this->from << \" \" << this->to;\n    }\n    int compare(const\
@@ -141,7 +145,7 @@ data:
   - graph/traveling_salesman.hpp
   - graph/lowest_common_ancestor.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-08-04 00:28:35+09:00'
+  timestamp: '2023-08-12 19:42:44+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/manhattan-mst.test.cpp

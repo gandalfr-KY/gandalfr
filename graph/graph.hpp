@@ -32,9 +32,13 @@ class graph {
             visited[x] = false;
     }
 
+    void reset_visited_flag() const {
+        visited.assign(N, false);
+    }
+
   public:
     graph() : N(0) {};
-    graph(int n) : N(n), G(n), visited(n), uf(n) {};
+    graph(int n) : N(n), G(n), uf(n), visited(n) {};
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -127,9 +131,7 @@ class graph {
         if constexpr (is_directed) {
             E.emplace_back(e);
         } else {
-            int from = std::min(e.from, e.to);
-            int to = std::max(e.from, e.to);
-            E.push_back({from, to, e.cost, e.to});
+            E.emplace_back(e.minmax());
         }
         W += e.cost;
     }
@@ -434,6 +436,45 @@ class graph {
             if (!ret.are_connected(e.from, e.to))
                 ret.add_edge(e);
         return ret;
+    }
+
+  private:
+    int run_lowlink(int idx, int k, int par, std::vector<int> &ord, std::vector<int> &low,
+        std::vector<edge<WEIGHT>> &brds, std::vector<int> &apts) {
+        visited[idx] = true;
+        ord[idx] = k++;
+        low[idx] = ord[idx];
+        bool is_apt = false;
+        int cnt = 0;
+        for(auto &e : G[idx]) {
+            if(!visited[e.to]) {
+                ++cnt;
+                k = run_lowlink(e.to, k, idx, ord, low, brds, apts);
+                low[idx] = std::min(low[idx], low[e.to]);
+                is_apt |= ~par && low[e.to] >= ord[idx];
+                if(ord[idx] < low[e.to]) {
+                    brds.emplace_back(e.minmax());
+                }
+            } else if(e.to != par) {
+                low[idx] = std::min(low[idx], ord[e.to]);
+            }
+        }
+        is_apt |= par == -1 && cnt > 1;
+        if(is_apt) apts.push_back(idx);
+        return k;   
+    }
+
+  public:
+    std::pair<std::vector<edge<WEIGHT>>, std::vector<int>> lowlink() {
+        static_assert(!is_directed);
+        std::vector<edge<WEIGHT>> brds;
+        std::vector<int> apts, ord(N, 0), low(N, 0);
+        reset_visited_flag();
+        int k = 0;
+        for(int i = 0; i < N; i++) {
+            if(!visited[i]) k = run_lowlink(i, k, -1, ord, low, brds, apts);
+        }
+        return {brds, apts};
     }
 
     void print() const {

@@ -34,11 +34,13 @@ data:
     \            if (r & 1)\n                r--, vr = op(v[r - 1], vr);\n       \
     \ }\n        return op(vl, vr);\n    }\n\n    // pos \u756A\u76EE\u306E\u5024\u3092\
     \u5F97\u308B\n    T get(int pos) {\n        assert(0 <= pos && pos < vec_size);\n\
-    \        return v[pos + n - 1];\n    }\n\n    void print() {\n        int prv\
-    \ = 0;\n        for (int sz = 1;; sz *= 2) {\n            for (int i = 0; i <\
-    \ sz; i++) {\n                std::cout << v[i + prv] << \" \";\n            }\n\
-    \            std::cout << std::endl;\n            prv += sz;\n            if (prv\
-    \ >= 2 * n - 1)\n                break;\n        }\n    }\n};\n\ntemplate <class\
+    \        return v[pos + n - 1];\n    }\n\n    void print() {\n        for (int\
+    \ i = 0; i < vec_size; i++) {\n            std::cout << get(i) << (i == vec_size\
+    \ - 1 ? \"\" : \" \");\n        }\n        std::cout << std::endl;\n    }\n\n\n\
+    \    void debug() {\n        int prv = 0;\n        for (int sz = 1; prv < 2 *\
+    \ n - 1; sz *= 2) {\n            for (int i = 0; i < sz; i++) {\n            \
+    \    std::cout << v[i + prv] << \" \";\n            }\n            std::cout <<\
+    \ std::endl;\n            prv += sz;\n        }\n    }\n};\n\ntemplate <class\
     \ T> struct RSQ_segment_tree : public segment_tree<T> {\n    RSQ_segment_tree(int\
     \ size)\n        : RSQ_segment_tree<T>::segment_tree(\n              size, [](T\
     \ a, T b) { return a + b; }, 0){};\n    RSQ_segment_tree(const std::vector<T>\
@@ -81,11 +83,13 @@ data:
     \            if (r & 1)\n                r--, vr = op(v[r - 1], vr);\n       \
     \ }\n        return op(vl, vr);\n    }\n\n    // pos \u756A\u76EE\u306E\u5024\u3092\
     \u5F97\u308B\n    T get(int pos) {\n        assert(0 <= pos && pos < vec_size);\n\
-    \        return v[pos + n - 1];\n    }\n\n    void print() {\n        int prv\
-    \ = 0;\n        for (int sz = 1;; sz *= 2) {\n            for (int i = 0; i <\
-    \ sz; i++) {\n                std::cout << v[i + prv] << \" \";\n            }\n\
-    \            std::cout << std::endl;\n            prv += sz;\n            if (prv\
-    \ >= 2 * n - 1)\n                break;\n        }\n    }\n};\n\ntemplate <class\
+    \        return v[pos + n - 1];\n    }\n\n    void print() {\n        for (int\
+    \ i = 0; i < vec_size; i++) {\n            std::cout << get(i) << (i == vec_size\
+    \ - 1 ? \"\" : \" \");\n        }\n        std::cout << std::endl;\n    }\n\n\n\
+    \    void debug() {\n        int prv = 0;\n        for (int sz = 1; prv < 2 *\
+    \ n - 1; sz *= 2) {\n            for (int i = 0; i < sz; i++) {\n            \
+    \    std::cout << v[i + prv] << \" \";\n            }\n            std::cout <<\
+    \ std::endl;\n            prv += sz;\n        }\n    }\n};\n\ntemplate <class\
     \ T> struct RSQ_segment_tree : public segment_tree<T> {\n    RSQ_segment_tree(int\
     \ size)\n        : RSQ_segment_tree<T>::segment_tree(\n              size, [](T\
     \ a, T b) { return a + b; }, 0){};\n    RSQ_segment_tree(const std::vector<T>\
@@ -107,7 +111,7 @@ data:
   isVerificationFile: false
   path: data_structure/segment_tree.hpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-08-15 16:09:05+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/segment_tree.hpp

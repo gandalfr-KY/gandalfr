@@ -70,15 +70,21 @@ template <class T> class segment_tree {
     }
 
     void print() {
+        for (int i = 0; i < vec_size; i++) {
+            std::cout << get(i) << (i == vec_size - 1 ? "" : " ");
+        }
+        std::cout << std::endl;
+    }
+
+
+    void debug() {
         int prv = 0;
-        for (int sz = 1;; sz *= 2) {
+        for (int sz = 1; prv < 2 * n - 1; sz *= 2) {
             for (int i = 0; i < sz; i++) {
                 std::cout << v[i + prv] << " ";
             }
             std::cout << std::endl;
             prv += sz;
-            if (prv >= 2 * n - 1)
-                break;
         }
     }
 };

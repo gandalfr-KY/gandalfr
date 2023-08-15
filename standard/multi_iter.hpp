@@ -15,7 +15,7 @@ class multi_iter {
     int depth, d;
 
   public:
-    multi_iter(const std::vector<int> &limits) : depth(limits.size()), d(0) {
+    multi_iter(const std::vector<int> &limits) : depth(limits.size()), d(depth - 1) {
         lim = new int[depth];
         bs = new int[depth];
         it = new int[depth];
@@ -24,7 +24,7 @@ class multi_iter {
             bs[i] = it[i] = 0;
         }
     }
-    multi_iter(const multirange &rngs) : depth(rngs.size()), d(0) {
+    multi_iter(const multirange &rngs) : depth(rngs.size()), d(depth - 1) {
         lim = new int[depth];
         bs = new int[depth];
         it = new int[depth];
@@ -41,7 +41,7 @@ class multi_iter {
     }
 
     multi_iter &operator++() {
-        for (d = 0; d < depth && ++it[d] == lim[d]; ++d)
+        for (d = depth - 1; d >= 0 && ++it[d] == lim[d]; --d)
             it[d] = bs[d];
         return *this;
     }
@@ -54,7 +54,7 @@ class multi_iter {
 
     void init() { std::copy(bs, bs + depth, it); }
 
-    bool fin() const { return d == depth; }
+    bool fin() const { return d == -1; }
 
     int operator[](int idx) const { return it[idx]; }
 };

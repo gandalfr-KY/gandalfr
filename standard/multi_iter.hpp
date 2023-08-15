@@ -15,7 +15,8 @@ class multi_iter {
     int depth, d;
 
   public:
-    multi_iter(const std::vector<int> &limits) : depth(limits.size()), d(depth - 1) {
+    multi_iter(const std::vector<int> &limits)
+        : depth(limits.size()), d(depth - 1) {
         lim = new int[depth];
         bs = new int[depth];
         it = new int[depth];

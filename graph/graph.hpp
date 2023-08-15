@@ -15,8 +15,7 @@
  * @tparam WEIGHT int なら重みなし、そうでないなら重みつきグラフ
  * @tparam is_directed 有向グラフかとうか
  */
-template <typename WEIGHT, bool is_directed>
-class graph {
+template <typename WEIGHT, bool is_directed> class graph {
   private:
     int N;
     std::vector<std::vector<edge<WEIGHT>>> G;
@@ -32,13 +31,11 @@ class graph {
             visited[x] = false;
     }
 
-    void reset_visited_flag() const {
-        visited.assign(N, false);
-    }
+    void reset_visited_flag() const { visited.assign(N, false); }
 
   public:
-    graph() : N(0) {};
-    graph(int n) : N(n), G(n), uf(n), visited(n) {};
+    graph() : N(0){};
+    graph(int n) : N(n), G(n), uf(n), visited(n){};
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -80,16 +77,12 @@ class graph {
      * @param y ノード番号
      * @return x, y が連結かどうか
      */
-    bool are_connected(int x, int y) const {
-        return uf.same(x, y);
-    }
+    bool are_connected(int x, int y) const { return uf.same(x, y); }
 
     /**
      * @return 連結成分の数
      */
-    int count_connected_components() const {
-        return uf.count_groups();
-    }
+    int count_connected_components() const { return uf.count_groups(); }
 
     /**
      * @return 連結成分のリストのリスト
@@ -101,16 +94,12 @@ class graph {
     /**
      * @return 木か
      */
-    bool is_tree() const {
-        return forest_flag && uf.count_groups() == 1;
-    }
+    bool is_tree() const { return forest_flag && uf.count_groups() == 1; }
 
     /**
      * @return 森か
      */
-    bool is_forest() const {
-        return forest_flag;
-    }
+    bool is_forest() const { return forest_flag; }
 
     /**
      * @return グラフの重み
@@ -164,8 +153,7 @@ class graph {
      */
     std::tuple<std::vector<graph>, std::vector<int>, std::vector<int>>
     decompose() const {
-        std::vector<graph> Gs(
-            uf.count_groups());
+        std::vector<graph> Gs(uf.count_groups());
         std::vector<std::vector<int>> groups(uf.all_groups());
         std::vector<int> group_id(N), node_id(N);
         for (int i = 0; i < (int)groups.size(); i++) {
@@ -188,7 +176,8 @@ class graph {
     /**
      * @brief グラフを隣接行列に変換
      * @param invalid 辺のないときの値
-     * @attention G に自己ループが含まれていない限り、対角成分は 0
+     * @attention 自己ループが含まれていない限り、対角成分は 0
+     * @attention 多重辺を持たないと仮定
      */
     matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0) const {
         matrix<WEIGHT> ret(N, N, invalid);
@@ -348,6 +337,45 @@ class graph {
         return dist;
     }
 
+  public:
+    /**
+     * @brief 最短距離を計算する
+     * @param start_nodes 始点のリスト
+     * @param invalid 到達不能な頂点に格納される値
+     * @return 各ノードまでの最短距離のリスト
+     */
+    std::vector<WEIGHT> distances(const std::vector<int> &start_nodes,
+                                  WEIGHT invalid) const {
+        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());
+        for (auto &x : start_nodes)
+            dist[x] = 0;
+
+        if constexpr (std::is_same<WEIGHT, int>::value) {
+            // BFS algorithm
+            std::queue<int> q;
+            for (auto &x : start_nodes)
+                q.push(x);
+            run_bfs(dist, q);
+        } else {
+            // Dijkstra's algorithm
+            Dijkstra_queue q;
+            std::set<int> st;
+            for (auto &x : start_nodes) {
+                q.push({0, x});
+                st.insert(uf.leader(x));
+            }
+            for (auto &x : st) {
+                reset_visited_flag(x);
+            }
+            run_Dijkstra(dist, q);
+        }
+
+        for (auto &x : dist)
+            if (x == std::numeric_limits<WEIGHT>::max())
+                x = invalid;
+        return dist;
+    }
+
     /**
      * @brief 復元付き最短経路
      * @attention 到達可能でないとき、空の配列で返る
@@ -439,29 +467,31 @@ class graph {
     }
 
   private:
-    int run_lowlink(int idx, int k, int par, std::vector<int> &ord, std::vector<int> &low,
-        std::vector<edge<WEIGHT>> &brds, std::vector<int> &apts) {
+    int run_lowlink(int idx, int k, int par, std::vector<int> &ord,
+                    std::vector<int> &low, std::vector<edge<WEIGHT>> &brds,
+                    std::vector<int> &apts) {
         visited[idx] = true;
         ord[idx] = k++;
         low[idx] = ord[idx];
         bool is_apt = false;
         int cnt = 0;
-        for(auto &e : G[idx]) {
-            if(!visited[e.to]) {
+        for (auto &e : G[idx]) {
+            if (!visited[e.to]) {
                 ++cnt;
                 k = run_lowlink(e.to, k, idx, ord, low, brds, apts);
                 low[idx] = std::min(low[idx], low[e.to]);
                 is_apt |= ~par && low[e.to] >= ord[idx];
-                if(ord[idx] < low[e.to]) {
+                if (ord[idx] < low[e.to]) {
                     brds.emplace_back(e.minmax());
                 }
-            } else if(e.to != par) {
+            } else if (e.to != par) {
                 low[idx] = std::min(low[idx], ord[e.to]);
             }
         }
         is_apt |= par == -1 && cnt > 1;
-        if(is_apt) apts.push_back(idx);
-        return k;   
+        if (is_apt)
+            apts.push_back(idx);
+        return k;
     }
 
   public:
@@ -471,8 +501,9 @@ class graph {
         std::vector<int> apts, ord(N, 0), low(N, 0);
         reset_visited_flag();
         int k = 0;
-        for(int i = 0; i < N; i++) {
-            if(!visited[i]) k = run_lowlink(i, k, -1, ord, low, brds, apts);
+        for (int i = 0; i < N; i++) {
+            if (!visited[i])
+                k = run_lowlink(i, k, -1, ord, low, brds, apts);
         }
         return {brds, apts};
     }
@@ -482,6 +513,4 @@ class graph {
         for (const edge<WEIGHT> &e : this->E)
             std::cout << e << std::endl;
     }
-
-
 };

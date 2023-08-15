@@ -57,7 +57,8 @@ template <class coef> class polynomial {
         ret.p.resize(siz1 + siz2 - 1);
         for (int i = 0; i < siz1; i++) {
             for (int j = 0; j < siz2; j++) {
-                if (i + j > limit_order) break;
+                if (i + j > limit_order)
+                    break;
                 ret.p[i + j] += a.p[i] * b.p[j];
             }
         }

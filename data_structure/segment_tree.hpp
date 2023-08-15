@@ -76,7 +76,6 @@ template <class T> class segment_tree {
         std::cout << std::endl;
     }
 
-
     void debug() {
         int prv = 0;
         for (int sz = 1; prv < 2 * n - 1; sz *= 2) {

@@ -100,16 +100,20 @@ template <int id> class dynamic_mod_integer {
     long long val; // 値は必ず 0 <= val < mod に保たれる
     friend d_mod_integer operator+(const d_mod_integer &a) { return a; }
     friend d_mod_integer operator-(const d_mod_integer &a) { return -a.val; }
-    friend d_mod_integer operator+(const d_mod_integer &a, const d_mod_integer &b) {
+    friend d_mod_integer operator+(const d_mod_integer &a,
+                                   const d_mod_integer &b) {
         return d_mod_integer(a.val + b.val);
     }
-    friend d_mod_integer operator-(const d_mod_integer &a, const d_mod_integer &b) {
+    friend d_mod_integer operator-(const d_mod_integer &a,
+                                   const d_mod_integer &b) {
         return d_mod_integer(a.val - b.val);
     }
-    friend d_mod_integer operator*(const d_mod_integer &a, const d_mod_integer &b) {
+    friend d_mod_integer operator*(const d_mod_integer &a,
+                                   const d_mod_integer &b) {
         return d_mod_integer(a.val * b.val);
     }
-    friend d_mod_integer operator/(const d_mod_integer &a, const d_mod_integer &b) {
+    friend d_mod_integer operator/(const d_mod_integer &a,
+                                   const d_mod_integer &b) {
         return d_mod_integer((a.val * mod_inverse(b.val, mod)) % mod);
     }
 

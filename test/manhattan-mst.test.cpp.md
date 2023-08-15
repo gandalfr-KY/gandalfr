@@ -200,19 +200,19 @@ data:
     \ int \u306A\u3089\u91CD\u307F\u306A\u3057\u3001\u305D\u3046\u3067\u306A\u3044\
     \u306A\u3089\u91CD\u307F\u3064\u304D\u30B0\u30E9\u30D5\n * @tparam is_directed\
     \ \u6709\u5411\u30B0\u30E9\u30D5\u304B\u3068\u3046\u304B\n */\ntemplate <typename\
-    \ WEIGHT, bool is_directed>\nclass graph {\n  private:\n    int N;\n    std::vector<std::vector<edge<WEIGHT>>>\
+    \ WEIGHT, bool is_directed> class graph {\n  private:\n    int N;\n    std::vector<std::vector<edge<WEIGHT>>>\
     \ G;\n    std::vector<edge<WEIGHT>> E;\n    union_find uf;\n    WEIGHT W = 0;\n\
     \n    mutable std::vector<bool> visited; // dfs / bfs \u306E\u305F\u3081\u306E\
     \u9818\u57DF\n    bool forest_flag = true;\n\n    void reset_visited_flag(int\
     \ node) const {\n        for (int x : uf.contained_group(node))\n            visited[x]\
-    \ = false;\n    }\n\n    void reset_visited_flag() const {\n        visited.assign(N,\
-    \ false);\n    }\n\n  public:\n    graph() : N(0) {};\n    graph(int n) : N(n),\
-    \ G(n), uf(n), visited(n) {};\n\n    /**\n     * @brief \u30CE\u30FC\u30C9\u306E\
-    \u6570\u3092n\u500B\u307E\u3067\u5897\u3084\u3059\n     * @param n \u30B5\u30A4\
-    \u30BA\n     * @attention \u4ECA\u306E\u30CE\u30FC\u30C9\u6570\u3088\u308A\u5C0F\
-    \u3055\u3044\u6570\u3092\u6E21\u3057\u305F\u3068\u304D\u3001\u5909\u5316\u306A\
-    \u3057\n     */\n    void expand(int n) {\n        if (n <= N)\n            return;\n\
-    \        N = n;\n        G.resize(n);\n        visited.resize(n);\n        uf.expand(n);\n\
+    \ = false;\n    }\n\n    void reset_visited_flag() const { visited.assign(N, false);\
+    \ }\n\n  public:\n    graph() : N(0){};\n    graph(int n) : N(n), G(n), uf(n),\
+    \ visited(n){};\n\n    /**\n     * @brief \u30CE\u30FC\u30C9\u306E\u6570\u3092\
+    n\u500B\u307E\u3067\u5897\u3084\u3059\n     * @param n \u30B5\u30A4\u30BA\n  \
+    \   * @attention \u4ECA\u306E\u30CE\u30FC\u30C9\u6570\u3088\u308A\u5C0F\u3055\u3044\
+    \u6570\u3092\u6E21\u3057\u305F\u3068\u304D\u3001\u5909\u5316\u306A\u3057\n   \
+    \  */\n    void expand(int n) {\n        if (n <= N)\n            return;\n  \
+    \      N = n;\n        G.resize(n);\n        visited.resize(n);\n        uf.expand(n);\n\
     \    }\n\n    /**\n     * @return \u30CE\u30FC\u30C9\u306E\u6570\n     */\n  \
     \  int count_nodes() const { return N; }\n\n    /**\n     * @return \u8FBA\u306E\
     \u6570\n     */\n    int count_edges() const { return E.size(); }\n\n    /**\n\
@@ -224,42 +224,41 @@ data:
     \ std::vector<edge<WEIGHT>> &edges() const { return E; }\n\n    /**\n     * @param\
     \ x \u30CE\u30FC\u30C9\u756A\u53F7\n     * @param y \u30CE\u30FC\u30C9\u756A\u53F7\
     \n     * @return x, y \u304C\u9023\u7D50\u304B\u3069\u3046\u304B\n     */\n  \
-    \  bool are_connected(int x, int y) const {\n        return uf.same(x, y);\n \
-    \   }\n\n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u6570\n     */\n\
-    \    int count_connected_components() const {\n        return uf.count_groups();\n\
-    \    }\n\n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\u30C8\
-    \u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> weakly_connected_components()\
-    \ const {\n        return uf.all_groups();\n    }\n\n    /**\n     * @return \u6728\
-    \u304B\n     */\n    bool is_tree() const {\n        return forest_flag && uf.count_groups()\
-    \ == 1;\n    }\n\n    /**\n     * @return \u68EE\u304B\n     */\n    bool is_forest()\
-    \ const {\n        return forest_flag;\n    }\n\n    /**\n     * @return \u30B0\
-    \u30E9\u30D5\u306E\u91CD\u307F\n     */\n    WEIGHT weight() const { return W;\
-    \ }\n\n    /**\n     * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\
-    \u306E id \u306F\u4FDD\u6301\u3055\u308C\u308B\n     */\n    void add_edge(const\
-    \ edge<WEIGHT> &e) {\n        forest_flag &= uf.merge(e.from, e.to);\n\n     \
-    \   G[e.from].emplace_back(e);\n        if (!is_directed && e.from != e.to)\n\
-    \            G[e.to].emplace_back(e.reverse());\n\n        if constexpr (is_directed)\
-    \ {\n            E.emplace_back(e);\n        } else {\n            E.emplace_back(e.minmax());\n\
-    \        }\n        W += e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E\
-    \ id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\
-    \u632F\u3089\u308C\u308B\n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\
-    \u30E9\u30FC\n     */\n    void add_edge(int from, int to, WEIGHT cost) {\n  \
-    \      static_assert(!std::is_same<WEIGHT, int>::value);\n        add_edge({from,\
-    \ to, cost, (int)E.size()});\n    }\n\n    /**\n     * @attention \u8FBA\u306E\
-    \ id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\
-    \u632F\u3089\u308C\u308B\n     * @attention WEIGHT \u304C int \u4EE5\u5916\u3060\
-    \u3068\u30A8\u30E9\u30FC\n     */\n    void add_edge(int from, int to) {\n   \
-    \     static_assert(std::is_same<WEIGHT, int>::value);\n        add_edge({from,\
-    \ to, (int)E.size()});\n    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\
-    \u9023\u7D50\u306A\u30B0\u30E9\u30D5\u306B\u5206\u3051\u3066\u30EA\u30B9\u30C8\
-    \u306B\u3057\u3066\u8FD4\u3059\n     * @example auto[Gs, gr, nd] = G.decompose();\n\
-    \     * @returns\n     * 1.\u30B0\u30E9\u30D5\u306E\u30EA\u30B9\u30C8\n     *\
-    \ 2.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\u30EA\u30B9\u30C8\u306E\
-    \u4F55\u756A\u76EE\u306B\u5C5E\u3059\u308B\u304B\n     * 3.\u5404\u30CE\u30FC\u30C9\
-    \u304C\u30B0\u30E9\u30D5\u306E\u3069\u306E\u30CE\u30FC\u30C9\u306B\u306A\u3063\
-    \u3066\u3044\u308B\u304B\n     */\n    std::tuple<std::vector<graph>, std::vector<int>,\
-    \ std::vector<int>>\n    decompose() const {\n        std::vector<graph> Gs(\n\
-    \            uf.count_groups());\n        std::vector<std::vector<int>> groups(uf.all_groups());\n\
+    \  bool are_connected(int x, int y) const { return uf.same(x, y); }\n\n    /**\n\
+    \     * @return \u9023\u7D50\u6210\u5206\u306E\u6570\n     */\n    int count_connected_components()\
+    \ const { return uf.count_groups(); }\n\n    /**\n     * @return \u9023\u7D50\u6210\
+    \u5206\u306E\u30EA\u30B9\u30C8\u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>>\
+    \ weakly_connected_components() const {\n        return uf.all_groups();\n   \
+    \ }\n\n    /**\n     * @return \u6728\u304B\n     */\n    bool is_tree() const\
+    \ { return forest_flag && uf.count_groups() == 1; }\n\n    /**\n     * @return\
+    \ \u68EE\u304B\n     */\n    bool is_forest() const { return forest_flag; }\n\n\
+    \    /**\n     * @return \u30B0\u30E9\u30D5\u306E\u91CD\u307F\n     */\n    WEIGHT\
+    \ weight() const { return W; }\n\n    /**\n     * @param e \u8FBA\n     * @attention\
+    \ \u6E21\u3057\u305F\u8FBA\u306E id \u306F\u4FDD\u6301\u3055\u308C\u308B\n   \
+    \  */\n    void add_edge(const edge<WEIGHT> &e) {\n        forest_flag &= uf.merge(e.from,\
+    \ e.to);\n\n        G[e.from].emplace_back(e);\n        if (!is_directed && e.from\
+    \ != e.to)\n            G[e.to].emplace_back(e.reverse());\n\n        if constexpr\
+    \ (is_directed) {\n            E.emplace_back(e);\n        } else {\n        \
+    \    E.emplace_back(e.minmax());\n        }\n        W += e.cost;\n    }\n\n \
+    \   /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\
+    \u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\n     * @attention\
+    \ WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\u30FC\n     */\n    void add_edge(int\
+    \ from, int to, WEIGHT cost) {\n        static_assert(!std::is_same<WEIGHT, int>::value);\n\
+    \        add_edge({from, to, cost, (int)E.size()});\n    }\n\n    /**\n     *\
+    \ @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\
+    \u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\n     * @attention WEIGHT \u304C\
+    \ int \u4EE5\u5916\u3060\u3068\u30A8\u30E9\u30FC\n     */\n    void add_edge(int\
+    \ from, int to) {\n        static_assert(std::is_same<WEIGHT, int>::value);\n\
+    \        add_edge({from, to, (int)E.size()});\n    }\n\n    /**\n     * @brief\
+    \ \u30B0\u30E9\u30D5\u3092\u9023\u7D50\u306A\u30B0\u30E9\u30D5\u306B\u5206\u3051\
+    \u3066\u30EA\u30B9\u30C8\u306B\u3057\u3066\u8FD4\u3059\n     * @example auto[Gs,\
+    \ gr, nd] = G.decompose();\n     * @returns\n     * 1.\u30B0\u30E9\u30D5\u306E\
+    \u30EA\u30B9\u30C8\n     * 2.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\
+    \u30EA\u30B9\u30C8\u306E\u4F55\u756A\u76EE\u306B\u5C5E\u3059\u308B\u304B\n   \
+    \  * 3.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\u3069\u306E\u30CE\
+    \u30FC\u30C9\u306B\u306A\u3063\u3066\u3044\u308B\u304B\n     */\n    std::tuple<std::vector<graph>,\
+    \ std::vector<int>, std::vector<int>>\n    decompose() const {\n        std::vector<graph>\
+    \ Gs(uf.count_groups());\n        std::vector<std::vector<int>> groups(uf.all_groups());\n\
     \        std::vector<int> group_id(N), node_id(N);\n        for (int i = 0; i\
     \ < (int)groups.size(); i++) {\n            Gs[i].expand(groups[i].size());\n\
     \            for (int j = 0; j < (int)groups[i].size(); j++) {\n             \
@@ -270,9 +269,10 @@ data:
     \ std::move(group_id),\n                               std::move(node_id));\n\
     \    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\
     \u306B\u5909\u63DB\n     * @param invalid \u8FBA\u306E\u306A\u3044\u3068\u304D\
-    \u306E\u5024\n     * @attention G \u306B\u81EA\u5DF1\u30EB\u30FC\u30D7\u304C\u542B\
-    \u307E\u308C\u3066\u3044\u306A\u3044\u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\
-    \u306F 0\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0) const {\n\
+    \u306E\u5024\n     * @attention \u81EA\u5DF1\u30EB\u30FC\u30D7\u304C\u542B\u307E\
+    \u308C\u3066\u3044\u306A\u3044\u9650\u308A\u3001\u5BFE\u89D2\u6210\u5206\u306F\
+    \ 0\n     * @attention \u591A\u91CD\u8FBA\u3092\u6301\u305F\u306A\u3044\u3068\u4EEE\
+    \u5B9A\n     */\n    matrix<WEIGHT> to_adjajency(WEIGHT invalid = 0) const {\n\
     \        matrix<WEIGHT> ret(N, N, invalid);\n        for (int i = 0; i < N; i++)\n\
     \            ret(i, i) = 0;\n        for (int i = 0; i < N; i++)\n           \
     \ for (auto &e : G[i])\n                ret(i, e.to) = e.cost;\n        return\
@@ -331,20 +331,38 @@ data:
     \        // Dijkstra's algorithm\n            Dijkstra_queue q;\n            q.push({0,\
     \ start_node});\n            reset_visited_flag(start_node);\n            run_Dijkstra(dist,\
     \ q);\n        }\n\n        for (auto &x : dist)\n            if (x == std::numeric_limits<WEIGHT>::max())\n\
-    \                x = invalid;\n        return dist;\n    }\n\n    /**\n     *\
-    \ @brief \u5FA9\u5143\u4ED8\u304D\u6700\u77ED\u7D4C\u8DEF\n     * @attention \u5230\
-    \u9054\u53EF\u80FD\u3067\u306A\u3044\u3068\u304D\u3001\u7A7A\u306E\u914D\u5217\
-    \u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>> shortest_path(int start_node,\
-    \ int end_node) {\n        if (start_node == end_node)\n            return {};\n\
-    \n        auto dist = distances(start_node, std::numeric_limits<WEIGHT>::max());\n\
-    \        if (dist[end_node] == std::numeric_limits<WEIGHT>::max())\n         \
-    \   return {};\n\n        auto R(this->reverse());\n        reset_visited_flag(end_node);\n\
-    \        visited[end_node] = true;\n\n        int cu = end_node;\n        std::vector<edge<WEIGHT>>\
-    \ route;\n        while (cu != start_node) {\n            for (auto e : R[cu])\
-    \ {\n                if (visited[e.to])\n                    continue;\n     \
-    \           if (dist[cu] - e.cost == dist[e.to]) {\n                    visited[cu\
-    \ = e.to] = true;\n                    route.push_back(e.reverse());\n       \
-    \             break;\n                }\n            }\n        }\n        std::reverse(route.begin(),\
+    \                x = invalid;\n        return dist;\n    }\n\n  public:\n    /**\n\
+    \     * @brief \u6700\u77ED\u8DDD\u96E2\u3092\u8A08\u7B97\u3059\u308B\n     *\
+    \ @param start_nodes \u59CB\u70B9\u306E\u30EA\u30B9\u30C8\n     * @param invalid\
+    \ \u5230\u9054\u4E0D\u80FD\u306A\u9802\u70B9\u306B\u683C\u7D0D\u3055\u308C\u308B\
+    \u5024\n     * @return \u5404\u30CE\u30FC\u30C9\u307E\u3067\u306E\u6700\u77ED\u8DDD\
+    \u96E2\u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<WEIGHT> distances(const\
+    \ std::vector<int> &start_nodes,\n                                  WEIGHT invalid)\
+    \ const {\n        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());\n\
+    \        for (auto &x : start_nodes)\n            dist[x] = 0;\n\n        if constexpr\
+    \ (std::is_same<WEIGHT, int>::value) {\n            // BFS algorithm\n       \
+    \     std::queue<int> q;\n            for (auto &x : start_nodes)\n          \
+    \      q.push(x);\n            run_bfs(dist, q);\n        } else {\n         \
+    \   // Dijkstra's algorithm\n            Dijkstra_queue q;\n            std::set<int>\
+    \ st;\n            for (auto &x : start_nodes) {\n                q.push({0, x});\n\
+    \                st.insert(uf.leader(x));\n            }\n            for (auto\
+    \ &x : st) {\n                reset_visited_flag(x);\n            }\n        \
+    \    run_Dijkstra(dist, q);\n        }\n\n        for (auto &x : dist)\n     \
+    \       if (x == std::numeric_limits<WEIGHT>::max())\n                x = invalid;\n\
+    \        return dist;\n    }\n\n    /**\n     * @brief \u5FA9\u5143\u4ED8\u304D\
+    \u6700\u77ED\u7D4C\u8DEF\n     * @attention \u5230\u9054\u53EF\u80FD\u3067\u306A\
+    \u3044\u3068\u304D\u3001\u7A7A\u306E\u914D\u5217\u3067\u8FD4\u308B\n     */\n\
+    \    std::vector<edge<WEIGHT>> shortest_path(int start_node, int end_node) {\n\
+    \        if (start_node == end_node)\n            return {};\n\n        auto dist\
+    \ = distances(start_node, std::numeric_limits<WEIGHT>::max());\n        if (dist[end_node]\
+    \ == std::numeric_limits<WEIGHT>::max())\n            return {};\n\n        auto\
+    \ R(this->reverse());\n        reset_visited_flag(end_node);\n        visited[end_node]\
+    \ = true;\n\n        int cu = end_node;\n        std::vector<edge<WEIGHT>> route;\n\
+    \        while (cu != start_node) {\n            for (auto e : R[cu]) {\n    \
+    \            if (visited[e.to])\n                    continue;\n             \
+    \   if (dist[cu] - e.cost == dist[e.to]) {\n                    visited[cu = e.to]\
+    \ = true;\n                    route.push_back(e.reverse());\n               \
+    \     break;\n                }\n            }\n        }\n        std::reverse(route.begin(),\
     \ route.end());\n        return route;\n    }\n\n    WEIGHT diameter() const {\n\
     \        static_assert(!is_directed);\n        assert(is_tree());\n        std::vector<WEIGHT>\
     \ dist(distances(0, -1));\n        dist = distances(\n            std::max_element(dist.begin(),\
@@ -366,25 +384,26 @@ data:
     \    std::sort(tmp.begin(), tmp.end());\n        for (auto &e : tmp)\n       \
     \     if (!ret.are_connected(e.from, e.to))\n                ret.add_edge(e);\n\
     \        return ret;\n    }\n\n  private:\n    int run_lowlink(int idx, int k,\
-    \ int par, std::vector<int> &ord, std::vector<int> &low,\n        std::vector<edge<WEIGHT>>\
-    \ &brds, std::vector<int> &apts) {\n        visited[idx] = true;\n        ord[idx]\
-    \ = k++;\n        low[idx] = ord[idx];\n        bool is_apt = false;\n       \
-    \ int cnt = 0;\n        for(auto &e : G[idx]) {\n            if(!visited[e.to])\
-    \ {\n                ++cnt;\n                k = run_lowlink(e.to, k, idx, ord,\
-    \ low, brds, apts);\n                low[idx] = std::min(low[idx], low[e.to]);\n\
-    \                is_apt |= ~par && low[e.to] >= ord[idx];\n                if(ord[idx]\
-    \ < low[e.to]) {\n                    brds.emplace_back(e.minmax());\n       \
-    \         }\n            } else if(e.to != par) {\n                low[idx] =\
-    \ std::min(low[idx], ord[e.to]);\n            }\n        }\n        is_apt |=\
-    \ par == -1 && cnt > 1;\n        if(is_apt) apts.push_back(idx);\n        return\
-    \ k;   \n    }\n\n  public:\n    std::pair<std::vector<edge<WEIGHT>>, std::vector<int>>\
+    \ int par, std::vector<int> &ord,\n                    std::vector<int> &low,\
+    \ std::vector<edge<WEIGHT>> &brds,\n                    std::vector<int> &apts)\
+    \ {\n        visited[idx] = true;\n        ord[idx] = k++;\n        low[idx] =\
+    \ ord[idx];\n        bool is_apt = false;\n        int cnt = 0;\n        for (auto\
+    \ &e : G[idx]) {\n            if (!visited[e.to]) {\n                ++cnt;\n\
+    \                k = run_lowlink(e.to, k, idx, ord, low, brds, apts);\n      \
+    \          low[idx] = std::min(low[idx], low[e.to]);\n                is_apt |=\
+    \ ~par && low[e.to] >= ord[idx];\n                if (ord[idx] < low[e.to]) {\n\
+    \                    brds.emplace_back(e.minmax());\n                }\n     \
+    \       } else if (e.to != par) {\n                low[idx] = std::min(low[idx],\
+    \ ord[e.to]);\n            }\n        }\n        is_apt |= par == -1 && cnt >\
+    \ 1;\n        if (is_apt)\n            apts.push_back(idx);\n        return k;\n\
+    \    }\n\n  public:\n    std::pair<std::vector<edge<WEIGHT>>, std::vector<int>>\
     \ lowlink() {\n        static_assert(!is_directed);\n        std::vector<edge<WEIGHT>>\
     \ brds;\n        std::vector<int> apts, ord(N, 0), low(N, 0);\n        reset_visited_flag();\n\
-    \        int k = 0;\n        for(int i = 0; i < N; i++) {\n            if(!visited[i])\
-    \ k = run_lowlink(i, k, -1, ord, low, brds, apts);\n        }\n        return\
-    \ {brds, apts};\n    }\n\n    void print() const {\n        std::cout << this->N\
-    \ << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT> &e\
-    \ : this->E)\n            std::cout << e << std::endl;\n    }\n\n\n};\n#line 6\
+    \        int k = 0;\n        for (int i = 0; i < N; i++) {\n            if (!visited[i])\n\
+    \                k = run_lowlink(i, k, -1, ord, low, brds, apts);\n        }\n\
+    \        return {brds, apts};\n    }\n\n    void print() const {\n        std::cout\
+    \ << this->N << \" \" << this->E.size() << std::endl;\n        for (const edge<WEIGHT>\
+    \ &e : this->E)\n            std::cout << e << std::endl;\n    }\n};\n#line 6\
     \ \"graph/Manhattan_minimum_spanning_tree.hpp\"\n\n/**\n * @see https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp\n\
     \ * @brief \u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
     \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002\n * @param xs \u5404\
@@ -436,7 +455,7 @@ data:
   isVerificationFile: true
   path: test/manhattan-mst.test.cpp
   requiredBy: []
-  timestamp: '2023-08-12 19:42:44+09:00'
+  timestamp: '2023-08-15 19:52:01+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/manhattan-mst.test.cpp

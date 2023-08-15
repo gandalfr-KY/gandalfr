@@ -70,12 +70,14 @@ data:
     \ 0 <= val < mod \u306B\u4FDD\u305F\u308C\u308B\n    friend d_mod_integer operator+(const\
     \ d_mod_integer &a) { return a; }\n    friend d_mod_integer operator-(const d_mod_integer\
     \ &a) { return -a.val; }\n    friend d_mod_integer operator+(const d_mod_integer\
-    \ &a, const d_mod_integer &b) {\n        return d_mod_integer(a.val + b.val);\n\
-    \    }\n    friend d_mod_integer operator-(const d_mod_integer &a, const d_mod_integer\
-    \ &b) {\n        return d_mod_integer(a.val - b.val);\n    }\n    friend d_mod_integer\
-    \ operator*(const d_mod_integer &a, const d_mod_integer &b) {\n        return\
-    \ d_mod_integer(a.val * b.val);\n    }\n    friend d_mod_integer operator/(const\
-    \ d_mod_integer &a, const d_mod_integer &b) {\n        return d_mod_integer((a.val\
+    \ &a,\n                                   const d_mod_integer &b) {\n        return\
+    \ d_mod_integer(a.val + b.val);\n    }\n    friend d_mod_integer operator-(const\
+    \ d_mod_integer &a,\n                                   const d_mod_integer &b)\
+    \ {\n        return d_mod_integer(a.val - b.val);\n    }\n    friend d_mod_integer\
+    \ operator*(const d_mod_integer &a,\n                                   const\
+    \ d_mod_integer &b) {\n        return d_mod_integer(a.val * b.val);\n    }\n \
+    \   friend d_mod_integer operator/(const d_mod_integer &a,\n                 \
+    \                  const d_mod_integer &b) {\n        return d_mod_integer((a.val\
     \ * mod_inverse(b.val, mod)) % mod);\n    }\n\n    friend bool operator==(const\
     \ d_mod_integer &a, const d_mod_integer &b) {\n        return a.val == b.val;\n\
     \    }\n    friend bool operator!=(const d_mod_integer &a, const d_mod_integer\
@@ -184,7 +186,7 @@ data:
   isVerificationFile: true
   path: test/ntl-1-d.test.cpp
   requiredBy: []
-  timestamp: '2023-08-11 23:12:11+09:00'
+  timestamp: '2023-08-15 19:52:01+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/ntl-1-d.test.cpp

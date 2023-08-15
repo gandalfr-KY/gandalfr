@@ -36,7 +36,7 @@ data:
     \u5F97\u308B\n    T get(int pos) {\n        assert(0 <= pos && pos < vec_size);\n\
     \        return v[pos + n - 1];\n    }\n\n    void print() {\n        for (int\
     \ i = 0; i < vec_size; i++) {\n            std::cout << get(i) << (i == vec_size\
-    \ - 1 ? \"\" : \" \");\n        }\n        std::cout << std::endl;\n    }\n\n\n\
+    \ - 1 ? \"\" : \" \");\n        }\n        std::cout << std::endl;\n    }\n\n\
     \    void debug() {\n        int prv = 0;\n        for (int sz = 1; prv < 2 *\
     \ n - 1; sz *= 2) {\n            for (int i = 0; i < sz; i++) {\n            \
     \    std::cout << v[i + prv] << \" \";\n            }\n            std::cout <<\
@@ -85,7 +85,7 @@ data:
     \u5F97\u308B\n    T get(int pos) {\n        assert(0 <= pos && pos < vec_size);\n\
     \        return v[pos + n - 1];\n    }\n\n    void print() {\n        for (int\
     \ i = 0; i < vec_size; i++) {\n            std::cout << get(i) << (i == vec_size\
-    \ - 1 ? \"\" : \" \");\n        }\n        std::cout << std::endl;\n    }\n\n\n\
+    \ - 1 ? \"\" : \" \");\n        }\n        std::cout << std::endl;\n    }\n\n\
     \    void debug() {\n        int prv = 0;\n        for (int sz = 1; prv < 2 *\
     \ n - 1; sz *= 2) {\n            for (int i = 0; i < sz; i++) {\n            \
     \    std::cout << v[i + prv] << \" \";\n            }\n            std::cout <<\
@@ -111,7 +111,7 @@ data:
   isVerificationFile: false
   path: data_structure/segment_tree.hpp
   requiredBy: []
-  timestamp: '2023-08-15 16:09:05+09:00'
+  timestamp: '2023-08-15 19:52:01+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/segment_tree.hpp

@@ -76,7 +76,7 @@ data:
     \ i = 0; i < N; i++)\n        ord[cmp2[i]].push_back(i);\n    for (int i = N -\
     \ 1; i >= 0; i--) {\n        int tmp = ord[cmp1[i]].back();\n        ord[cmp1[i]].pop_back();\n\
     \        cmp1[i] = tmp;\n    }\n    return inversion(cmp1.begin(), cmp1.end());\n\
-    }\n#line 7 \"other/io_supporter.hpp\"\n\ntemplate <typename T>\nstd::ostream &operator<<(std::ostream\
+    }\n#line 8 \"other/io_supporter.hpp\"\n\ntemplate <typename T>\nstd::ostream &operator<<(std::ostream\
     \ &os, const std::vector<T> &v) {\n    for (int i = 0; i < (int)v.size(); i++)\n\
     \        os << v[i] << (i + 1 != (int)v.size() ? \" \" : \"\");\n    return os;\n\
     }\ntemplate <typename T>\nstd::ostream &operator<<(std::ostream &os, const std::set<T>\
@@ -120,7 +120,7 @@ data:
   isVerificationFile: true
   path: test/alds1-5-d.test.cpp
   requiredBy: []
-  timestamp: '2023-07-20 02:56:32+09:00'
+  timestamp: '2023-08-16 15:54:22+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/alds1-5-d.test.cpp

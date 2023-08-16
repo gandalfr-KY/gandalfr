@@ -35,7 +35,7 @@ data:
     \ dp.end(), *arg_it);\n        else\n            dp_it = std::upper_bound(dp.begin(),\
     \ dp.end(), *arg_it);\n        if (dp_it != dp.end())\n            *dp_it = *arg_it;\n\
     \        else\n            dp.push_back(*arg_it);\n    }\n    return dp.size();\n\
-    }\n#line 7 \"other/io_supporter.hpp\"\n\ntemplate <typename T>\nstd::ostream &operator<<(std::ostream\
+    }\n#line 8 \"other/io_supporter.hpp\"\n\ntemplate <typename T>\nstd::ostream &operator<<(std::ostream\
     \ &os, const std::vector<T> &v) {\n    for (int i = 0; i < (int)v.size(); i++)\n\
     \        os << v[i] << (i + 1 != (int)v.size() ? \" \" : \"\");\n    return os;\n\
     }\ntemplate <typename T>\nstd::ostream &operator<<(std::ostream &os, const std::set<T>\
@@ -73,7 +73,7 @@ data:
   isVerificationFile: true
   path: test/dpl-1-d.test.cpp
   requiredBy: []
-  timestamp: '2023-06-19 01:54:04+09:00'
+  timestamp: '2023-08-16 15:54:22+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/dpl-1-d.test.cpp

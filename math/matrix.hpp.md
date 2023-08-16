@@ -6,9 +6,6 @@ data:
     path: graph/Manhattan_minimum_spanning_tree.hpp
     title: "\u30DE\u30F3\u30CF\u30C3\u30BF\u30F3\u8DDD\u96E2\u3067\u6700\u5C0F\u91CD\
       \u307F\u5168\u57DF\u6728\u3092\u69CB\u6210\u3059\u308B\u3002"
-  - icon: ':heavy_check_mark:'
-    path: graph/Warshall_Floyd.hpp
-    title: graph/Warshall_Floyd.hpp
   - icon: ':warning:'
     path: graph/doubling.hpp
     title: graph/doubling.hpp
@@ -23,10 +20,6 @@ data:
     title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
       \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
   - icon: ':warning:'
-    path: graph/lowlink.hpp
-    title: "\u5358\u7D14\u7121\u5411\u30B0\u30E9\u30D5\u306E\u95A2\u7BC0\u70B9\u30FB\
-      \u6A4B\u3092\u6C42\u3081\u308B"
-  - icon: ':warning:'
     path: graph/traveling_salesman.hpp
     title: graph/traveling_salesman.hpp
   - icon: ':warning:'
@@ -39,7 +32,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-1-c.test.cpp
     title: test/grl-1-c.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-2-a.test.cpp
     title: test/grl-2-a.test.cpp
   - icon: ':heavy_check_mark:'
@@ -289,10 +282,8 @@ data:
   path: math/matrix.hpp
   requiredBy:
   - other/random.hpp
-  - graph/Warshall_Floyd.hpp
   - graph/graph.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
-  - graph/lowlink.hpp
   - graph/doubling.hpp
   - graph/traveling_salesman.hpp
   - graph/lowest_common_ancestor.hpp

@@ -4,6 +4,7 @@
 #include "graph.hpp"
 
 /**
+ * @see
  * @brief 単純無向グラフの関節点・橋を求める
  * @attention 連結でないときの verify ができてない。多分あってるけど...
  */

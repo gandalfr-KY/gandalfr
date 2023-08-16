@@ -1,6 +1,4 @@
 #include "graph/is_isomorphic.hpp"
-#include "graph/lowlink.hpp"
-#include "graph/Warshall_Floyd.hpp"
 #include "graph/lowest_common_ancestor.hpp"
 #include "graph/traveling_salesman.hpp"
 #include "graph/strongly_connected_components.hpp"

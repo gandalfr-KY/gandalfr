@@ -25,6 +25,7 @@ template <typename WEIGHT, bool is_directed> class graph {
 
     mutable std::vector<bool> visited; // dfs / bfs のための領域
     bool forest_flag = true;
+    const WEIGHT WEIGHT_MAX = std::numeric_limits<WEIGHT>::max();
 
     void reset_visited_flag(int node) const {
         for (int x : uf.contained_group(node))
@@ -279,7 +280,7 @@ template <typename WEIGHT, bool is_directed> class graph {
             int cu = q.front();
             q.pop();
             for (auto &e : G[cu]) {
-                if (dist[e.to] != std::numeric_limits<WEIGHT>::max())
+                if (dist[e.to] != WEIGHT_MAX)
                     continue;
                 dist[e.to] = dist[cu] + 1;
                 q.push(e.to);
@@ -315,7 +316,7 @@ template <typename WEIGHT, bool is_directed> class graph {
      * @return 各ノードまでの最短距離のリスト
      */
     std::vector<WEIGHT> distances(int start_node, WEIGHT invalid) const {
-        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());
+        std::vector<WEIGHT> dist(N, WEIGHT_MAX);
         dist[start_node] = 0;
 
         if constexpr (std::is_same<WEIGHT, int>::value) {
@@ -332,7 +333,7 @@ template <typename WEIGHT, bool is_directed> class graph {
         }
 
         for (auto &x : dist)
-            if (x == std::numeric_limits<WEIGHT>::max())
+            if (x == WEIGHT_MAX)
                 x = invalid;
         return dist;
     }
@@ -346,7 +347,7 @@ template <typename WEIGHT, bool is_directed> class graph {
      */
     std::vector<WEIGHT> distances(const std::vector<int> &start_nodes,
                                   WEIGHT invalid) const {
-        std::vector<WEIGHT> dist(N, std::numeric_limits<WEIGHT>::max());
+        std::vector<WEIGHT> dist(N, WEIGHT_MAX);
         for (auto &x : start_nodes)
             dist[x] = 0;
 
@@ -371,10 +372,27 @@ template <typename WEIGHT, bool is_directed> class graph {
         }
 
         for (auto &x : dist)
-            if (x == std::numeric_limits<WEIGHT>::max())
+            if (x == WEIGHT_MAX)
                 x = invalid;
         return dist;
     }
+
+    matrix<WEIGHT> distances_from_all_nodes(WEIGHT invalid = -1) {
+        auto mt(to_adjajency(WEIGHT_MAX));
+
+        int N = mt.size_H();
+        for (int k = 0; k < N; k++)         // 経由する頂点
+            for (int i = 0; i < N; i++)     // 始点
+                for (int j = 0; j < N; j++) // 終点
+                    if (mt(i, k) != WEIGHT_MAX && mt(k, j) != WEIGHT_MAX)
+                        mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k, j));
+
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < N; ++j)
+                if (mt(i, j) == WEIGHT_MAX) mt(i, j) = invalid;
+        return mt;
+    }
+
 
     /**
      * @brief 復元付き最短経路
@@ -384,8 +402,8 @@ template <typename WEIGHT, bool is_directed> class graph {
         if (start_node == end_node)
             return {};
 
-        auto dist = distances(start_node, std::numeric_limits<WEIGHT>::max());
-        if (dist[end_node] == std::numeric_limits<WEIGHT>::max())
+        auto dist = distances(start_node, WEIGHT_MAX);
+        if (dist[end_node] == WEIGHT_MAX)
             return {};
 
         auto R(this->reverse());
@@ -455,7 +473,7 @@ template <typename WEIGHT, bool is_directed> class graph {
     /**
      * @return 最小全域森
      */
-    graph minimum_spanning_tree() const {
+    graph minimum_spanning_forest() const {
         static_assert(!is_directed);
         graph ret(N);
         std::vector<edge<WEIGHT>> tmp(edges());
@@ -467,6 +485,10 @@ template <typename WEIGHT, bool is_directed> class graph {
     }
 
   private:
+    /**
+     * @see https://ei1333.github.io/luzhiled/snippets/graph/lowlink.html
+     * @attention 非連結でも動作
+     */
     int run_lowlink(int idx, int k, int par, std::vector<int> &ord,
                     std::vector<int> &low, std::vector<edge<WEIGHT>> &brds,
                     std::vector<int> &apts) {

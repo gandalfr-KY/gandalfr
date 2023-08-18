@@ -15,7 +15,7 @@ int main(void){
     //calculate
 
     cout << N << ":";
-    for(auto p : prime_number_utility::factorize(N)){
+    for(auto p : Eratosthenes::factorize(N)){
         rep(i,0,p.second) cout << " " << p.first;
     }
     cout << endl;

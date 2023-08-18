@@ -2,8 +2,9 @@
 #include <algorithm>
 #include <vector>
 
-/* 約数昇順列挙
- * O(√N)
+/**
+ * @brief 約数昇順列挙
+ * @attention O(√N)
  */
 std::vector<long long> divisors(long long N) {
     std::vector<long long> ret;

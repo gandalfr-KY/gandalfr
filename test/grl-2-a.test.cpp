@@ -20,6 +20,6 @@ int main(void){
  
     //calculate
     
-    cout << G.minimum_spanning_tree().weight() << endl;
+    cout << G.minimum_spanning_forest().weight() << endl;
  
 }

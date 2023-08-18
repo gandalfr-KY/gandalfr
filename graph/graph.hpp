@@ -389,10 +389,10 @@ template <typename WEIGHT, bool is_directed> class graph {
 
         for (int i = 0; i < N; ++i)
             for (int j = 0; j < N; ++j)
-                if (mt(i, j) == WEIGHT_MAX) mt(i, j) = invalid;
+                if (mt(i, j) == WEIGHT_MAX)
+                    mt(i, j) = invalid;
         return mt;
     }
-
 
     /**
      * @brief 復元付き最短経路

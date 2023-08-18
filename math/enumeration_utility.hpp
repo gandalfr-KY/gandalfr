@@ -40,9 +40,21 @@ long long power(long long x, long long n, int MOD) {
     return ret;
 }
 
+long long power(long long x, long long n, long long MOD) {
+    long long ret = 1;
+    x %= MOD;
+    while (n > 0) {
+        if (n & 1)
+            ret = (__int128_t)ret * x % MOD;
+        x = (__int128_t)x * x % MOD;
+        n >>= 1;
+    }
+    return ret;
+}
+
 template <class T> class factorial {
   private:
-    static inline std::vector<T> fact{1};
+    static inline std::vector<T> fact{T(1)};
 
   public:
     factorial() = delete;

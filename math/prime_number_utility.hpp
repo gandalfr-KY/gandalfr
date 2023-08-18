@@ -1,94 +1,165 @@
 #pragma once
+#include <assert.h>
 #include <math.h>
 
 #include <vector>
+
+#include "enumeration_utility.hpp"
+
+/**
+ * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000
+ */
+bool MillerRabin(long long N, const std::vector<long long> &A) {
+    long long s = 0, d = N - 1;
+    while (d % 2 == 0) {
+        ++s;
+        d >>= 1;
+    }
+    for (auto a : A) {
+        if (N <= a)
+            return true;
+        long long t, x = power(a, d, N);
+        if (x != 1) {
+            for (t = 0; t < s; ++t) {
+                if (x == N - 1)
+                    break;
+                x = (__int128_t)x * x % N;
+            }
+            if (t == s)
+                return false;
+        }
+    }
+    return true;
+}
 
 /**
  * @brief 素数判定や列挙をサポートするクラス
  * @brief 素数篩を固定サイズで構築、それをもとに素数列挙などを行う
  */
-class prime_number_utility {
+class Eratosthenes {
   protected:
-    static const int init_seive_size = (1 << 24), sqrt_size = (1 << 13);
+    static inline int seive_size = (1 << 24);
     static inline std::vector<bool> sieve;
-    static inline std::vector<int> primes{2, 3};
+    static inline std::vector<int> primes{2, 3}, movius, min_factor;
 
-  public:
-    prime_number_utility() = delete;
-    ~prime_number_utility() = delete;
-
-    /**
-     * @brief n が素数かを判定
-     * @attention if n < (1 << 26) : O(1)
-     * @attention else : O(√n)
-     */
-    static bool is_prime(long long n) {
-        if (sieve.empty()) { // 篩が未構築なら
-            sieve.assign(init_seive_size, true);
-            sieve[0] = sieve[1] = false;
-            for (int i = 4; i < init_seive_size; i += 2)
-                sieve[i] = false;
-            for (int i = 3; i <= sqrt_size; i += 2) {
-                if (!sieve[i])
-                    continue;
-                for (int j = i * 2; j < init_seive_size; j += i)
-                    sieve[j] = false;
-            }
-        }
-        if ((n & 1) == 0)
-            return 0;
-        // n が小さいとき、篩を参照
-        if (n < init_seive_size)
-            return sieve[n];
-        // n が大きいとき、O(√n) 試し割りで計算
-        long long sqrt_n = std::ceil(std::sqrt(n)) + 1;
-        for (long long i = 3; i <= sqrt_n; i += 2) {
+    static void make_table() {
+        sieve.assign(seive_size, true);
+        sieve[0] = sieve[1] = false;
+        movius.assign(seive_size, 1);
+        min_factor.assign(seive_size, 1);
+        for (int i = 2; i <= seive_size; ++i) {
             if (!sieve[i])
                 continue;
-            if (n % i == 0)
-                return false;
+            movius[i] = -1;
+            min_factor[i] = i;
+            primes.push_back(i);
+            for (int j = i * 2; j < seive_size; j += i) {
+                sieve[j] = false;
+                movius[j] = ((j / i) % i == 0 ? 0 : -movius[j]);
+                if (min_factor[j] == 1)
+                    min_factor[j] = i;
+            }
         }
-        return true;
     }
 
-    static void expand_list(int siz) {
-        for (int i = primes.back() + 2; (int)primes.size() < siz; i += 2) {
-            if (is_prime(i))
-                primes.push_back(i);
-        }
-    }
-
-    // 素数のリストを、末尾の数が lim を超えるまで拡張
-    static void set_lower_limit(int lim) {
-        while (primes.back() < lim)
-            expand_list(primes.size() + 1);
-    }
-
-    /**
-     * @brief 素因数分解する
-     * @return prime_factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...}
-     * @attention prime_factorize(1) => {}
-     * @attention prime_factorize(0) => {{0, 1}}
-     */
-    static std::vector<std::pair<long long, int>> factorize(long long N) {
+    static std::vector<std::pair<long long, int>> fast_factorize(long long n) {
         std::vector<std::pair<long long, int>> ret;
-        set_lower_limit(ceil(sqrt(N)));
+        while (n > 1) {
+            if (ret.empty() || ret.back().first != min_factor[n]) {
+                ret.push_back({min_factor[n], 1});
+            } else {
+                ret.back().second++;
+            }
+            n /= min_factor[n];
+        }
+        return ret;
+    }
+
+    static std::vector<std::pair<long long, int>> naive_factorize(long long n) {
+        std::vector<std::pair<long long, int>> ret;
         for (long long p : primes) {
-            if (N == 1 || (__int128_t)p * p > N)
+            if (n == 1 || p * p > n)
                 break;
-            while (N % p == 0) {
+            while (n % p == 0) {
                 if (ret.empty() || ret.back().first != p)
                     ret.push_back({p, 1});
                 else
                     ret.back().second++;
-                N /= p;
+                n /= p;
             }
         }
-        if (N != 1)
-            ret.push_back({N, 1});
+        if (n != 1)
+            ret.push_back({n, 1});
         return ret;
     }
 
-    static const std::vector<int> &list() { return primes; }
-    static const std::vector<bool> &table() { return sieve; }
+  public:
+    Eratosthenes() = delete;
+    ~Eratosthenes() = delete;
+
+    static void set_init_size(int size) {
+        assert(sieve.empty());
+        seive_size = size;
+    }
+
+    /**
+     * @brief n が素数かを判定
+     * @attention if n < (1 << 24) : O(1)
+     * @attention else : O(log(N))
+     */
+    static bool is_prime(long long n) {
+        if (sieve.empty())
+            make_table();
+        assert(1 <= n);
+
+        if (n > 2 && (n & 1LL) == 0) {
+            return false;
+        } else if (n < seive_size) {
+            return sieve[n];
+        } else if (n < 4759123141LL) {
+            return MillerRabin(n, {2, 7, 61});
+        } else {
+            return MillerRabin(
+                n, {2, 325, 9375, 28178, 450775, 9780504, 1795265022});
+        }
+    }
+
+    /**
+     * @brief 素因数分解する
+     * @return factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...},
+     * @return factorize(1) => {}
+     * @attention if n < (1 << 24) : O(log(N))
+     * @attention if n < (1 << 24) : O(N^(3/2))
+     */
+    static std::vector<std::pair<long long, int>> factorize(long long n) {
+        if (sieve.empty())
+            make_table();
+        assert(1 <= n);
+
+        if (n < seive_size) {
+            return fast_factorize(n);
+        } else {
+            return naive_factorize(n);
+        }
+    }
+
+    static int Movius(int n) {
+        if (movius.empty())
+            make_table();
+        assert(1 <= n);
+        return movius.at(n);
+    }
+
+    /**
+     * @brief オイラーのトーシェント関数
+     */
+    long long totient(long long n) {
+        long long ret = 1;
+        for (auto [b, e] : factorize(n))
+            ret *= power(b, e - 1) * (b - 1);
+        return ret;
+    }
+
+
+    static int kth_prime(int k) { return primes.at(k); }
 };

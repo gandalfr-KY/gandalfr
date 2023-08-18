@@ -29,6 +29,7 @@ class my_multiset : public std::multiset<_Key, _Compare, _Alloc> {
     const _Key &front() const { return *this->begin(); }
     const _Key &back() const { return *--this->end(); }
     friend std::ostream &operator<<(std::ostream &os, const my_multiset &ms) {
+        if (ms.empty()) return os;
         auto it = ms.begin();
         os << *it;
         for (++it; it != ms.end(); ++it) {
@@ -37,3 +38,22 @@ class my_multiset : public std::multiset<_Key, _Compare, _Alloc> {
         return os;
     }
 };
+
+template <typename _Key, typename _Compare = std ::less<_Key>,
+          typename _Alloc = std ::allocator<_Key>>
+class my_set : public std::set<_Key, _Compare, _Alloc> {
+  public:
+    using std::set<_Key, _Compare, _Alloc>::set;
+    const _Key &front() const { return *this->begin(); }
+    const _Key &back() const { return *--this->end(); }
+    friend std::ostream &operator<<(std::ostream &os, const my_set &ms) {
+        if (ms.empty()) return os;
+        auto it = ms.begin();
+        os << *it;
+        for (++it; it != ms.end(); ++it) {
+            os << ' ' << *it;
+        }
+        return os;
+    }
+};
+

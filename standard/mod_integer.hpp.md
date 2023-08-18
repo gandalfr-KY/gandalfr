@@ -6,9 +6,9 @@ data:
     path: math/enumeration_utility.hpp
     title: math/enumeration_utility.hpp
   - icon: ':heavy_check_mark:'
-    path: math/totient.hpp
-    title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-      \u6570"
+    path: math/prime_number_utility.hpp
+    title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
+      \u3059\u308B\u30AF\u30E9\u30B9"
   - icon: ':warning:'
     path: standard/fraction.hpp
     title: standard/fraction.hpp
@@ -17,8 +17,8 @@ data:
     path: test/jsc2021-g.test.cpp
     title: test/jsc2021-g.test.cpp
   - icon: ':heavy_check_mark:'
-    path: test/ntl-1-d.test.cpp
-    title: test/ntl-1-d.test.cpp
+    path: test/ntl-1-a.test.cpp
+    title: test/ntl-1-a.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
   _verificationStatusIcon: ':question:'
@@ -180,14 +180,14 @@ data:
   isVerificationFile: false
   path: standard/mod_integer.hpp
   requiredBy:
-  - math/enumeration_utility.hpp
-  - math/totient.hpp
   - standard/fraction.hpp
+  - math/enumeration_utility.hpp
+  - math/prime_number_utility.hpp
   timestamp: '2023-08-15 19:52:01+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test/ntl-1-d.test.cpp
   - test/jsc2021-g.test.cpp
+  - test/ntl-1-a.test.cpp
 documentation_of: standard/mod_integer.hpp
 layout: document
 redirect_from:

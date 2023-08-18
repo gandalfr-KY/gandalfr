@@ -14,9 +14,9 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     links: []
-  bundledCode: "#line 2 \"other/io_supporter.hpp\"\n#include <deque>\n#include <set>\n\
-    #include <iostream>\n#include <queue>\n#include <string>\n#include <utility>\n\
-    \ntemplate <typename T>\nstd::ostream &operator<<(std::ostream &os, const std::vector<T>\
+  bundledCode: "#line 2 \"other/io_supporter.hpp\"\n#include <deque>\n#include <iostream>\n\
+    #include <queue>\n#include <set>\n#include <string>\n#include <utility>\n\ntemplate\
+    \ <typename T>\nstd::ostream &operator<<(std::ostream &os, const std::vector<T>\
     \ &v) {\n    for (int i = 0; i < (int)v.size(); i++)\n        os << v[i] << (i\
     \ + 1 != (int)v.size() ? \" \" : \"\");\n    return os;\n}\ntemplate <typename\
     \ T>\nstd::ostream &operator<<(std::ostream &os, const std::set<T> &st) {\n  \
@@ -36,8 +36,8 @@ data:
     \ (T &in : v)\n        is >> in;\n    return is;\n}\ntemplate <typename T1, typename\
     \ T2>\nstd::istream &operator>>(std::istream &is, std::pair<T1, T2> &p) {\n  \
     \  is >> p.first >> p.second;\n    return is;\n}\n"
-  code: "#pragma once\n#include <deque>\n#include <set>\n#include <iostream>\n#include\
-    \ <queue>\n#include <string>\n#include <utility>\n\ntemplate <typename T>\nstd::ostream\
+  code: "#pragma once\n#include <deque>\n#include <iostream>\n#include <queue>\n#include\
+    \ <set>\n#include <string>\n#include <utility>\n\ntemplate <typename T>\nstd::ostream\
     \ &operator<<(std::ostream &os, const std::vector<T> &v) {\n    for (int i = 0;\
     \ i < (int)v.size(); i++)\n        os << v[i] << (i + 1 != (int)v.size() ? \"\
     \ \" : \"\");\n    return os;\n}\ntemplate <typename T>\nstd::ostream &operator<<(std::ostream\
@@ -61,11 +61,11 @@ data:
   isVerificationFile: false
   path: other/io_supporter.hpp
   requiredBy: []
-  timestamp: '2023-08-16 15:54:22+09:00'
+  timestamp: '2023-08-18 16:17:38+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/dpl-1-d.test.cpp
   - test/alds1-5-d.test.cpp
+  - test/dpl-1-d.test.cpp
 documentation_of: other/io_supporter.hpp
 layout: document
 redirect_from:

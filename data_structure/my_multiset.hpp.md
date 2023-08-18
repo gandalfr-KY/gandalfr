@@ -20,9 +20,17 @@ data:
     \  this->erase(__x);\n            return ret;\n        }\n    }\n    const _Key\
     \ &front() const { return *this->begin(); }\n    const _Key &back() const { return\
     \ *--this->end(); }\n    friend std::ostream &operator<<(std::ostream &os, const\
-    \ my_multiset &ms) {\n        auto it = ms.begin();\n        os << *it;\n    \
-    \    for (++it; it != ms.end(); ++it) {\n            os << ' ' << *it;\n     \
-    \   }\n        return os;\n    }\n};\n"
+    \ my_multiset &ms) {\n        if (ms.empty()) return os;\n        auto it = ms.begin();\n\
+    \        os << *it;\n        for (++it; it != ms.end(); ++it) {\n            os\
+    \ << ' ' << *it;\n        }\n        return os;\n    }\n};\n\ntemplate <typename\
+    \ _Key, typename _Compare = std ::less<_Key>,\n          typename _Alloc = std\
+    \ ::allocator<_Key>>\nclass my_set : public std::set<_Key, _Compare, _Alloc> {\n\
+    \  public:\n    using std::set<_Key, _Compare, _Alloc>::set;\n    const _Key &front()\
+    \ const { return *this->begin(); }\n    const _Key &back() const { return *--this->end();\
+    \ }\n    friend std::ostream &operator<<(std::ostream &os, const my_set &ms) {\n\
+    \        if (ms.empty()) return os;\n        auto it = ms.begin();\n        os\
+    \ << *it;\n        for (++it; it != ms.end(); ++it) {\n            os << ' ' <<\
+    \ *it;\n        }\n        return os;\n    }\n};\n\n"
   code: "#pragma once\n\n#include <iostream>\n#include <set>\n\ntemplate <typename\
     \ _Key, typename _Compare = std ::less<_Key>,\n          typename _Alloc = std\
     \ ::allocator<_Key>>\nclass my_multiset : public std::multiset<_Key, _Compare,\
@@ -35,14 +43,22 @@ data:
     \            return ret;\n        }\n    }\n    const _Key &front() const { return\
     \ *this->begin(); }\n    const _Key &back() const { return *--this->end(); }\n\
     \    friend std::ostream &operator<<(std::ostream &os, const my_multiset &ms)\
-    \ {\n        auto it = ms.begin();\n        os << *it;\n        for (++it; it\
-    \ != ms.end(); ++it) {\n            os << ' ' << *it;\n        }\n        return\
-    \ os;\n    }\n};\n"
+    \ {\n        if (ms.empty()) return os;\n        auto it = ms.begin();\n     \
+    \   os << *it;\n        for (++it; it != ms.end(); ++it) {\n            os <<\
+    \ ' ' << *it;\n        }\n        return os;\n    }\n};\n\ntemplate <typename\
+    \ _Key, typename _Compare = std ::less<_Key>,\n          typename _Alloc = std\
+    \ ::allocator<_Key>>\nclass my_set : public std::set<_Key, _Compare, _Alloc> {\n\
+    \  public:\n    using std::set<_Key, _Compare, _Alloc>::set;\n    const _Key &front()\
+    \ const { return *this->begin(); }\n    const _Key &back() const { return *--this->end();\
+    \ }\n    friend std::ostream &operator<<(std::ostream &os, const my_set &ms) {\n\
+    \        if (ms.empty()) return os;\n        auto it = ms.begin();\n        os\
+    \ << *it;\n        for (++it; it != ms.end(); ++it) {\n            os << ' ' <<\
+    \ *it;\n        }\n        return os;\n    }\n};\n\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/my_multiset.hpp
   requiredBy: []
-  timestamp: '2023-08-15 19:52:01+09:00'
+  timestamp: '2023-08-18 16:17:38+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: data_structure/my_multiset.hpp

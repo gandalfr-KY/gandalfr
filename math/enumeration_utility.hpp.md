@@ -6,13 +6,13 @@ data:
     title: standard/mod_integer.hpp
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: math/totient.hpp
-    title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-      \u6570"
+    path: math/prime_number_utility.hpp
+    title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
+      \u3059\u308B\u30AF\u30E9\u30B9"
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
-    path: test/ntl-1-d.test.cpp
-    title: test/ntl-1-d.test.cpp
+    path: test/ntl-1-a.test.cpp
+    title: test/ntl-1-a.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -105,9 +105,13 @@ data:
     \ long power(long long x, long long n, int MOD) {\n    long long ret = 1;\n  \
     \  x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n            ret = ret *\
     \ x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n\
-    }\n\ntemplate <class T> class factorial {\n  private:\n    static inline std::vector<T>\
-    \ fact{1};\n\n  public:\n    factorial() = delete;\n    ~factorial() = delete;\n\
-    \    static T get(int n) {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
+    }\n\nlong long power(long long x, long long n, long long MOD) {\n    long long\
+    \ ret = 1;\n    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n         \
+    \   ret = (__int128_t)ret * x % MOD;\n        x = (__int128_t)x * x % MOD;\n \
+    \       n >>= 1;\n    }\n    return ret;\n}\n\ntemplate <class T> class factorial\
+    \ {\n  private:\n    static inline std::vector<T> fact{T(1)};\n\n  public:\n \
+    \   factorial() = delete;\n    ~factorial() = delete;\n    static T get(int n)\
+    \ {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
     \ * fact.size());\n        return fact[n];\n    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n\
     _mint (*_fact)(int) = factorial<_mint>::get;\n\ntemplate <class T> T permutation(int\
     \ n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
@@ -126,28 +130,31 @@ data:
     \ return ret;\n}\n\nlong long power(long long x, long long n, int MOD) {\n   \
     \ long long ret = 1;\n    x %= MOD;\n    while (n > 0) {\n        if (n & 1)\n\
     \            ret = ret * x % MOD;\n        x = x * x % MOD;\n        n >>= 1;\n\
-    \    }\n    return ret;\n}\n\ntemplate <class T> class factorial {\n  private:\n\
-    \    static inline std::vector<T> fact{1};\n\n  public:\n    factorial() = delete;\n\
-    \    ~factorial() = delete;\n    static T get(int n) {\n        while (n >= fact.size())\n\
-    \            fact.push_back(fact.back() * fact.size());\n        return fact[n];\n\
-    \    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n_mint (*_fact)(int) = factorial<_mint>::get;\n\
-    \ntemplate <class T> T permutation(int n, int k) {\n    assert(0 <= k && k <=\
-    \ n);\n    return factorial<T>::get(n) / factorial<T>::get(n - k);\n}\nmint (*perm)(int,\
-    \ int) = permutation<mint>;\n_mint (*_perm)(int, int) = permutation<_mint>;\n\n\
-    template <class T> static T combnation(int n, int k) {\n    assert(0 <= k && k\
-    \ <= n);\n    return factorial<T>::get(n) /\n           (factorial<T>::get(k)\
-    \ * factorial<T>::get(n - k));\n}\nmint (*comb)(int, int) = combnation<mint>;\n\
-    _mint (*_comb)(int, int) = combnation<_mint>;\n"
+    \    }\n    return ret;\n}\n\nlong long power(long long x, long long n, long long\
+    \ MOD) {\n    long long ret = 1;\n    x %= MOD;\n    while (n > 0) {\n       \
+    \ if (n & 1)\n            ret = (__int128_t)ret * x % MOD;\n        x = (__int128_t)x\
+    \ * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n}\n\ntemplate <class T>\
+    \ class factorial {\n  private:\n    static inline std::vector<T> fact{T(1)};\n\
+    \n  public:\n    factorial() = delete;\n    ~factorial() = delete;\n    static\
+    \ T get(int n) {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
+    \ * fact.size());\n        return fact[n];\n    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n\
+    _mint (*_fact)(int) = factorial<_mint>::get;\n\ntemplate <class T> T permutation(int\
+    \ n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
+    \ / factorial<T>::get(n - k);\n}\nmint (*perm)(int, int) = permutation<mint>;\n\
+    _mint (*_perm)(int, int) = permutation<_mint>;\n\ntemplate <class T> static T\
+    \ combnation(int n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
+    \ /\n           (factorial<T>::get(k) * factorial<T>::get(n - k));\n}\nmint (*comb)(int,\
+    \ int) = combnation<mint>;\n_mint (*_comb)(int, int) = combnation<_mint>;\n"
   dependsOn:
   - standard/mod_integer.hpp
   isVerificationFile: false
   path: math/enumeration_utility.hpp
   requiredBy:
-  - math/totient.hpp
-  timestamp: '2023-08-15 19:52:01+09:00'
+  - math/prime_number_utility.hpp
+  timestamp: '2023-08-18 16:17:38+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/ntl-1-d.test.cpp
+  - test/ntl-1-a.test.cpp
 documentation_of: math/enumeration_utility.hpp
 layout: document
 redirect_from:

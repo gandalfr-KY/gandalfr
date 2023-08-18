@@ -62,11 +62,8 @@ data:
       path: math/Bezout_coefficients.hpp
       title: math/Bezout_coefficients.hpp
     - icon: ':warning:'
-      path: math/Garner.hpp
-      title: math/Garner.hpp
-    - icon: ':warning:'
       path: math/divisors.hpp
-      title: math/divisors.hpp
+      title: "\u7D04\u6570\u6607\u9806\u5217\u6319"
     - icon: ':heavy_check_mark:'
       path: math/enumeration_utility.hpp
       title: math/enumeration_utility.hpp
@@ -80,10 +77,6 @@ data:
       path: math/prime_number_utility.hpp
       title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
         \u3059\u308B\u30AF\u30E9\u30B9"
-    - icon: ':heavy_check_mark:'
-      path: math/totient.hpp
-      title: "\u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-        \u6570"
   - name: other
     pages:
     - icon: ':heavy_check_mark:'
@@ -155,7 +148,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/grl-1-c.test.cpp
       title: test/grl-1-c.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test/grl-2-a.test.cpp
       title: test/grl-2-a.test.cpp
     - icon: ':heavy_check_mark:'
@@ -182,7 +175,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/ntl-1-a.test.cpp
       title: test/ntl-1-a.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/ntl-1-d.test.cpp
       title: test/ntl-1-d.test.cpp
     - icon: ':heavy_check_mark:'

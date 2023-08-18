@@ -38,7 +38,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/grl-1-c.test.cpp
     title: test/grl-1-c.test.cpp
-  - icon: ':x:'
+  - icon: ':heavy_check_mark:'
     path: test/grl-2-a.test.cpp
     title: test/grl-2-a.test.cpp
   - icon: ':heavy_check_mark:'
@@ -400,10 +400,10 @@ data:
     \n                    if (mt(i, k) != WEIGHT_MAX && mt(k, j) != WEIGHT_MAX)\n\
     \                        mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k, j));\n\
     \n        for (int i = 0; i < N; ++i)\n            for (int j = 0; j < N; ++j)\n\
-    \                if (mt(i, j) == WEIGHT_MAX) mt(i, j) = invalid;\n        return\
-    \ mt;\n    }\n\n\n    /**\n     * @brief \u5FA9\u5143\u4ED8\u304D\u6700\u77ED\u7D4C\
-    \u8DEF\n     * @attention \u5230\u9054\u53EF\u80FD\u3067\u306A\u3044\u3068\u304D\
-    \u3001\u7A7A\u306E\u914D\u5217\u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>>\
+    \                if (mt(i, j) == WEIGHT_MAX)\n                    mt(i, j) = invalid;\n\
+    \        return mt;\n    }\n\n    /**\n     * @brief \u5FA9\u5143\u4ED8\u304D\u6700\
+    \u77ED\u7D4C\u8DEF\n     * @attention \u5230\u9054\u53EF\u80FD\u3067\u306A\u3044\
+    \u3068\u304D\u3001\u7A7A\u306E\u914D\u5217\u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>>\
     \ shortest_path(int start_node, int end_node) {\n        if (start_node == end_node)\n\
     \            return {};\n\n        auto dist = distances(start_node, WEIGHT_MAX);\n\
     \        if (dist[end_node] == WEIGHT_MAX)\n            return {};\n\n       \
@@ -620,10 +620,10 @@ data:
     \n                    if (mt(i, k) != WEIGHT_MAX && mt(k, j) != WEIGHT_MAX)\n\
     \                        mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k, j));\n\
     \n        for (int i = 0; i < N; ++i)\n            for (int j = 0; j < N; ++j)\n\
-    \                if (mt(i, j) == WEIGHT_MAX) mt(i, j) = invalid;\n        return\
-    \ mt;\n    }\n\n\n    /**\n     * @brief \u5FA9\u5143\u4ED8\u304D\u6700\u77ED\u7D4C\
-    \u8DEF\n     * @attention \u5230\u9054\u53EF\u80FD\u3067\u306A\u3044\u3068\u304D\
-    \u3001\u7A7A\u306E\u914D\u5217\u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>>\
+    \                if (mt(i, j) == WEIGHT_MAX)\n                    mt(i, j) = invalid;\n\
+    \        return mt;\n    }\n\n    /**\n     * @brief \u5FA9\u5143\u4ED8\u304D\u6700\
+    \u77ED\u7D4C\u8DEF\n     * @attention \u5230\u9054\u53EF\u80FD\u3067\u306A\u3044\
+    \u3068\u304D\u3001\u7A7A\u306E\u914D\u5217\u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>>\
     \ shortest_path(int start_node, int end_node) {\n        if (start_node == end_node)\n\
     \            return {};\n\n        auto dist = distances(start_node, WEIGHT_MAX);\n\
     \        if (dist[end_node] == WEIGHT_MAX)\n            return {};\n\n       \
@@ -684,25 +684,25 @@ data:
   isVerificationFile: false
   path: graph/graph.hpp
   requiredBy:
-  - other/random.hpp
+  - graph/traveling_salesman.hpp
   - graph/Manhattan_minimum_spanning_tree.hpp
   - graph/doubling.hpp
-  - graph/traveling_salesman.hpp
-  - graph/lowest_common_ancestor.hpp
   - graph/is_isomorphic.hpp
-  timestamp: '2023-08-16 15:54:22+09:00'
+  - graph/lowest_common_ancestor.hpp
+  - other/random.hpp
+  timestamp: '2023-08-18 16:17:38+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test/manhattan-mst.test.cpp
-  - test/grl-5-c.test.cpp
-  - test/grl-1-a.test.cpp
   - test/grl-2-a.test.cpp
-  - test/grl-3-a.test.cpp
-  - test/grl-3-b.test.cpp
   - test/shortest_path.test.cpp
-  - test/grl-1-c.test.cpp
-  - test/jsc2021-g.test.cpp
+  - test/grl-5-c.test.cpp
   - test/grl-5-a.test.cpp
+  - test/grl-1-c.test.cpp
+  - test/manhattan-mst.test.cpp
+  - test/grl-3-b.test.cpp
+  - test/jsc2021-g.test.cpp
+  - test/grl-1-a.test.cpp
+  - test/grl-3-a.test.cpp
 documentation_of: graph/graph.hpp
 layout: document
 redirect_from:

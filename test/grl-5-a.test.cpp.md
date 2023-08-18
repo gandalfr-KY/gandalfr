@@ -351,10 +351,10 @@ data:
     \n                    if (mt(i, k) != WEIGHT_MAX && mt(k, j) != WEIGHT_MAX)\n\
     \                        mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k, j));\n\
     \n        for (int i = 0; i < N; ++i)\n            for (int j = 0; j < N; ++j)\n\
-    \                if (mt(i, j) == WEIGHT_MAX) mt(i, j) = invalid;\n        return\
-    \ mt;\n    }\n\n\n    /**\n     * @brief \u5FA9\u5143\u4ED8\u304D\u6700\u77ED\u7D4C\
-    \u8DEF\n     * @attention \u5230\u9054\u53EF\u80FD\u3067\u306A\u3044\u3068\u304D\
-    \u3001\u7A7A\u306E\u914D\u5217\u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>>\
+    \                if (mt(i, j) == WEIGHT_MAX)\n                    mt(i, j) = invalid;\n\
+    \        return mt;\n    }\n\n    /**\n     * @brief \u5FA9\u5143\u4ED8\u304D\u6700\
+    \u77ED\u7D4C\u8DEF\n     * @attention \u5230\u9054\u53EF\u80FD\u3067\u306A\u3044\
+    \u3068\u304D\u3001\u7A7A\u306E\u914D\u5217\u3067\u8FD4\u308B\n     */\n    std::vector<edge<WEIGHT>>\
     \ shortest_path(int start_node, int end_node) {\n        if (start_node == end_node)\n\
     \            return {};\n\n        auto dist = distances(start_node, WEIGHT_MAX);\n\
     \        if (dist[end_node] == WEIGHT_MAX)\n            return {};\n\n       \
@@ -428,7 +428,7 @@ data:
   isVerificationFile: true
   path: test/grl-5-a.test.cpp
   requiredBy: []
-  timestamp: '2023-08-16 15:54:22+09:00'
+  timestamp: '2023-08-18 16:17:38+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/grl-5-a.test.cpp

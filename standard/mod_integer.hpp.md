@@ -180,14 +180,14 @@ data:
   isVerificationFile: false
   path: standard/mod_integer.hpp
   requiredBy:
-  - standard/fraction.hpp
   - math/enumeration_utility.hpp
   - math/prime_number_utility.hpp
+  - standard/fraction.hpp
   timestamp: '2023-08-15 19:52:01+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
-  - test/jsc2021-g.test.cpp
   - test/ntl-1-a.test.cpp
+  - test/jsc2021-g.test.cpp
 documentation_of: standard/mod_integer.hpp
 layout: document
 redirect_from:

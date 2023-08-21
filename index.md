@@ -90,6 +90,9 @@ data:
       title: other/stopwatch.hpp
   - name: standard
     pages:
+    - icon: ':warning:'
+      path: standard/bisection.hpp
+      title: standard/bisection.hpp
     - icon: ':heavy_check_mark:'
       path: standard/compress.hpp
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\

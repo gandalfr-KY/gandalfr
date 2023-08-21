@@ -22,6 +22,7 @@
 #include "standard/compress.hpp"
 #include "standard/mod_integer.hpp"
 #include "standard/multi_iter.hpp"
+#include "standard/bisection.hpp"
 #include "other/stopwatch.hpp"
 #include "other/random.hpp"
 #include "other/io_supporter.hpp"

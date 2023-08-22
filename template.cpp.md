@@ -27,15 +27,7 @@ data:
 
     const int INF = 1001001001;
 
-    const int MAXINT = std::numeric_limits<int>::max();
-
-    const int MININT = std::numeric_limits<int>::min();
-
     const ll INFLL = 1001001001001001001;
-
-    const ll MAXLL = std::numeric_limits<ll>::max();
-
-    const ll MINLL = std::numeric_limits<ll>::min();
 
     const ll MOD  = 1000000007;
 

@@ -178,7 +178,7 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/ntl-1-a.test.cpp
       title: test/ntl-1-a.test.cpp
-    - icon: ':x:'
+    - icon: ':heavy_check_mark:'
       path: test/ntl-1-d.test.cpp
       title: test/ntl-1-d.test.cpp
     - icon: ':heavy_check_mark:'

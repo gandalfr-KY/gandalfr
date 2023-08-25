@@ -13,6 +13,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/ntl-1-a.test.cpp
     title: test/ntl-1-a.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/ntl-1-d.test.cpp
+    title: test/ntl-1-d.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -154,6 +157,7 @@ data:
   timestamp: '2023-08-18 16:17:38+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/ntl-1-d.test.cpp
   - test/ntl-1-a.test.cpp
 documentation_of: math/enumeration_utility.hpp
 layout: document

@@ -19,6 +19,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/ntl-1-a.test.cpp
     title: test/ntl-1-a.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/ntl-1-d.test.cpp
+    title: test/ntl-1-d.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
   _verificationStatusIcon: ':question:'
@@ -186,6 +189,7 @@ data:
   timestamp: '2023-08-15 19:52:01+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
+  - test/ntl-1-d.test.cpp
   - test/jsc2021-g.test.cpp
   - test/ntl-1-a.test.cpp
 documentation_of: standard/mod_integer.hpp

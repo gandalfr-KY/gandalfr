@@ -272,49 +272,42 @@ data:
     \ for (auto &e : G[i])\n                ret(i, e.to) = e.cost;\n        return\
     \ ret;\n    }\n\n    /**\n     * @brief \u884C\u304D\u304C\u3051\u9806\u306B bfs\n\
     \     */\n    std::vector<int> preorder(int start) const {\n        std::vector<int>\
-    \ result;\n        std::stack<std::pair<int, int>> stk;\n        reset_visited_flag(start);\n\
-    \        visited[start] = true;\n        stk.push({start, 0});\n\n        while\
-    \ (!stk.empty()) {\n            auto &[cu, idx] = stk.top();\n            if (idx\
-    \ == 0)\n                result.push_back(cu);\n            if (idx == G[cu].size())\
-    \ {\n                stk.pop();\n            } else {\n                int to\
-    \ = G[cu][idx++];\n                if (!visited[to]) {\n                    visited[to]\
-    \ = true;\n                    stk.push({to, 0});\n                }\n       \
-    \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u901A\
-    \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> inorder(int\
-    \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
-    \ int>> stk;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
-    \        stk.push({start, 0});\n\n        while (!stk.empty()) {\n           \
-    \ auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n     \
-    \           stk.pop();\n                result.push_back(cu);\n            } else\
-    \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
-    \ {\n                    visited[to] = true;\n                    stk.push({to,\
-    \ 0});\n                    result.push_back(cu);\n                }\n       \
-    \     }\n        }\n        return result;\n    }\n\n    /**\n     * @brief \u5E30\
-    \u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> postorder(int\
-    \ start) const {\n        std::vector<int> result;\n        std::stack<std::pair<int,\
-    \ int>> stk;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
-    \        stk.push({start, 0});\n\n        while (!stk.empty()) {\n           \
-    \ auto &[cu, idx] = stk.top();\n            if (idx == G[cu].size()) {\n     \
-    \           stk.pop();\n                result.push_back(cu);\n            } else\
-    \ {\n                int to = G[cu][idx++];\n                if (!visited[to])\
-    \ {\n                    visited[to] = true;\n                    stk.push({to,\
-    \ 0});\n                }\n            }\n        }\n        return result;\n\
-    \    }\n\n  private:\n    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue\
-    \ =\n        std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;\n\
-    \n    void run_bfs(std::vector<int> &dist, std::queue<int> &q) const {\n     \
-    \   while (!q.empty()) {\n            int cu = q.front();\n            q.pop();\n\
-    \            for (auto &e : G[cu]) {\n                if (dist[e.to] != WEIGHT_MAX)\n\
-    \                    continue;\n                dist[e.to] = dist[cu] + 1;\n \
-    \               q.push(e.to);\n            }\n        }\n    }\n\n    void run_Dijkstra(std::vector<WEIGHT>\
-    \ &dist, Dijkstra_queue &q) const {\n        while (!q.empty()) {\n          \
-    \  WEIGHT cur_dist = q.top().first;\n            int cu = q.top().second;\n  \
-    \          q.pop();\n\n            if (visited[cu])\n                continue;\n\
-    \            visited[cu] = true;\n\n            for (auto &e : G[cu]) {\n    \
-    \            WEIGHT alt = cur_dist + e.cost;\n                if (dist[e.to] <=\
-    \ alt)\n                    continue;\n                dist[e.to] = alt;\n   \
-    \             q.push({alt, e.to});\n            }\n        }\n    }\n\n  public:\n\
-    \    /**\n     * @brief \u6700\u77ED\u8DDD\u96E2\u3092\u8A08\u7B97\u3059\u308B\
-    \n     * @param start_node \u59CB\u70B9\n     * @param invalid \u5230\u9054\u4E0D\
+    \ result;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
+    \        auto dfs = [&](auto self, int cu, int pa = -1) -> void {\n          \
+    \  result.push_back(cu);\n            for (int to : G[cu]) {\n               \
+    \ if (visited[to]) continue;\n                visited[to] = true;\n          \
+    \      self(self, to, cu);\n            }\n        };\n        dfs(dfs, start);\n\
+    \        return result;\n    }\n\n    /**\n     * @brief \u901A\u308A\u304C\u3051\
+    \u9806\u306B bfs\n     */\n    std::vector<int> inorder(int start) const {\n \
+    \       std::vector<int> result;\n        reset_visited_flag(start);\n       \
+    \ visited[start] = true;\n        auto dfs = [&](auto self, int cu, int pa = -1)\
+    \ -> void {\n            for (int to : G[cu]) {\n                if (visited[to])\
+    \ continue;\n                visited[to] = true;\n                result.push_back(cu);\n\
+    \                self(self, to, cu);\n            }\n            result.push_back(cu);\n\
+    \        };\n        dfs(dfs, start);\n        return result;\n    }\n\n    /**\n\
+    \     * @brief \u5E30\u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int>\
+    \ postorder(int start) const {\n        std::vector<int> result;\n        reset_visited_flag(start);\n\
+    \        visited[start] = true;\n        auto dfs = [&](auto self, int cu, int\
+    \ pa = -1) -> void {\n            for (int to : G[cu]) {\n                if (visited[to])\
+    \ continue;\n                visited[to] = true;\n                self(self, to,\
+    \ cu);\n            }\n            result.push_back(cu);\n        };\n       \
+    \ dfs(dfs, start);\n        return result;\n    }\n\n  private:\n    using PAIR\
+    \ = std::pair<WEIGHT, int>;\n    using Dijkstra_queue =\n        std::priority_queue<PAIR,\
+    \ std::vector<PAIR>, std::greater<PAIR>>;\n\n    void run_bfs(std::vector<int>\
+    \ &dist, std::queue<int> &q) const {\n        while (!q.empty()) {\n         \
+    \   int cu = q.front();\n            q.pop();\n            for (auto &e : G[cu])\
+    \ {\n                if (dist[e.to] != WEIGHT_MAX)\n                    continue;\n\
+    \                dist[e.to] = dist[cu] + 1;\n                q.push(e.to);\n \
+    \           }\n        }\n    }\n\n    void run_Dijkstra(std::vector<WEIGHT> &dist,\
+    \ Dijkstra_queue &q) const {\n        while (!q.empty()) {\n            WEIGHT\
+    \ cur_dist = q.top().first;\n            int cu = q.top().second;\n          \
+    \  q.pop();\n\n            if (visited[cu])\n                continue;\n     \
+    \       visited[cu] = true;\n\n            for (auto &e : G[cu]) {\n         \
+    \       WEIGHT alt = cur_dist + e.cost;\n                if (dist[e.to] <= alt)\n\
+    \                    continue;\n                dist[e.to] = alt;\n          \
+    \      q.push({alt, e.to});\n            }\n        }\n    }\n\n  public:\n  \
+    \  /**\n     * @brief \u6700\u77ED\u8DDD\u96E2\u3092\u8A08\u7B97\u3059\u308B\n\
+    \     * @param start_node \u59CB\u70B9\n     * @param invalid \u5230\u9054\u4E0D\
     \u80FD\u306A\u9802\u70B9\u306B\u683C\u7D0D\u3055\u308C\u308B\u5024\n     * @return\
     \ \u5404\u30CE\u30FC\u30C9\u307E\u3067\u306E\u6700\u77ED\u8DDD\u96E2\u306E\u30EA\
     \u30B9\u30C8\n     */\n    std::vector<WEIGHT> distances(int start_node, WEIGHT\
@@ -406,11 +399,11 @@ data:
     \ k, -1, ord, low, brds, apts);\n        }\n        return {brds, apts};\n   \
     \ }\n\n    void print() const {\n        std::cout << this->N << \" \" << this->E.size()\
     \ << std::endl;\n        for (const edge<WEIGHT> &e : this->E)\n            std::cout\
-    \ << e << std::endl;\n    }\n};\n#line 5 \"other/random.hpp\"\n\n#line 7 \"other/random.hpp\"\
-    \n\ntemplate <int id> struct random_utility {\n    static inline std::mt19937\
-    \ mt;\n\n    static void set_seed(int seed) {\n        mt.seed(seed); // mt\u306B\
-    seed\u3092\u8A2D\u5B9A\n    }\n\n    static long long random_int(long long min_value,\
-    \ long long max_value) {\n        std::uniform_int_distribution<long long> distribution(min_value,\n\
+    \ << e << std::endl;\n    }\n};\n#line 5 \"other/random.hpp\"\n\ntemplate <int\
+    \ id> struct random_utility {\n    static inline std::mt19937 mt;\n\n    static\
+    \ void set_seed(int seed) {\n        mt.seed(seed); // mt\u306Bseed\u3092\u8A2D\
+    \u5B9A\n    }\n\n    static long long random_int(long long min_value, long long\
+    \ max_value) {\n        std::uniform_int_distribution<long long> distribution(min_value,\n\
     \                                                              max_value);\n \
     \       return distribution(mt);\n    }\n\n    static double random_double(double\
     \ min_value, double max_value) {\n        std::uniform_real_distribution<double>\
@@ -419,11 +412,11 @@ data:
     \ graph<int, false> generate_tree(int V) {\n        graph<int, false> g(V);\n\
     \        for (int i = 1; i < V; ++i) {\n            g.add_edge(random_int(0, i\
     \ - 1), i);\n        }\n        return g;\n    }\n};\n\nusing rnd = random_utility<-1>;\n"
-  code: "#pragma once\n#include <random>\n\n#include \"../graph/graph.hpp\"\n\n#include\
-    \ <random>\n\ntemplate <int id> struct random_utility {\n    static inline std::mt19937\
-    \ mt;\n\n    static void set_seed(int seed) {\n        mt.seed(seed); // mt\u306B\
-    seed\u3092\u8A2D\u5B9A\n    }\n\n    static long long random_int(long long min_value,\
-    \ long long max_value) {\n        std::uniform_int_distribution<long long> distribution(min_value,\n\
+  code: "#pragma once\n#include <random>\n\n#include \"../graph/graph.hpp\"\n\ntemplate\
+    \ <int id> struct random_utility {\n    static inline std::mt19937 mt;\n\n   \
+    \ static void set_seed(int seed) {\n        mt.seed(seed); // mt\u306Bseed\u3092\
+    \u8A2D\u5B9A\n    }\n\n    static long long random_int(long long min_value, long\
+    \ long max_value) {\n        std::uniform_int_distribution<long long> distribution(min_value,\n\
     \                                                              max_value);\n \
     \       return distribution(mt);\n    }\n\n    static double random_double(double\
     \ min_value, double max_value) {\n        std::uniform_real_distribution<double>\
@@ -440,7 +433,7 @@ data:
   isVerificationFile: false
   path: other/random.hpp
   requiredBy: []
-  timestamp: '2023-08-18 16:17:38+09:00'
+  timestamp: '2023-08-25 14:59:01+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: other/random.hpp

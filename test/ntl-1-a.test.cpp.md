@@ -180,9 +180,9 @@ data:
     \ Movius(int n) {\n        if (movius.empty())\n            make_table();\n  \
     \      assert(1 <= n);\n        return movius.at(n);\n    }\n\n    /**\n     *\
     \ @brief \u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-    \u6570\n     */\n    long long totient(long long n) {\n        long long ret =\
-    \ 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b, e\
-    \ - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
+    \u6570\n     */\n    static long long totient(long long n) {\n        long long\
+    \ ret = 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b,\
+    \ e - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
     \ k) { return primes.at(k); }\n};\n#line 4 \"test/ntl-1-a.test.cpp\"\nusing namespace\
     \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
     \ i++)\n\nint main(void){\n \n    //input\n\n    int N;\n    cin >> N;\n\n   \
@@ -203,7 +203,7 @@ data:
   isVerificationFile: true
   path: test/ntl-1-a.test.cpp
   requiredBy: []
-  timestamp: '2023-08-18 16:17:38+09:00'
+  timestamp: '2023-08-25 14:59:01+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/ntl-1-a.test.cpp

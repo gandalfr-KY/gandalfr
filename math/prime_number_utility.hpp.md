@@ -12,6 +12,9 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/ntl-1-a.test.cpp
     title: test/ntl-1-a.test.cpp
+  - icon: ':heavy_check_mark:'
+    path: test/ntl-1-d.test.cpp
+    title: test/ntl-1-d.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -180,9 +183,9 @@ data:
     \ Movius(int n) {\n        if (movius.empty())\n            make_table();\n  \
     \      assert(1 <= n);\n        return movius.at(n);\n    }\n\n    /**\n     *\
     \ @brief \u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-    \u6570\n     */\n    long long totient(long long n) {\n        long long ret =\
-    \ 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b, e\
-    \ - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
+    \u6570\n     */\n    static long long totient(long long n) {\n        long long\
+    \ ret = 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b,\
+    \ e - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
     \ k) { return primes.at(k); }\n};\n"
   code: "#pragma once\n#include <assert.h>\n#include <math.h>\n\n#include <vector>\n\
     \n#include \"enumeration_utility.hpp\"\n\n/**\n * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000\n\
@@ -242,9 +245,9 @@ data:
     \ Movius(int n) {\n        if (movius.empty())\n            make_table();\n  \
     \      assert(1 <= n);\n        return movius.at(n);\n    }\n\n    /**\n     *\
     \ @brief \u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-    \u6570\n     */\n    long long totient(long long n) {\n        long long ret =\
-    \ 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b, e\
-    \ - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
+    \u6570\n     */\n    static long long totient(long long n) {\n        long long\
+    \ ret = 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b,\
+    \ e - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
     \ k) { return primes.at(k); }\n};\n"
   dependsOn:
   - math/enumeration_utility.hpp
@@ -252,9 +255,10 @@ data:
   isVerificationFile: false
   path: math/prime_number_utility.hpp
   requiredBy: []
-  timestamp: '2023-08-18 16:17:38+09:00'
+  timestamp: '2023-08-25 14:59:01+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
+  - test/ntl-1-d.test.cpp
   - test/ntl-1-a.test.cpp
 documentation_of: math/prime_number_utility.hpp
 layout: document

@@ -195,25 +195,17 @@ template <typename WEIGHT, bool is_directed> class graph {
      */
     std::vector<int> preorder(int start) const {
         std::vector<int> result;
-        std::stack<std::pair<int, int>> stk;
         reset_visited_flag(start);
         visited[start] = true;
-        stk.push({start, 0});
-
-        while (!stk.empty()) {
-            auto &[cu, idx] = stk.top();
-            if (idx == 0)
-                result.push_back(cu);
-            if (idx == G[cu].size()) {
-                stk.pop();
-            } else {
-                int to = G[cu][idx++];
-                if (!visited[to]) {
-                    visited[to] = true;
-                    stk.push({to, 0});
-                }
+        auto dfs = [&](auto self, int cu, int pa = -1) -> void {
+            result.push_back(cu);
+            for (int to : G[cu]) {
+                if (visited[to]) continue;
+                visited[to] = true;
+                self(self, to, cu);
             }
-        }
+        };
+        dfs(dfs, start);
         return result;
     }
 
@@ -222,25 +214,18 @@ template <typename WEIGHT, bool is_directed> class graph {
      */
     std::vector<int> inorder(int start) const {
         std::vector<int> result;
-        std::stack<std::pair<int, int>> stk;
         reset_visited_flag(start);
         visited[start] = true;
-        stk.push({start, 0});
-
-        while (!stk.empty()) {
-            auto &[cu, idx] = stk.top();
-            if (idx == G[cu].size()) {
-                stk.pop();
+        auto dfs = [&](auto self, int cu, int pa = -1) -> void {
+            for (int to : G[cu]) {
+                if (visited[to]) continue;
+                visited[to] = true;
                 result.push_back(cu);
-            } else {
-                int to = G[cu][idx++];
-                if (!visited[to]) {
-                    visited[to] = true;
-                    stk.push({to, 0});
-                    result.push_back(cu);
-                }
+                self(self, to, cu);
             }
-        }
+            result.push_back(cu);
+        };
+        dfs(dfs, start);
         return result;
     }
 
@@ -249,24 +234,17 @@ template <typename WEIGHT, bool is_directed> class graph {
      */
     std::vector<int> postorder(int start) const {
         std::vector<int> result;
-        std::stack<std::pair<int, int>> stk;
         reset_visited_flag(start);
         visited[start] = true;
-        stk.push({start, 0});
-
-        while (!stk.empty()) {
-            auto &[cu, idx] = stk.top();
-            if (idx == G[cu].size()) {
-                stk.pop();
-                result.push_back(cu);
-            } else {
-                int to = G[cu][idx++];
-                if (!visited[to]) {
-                    visited[to] = true;
-                    stk.push({to, 0});
-                }
+        auto dfs = [&](auto self, int cu, int pa = -1) -> void {
+            for (int to : G[cu]) {
+                if (visited[to]) continue;
+                visited[to] = true;
+                self(self, to, cu);
             }
-        }
+            result.push_back(cu);
+        };
+        dfs(dfs, start);
         return result;
     }
 

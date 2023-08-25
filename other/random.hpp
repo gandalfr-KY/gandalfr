@@ -3,8 +3,6 @@
 
 #include "../graph/graph.hpp"
 
-#include <random>
-
 template <int id> struct random_utility {
     static inline std::mt19937 mt;
 

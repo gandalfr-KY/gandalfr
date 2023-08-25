@@ -153,7 +153,7 @@ class Eratosthenes {
     /**
      * @brief オイラーのトーシェント関数
      */
-    long long totient(long long n) {
+    static long long totient(long long n) {
         long long ret = 1;
         for (auto [b, e] : factorize(n))
             ret *= power(b, e - 1) * (b - 1);

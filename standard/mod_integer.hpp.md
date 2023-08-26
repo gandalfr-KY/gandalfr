@@ -3,12 +3,12 @@ data:
   _extendedDependsOn: []
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: math/enumeration_utility.hpp
-    title: math/enumeration_utility.hpp
-  - icon: ':heavy_check_mark:'
-    path: math/prime_number_utility.hpp
+    path: math/Eratosthenes.hpp
     title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
       \u3059\u308B\u30AF\u30E9\u30B9"
+  - icon: ':heavy_check_mark:'
+    path: math/enumeration_utility.hpp
+    title: math/enumeration_utility.hpp
   - icon: ':warning:'
     path: standard/fraction.hpp
     title: standard/fraction.hpp
@@ -184,8 +184,8 @@ data:
   path: standard/mod_integer.hpp
   requiredBy:
   - standard/fraction.hpp
+  - math/Eratosthenes.hpp
   - math/enumeration_utility.hpp
-  - math/prime_number_utility.hpp
   timestamp: '2023-08-15 19:52:01+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:

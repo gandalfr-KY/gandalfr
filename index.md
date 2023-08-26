@@ -61,9 +61,10 @@ data:
     - icon: ':warning:'
       path: math/Bezout_coefficients.hpp
       title: math/Bezout_coefficients.hpp
-    - icon: ':warning:'
-      path: math/divisors.hpp
-      title: "\u7D04\u6570\u6607\u9806\u5217\u6319"
+    - icon: ':heavy_check_mark:'
+      path: math/Eratosthenes.hpp
+      title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
+        \u3059\u308B\u30AF\u30E9\u30B9"
     - icon: ':heavy_check_mark:'
       path: math/enumeration_utility.hpp
       title: math/enumeration_utility.hpp
@@ -73,10 +74,6 @@ data:
     - icon: ':warning:'
       path: math/polynomial.hpp
       title: math/polynomial.hpp
-    - icon: ':heavy_check_mark:'
-      path: math/prime_number_utility.hpp
-      title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
-        \u3059\u308B\u30AF\u30E9\u30B9"
   - name: other
     pages:
     - icon: ':heavy_check_mark:'

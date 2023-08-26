@@ -6,7 +6,7 @@ data:
     title: standard/mod_integer.hpp
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
-    path: math/prime_number_utility.hpp
+    path: math/Eratosthenes.hpp
     title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
       \u3059\u308B\u30AF\u30E9\u30B9"
   _extendedVerifiedWith:
@@ -114,7 +114,7 @@ data:
     \       n >>= 1;\n    }\n    return ret;\n}\n\ntemplate <class T> class factorial\
     \ {\n  private:\n    static inline std::vector<T> fact{T(1)};\n\n  public:\n \
     \   factorial() = delete;\n    ~factorial() = delete;\n    static T get(int n)\
-    \ {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
+    \ {\n        while (n >= (int)fact.size())\n            fact.push_back(fact.back()\
     \ * fact.size());\n        return fact[n];\n    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n\
     _mint (*_fact)(int) = factorial<_mint>::get;\n\ntemplate <class T> T permutation(int\
     \ n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
@@ -139,7 +139,7 @@ data:
     \ * x % MOD;\n        n >>= 1;\n    }\n    return ret;\n}\n\ntemplate <class T>\
     \ class factorial {\n  private:\n    static inline std::vector<T> fact{T(1)};\n\
     \n  public:\n    factorial() = delete;\n    ~factorial() = delete;\n    static\
-    \ T get(int n) {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
+    \ T get(int n) {\n        while (n >= (int)fact.size())\n            fact.push_back(fact.back()\
     \ * fact.size());\n        return fact[n];\n    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n\
     _mint (*_fact)(int) = factorial<_mint>::get;\n\ntemplate <class T> T permutation(int\
     \ n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
@@ -153,8 +153,8 @@ data:
   isVerificationFile: false
   path: math/enumeration_utility.hpp
   requiredBy:
-  - math/prime_number_utility.hpp
-  timestamp: '2023-08-18 16:17:38+09:00'
+  - math/Eratosthenes.hpp
+  timestamp: '2023-08-26 20:18:13+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp

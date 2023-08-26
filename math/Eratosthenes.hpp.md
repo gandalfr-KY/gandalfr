@@ -23,10 +23,10 @@ data:
       \u30C8\u3059\u308B\u30AF\u30E9\u30B9"
     links:
     - https://drken1215.hatenablog.com/entry/2023/05/23/233000
-  bundledCode: "#line 2 \"math/prime_number_utility.hpp\"\n#include <assert.h>\n#include\
-    \ <math.h>\n\n#include <vector>\n\n#line 2 \"math/enumeration_utility.hpp\"\n\
-    #include <algorithm>\n#include <map>\n#include <utility>\n#line 6 \"math/enumeration_utility.hpp\"\
-    \n\n#line 2 \"standard/mod_integer.hpp\"\n#include <iostream>\n#include <queue>\n\
+  bundledCode: "#line 2 \"math/Eratosthenes.hpp\"\n#include <assert.h>\n#include <math.h>\n\
+    \n#include <vector>\n\n#line 2 \"math/enumeration_utility.hpp\"\n#include <algorithm>\n\
+    #include <map>\n#include <utility>\n#line 6 \"math/enumeration_utility.hpp\"\n\
+    \n#line 2 \"standard/mod_integer.hpp\"\n#include <iostream>\n#include <queue>\n\
     #line 5 \"standard/mod_integer.hpp\"\n\ninline long long mod_inverse(long long\
     \ a, int mod) {\n    assert(mod > 0);\n    long long b = mod, u = 1, v = 0;\n\
     \    while (b) {\n        long long t = a / b;\n        a -= t * b, std::swap(a,\
@@ -117,7 +117,7 @@ data:
     \       n >>= 1;\n    }\n    return ret;\n}\n\ntemplate <class T> class factorial\
     \ {\n  private:\n    static inline std::vector<T> fact{T(1)};\n\n  public:\n \
     \   factorial() = delete;\n    ~factorial() = delete;\n    static T get(int n)\
-    \ {\n        while (n >= fact.size())\n            fact.push_back(fact.back()\
+    \ {\n        while (n >= (int)fact.size())\n            fact.push_back(fact.back()\
     \ * fact.size());\n        return fact[n];\n    }\n};\nmint (*fact)(int) = factorial<mint>::get;\n\
     _mint (*_fact)(int) = factorial<_mint>::get;\n\ntemplate <class T> T permutation(int\
     \ n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
@@ -126,7 +126,7 @@ data:
     \ combnation(int n, int k) {\n    assert(0 <= k && k <= n);\n    return factorial<T>::get(n)\
     \ /\n           (factorial<T>::get(k) * factorial<T>::get(n - k));\n}\nmint (*comb)(int,\
     \ int) = combnation<mint>;\n_mint (*_comb)(int, int) = combnation<_mint>;\n#line\
-    \ 8 \"math/prime_number_utility.hpp\"\n\n/**\n * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000\n\
+    \ 8 \"math/Eratosthenes.hpp\"\n\n/**\n * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000\n\
     \ */\nbool MillerRabin(long long N, const std::vector<long long> &A) {\n    long\
     \ long s = 0, d = N - 1;\n    while (d % 2 == 0) {\n        ++s;\n        d >>=\
     \ 1;\n    }\n    for (auto a : A) {\n        if (N <= a)\n            return true;\n\
@@ -137,9 +137,10 @@ data:
     \ true;\n}\n\n/**\n * @brief \u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\
     \u30DD\u30FC\u30C8\u3059\u308B\u30AF\u30E9\u30B9\n * @brief \u7D20\u6570\u7BE9\
     \u3092\u56FA\u5B9A\u30B5\u30A4\u30BA\u3067\u69CB\u7BC9\u3001\u305D\u308C\u3092\
-    \u3082\u3068\u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\u3046\n */\n\
-    class Eratosthenes {\n  protected:\n    static inline int seive_size = (1 << 24);\n\
-    \    static inline std::vector<bool> sieve;\n    static inline std::vector<int>\
+    \u3082\u3068\u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\u3046\n * @attention\
+    \ \u69CB\u7BC9\u30B5\u30A4\u30BA\u304C (2^23) \u3067\u304A\u3088\u305D 0.5s\n\
+    \ */\nclass Eratosthenes {\n  protected:\n    static inline int seive_size = (1\
+    \ << 23);\n    static inline std::vector<bool> sieve;\n    static inline std::vector<int>\
     \ primes{2, 3}, movius, min_factor;\n\n    static void make_table() {\n      \
     \  sieve.assign(seive_size, true);\n        sieve[0] = sieve[1] = false;\n   \
     \     movius.assign(seive_size, 1);\n        min_factor.assign(seive_size, 1);\n\
@@ -162,31 +163,38 @@ data:
     \   ret.push_back({p, 1});\n                else\n                    ret.back().second++;\n\
     \                n /= p;\n            }\n        }\n        if (n != 1)\n    \
     \        ret.push_back({n, 1});\n        return ret;\n    }\n\n  public:\n   \
-    \ Eratosthenes() = delete;\n    ~Eratosthenes() = delete;\n\n    static void set_init_size(int\
+    \ Eratosthenes() = delete;\n    ~Eratosthenes() = delete;\n\n    static void set_sieve_size(int\
     \ size) {\n        assert(sieve.empty());\n        seive_size = size;\n    }\n\
-    \n    /**\n     * @brief n \u304C\u7D20\u6570\u304B\u3092\u5224\u5B9A\n     *\
-    \ @attention if n < (1 << 24) : O(1)\n     * @attention else : O(log(N))\n   \
-    \  */\n    static bool is_prime(long long n) {\n        if (sieve.empty())\n \
-    \           make_table();\n        assert(1 <= n);\n\n        if (n > 2 && (n\
-    \ & 1LL) == 0) {\n            return false;\n        } else if (n < seive_size)\
-    \ {\n            return sieve[n];\n        } else if (n < 4759123141LL) {\n  \
-    \          return MillerRabin(n, {2, 7, 61});\n        } else {\n            return\
+    \n    /**\n     * @brief n \u304C\u7D20\u6570\u304B\u3092\u5224\u5B9A\n     */\n\
+    \    static bool is_prime(long long n) {\n        if (sieve.empty())\n       \
+    \     make_table();\n        assert(1 <= n);\n\n        if (n > 2 && (n & 1LL)\
+    \ == 0) {\n            return false;\n        } else if (n < seive_size) {\n \
+    \           return sieve[n];\n        } else if (n < 4759123141LL) {\n       \
+    \     return MillerRabin(n, {2, 7, 61});\n        } else {\n            return\
     \ MillerRabin(\n                n, {2, 325, 9375, 28178, 450775, 9780504, 1795265022});\n\
     \        }\n    }\n\n    /**\n     * @brief \u7D20\u56E0\u6570\u5206\u89E3\u3059\
     \u308B\n     * @return factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2],\
-    \ ...},\n     * @return factorize(1) => {}\n     * @attention if n < (1 << 24)\
-    \ : O(log(N))\n     * @attention if n < (1 << 24) : O(N^(3/2))\n     */\n    static\
-    \ std::vector<std::pair<long long, int>> factorize(long long n) {\n        if\
-    \ (sieve.empty())\n            make_table();\n        assert(1 <= n);\n\n    \
-    \    if (n < seive_size) {\n            return fast_factorize(n);\n        } else\
-    \ {\n            return naive_factorize(n);\n        }\n    }\n\n    static int\
-    \ Movius(int n) {\n        if (movius.empty())\n            make_table();\n  \
-    \      assert(1 <= n);\n        return movius.at(n);\n    }\n\n    /**\n     *\
-    \ @brief \u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-    \u6570\n     */\n    static long long totient(long long n) {\n        long long\
-    \ ret = 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b,\
-    \ e - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
-    \ k) { return primes.at(k); }\n};\n"
+    \ ...},\n     * @return factorize(1) => {}\n     */\n    static std::vector<std::pair<long\
+    \ long, int>> factorize(long long n) {\n        if (sieve.empty())\n         \
+    \   make_table();\n        assert(1 <= n);\n\n        if (n < seive_size) {\n\
+    \            return fast_factorize(n);\n        } else {\n            return naive_factorize(n);\n\
+    \        }\n    }\n\n    static int Movius(int n) {\n        if (movius.empty())\n\
+    \            make_table();\n        assert(1 <= n);\n        return movius.at(n);\n\
+    \    }\n\n    /**\n     * @brief \u7D04\u6570\u5217\u6319\n     * @attention if\
+    \ n < sieve_size : O(N^(1/loglogN))\n     */\n    template <bool sort = true>\n\
+    \    static std::vector<long long> divisors(long long n) {\n        std::vector<long\
+    \ long> ds;\n        auto facs(factorize(n));\n        auto rec = [&](auto self,\
+    \ long long d, int cu) -> void {\n            if (cu == (int)facs.size()) {\n\
+    \                ds.push_back(d);\n                return;\n            }\n  \
+    \          for (int e = 0; e <= facs[cu].second; ++e) {\n                self(self,\
+    \ d, cu + 1);\n                d *= facs[cu].first;\n            }\n        };\n\
+    \        rec(rec, 1LL, 0);\n        if constexpr (sort)\n            std::sort(ds.begin(),\
+    \ ds.end());\n        return ds;;\n    }\n\n    /**\n     * @brief \u30AA\u30A4\
+    \u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n     */\n\
+    \    static long long totient(long long n) {\n        long long ret = 1;\n   \
+    \     for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1) * (b\
+    \ - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int k) { return\
+    \ primes.at(k); }\n};\n"
   code: "#pragma once\n#include <assert.h>\n#include <math.h>\n\n#include <vector>\n\
     \n#include \"enumeration_utility.hpp\"\n\n/**\n * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000\n\
     \ */\nbool MillerRabin(long long N, const std::vector<long long> &A) {\n    long\
@@ -199,9 +207,10 @@ data:
     \ true;\n}\n\n/**\n * @brief \u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\
     \u30DD\u30FC\u30C8\u3059\u308B\u30AF\u30E9\u30B9\n * @brief \u7D20\u6570\u7BE9\
     \u3092\u56FA\u5B9A\u30B5\u30A4\u30BA\u3067\u69CB\u7BC9\u3001\u305D\u308C\u3092\
-    \u3082\u3068\u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\u3046\n */\n\
-    class Eratosthenes {\n  protected:\n    static inline int seive_size = (1 << 24);\n\
-    \    static inline std::vector<bool> sieve;\n    static inline std::vector<int>\
+    \u3082\u3068\u306B\u7D20\u6570\u5217\u6319\u306A\u3069\u3092\u884C\u3046\n * @attention\
+    \ \u69CB\u7BC9\u30B5\u30A4\u30BA\u304C (2^23) \u3067\u304A\u3088\u305D 0.5s\n\
+    \ */\nclass Eratosthenes {\n  protected:\n    static inline int seive_size = (1\
+    \ << 23);\n    static inline std::vector<bool> sieve;\n    static inline std::vector<int>\
     \ primes{2, 3}, movius, min_factor;\n\n    static void make_table() {\n      \
     \  sieve.assign(seive_size, true);\n        sieve[0] = sieve[1] = false;\n   \
     \     movius.assign(seive_size, 1);\n        min_factor.assign(seive_size, 1);\n\
@@ -224,47 +233,54 @@ data:
     \   ret.push_back({p, 1});\n                else\n                    ret.back().second++;\n\
     \                n /= p;\n            }\n        }\n        if (n != 1)\n    \
     \        ret.push_back({n, 1});\n        return ret;\n    }\n\n  public:\n   \
-    \ Eratosthenes() = delete;\n    ~Eratosthenes() = delete;\n\n    static void set_init_size(int\
+    \ Eratosthenes() = delete;\n    ~Eratosthenes() = delete;\n\n    static void set_sieve_size(int\
     \ size) {\n        assert(sieve.empty());\n        seive_size = size;\n    }\n\
-    \n    /**\n     * @brief n \u304C\u7D20\u6570\u304B\u3092\u5224\u5B9A\n     *\
-    \ @attention if n < (1 << 24) : O(1)\n     * @attention else : O(log(N))\n   \
-    \  */\n    static bool is_prime(long long n) {\n        if (sieve.empty())\n \
-    \           make_table();\n        assert(1 <= n);\n\n        if (n > 2 && (n\
-    \ & 1LL) == 0) {\n            return false;\n        } else if (n < seive_size)\
-    \ {\n            return sieve[n];\n        } else if (n < 4759123141LL) {\n  \
-    \          return MillerRabin(n, {2, 7, 61});\n        } else {\n            return\
+    \n    /**\n     * @brief n \u304C\u7D20\u6570\u304B\u3092\u5224\u5B9A\n     */\n\
+    \    static bool is_prime(long long n) {\n        if (sieve.empty())\n       \
+    \     make_table();\n        assert(1 <= n);\n\n        if (n > 2 && (n & 1LL)\
+    \ == 0) {\n            return false;\n        } else if (n < seive_size) {\n \
+    \           return sieve[n];\n        } else if (n < 4759123141LL) {\n       \
+    \     return MillerRabin(n, {2, 7, 61});\n        } else {\n            return\
     \ MillerRabin(\n                n, {2, 325, 9375, 28178, 450775, 9780504, 1795265022});\n\
     \        }\n    }\n\n    /**\n     * @brief \u7D20\u56E0\u6570\u5206\u89E3\u3059\
     \u308B\n     * @return factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2],\
-    \ ...},\n     * @return factorize(1) => {}\n     * @attention if n < (1 << 24)\
-    \ : O(log(N))\n     * @attention if n < (1 << 24) : O(N^(3/2))\n     */\n    static\
-    \ std::vector<std::pair<long long, int>> factorize(long long n) {\n        if\
-    \ (sieve.empty())\n            make_table();\n        assert(1 <= n);\n\n    \
-    \    if (n < seive_size) {\n            return fast_factorize(n);\n        } else\
-    \ {\n            return naive_factorize(n);\n        }\n    }\n\n    static int\
-    \ Movius(int n) {\n        if (movius.empty())\n            make_table();\n  \
-    \      assert(1 <= n);\n        return movius.at(n);\n    }\n\n    /**\n     *\
-    \ @brief \u30AA\u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\
-    \u6570\n     */\n    static long long totient(long long n) {\n        long long\
-    \ ret = 1;\n        for (auto [b, e] : factorize(n))\n            ret *= power(b,\
-    \ e - 1) * (b - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int\
-    \ k) { return primes.at(k); }\n};\n"
+    \ ...},\n     * @return factorize(1) => {}\n     */\n    static std::vector<std::pair<long\
+    \ long, int>> factorize(long long n) {\n        if (sieve.empty())\n         \
+    \   make_table();\n        assert(1 <= n);\n\n        if (n < seive_size) {\n\
+    \            return fast_factorize(n);\n        } else {\n            return naive_factorize(n);\n\
+    \        }\n    }\n\n    static int Movius(int n) {\n        if (movius.empty())\n\
+    \            make_table();\n        assert(1 <= n);\n        return movius.at(n);\n\
+    \    }\n\n    /**\n     * @brief \u7D04\u6570\u5217\u6319\n     * @attention if\
+    \ n < sieve_size : O(N^(1/loglogN))\n     */\n    template <bool sort = true>\n\
+    \    static std::vector<long long> divisors(long long n) {\n        std::vector<long\
+    \ long> ds;\n        auto facs(factorize(n));\n        auto rec = [&](auto self,\
+    \ long long d, int cu) -> void {\n            if (cu == (int)facs.size()) {\n\
+    \                ds.push_back(d);\n                return;\n            }\n  \
+    \          for (int e = 0; e <= facs[cu].second; ++e) {\n                self(self,\
+    \ d, cu + 1);\n                d *= facs[cu].first;\n            }\n        };\n\
+    \        rec(rec, 1LL, 0);\n        if constexpr (sort)\n            std::sort(ds.begin(),\
+    \ ds.end());\n        return ds;;\n    }\n\n    /**\n     * @brief \u30AA\u30A4\
+    \u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n     */\n\
+    \    static long long totient(long long n) {\n        long long ret = 1;\n   \
+    \     for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1) * (b\
+    \ - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int k) { return\
+    \ primes.at(k); }\n};\n"
   dependsOn:
   - math/enumeration_utility.hpp
   - standard/mod_integer.hpp
   isVerificationFile: false
-  path: math/prime_number_utility.hpp
+  path: math/Eratosthenes.hpp
   requiredBy: []
-  timestamp: '2023-08-25 14:59:01+09:00'
+  timestamp: '2023-08-26 20:18:13+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/ntl-1-d.test.cpp
   - test/ntl-1-a.test.cpp
-documentation_of: math/prime_number_utility.hpp
+documentation_of: math/Eratosthenes.hpp
 layout: document
 redirect_from:
-- /library/math/prime_number_utility.hpp
-- /library/math/prime_number_utility.hpp.html
+- /library/math/Eratosthenes.hpp
+- /library/math/Eratosthenes.hpp.html
 title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\u3059\
   \u308B\u30AF\u30E9\u30B9"
 ---

@@ -60,7 +60,7 @@ template <class T> class factorial {
     factorial() = delete;
     ~factorial() = delete;
     static T get(int n) {
-        while (n >= fact.size())
+        while (n >= (int)fact.size())
             fact.push_back(fact.back() * fact.size());
         return fact[n];
     }

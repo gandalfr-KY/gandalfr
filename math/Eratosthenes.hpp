@@ -35,10 +35,11 @@ bool MillerRabin(long long N, const std::vector<long long> &A) {
 /**
  * @brief 素数判定や列挙をサポートするクラス
  * @brief 素数篩を固定サイズで構築、それをもとに素数列挙などを行う
+ * @attention 構築サイズが (2^23) でおよそ 0.5s
  */
 class Eratosthenes {
   protected:
-    static inline int seive_size = (1 << 24);
+    static inline int seive_size = (1 << 23);
     static inline std::vector<bool> sieve;
     static inline std::vector<int> primes{2, 3}, movius, min_factor;
 
@@ -97,15 +98,13 @@ class Eratosthenes {
     Eratosthenes() = delete;
     ~Eratosthenes() = delete;
 
-    static void set_init_size(int size) {
+    static void set_sieve_size(int size) {
         assert(sieve.empty());
         seive_size = size;
     }
 
     /**
      * @brief n が素数かを判定
-     * @attention if n < (1 << 24) : O(1)
-     * @attention else : O(log(N))
      */
     static bool is_prime(long long n) {
         if (sieve.empty())
@@ -128,8 +127,6 @@ class Eratosthenes {
      * @brief 素因数分解する
      * @return factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...},
      * @return factorize(1) => {}
-     * @attention if n < (1 << 24) : O(log(N))
-     * @attention if n < (1 << 24) : O(N^(3/2))
      */
     static std::vector<std::pair<long long, int>> factorize(long long n) {
         if (sieve.empty())
@@ -148,6 +145,30 @@ class Eratosthenes {
             make_table();
         assert(1 <= n);
         return movius.at(n);
+    }
+
+    /**
+     * @brief 約数列挙
+     * @attention if n < sieve_size : O(N^(1/loglogN))
+     */
+    template <bool sort = true>
+    static std::vector<long long> divisors(long long n) {
+        std::vector<long long> ds;
+        auto facs(factorize(n));
+        auto rec = [&](auto self, long long d, int cu) -> void {
+            if (cu == (int)facs.size()) {
+                ds.push_back(d);
+                return;
+            }
+            for (int e = 0; e <= facs[cu].second; ++e) {
+                self(self, d, cu + 1);
+                d *= facs[cu].first;
+            }
+        };
+        rec(rec, 1LL, 0);
+        if constexpr (sort)
+            std::sort(ds.begin(), ds.end());
+        return ds;;
     }
 
     /**

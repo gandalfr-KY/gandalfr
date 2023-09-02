@@ -168,7 +168,8 @@ class Eratosthenes {
         rec(rec, 1LL, 0);
         if constexpr (sort)
             std::sort(ds.begin(), ds.end());
-        return ds;;
+        return ds;
+        ;
     }
 
     /**
@@ -180,7 +181,6 @@ class Eratosthenes {
             ret *= power(b, e - 1) * (b - 1);
         return ret;
     }
-
 
     static int kth_prime(int k) { return primes.at(k); }
 };

@@ -207,7 +207,8 @@ template <typename WEIGHT, bool is_directed> class graph {
         auto dfs = [&](auto self, int cu, int pa = -1) -> void {
             result.push_back(cu);
             for (int to : G[cu]) {
-                if (visited[to]) continue;
+                if (visited[to])
+                    continue;
                 visited[to] = true;
                 self(self, to, cu);
             }
@@ -225,7 +226,8 @@ template <typename WEIGHT, bool is_directed> class graph {
         visited[start] = true;
         auto dfs = [&](auto self, int cu, int pa = -1) -> void {
             for (int to : G[cu]) {
-                if (visited[to]) continue;
+                if (visited[to])
+                    continue;
                 visited[to] = true;
                 result.push_back(cu);
                 self(self, to, cu);
@@ -245,7 +247,8 @@ template <typename WEIGHT, bool is_directed> class graph {
         visited[start] = true;
         auto dfs = [&](auto self, int cu, int pa = -1) -> void {
             for (int to : G[cu]) {
-                if (visited[to]) continue;
+                if (visited[to])
+                    continue;
                 visited[to] = true;
                 self(self, to, cu);
             }

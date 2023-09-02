@@ -28,7 +28,7 @@ template <typename WEIGHT, bool is_directed> class graph {
     const WEIGHT WEIGHT_MAX = std::numeric_limits<WEIGHT>::max();
 
     void reset_visited_flag(int node) const {
-        for (int x : uf.contained_group(node))
+        for (int x : uf.group_containing_node(node))
             visited[x] = false;
     }
 
@@ -81,15 +81,22 @@ template <typename WEIGHT, bool is_directed> class graph {
     bool are_connected(int x, int y) const { return uf.same(x, y); }
 
     /**
-     * @return 連結成分の数
+     * @return 弱連結成分の数
      */
     int count_connected_components() const { return uf.count_groups(); }
 
     /**
-     * @return 連結成分のリストのリスト
+     * @return 弱連結成分のリストのリスト
      */
     std::vector<std::vector<int>> weakly_connected_components() const {
         return uf.all_groups();
+    }
+
+    /**
+     * ノード x が含まれている弱連結成分のリストを返す
+     */
+    std::vector<int> component_containing_node(int x) {
+        return uf.group_containing_node(x);
     }
 
     /**
@@ -495,6 +502,9 @@ template <typename WEIGHT, bool is_directed> class graph {
     }
 
   public:
+    /**
+     * @return pair<vector<橋>, vector<関節点>>
+     */
     std::pair<std::vector<edge<WEIGHT>>, std::vector<int>> lowlink() {
         static_assert(!is_directed);
         std::vector<edge<WEIGHT>> brds;

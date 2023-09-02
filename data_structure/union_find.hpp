@@ -61,7 +61,7 @@ class union_find {
      */
     int size() const { return N; }
 
-    std::vector<int> contained_group(int x) const {
+    std::vector<int> group_containing_node(int x) const {
         std::vector<int> ret{x};
         for (int cu = nxt[x]; cu != ret[0]; cu = nxt[cu])
             ret.push_back(cu);
@@ -76,7 +76,7 @@ class union_find {
         std::vector<bool> used(N, false);
         for (int i = 0; i < N; ++i) {
             if (!used[i]) {
-                result.emplace_back(contained_group(i));
+                result.emplace_back(group_containing_node(i));
                 for (int x : result.back()) {
                     used[x] = true;
                 }

@@ -1,21 +1,21 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/Eratosthenes.hpp
     title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
       \u3059\u308B\u30AF\u30E9\u30B9"
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/enumeration_utility.hpp
     title: math/enumeration_utility.hpp
-  - icon: ':question:'
+  - icon: ':x:'
     path: standard/mod_integer.hpp
     title: standard/mod_integer.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: cpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
     PROBLEM: https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_A
@@ -186,17 +186,17 @@ data:
     \          for (int e = 0; e <= facs[cu].second; ++e) {\n                self(self,\
     \ d, cu + 1);\n                d *= facs[cu].first;\n            }\n        };\n\
     \        rec(rec, 1LL, 0);\n        if constexpr (sort)\n            std::sort(ds.begin(),\
-    \ ds.end());\n        return ds;;\n    }\n\n    /**\n     * @brief \u30AA\u30A4\
-    \u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n     */\n\
-    \    static long long totient(long long n) {\n        long long ret = 1;\n   \
-    \     for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1) * (b\
-    \ - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int k) { return\
-    \ primes.at(k); }\n};\n#line 4 \"test/ntl-1-a.test.cpp\"\nusing namespace std;\n\
-    using ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
-    \nint main(void){\n \n    //input\n\n    int N;\n    cin >> N;\n\n    //calculate\n\
-    \n    cout << N << \":\";\n    for(auto p : Eratosthenes::factorize(N)){\n   \
-    \     rep(i,0,p.second) cout << \" \" << p.first;\n    }\n    cout << endl;\n\n\
-    }\n"
+    \ ds.end());\n        return ds;\n        ;\n    }\n\n    /**\n     * @brief \u30AA\
+    \u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n   \
+    \  */\n    static long long totient(long long n) {\n        long long ret = 1;\n\
+    \        for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1)\
+    \ * (b - 1);\n        return ret;\n    }\n\n    static int kth_prime(int k) {\
+    \ return primes.at(k); }\n};\n#line 4 \"test/ntl-1-a.test.cpp\"\nusing namespace\
+    \ std;\nusing ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n);\
+    \ i++)\n\nint main(void){\n \n    //input\n\n    int N;\n    cin >> N;\n\n   \
+    \ //calculate\n\n    cout << N << \":\";\n    for(auto p : Eratosthenes::factorize(N)){\n\
+    \        rep(i,0,p.second) cout << \" \" << p.first;\n    }\n    cout << endl;\n\
+    \n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/NTL_1_A\"\n#include\
     \ <bits/stdc++.h>\n#include \"../math/Eratosthenes.hpp\"\nusing namespace std;\n\
     using ll = long long;\n#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)\n\
@@ -211,8 +211,8 @@ data:
   isVerificationFile: true
   path: test/ntl-1-a.test.cpp
   requiredBy: []
-  timestamp: '2023-08-26 20:18:13+09:00'
-  verificationStatus: TEST_ACCEPTED
+  timestamp: '2023-09-02 19:34:44+09:00'
+  verificationStatus: TEST_WRONG_ANSWER
   verifiedWith: []
 documentation_of: test/ntl-1-a.test.cpp
 layout: document

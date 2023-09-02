@@ -1,23 +1,23 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/enumeration_utility.hpp
     title: math/enumeration_utility.hpp
-  - icon: ':question:'
+  - icon: ':x:'
     path: standard/mod_integer.hpp
     title: standard/mod_integer.hpp
   _extendedRequiredBy: []
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/ntl-1-a.test.cpp
     title: test/ntl-1-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/ntl-1-d.test.cpp
     title: test/ntl-1-d.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     document_title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\
       \u30C8\u3059\u308B\u30AF\u30E9\u30B9"
@@ -189,12 +189,12 @@ data:
     \          for (int e = 0; e <= facs[cu].second; ++e) {\n                self(self,\
     \ d, cu + 1);\n                d *= facs[cu].first;\n            }\n        };\n\
     \        rec(rec, 1LL, 0);\n        if constexpr (sort)\n            std::sort(ds.begin(),\
-    \ ds.end());\n        return ds;;\n    }\n\n    /**\n     * @brief \u30AA\u30A4\
-    \u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n     */\n\
-    \    static long long totient(long long n) {\n        long long ret = 1;\n   \
-    \     for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1) * (b\
-    \ - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int k) { return\
-    \ primes.at(k); }\n};\n"
+    \ ds.end());\n        return ds;\n        ;\n    }\n\n    /**\n     * @brief \u30AA\
+    \u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n   \
+    \  */\n    static long long totient(long long n) {\n        long long ret = 1;\n\
+    \        for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1)\
+    \ * (b - 1);\n        return ret;\n    }\n\n    static int kth_prime(int k) {\
+    \ return primes.at(k); }\n};\n"
   code: "#pragma once\n#include <assert.h>\n#include <math.h>\n\n#include <vector>\n\
     \n#include \"enumeration_utility.hpp\"\n\n/**\n * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000\n\
     \ */\nbool MillerRabin(long long N, const std::vector<long long> &A) {\n    long\
@@ -259,20 +259,20 @@ data:
     \          for (int e = 0; e <= facs[cu].second; ++e) {\n                self(self,\
     \ d, cu + 1);\n                d *= facs[cu].first;\n            }\n        };\n\
     \        rec(rec, 1LL, 0);\n        if constexpr (sort)\n            std::sort(ds.begin(),\
-    \ ds.end());\n        return ds;;\n    }\n\n    /**\n     * @brief \u30AA\u30A4\
-    \u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n     */\n\
-    \    static long long totient(long long n) {\n        long long ret = 1;\n   \
-    \     for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1) * (b\
-    \ - 1);\n        return ret;\n    }\n\n\n    static int kth_prime(int k) { return\
-    \ primes.at(k); }\n};\n"
+    \ ds.end());\n        return ds;\n        ;\n    }\n\n    /**\n     * @brief \u30AA\
+    \u30A4\u30E9\u30FC\u306E\u30C8\u30FC\u30B7\u30A7\u30F3\u30C8\u95A2\u6570\n   \
+    \  */\n    static long long totient(long long n) {\n        long long ret = 1;\n\
+    \        for (auto [b, e] : factorize(n))\n            ret *= power(b, e - 1)\
+    \ * (b - 1);\n        return ret;\n    }\n\n    static int kth_prime(int k) {\
+    \ return primes.at(k); }\n};\n"
   dependsOn:
   - math/enumeration_utility.hpp
   - standard/mod_integer.hpp
   isVerificationFile: false
   path: math/Eratosthenes.hpp
   requiredBy: []
-  timestamp: '2023-08-26 20:18:13+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  timestamp: '2023-09-02 19:34:44+09:00'
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/ntl-1-d.test.cpp
   - test/ntl-1-a.test.cpp

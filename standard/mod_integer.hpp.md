@@ -2,11 +2,11 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/Eratosthenes.hpp
     title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
       \u3059\u308B\u30AF\u30E9\u30B9"
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/enumeration_utility.hpp
     title: math/enumeration_utility.hpp
   - icon: ':warning:'
@@ -16,15 +16,15 @@ data:
   - icon: ':x:'
     path: test/jsc2021-g.test.cpp
     title: test/jsc2021-g.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/ntl-1-a.test.cpp
     title: test/ntl-1-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/ntl-1-d.test.cpp
     title: test/ntl-1-d.test.cpp
   _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':question:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 2 \"standard/mod_integer.hpp\"\n#include <iostream>\n#include\
@@ -187,7 +187,7 @@ data:
   - math/Eratosthenes.hpp
   - math/enumeration_utility.hpp
   timestamp: '2023-08-15 19:52:01+09:00'
-  verificationStatus: LIBRARY_SOME_WA
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/ntl-1-d.test.cpp
   - test/jsc2021-g.test.cpp

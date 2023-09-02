@@ -17,52 +17,23 @@ data:
     , line 260, in _resolve\n    raise BundleErrorAt(path, -1, \"no such header\"\
     )\nonlinejudge_verify.languages.cplusplus_bundle.BundleErrorAt: gandalfr/basic:\
     \ line -1: no such header\n"
-  code: '#include <bits/stdc++.h>
-
-    #include "gandalfr/basic"
-
-    using namespace std;
-
-    using ll = long long;
-
-    const int INF = 1001001001;
-
-    const ll INFLL = 1001001001001001001;
-
-    const ll MOD  = 1000000007;
-
-    const ll _MOD = 998244353;
-
-    #define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
-
-    #define rrep(i, j, n) for(ll i = (ll)(n-1); i >= (ll)(j); i--)
-
-    #define all(a) (a).begin(),(a).end()
-
-    #define LF cout << endl
-
-    #ifdef ENABLE_MULTI_FOR
-
-    #define mfor(it, v) for(multi_iter it(v); !it.fin(); ++it)
-
-    #endif
-
-    template<typename T1, typename T2> inline bool chmax(T1 &a, T2 b) { return a <
-    b && (a = b, true); }
-
-    template<typename T1, typename T2> inline bool chmin(T1 &a, T2 b) { return a >
-    b && (a = b, true); }
-
-    void Yes(bool ok){ std::cout << (ok ? "Yes" : "No") << std::endl; }
-
-
-    int main(void){
-
-
-
-    }
-
-    '
+  code: "#include <bits/stdc++.h>\n#include \"gandalfr/basic\"\nusing namespace std;\n\
+    using ll = long long;\nconst int INF = 1001001001;\nconst ll INFLL = 1001001001001001001;\n\
+    const ll MOD  = 1000000007;\nconst ll _MOD = 998244353;\n#define rep(i, j, n)\
+    \ for(ll i = (ll)(j); i < (ll)(n); i++)\n#define rrep(i, j, n) for(ll i = (ll)(n-1);\
+    \ i >= (ll)(j); i--)\n#define all(a) (a).begin(),(a).end()\n#define LF cout <<\
+    \ endl\n#ifdef ENABLE_MULTI_FOR\n#define mfor(it, v) for(multi_iter it(v); !it.fin();\
+    \ ++it)\n#endif\ntemplate<typename T1, typename T2> inline bool chmax(T1 &a, T2\
+    \ b) { return a < b && (a = b, true); }\ntemplate<typename T1, typename T2> inline\
+    \ bool chmin(T1 &a, T2 b) { return a > b && (a = b, true); }\nvoid Yes(bool ok){\
+    \ std::cout << (ok ? \"Yes\" : \"No\") << std::endl; }\n\nint main(void){\n\n\
+    \    int N;\n    cin >> N;\n    vector<int> A(N), B(N);\n    cin >> A >> B;\n\n\
+    \    vector dp(N, vector<vector<ll>>(2, vector<ll>(2, INFLL)));\n    dp[0][0][0]\
+    \ = A[0];\n    dp[0][1][1] = 0;\n    rep(i,1,N) {\n        rep(j,0,2) rep(k,0,2)\
+    \ rep(prvj,0,2) {\n            chmin(dp[i][j][k], dp[i-1][prvj][k] +\n       \
+    \         (j == 0 ? A[i] : 0) + (j == prvj ? B[i] : 0));\n        }\n    }\n\n\
+    \    ll ans = INFLL;\n    rep(j,0,2) rep(k,0,2) {\n        chmin(ans, dp[N-1][j][k]\
+    \ + (j == k ? B[N-1] : 0));\n    }\n    cout << ans << endl;\n    \n\n}\n"
   dependsOn: []
   isVerificationFile: false
   path: template.cpp

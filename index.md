@@ -21,7 +21,7 @@ data:
     - icon: ':warning:'
       path: data_structure/segment_tree.hpp
       title: data_structure/segment_tree.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: data_structure/sparse_table.hpp
       title: "\u7D50\u5408\u5247\u30FB\u51AA\u7B49\u6027\u3092\u6E80\u305F\u3059\u6F14\
         \u7B97\u306E\u66F4\u65B0\u7121\u3057\u533A\u9593\u30AF\u30A8\u30EA\u51E6\u7406"
@@ -46,7 +46,7 @@ data:
     - icon: ':warning:'
       path: graph/is_isomorphic.hpp
       title: graph/is_isomorphic.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: graph/lowest_common_ancestor.hpp
       title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
         \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
@@ -61,11 +61,11 @@ data:
     - icon: ':warning:'
       path: math/Bezout_coefficients.hpp
       title: math/Bezout_coefficients.hpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: math/Eratosthenes.hpp
       title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
         \u3059\u308B\u30AF\u30E9\u30B9"
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: math/enumeration_utility.hpp
       title: math/enumeration_utility.hpp
     - icon: ':question:'
@@ -76,7 +76,7 @@ data:
       title: math/polynomial.hpp
   - name: other
     pages:
-    - icon: ':heavy_check_mark:'
+    - icon: ':question:'
       path: other/io_supporter.hpp
       title: other/io_supporter.hpp
     - icon: ':warning:'
@@ -104,12 +104,12 @@ data:
       path: standard/inversion.hpp
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
         \u3067\u6307\u5B9A\u3057\u3001\u8EE2\u5012\u6570\u3092\u6C42\u3081\u308B"
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: standard/longest_increasing_subsequence.hpp
       title: "\u30B3\u30F3\u30C6\u30CA\u306E\u8981\u7D20\u3092\u534A\u958B\u533A\u9593\
         \u3067\u6307\u5B9A\u3057\u3001\u6700\u9577\u90E8\u5206\u5897\u52A0\u5217\u306E\
         \u306E\u9577\u3055\u3092\u6C42\u3081\u308B"
-    - icon: ':question:'
+    - icon: ':x:'
       path: standard/mod_integer.hpp
       title: standard/mod_integer.hpp
     - icon: ':warning:'
@@ -136,31 +136,31 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/alds1-5-d.test.cpp
       title: test/alds1-5-d.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/dpl-1-d.test.cpp
       title: test/dpl-1-d.test.cpp
     - icon: ':heavy_check_mark:'
       path: test/dsl-2-b.test.cpp
       title: test/dsl-2-b.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-1-a.test.cpp
       title: test/grl-1-a.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-1-c.test.cpp
       title: test/grl-1-c.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-2-a.test.cpp
       title: test/grl-2-a.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-3-a.test.cpp
       title: test/grl-3-a.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-3-b.test.cpp
       title: test/grl-3-b.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-5-a.test.cpp
       title: test/grl-5-a.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/grl-5-c.test.cpp
       title: test/grl-5-c.test.cpp
     - icon: ':heavy_check_mark:'
@@ -172,10 +172,10 @@ data:
     - icon: ':heavy_check_mark:'
       path: test/manhattan-mst.test.cpp
       title: test/manhattan-mst.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/ntl-1-a.test.cpp
       title: test/ntl-1-a.test.cpp
-    - icon: ':heavy_check_mark:'
+    - icon: ':x:'
       path: test/ntl-1-d.test.cpp
       title: test/ntl-1-d.test.cpp
     - icon: ':heavy_check_mark:'

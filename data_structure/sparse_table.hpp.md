@@ -2,17 +2,17 @@
 data:
   _extendedDependsOn: []
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowest_common_ancestor.hpp
     title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
       \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-c.test.cpp
     title: test/grl-5-c.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     document_title: "\u7D50\u5408\u5247\u30FB\u51AA\u7B49\u6027\u3092\u6E80\u305F\u3059\
       \u6F14\u7B97\u306E\u66F4\u65B0\u7121\u3057\u533A\u9593\u30AF\u30A8\u30EA\u51E6\
@@ -72,7 +72,7 @@ data:
   requiredBy:
   - graph/lowest_common_ancestor.hpp
   timestamp: '2023-06-21 11:58:18+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/grl-5-c.test.cpp
 documentation_of: data_structure/sparse_table.hpp

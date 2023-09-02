@@ -4,7 +4,7 @@ data:
   - icon: ':heavy_check_mark:'
     path: data_structure/binary_indexed_tree.hpp
     title: "\u4E00\u70B9\u52A0\u7B97\u3001\u533A\u9593\u548C\u306E\u53D6\u5F97"
-  - icon: ':heavy_check_mark:'
+  - icon: ':question:'
     path: other/io_supporter.hpp
     title: other/io_supporter.hpp
   - icon: ':heavy_check_mark:'

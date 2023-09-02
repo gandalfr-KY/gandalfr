@@ -15,7 +15,7 @@ data:
   - icon: ':warning:'
     path: graph/is_isomorphic.hpp
     title: graph/is_isomorphic.hpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: graph/lowest_common_ancestor.hpp
     title: "\u7121\u5411\u5358\u7D14\u6728\u306E\u6700\u5C0F\u5171\u901A\u7956\u5148\
       \u3092\u6C42\u3081\u308B\u30AF\u30E9\u30B9"
@@ -26,25 +26,25 @@ data:
     path: other/random.hpp
     title: other/random.hpp
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-1-a.test.cpp
     title: test/grl-1-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-1-c.test.cpp
     title: test/grl-1-c.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-2-a.test.cpp
     title: test/grl-2-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-a.test.cpp
     title: test/grl-3-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-3-b.test.cpp
     title: test/grl-3-b.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-a.test.cpp
     title: test/grl-5-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/grl-5-c.test.cpp
     title: test/grl-5-c.test.cpp
   - icon: ':x:'
@@ -82,16 +82,16 @@ data:
     \  * @brief x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\
     \u30BA\u3092\u8FD4\u3059\n     */\n    int size(int x) const { return -par[leader(x)];\
     \ }\n\n    /**\n     * @brief \u3059\u3079\u3066\u306E\u30CE\u30FC\u30C9\u306E\
-    \u6570\n     */\n    int size() const { return N; }\n\n    std::vector<int> contained_group(int\
+    \u6570\n     */\n    int size() const { return N; }\n\n    std::vector<int> group_containing_node(int\
     \ x) const {\n        std::vector<int> ret{x};\n        for (int cu = nxt[x];\
     \ cu != ret[0]; cu = nxt[cu])\n            ret.push_back(cu);\n        return\
     \ ret;\n    }\n\n    int count_groups() const { return group_num; }\n\n    std::vector<std::vector<int>>\
     \ all_groups() const {\n        std::vector<std::vector<int>> result;\n      \
     \  result.reserve(group_num);\n        std::vector<bool> used(N, false);\n   \
     \     for (int i = 0; i < N; ++i) {\n            if (!used[i]) {\n           \
-    \     result.emplace_back(contained_group(i));\n                for (int x : result.back())\
-    \ {\n                    used[x] = true;\n                }\n            }\n \
-    \       }\n        return result;\n    }\n};\n"
+    \     result.emplace_back(group_containing_node(i));\n                for (int\
+    \ x : result.back()) {\n                    used[x] = true;\n                }\n\
+    \            }\n        }\n        return result;\n    }\n};\n"
   code: "#pragma once\n#include <assert.h>\n\n#include <algorithm>\n#include <vector>\n\
     \nclass union_find {\n  private:\n    int N;\n    mutable std::vector<int> par;\n\
     \    std::vector<int> nxt;\n    int group_num; // \u96C6\u5408\u306E\u6570\n\n\
@@ -112,16 +112,16 @@ data:
     \u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\u30BA\u3092\u8FD4\u3059\n     */\n\
     \    int size(int x) const { return -par[leader(x)]; }\n\n    /**\n     * @brief\
     \ \u3059\u3079\u3066\u306E\u30CE\u30FC\u30C9\u306E\u6570\n     */\n    int size()\
-    \ const { return N; }\n\n    std::vector<int> contained_group(int x) const {\n\
-    \        std::vector<int> ret{x};\n        for (int cu = nxt[x]; cu != ret[0];\
+    \ const { return N; }\n\n    std::vector<int> group_containing_node(int x) const\
+    \ {\n        std::vector<int> ret{x};\n        for (int cu = nxt[x]; cu != ret[0];\
     \ cu = nxt[cu])\n            ret.push_back(cu);\n        return ret;\n    }\n\n\
     \    int count_groups() const { return group_num; }\n\n    std::vector<std::vector<int>>\
     \ all_groups() const {\n        std::vector<std::vector<int>> result;\n      \
     \  result.reserve(group_num);\n        std::vector<bool> used(N, false);\n   \
     \     for (int i = 0; i < N; ++i) {\n            if (!used[i]) {\n           \
-    \     result.emplace_back(contained_group(i));\n                for (int x : result.back())\
-    \ {\n                    used[x] = true;\n                }\n            }\n \
-    \       }\n        return result;\n    }\n};\n"
+    \     result.emplace_back(group_containing_node(i));\n                for (int\
+    \ x : result.back()) {\n                    used[x] = true;\n                }\n\
+    \            }\n        }\n        return result;\n    }\n};\n"
   dependsOn: []
   isVerificationFile: false
   path: data_structure/union_find.hpp
@@ -133,7 +133,7 @@ data:
   - graph/is_isomorphic.hpp
   - graph/lowest_common_ancestor.hpp
   - other/random.hpp
-  timestamp: '2023-07-20 02:56:32+09:00'
+  timestamp: '2023-09-02 19:30:20+09:00'
   verificationStatus: LIBRARY_SOME_WA
   verifiedWith:
   - test/grl-2-a.test.cpp

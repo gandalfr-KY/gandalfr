@@ -1,24 +1,24 @@
 ---
 data:
   _extendedDependsOn:
-  - icon: ':question:'
+  - icon: ':x:'
     path: standard/mod_integer.hpp
     title: standard/mod_integer.hpp
   _extendedRequiredBy:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: math/Eratosthenes.hpp
     title: "\u7D20\u6570\u5224\u5B9A\u3084\u5217\u6319\u3092\u30B5\u30DD\u30FC\u30C8\
       \u3059\u308B\u30AF\u30E9\u30B9"
   _extendedVerifiedWith:
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/ntl-1-a.test.cpp
     title: test/ntl-1-a.test.cpp
-  - icon: ':heavy_check_mark:'
+  - icon: ':x:'
     path: test/ntl-1-d.test.cpp
     title: test/ntl-1-d.test.cpp
-  _isVerificationFailed: false
+  _isVerificationFailed: true
   _pathExtension: hpp
-  _verificationStatusIcon: ':heavy_check_mark:'
+  _verificationStatusIcon: ':x:'
   attributes:
     links: []
   bundledCode: "#line 2 \"math/enumeration_utility.hpp\"\n#include <algorithm>\n#include\
@@ -155,7 +155,7 @@ data:
   requiredBy:
   - math/Eratosthenes.hpp
   timestamp: '2023-08-26 20:18:13+09:00'
-  verificationStatus: LIBRARY_ALL_AC
+  verificationStatus: LIBRARY_ALL_WA
   verifiedWith:
   - test/ntl-1-d.test.cpp
   - test/ntl-1-a.test.cpp

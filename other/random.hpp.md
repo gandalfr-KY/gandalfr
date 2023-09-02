@@ -42,17 +42,17 @@ data:
     \  * @brief x \u306E\u5C5E\u3059\u308B\u30B0\u30EB\u30FC\u30D7\u306E\u30B5\u30A4\
     \u30BA\u3092\u8FD4\u3059\n     */\n    int size(int x) const { return -par[leader(x)];\
     \ }\n\n    /**\n     * @brief \u3059\u3079\u3066\u306E\u30CE\u30FC\u30C9\u306E\
-    \u6570\n     */\n    int size() const { return N; }\n\n    std::vector<int> contained_group(int\
+    \u6570\n     */\n    int size() const { return N; }\n\n    std::vector<int> group_containing_node(int\
     \ x) const {\n        std::vector<int> ret{x};\n        for (int cu = nxt[x];\
     \ cu != ret[0]; cu = nxt[cu])\n            ret.push_back(cu);\n        return\
     \ ret;\n    }\n\n    int count_groups() const { return group_num; }\n\n    std::vector<std::vector<int>>\
     \ all_groups() const {\n        std::vector<std::vector<int>> result;\n      \
     \  result.reserve(group_num);\n        std::vector<bool> used(N, false);\n   \
     \     for (int i = 0; i < N; ++i) {\n            if (!used[i]) {\n           \
-    \     result.emplace_back(contained_group(i));\n                for (int x : result.back())\
-    \ {\n                    used[x] = true;\n                }\n            }\n \
-    \       }\n        return result;\n    }\n};\n#line 3 \"math/matrix.hpp\"\n\n\
-    #include <iostream>\n#include <utility>\n#include <valarray>\n#line 8 \"math/matrix.hpp\"\
+    \     result.emplace_back(group_containing_node(i));\n                for (int\
+    \ x : result.back()) {\n                    used[x] = true;\n                }\n\
+    \            }\n        }\n        return result;\n    }\n};\n#line 3 \"math/matrix.hpp\"\
+    \n\n#include <iostream>\n#include <utility>\n#include <valarray>\n#line 8 \"math/matrix.hpp\"\
     \n\ntemplate <class T> class matrix {\n  private:\n    int H, W;\n    std::valarray<std::valarray<T>>\
     \ table;\n\n    enum rowtrans_operation_name { SCALE, SWAP, ADD };\n    struct\
     \ rowtrans_operation {\n        int op, tar, res;\n        T scl;\n    };\n  \
@@ -198,7 +198,7 @@ data:
     \ G;\n    std::vector<edge<WEIGHT>> E;\n    union_find uf;\n    WEIGHT W = 0;\n\
     \n    mutable std::vector<bool> visited; // dfs / bfs \u306E\u305F\u3081\u306E\
     \u9818\u57DF\n    bool forest_flag = true;\n    const WEIGHT WEIGHT_MAX = std::numeric_limits<WEIGHT>::max();\n\
-    \n    void reset_visited_flag(int node) const {\n        for (int x : uf.contained_group(node))\n\
+    \n    void reset_visited_flag(int node) const {\n        for (int x : uf.group_containing_node(node))\n\
     \            visited[x] = false;\n    }\n\n    void reset_visited_flag() const\
     \ { visited.assign(N, false); }\n\n  public:\n    graph() : N(0){};\n    graph(int\
     \ n) : N(n), G(n), uf(n), visited(n){};\n\n    /**\n     * @brief \u30CE\u30FC\
@@ -219,47 +219,51 @@ data:
     \    /**\n     * @param x \u30CE\u30FC\u30C9\u756A\u53F7\n     * @param y \u30CE\
     \u30FC\u30C9\u756A\u53F7\n     * @return x, y \u304C\u9023\u7D50\u304B\u3069\u3046\
     \u304B\n     */\n    bool are_connected(int x, int y) const { return uf.same(x,\
-    \ y); }\n\n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u6570\n    \
-    \ */\n    int count_connected_components() const { return uf.count_groups(); }\n\
-    \n    /**\n     * @return \u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\u30C8\u306E\
-    \u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> weakly_connected_components()\
-    \ const {\n        return uf.all_groups();\n    }\n\n    /**\n     * @return \u6728\
-    \u304B\n     */\n    bool is_tree() const { return forest_flag && uf.count_groups()\
-    \ == 1; }\n\n    /**\n     * @return \u68EE\u304B\n     */\n    bool is_forest()\
-    \ const { return forest_flag; }\n\n    /**\n     * @return \u30B0\u30E9\u30D5\u306E\
-    \u91CD\u307F\n     */\n    WEIGHT weight() const { return W; }\n\n    /**\n  \
-    \   * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\u8FBA\u306E id \u306F\
-    \u4FDD\u6301\u3055\u308C\u308B\n     */\n    void add_edge(const edge<WEIGHT>\
-    \ &e) {\n        forest_flag &= uf.merge(e.from, e.to);\n\n        G[e.from].emplace_back(e);\n\
-    \        if (!is_directed && e.from != e.to)\n            G[e.to].emplace_back(e.reverse());\n\
-    \n        if constexpr (is_directed) {\n            E.emplace_back(e);\n     \
-    \   } else {\n            E.emplace_back(e.minmax());\n        }\n        W +=\
-    \ e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\
-    \u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\
-    \n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\u30E9\u30FC\n     */\n\
-    \    void add_edge(int from, int to, WEIGHT cost) {\n        static_assert(!std::is_same<WEIGHT,\
-    \ int>::value);\n        add_edge({from, to, cost, (int)E.size()});\n    }\n\n\
-    \    /**\n     * @attention \u8FBA\u306E id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\
-    \u306E\u672C\u6570)\u756A\u76EE \u304C\u632F\u3089\u308C\u308B\n     * @attention\
-    \ WEIGHT \u304C int \u4EE5\u5916\u3060\u3068\u30A8\u30E9\u30FC\n     */\n    void\
-    \ add_edge(int from, int to) {\n        static_assert(std::is_same<WEIGHT, int>::value);\n\
-    \        add_edge({from, to, (int)E.size()});\n    }\n\n    /**\n     * @brief\
-    \ \u30B0\u30E9\u30D5\u3092\u9023\u7D50\u306A\u30B0\u30E9\u30D5\u306B\u5206\u3051\
-    \u3066\u30EA\u30B9\u30C8\u306B\u3057\u3066\u8FD4\u3059\n     * @example auto[Gs,\
-    \ gr, nd] = G.decompose();\n     * @returns\n     * 1.\u30B0\u30E9\u30D5\u306E\
-    \u30EA\u30B9\u30C8\n     * 2.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\
-    \u30EA\u30B9\u30C8\u306E\u4F55\u756A\u76EE\u306B\u5C5E\u3059\u308B\u304B\n   \
-    \  * 3.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\u3069\u306E\u30CE\
-    \u30FC\u30C9\u306B\u306A\u3063\u3066\u3044\u308B\u304B\n     */\n    std::tuple<std::vector<graph>,\
-    \ std::vector<int>, std::vector<int>>\n    decompose() const {\n        std::vector<graph>\
-    \ Gs(uf.count_groups());\n        std::vector<std::vector<int>> groups(uf.all_groups());\n\
-    \        std::vector<int> group_id(N), node_id(N);\n        for (int i = 0; i\
-    \ < (int)groups.size(); i++) {\n            Gs[i].expand(groups[i].size());\n\
-    \            for (int j = 0; j < (int)groups[i].size(); j++) {\n             \
-    \   group_id[groups[i][j]] = i;\n                node_id[groups[i][j]] = j;\n\
-    \            }\n        }\n        for (auto e : E) {\n            int id = group_id[e.from];\n\
-    \            e.from = node_id[e.from];\n            e.to = node_id[e.to];\n  \
-    \          Gs[id].add_edge(e);\n        }\n        return std::make_tuple(std::move(Gs),\
+    \ y); }\n\n    /**\n     * @return \u5F31\u9023\u7D50\u6210\u5206\u306E\u6570\n\
+    \     */\n    int count_connected_components() const { return uf.count_groups();\
+    \ }\n\n    /**\n     * @return \u5F31\u9023\u7D50\u6210\u5206\u306E\u30EA\u30B9\
+    \u30C8\u306E\u30EA\u30B9\u30C8\n     */\n    std::vector<std::vector<int>> weakly_connected_components()\
+    \ const {\n        return uf.all_groups();\n    }\n\n    /**\n     * \u30CE\u30FC\
+    \u30C9 x \u304C\u542B\u307E\u308C\u3066\u3044\u308B\u5F31\u9023\u7D50\u6210\u5206\
+    \u306E\u30EA\u30B9\u30C8\u3092\u8FD4\u3059\n     */\n    std::vector<int> component_containing_node(int\
+    \ x) {\n        return uf.group_containing_node(x);\n    }\n\n    /**\n     *\
+    \ @return \u6728\u304B\n     */\n    bool is_tree() const { return forest_flag\
+    \ && uf.count_groups() == 1; }\n\n    /**\n     * @return \u68EE\u304B\n     */\n\
+    \    bool is_forest() const { return forest_flag; }\n\n    /**\n     * @return\
+    \ \u30B0\u30E9\u30D5\u306E\u91CD\u307F\n     */\n    WEIGHT weight() const { return\
+    \ W; }\n\n    /**\n     * @param e \u8FBA\n     * @attention \u6E21\u3057\u305F\
+    \u8FBA\u306E id \u306F\u4FDD\u6301\u3055\u308C\u308B\n     */\n    void add_edge(const\
+    \ edge<WEIGHT> &e) {\n        forest_flag &= uf.merge(e.from, e.to);\n\n     \
+    \   G[e.from].emplace_back(e);\n        if (!is_directed && e.from != e.to)\n\
+    \            G[e.to].emplace_back(e.reverse());\n\n        if constexpr (is_directed)\
+    \ {\n            E.emplace_back(e);\n        } else {\n            E.emplace_back(e.minmax());\n\
+    \        }\n        W += e.cost;\n    }\n\n    /**\n     * @attention \u8FBA\u306E\
+    \ id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\
+    \u632F\u3089\u308C\u308B\n     * @attention WEIGHT \u304C int \u3060\u3068\u30A8\
+    \u30E9\u30FC\n     */\n    void add_edge(int from, int to, WEIGHT cost) {\n  \
+    \      static_assert(!std::is_same<WEIGHT, int>::value);\n        add_edge({from,\
+    \ to, cost, (int)E.size()});\n    }\n\n    /**\n     * @attention \u8FBA\u306E\
+    \ id \u306F\u3001(\u73FE\u5728\u306E\u8FBA\u306E\u672C\u6570)\u756A\u76EE \u304C\
+    \u632F\u3089\u308C\u308B\n     * @attention WEIGHT \u304C int \u4EE5\u5916\u3060\
+    \u3068\u30A8\u30E9\u30FC\n     */\n    void add_edge(int from, int to) {\n   \
+    \     static_assert(std::is_same<WEIGHT, int>::value);\n        add_edge({from,\
+    \ to, (int)E.size()});\n    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\
+    \u9023\u7D50\u306A\u30B0\u30E9\u30D5\u306B\u5206\u3051\u3066\u30EA\u30B9\u30C8\
+    \u306B\u3057\u3066\u8FD4\u3059\n     * @example auto[Gs, gr, nd] = G.decompose();\n\
+    \     * @returns\n     * 1.\u30B0\u30E9\u30D5\u306E\u30EA\u30B9\u30C8\n     *\
+    \ 2.\u5404\u30CE\u30FC\u30C9\u304C\u30B0\u30E9\u30D5\u306E\u30EA\u30B9\u30C8\u306E\
+    \u4F55\u756A\u76EE\u306B\u5C5E\u3059\u308B\u304B\n     * 3.\u5404\u30CE\u30FC\u30C9\
+    \u304C\u30B0\u30E9\u30D5\u306E\u3069\u306E\u30CE\u30FC\u30C9\u306B\u306A\u3063\
+    \u3066\u3044\u308B\u304B\n     */\n    std::tuple<std::vector<graph>, std::vector<int>,\
+    \ std::vector<int>>\n    decompose() const {\n        std::vector<graph> Gs(uf.count_groups());\n\
+    \        std::vector<std::vector<int>> groups(uf.all_groups());\n        std::vector<int>\
+    \ group_id(N), node_id(N);\n        for (int i = 0; i < (int)groups.size(); i++)\
+    \ {\n            Gs[i].expand(groups[i].size());\n            for (int j = 0;\
+    \ j < (int)groups[i].size(); j++) {\n                group_id[groups[i][j]] =\
+    \ i;\n                node_id[groups[i][j]] = j;\n            }\n        }\n \
+    \       for (auto e : E) {\n            int id = group_id[e.from];\n         \
+    \   e.from = node_id[e.from];\n            e.to = node_id[e.to];\n           \
+    \ Gs[id].add_edge(e);\n        }\n        return std::make_tuple(std::move(Gs),\
     \ std::move(group_id),\n                               std::move(node_id));\n\
     \    }\n\n    /**\n     * @brief \u30B0\u30E9\u30D5\u3092\u96A3\u63A5\u884C\u5217\
     \u306B\u5909\u63DB\n     * @param invalid \u8FBA\u306E\u306A\u3044\u3068\u304D\
@@ -275,39 +279,40 @@ data:
     \ result;\n        reset_visited_flag(start);\n        visited[start] = true;\n\
     \        auto dfs = [&](auto self, int cu, int pa = -1) -> void {\n          \
     \  result.push_back(cu);\n            for (int to : G[cu]) {\n               \
-    \ if (visited[to]) continue;\n                visited[to] = true;\n          \
-    \      self(self, to, cu);\n            }\n        };\n        dfs(dfs, start);\n\
-    \        return result;\n    }\n\n    /**\n     * @brief \u901A\u308A\u304C\u3051\
-    \u9806\u306B bfs\n     */\n    std::vector<int> inorder(int start) const {\n \
-    \       std::vector<int> result;\n        reset_visited_flag(start);\n       \
-    \ visited[start] = true;\n        auto dfs = [&](auto self, int cu, int pa = -1)\
-    \ -> void {\n            for (int to : G[cu]) {\n                if (visited[to])\
-    \ continue;\n                visited[to] = true;\n                result.push_back(cu);\n\
-    \                self(self, to, cu);\n            }\n            result.push_back(cu);\n\
-    \        };\n        dfs(dfs, start);\n        return result;\n    }\n\n    /**\n\
-    \     * @brief \u5E30\u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int>\
-    \ postorder(int start) const {\n        std::vector<int> result;\n        reset_visited_flag(start);\n\
+    \ if (visited[to])\n                    continue;\n                visited[to]\
+    \ = true;\n                self(self, to, cu);\n            }\n        };\n  \
+    \      dfs(dfs, start);\n        return result;\n    }\n\n    /**\n     * @brief\
+    \ \u901A\u308A\u304C\u3051\u9806\u306B bfs\n     */\n    std::vector<int> inorder(int\
+    \ start) const {\n        std::vector<int> result;\n        reset_visited_flag(start);\n\
     \        visited[start] = true;\n        auto dfs = [&](auto self, int cu, int\
-    \ pa = -1) -> void {\n            for (int to : G[cu]) {\n                if (visited[to])\
-    \ continue;\n                visited[to] = true;\n                self(self, to,\
-    \ cu);\n            }\n            result.push_back(cu);\n        };\n       \
-    \ dfs(dfs, start);\n        return result;\n    }\n\n  private:\n    using PAIR\
-    \ = std::pair<WEIGHT, int>;\n    using Dijkstra_queue =\n        std::priority_queue<PAIR,\
-    \ std::vector<PAIR>, std::greater<PAIR>>;\n\n    void run_bfs(std::vector<int>\
-    \ &dist, std::queue<int> &q) const {\n        while (!q.empty()) {\n         \
-    \   int cu = q.front();\n            q.pop();\n            for (auto &e : G[cu])\
-    \ {\n                if (dist[e.to] != WEIGHT_MAX)\n                    continue;\n\
-    \                dist[e.to] = dist[cu] + 1;\n                q.push(e.to);\n \
-    \           }\n        }\n    }\n\n    void run_Dijkstra(std::vector<WEIGHT> &dist,\
-    \ Dijkstra_queue &q) const {\n        while (!q.empty()) {\n            WEIGHT\
-    \ cur_dist = q.top().first;\n            int cu = q.top().second;\n          \
-    \  q.pop();\n\n            if (visited[cu])\n                continue;\n     \
-    \       visited[cu] = true;\n\n            for (auto &e : G[cu]) {\n         \
-    \       WEIGHT alt = cur_dist + e.cost;\n                if (dist[e.to] <= alt)\n\
-    \                    continue;\n                dist[e.to] = alt;\n          \
-    \      q.push({alt, e.to});\n            }\n        }\n    }\n\n  public:\n  \
-    \  /**\n     * @brief \u6700\u77ED\u8DDD\u96E2\u3092\u8A08\u7B97\u3059\u308B\n\
-    \     * @param start_node \u59CB\u70B9\n     * @param invalid \u5230\u9054\u4E0D\
+    \ pa = -1) -> void {\n            for (int to : G[cu]) {\n                if (visited[to])\n\
+    \                    continue;\n                visited[to] = true;\n        \
+    \        result.push_back(cu);\n                self(self, to, cu);\n        \
+    \    }\n            result.push_back(cu);\n        };\n        dfs(dfs, start);\n\
+    \        return result;\n    }\n\n    /**\n     * @brief \u5E30\u308A\u304C\u3051\
+    \u9806\u306B bfs\n     */\n    std::vector<int> postorder(int start) const {\n\
+    \        std::vector<int> result;\n        reset_visited_flag(start);\n      \
+    \  visited[start] = true;\n        auto dfs = [&](auto self, int cu, int pa =\
+    \ -1) -> void {\n            for (int to : G[cu]) {\n                if (visited[to])\n\
+    \                    continue;\n                visited[to] = true;\n        \
+    \        self(self, to, cu);\n            }\n            result.push_back(cu);\n\
+    \        };\n        dfs(dfs, start);\n        return result;\n    }\n\n  private:\n\
+    \    using PAIR = std::pair<WEIGHT, int>;\n    using Dijkstra_queue =\n      \
+    \  std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;\n\n    void\
+    \ run_bfs(std::vector<int> &dist, std::queue<int> &q) const {\n        while (!q.empty())\
+    \ {\n            int cu = q.front();\n            q.pop();\n            for (auto\
+    \ &e : G[cu]) {\n                if (dist[e.to] != WEIGHT_MAX)\n             \
+    \       continue;\n                dist[e.to] = dist[cu] + 1;\n              \
+    \  q.push(e.to);\n            }\n        }\n    }\n\n    void run_Dijkstra(std::vector<WEIGHT>\
+    \ &dist, Dijkstra_queue &q) const {\n        while (!q.empty()) {\n          \
+    \  WEIGHT cur_dist = q.top().first;\n            int cu = q.top().second;\n  \
+    \          q.pop();\n\n            if (visited[cu])\n                continue;\n\
+    \            visited[cu] = true;\n\n            for (auto &e : G[cu]) {\n    \
+    \            WEIGHT alt = cur_dist + e.cost;\n                if (dist[e.to] <=\
+    \ alt)\n                    continue;\n                dist[e.to] = alt;\n   \
+    \             q.push({alt, e.to});\n            }\n        }\n    }\n\n  public:\n\
+    \    /**\n     * @brief \u6700\u77ED\u8DDD\u96E2\u3092\u8A08\u7B97\u3059\u308B\
+    \n     * @param start_node \u59CB\u70B9\n     * @param invalid \u5230\u9054\u4E0D\
     \u80FD\u306A\u9802\u70B9\u306B\u683C\u7D0D\u3055\u308C\u308B\u5024\n     * @return\
     \ \u5404\u30CE\u30FC\u30C9\u307E\u3067\u306E\u6700\u77ED\u8DDD\u96E2\u306E\u30EA\
     \u30B9\u30C8\n     */\n    std::vector<WEIGHT> distances(int start_node, WEIGHT\
@@ -391,7 +396,8 @@ data:
     \                }\n            } else if (e.to != par) {\n                low[idx]\
     \ = std::min(low[idx], ord[e.to]);\n            }\n        }\n        is_apt |=\
     \ par == -1 && cnt > 1;\n        if (is_apt)\n            apts.push_back(idx);\n\
-    \        return k;\n    }\n\n  public:\n    std::pair<std::vector<edge<WEIGHT>>,\
+    \        return k;\n    }\n\n  public:\n    /**\n     * @return pair<vector<\u6A4B\
+    >, vector<\u95A2\u7BC0\u70B9>>\n     */\n    std::pair<std::vector<edge<WEIGHT>>,\
     \ std::vector<int>> lowlink() {\n        static_assert(!is_directed);\n      \
     \  std::vector<edge<WEIGHT>> brds;\n        std::vector<int> apts, ord(N, 0),\
     \ low(N, 0);\n        reset_visited_flag();\n        int k = 0;\n        for (int\
@@ -433,7 +439,7 @@ data:
   isVerificationFile: false
   path: other/random.hpp
   requiredBy: []
-  timestamp: '2023-08-25 14:59:01+09:00'
+  timestamp: '2023-09-02 19:34:44+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: other/random.hpp

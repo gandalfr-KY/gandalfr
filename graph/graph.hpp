@@ -93,7 +93,7 @@ template <typename WEIGHT, bool is_directed> class graph {
     }
 
     /**
-     * ノード x が含まれている弱連結成分のリストを返す
+     * @brief ノード x が含まれている弱連結成分のリストを返す
      */
     std::vector<int> component_containing_node(int x) {
         return uf.group_containing_node(x);

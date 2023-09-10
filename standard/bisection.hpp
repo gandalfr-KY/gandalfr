@@ -1,10 +1,11 @@
 #include <type_traits>
 
 template <class T, class Func> void bisection(T &t, T &f, const Func &F) {
-    static_assert(std::is_invocable_r_v<bool, Func, T>);
+    static_assert(std::is_integral_v<T> && std::is_signed_v<T>, "T must be a signed integral type.");
+    static_assert(std::is_invocable_r_v<bool, Func, T>, "Func must be invocable with T and return bool.");
     assert(F(t) && !F(f));
     while (std::abs(t - f) > 1) {
-        T mid = (t + f) / 2;
+        T mid = (a & b) + ((a ^ b) >> 1);
         (F(mid) ? t : f) = mid;
     }
 }

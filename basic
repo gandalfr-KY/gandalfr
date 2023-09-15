@@ -18,6 +18,7 @@
 #include "standard/rolling_hash.hpp"
 #include "standard/inversion.hpp"
 #include "standard/grid.hpp"
+#include "standard/vector_nd.hpp"
 #include "standard/longest_increasing_subsequence.hpp"
 #include "standard/compress.hpp"
 #include "standard/mod_integer.hpp"

@@ -52,12 +52,15 @@ struct grid {
         os << g.h << " " << g.w;
         return os;
     }
+
+    /*
+     * | 8 4 5 |
+     * | 3 0 1 |
+     * | 7 2 6 |
+     */
+    static const std::vector<grid> around;
 };
 
-/*
- * | 8 4 5 |
- * | 3 0 1 |
- * | 7 2 6 |
- */
-const std::vector<grid> around = {{0, 0},  {0, 1}, {1, 0},   {0, -1}, {-1, 0},
-                                  {-1, 1}, {1, 1}, {-1, -1}, {1, -1}};
+const std::vector<grid> grid::around = {{0, 0},  {0, 1},   {1, 0},
+                                        {0, -1}, {-1, 0},  {-1, 1},
+                                        {1, 1},  {-1, -1}, {1, -1}};

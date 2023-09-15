@@ -198,19 +198,19 @@ template <typename WEIGHT, bool is_directed> class graph {
     }
 
     /**
-     * @brief 行きがけ順に bfs
+     * @brief 行きがけ順に dfs
      */
     std::vector<int> preorder(int start) const {
         std::vector<int> result;
         reset_visited_flag(start);
         visited[start] = true;
-        auto dfs = [&](auto self, int cu, int pa = -1) -> void {
+        auto dfs = [&](auto self, int cu) -> void {
             result.push_back(cu);
             for (int to : G[cu]) {
                 if (visited[to])
                     continue;
                 visited[to] = true;
-                self(self, to, cu);
+                self(self, to);
             }
         };
         dfs(dfs, start);
@@ -218,19 +218,19 @@ template <typename WEIGHT, bool is_directed> class graph {
     }
 
     /**
-     * @brief 通りがけ順に bfs
+     * @brief 通りがけ順に dfs
      */
     std::vector<int> inorder(int start) const {
         std::vector<int> result;
         reset_visited_flag(start);
         visited[start] = true;
-        auto dfs = [&](auto self, int cu, int pa = -1) -> void {
+        auto dfs = [&](auto self, int cu) -> void {
             for (int to : G[cu]) {
                 if (visited[to])
                     continue;
                 visited[to] = true;
                 result.push_back(cu);
-                self(self, to, cu);
+                self(self, to);
             }
             result.push_back(cu);
         };
@@ -239,18 +239,18 @@ template <typename WEIGHT, bool is_directed> class graph {
     }
 
     /**
-     * @brief 帰りがけ順に bfs
+     * @brief 帰りがけ順に dfs
      */
     std::vector<int> postorder(int start) const {
         std::vector<int> result;
         reset_visited_flag(start);
         visited[start] = true;
-        auto dfs = [&](auto self, int cu, int pa = -1) -> void {
+        auto dfs = [&](auto self, int cu) -> void {
             for (int to : G[cu]) {
                 if (visited[to])
                     continue;
                 visited[to] = true;
-                self(self, to, cu);
+                self(self, to);
             }
             result.push_back(cu);
         };

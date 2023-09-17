@@ -7,13 +7,13 @@
  * 強連結成分を簡約したグラフを返す。ただし、自己ループ無し、多重辺あり 前処理
  * O(N) verify : https://atcoder.jp/contests/practice2/submissions/36388906
  */
-template <typename WEIGHT> class strongly_connected_components {
+template <typename Weight> class strongly_connected_components {
   private:
     std::vector<int> grp_id;
     std::vector<std::vector<int>> grps;
-    graph<WEIGHT, true> S;
+    graph<Weight, true> S;
 
-    void dfs1(const graph<WEIGHT, true> &G, int cu, std::vector<int> &ord,
+    void dfs1(const graph<Weight, true> &G, int cu, std::vector<int> &ord,
               std::vector<bool> &used) {
         if (used[cu])
             return;
@@ -23,7 +23,7 @@ template <typename WEIGHT> class strongly_connected_components {
         ord.push_back(cu);
     }
 
-    void dfs2(const graph<WEIGHT, true> &G, int cu, int id) {
+    void dfs2(const graph<Weight, true> &G, int cu, int id) {
         if (grp_id[cu] != -1)
             return;
         grp_id[cu] = id;
@@ -32,12 +32,12 @@ template <typename WEIGHT> class strongly_connected_components {
     }
 
   public:
-    strongly_connected_components(const graph<WEIGHT, true> &G)
+    strongly_connected_components(const graph<Weight, true> &G)
         : grp_id(G.count_nodes(), -1) {
         int N = G.count_nodes();
         std::vector<bool> used(N, false);
         std::vector<int> ord;
-        graph<WEIGHT, true> R(G.reverse());
+        graph<Weight, true> R(G.reverse());
 
         for (int i = 0; i < N; i++) {
             dfs1(G, i, ord, used);
@@ -65,5 +65,5 @@ template <typename WEIGHT> class strongly_connected_components {
 
     const std::vector<std::vector<int>> &groups() { return grps; }
     const std::vector<int> &group_id() { return grp_id; }
-    const graph<WEIGHT, true> &simplified_graph() { return S; };
+    const graph<Weight, true> &simplified_graph() { return S; };
 };

@@ -6,16 +6,16 @@
 
 // 多分あってるくらいの気持ちで...
 // 同型判定
-template <typename WEIGHT, bool is_directed>
-bool is_isomorphic(const graph<WEIGHT, is_directed> &G1,
-                   const graph<WEIGHT, is_directed> &G2) {
+template <typename Weight, bool is_directed>
+bool is_isomorphic(const graph<Weight, is_directed> &G1,
+                   const graph<Weight, is_directed> &G2) {
     if (G1.count_nodes() != G2.count_nodes())
         return false;
     if (G1.count_nodes() != G2.count_nodes())
         return false;
 
     int N = G1.count_nodes();
-    matrix<WEIGHT> adj1(G1.to_adjajency()), adj2(G2.to_adjajency());
+    matrix<Weight> adj1(G1.to_adjajency()), adj2(G2.to_adjajency());
 
     std::vector<int> nodes_id(N);
     std::iota(nodes_id.begin(), nodes_id.end(), 0);

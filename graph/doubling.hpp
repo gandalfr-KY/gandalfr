@@ -4,16 +4,16 @@
 /*
  * verify : https://atcoder.jp/contests/abc235/submissions/39688316
  */
-template <typename WEIGHT> class doubling {
+template <typename Weight> class doubling {
   private:
     int N;
-    WEIGHT MIN = std::numeric_limits<WEIGHT>::min();
+    Weight MIN = std::numeric_limits<Weight>::min();
     std::vector<int> depth;
     std::vector<short> log_table;
     std::vector<std::vector<int>> par;
-    std::vector<std::vector<WEIGHT>> max_cost;
+    std::vector<std::vector<Weight>> max_cost;
 
-    void dfs(const graph<WEIGHT, false> &G, int cu, int pa) {
+    void dfs(const graph<Weight, false> &G, int cu, int pa) {
         par[cu][0] = pa;
         for (auto &e : G[cu]) {
             if (e.to == pa)
@@ -25,7 +25,7 @@ template <typename WEIGHT> class doubling {
     }
 
   public:
-    doubling(const graph<WEIGHT, false> &G)
+    doubling(const graph<Weight, false> &G)
         : N(G.count_nodes()), depth(G.count_nodes(), 0),
           par(G.count_nodes(), std::vector<int>(1)), max_cost(G.count_nodes()) {
         max_cost[0] = {MIN};
@@ -62,8 +62,8 @@ template <typename WEIGHT> class doubling {
         }
     }
 
-    WEIGHT get_max_cost(int a, int b) {
-        WEIGHT ret = MIN;
+    Weight get_max_cost(int a, int b) {
+        Weight ret = MIN;
         if (depth[a] < depth[b])
             std::swap(a, b);
         for (int i = 0, d = depth[a] - depth[b]; d > 0; d >>= 1, i++) {

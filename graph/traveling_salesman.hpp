@@ -5,13 +5,13 @@
 /*
  * verify : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=7650432#1
  */
-template <class WEIGHT, bool is_directed>
-WEIGHT traveling_salesman(const graph<WEIGHT, is_directed> &G) {
-    matrix<WEIGHT> adj(G, -1);
-    const WEIGHT MAX = std::numeric_limits<WEIGHT>::max() / 2;
+template <class Weight, bool is_directed>
+Weight traveling_salesman(const graph<Weight, is_directed> &G) {
+    matrix<Weight> adj(G, -1);
+    const Weight MAX = std::numeric_limits<Weight>::max() / 2;
     int N = G.count_nodes();
 
-    std::vector<std::vector<WEIGHT>> dp((1 << N), std::vector<WEIGHT>(N, MAX));
+    std::vector<std::vector<Weight>> dp((1 << N), std::vector<Weight>(N, MAX));
     dp[0][0] = 0;
 
     for (long long cuS = 0; cuS < (1 << N); cuS++) {
@@ -25,7 +25,7 @@ WEIGHT traveling_salesman(const graph<WEIGHT, is_directed> &G) {
         }
     }
 
-    WEIGHT ret = dp[(1 << N) - 1][0];
+    Weight ret = dp[(1 << N) - 1][0];
     if (ret == MAX)
         ret = -1;
     return ret;

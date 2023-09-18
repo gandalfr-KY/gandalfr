@@ -10,6 +10,8 @@
 #include "../math/matrix.hpp"
 #include "edge.hpp"
 
+namespace internal {
+
 template <typename Edge> class _base_graph {
   protected:
     int N;
@@ -47,13 +49,14 @@ template <typename Edge> class _base_graph {
             std::cout << e << std::endl;
     }
 };
+}
 
 /**
  * @brief グラフを管理するクラス。
  * @tparam Weight int なら重みなし、そうでないなら重みつきグラフ
  * @tparam is_directed 有向グラフかとうか
  */
-template <typename Weight, bool is_directed> class graph: public _base_graph<edge<Weight>> {
+template <typename Weight, bool is_directed> class graph: public internal::_base_graph<edge<Weight>> {
   private:
     union_find uf;
     mutable std::vector<bool> visited; // dfs / bfs のための領域
@@ -70,7 +73,7 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
 
   public:
     graph() {}
-    graph(int n) : _base_graph<edge<Weight>>(n), uf(n), visited(n) {}
+    graph(int n) : internal::_base_graph<edge<Weight>>(n), uf(n), visited(n) {}
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -542,16 +545,12 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
         }
         return {brds, apts};
     }
-
-    void print() const {
-        std::cout << this->N << " " << this->E.size() << std::endl;
-        for (const edge<Weight> &e : this->E)
-            std::cout << e << std::endl;
-    }
 };
 
-template <typename Weight, typename Flow> class flow_graph: public _base_graph<flow_edge<Weight, Flow>> {
+template <typename Weight, typename Flow> class flow_graph: public internal::_base_graph<flow_edge<Weight, Flow>> {
   public:
+    using internal::_base_graph<flow_edge<Weight, Flow>>::_base_graph;
+
     /**
      * @brief ノードの数をn個まで増やす
      * @param n サイズ
@@ -572,26 +571,37 @@ template <typename Weight, typename Flow> class flow_graph: public _base_graph<f
         flow_edge<Weight, Flow> e(from, to, capacity, capacity, id);
         this->E.push_back(e);
         this->G[from].push_back(e);
-        flow_edge<Weight, Flow> *ptr = &this->G[from].back();
+        int idx = this->G[from].size() - 1;
         this->G[to].push_back(e.reverse());
-        flow_edge<Weight, Flow> *r_ptr = &this->G[to].back();
-        r_ptr->r_ptr = ptr;
-        ptr->r_ptr = r_ptr;
+        int r_idx = this->G[to].size() - 1;
+        this->G[from][idx].r_idx = r_idx;
+        this->G[to][r_idx].r_idx = idx;
     }
 
-    /**
-     * @attention 辺の id は、(現在の辺の本数)番目 が振られる
-     */
-    void add_edge(int from, int to, Flow capacity, Weight cost) {
-        int id = (int)this->E.size();
-        flow_edge<Weight, Flow> e(from, to, capacity, capacity, cost, id);
-        this->E.push_back(e);
-        this->G[from].push_back(e);
-        flow_edge<Weight, Flow> *ptr = &this->G[from].back();
-        this->G[to].push_back(e.reverse());
-        flow_edge<Weight, Flow> *r_ptr = &this->G[to].back();
-        r_ptr->r_ptr = ptr;
-        ptr->r_ptr = r_ptr;
+    Flow Ford_Fulkerson(int s, int t) {
+
+        Flow flow = 0;
+        while(true) {
+            std::vector<bool> vis(this->N, false);
+            auto dfs = [&](auto self, int cur, Flow f) -> Flow {
+                if (cur == t) return f;
+                vis[cur] = true;
+                for (auto &e: this->G[cur]) {
+                    if (vis[e.to] || e.residual == static_cast<Flow>(0)) continue;
+                    Flow tmp = self(self, e.to, std::min<Flow>(e.residual, f));
+                    if (tmp > static_cast<Flow>(0)) {
+                        e.residual -= tmp;
+                        this->G[e.to][e.r_idx].residual += tmp;
+                        return tmp;
+                    }
+                }
+                return static_cast<Flow>(0);
+            };
+            Flow inc = dfs(dfs, s, std::numeric_limits<Flow>::max());
+            if (inc == 0) break;
+            flow += inc;
+        }
+        return flow;
     }
 
 };

@@ -61,7 +61,7 @@ template <> struct edge<int> : public internal::_base_edge<int> {
 
 template <class Weight, class Flow> 
 struct flow_edge : public internal::_base_edge<Weight> {
-    flow_edge *r_ptr = nullptr;
+    int r_idx = -1;
     Weight capacity, residual;
 
     flow_edge(int _from, int _to, Flow _residual, Flow _capacity, int _id)
@@ -75,6 +75,6 @@ struct flow_edge : public internal::_base_edge<Weight> {
 
   protected:
     void print(std::ostream &os) const override {
-        os << this->from << " " << this->to << " " << this->capacity - this->residual;
+        os << this->from << " " << this->to << " " << capacity - residual << "/" << capacity;
     }
 };

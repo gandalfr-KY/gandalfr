@@ -1,62 +1,20 @@
 #pragma once
-#include <algorithm>
 #include <assert.h>
 #include <queue>
-#include <stack>
 #include <tuple>
 #include <vector>
 
 #include "../data_structure/union_find.hpp"
 #include "../math/matrix.hpp"
-#include "edge.hpp"
-
-namespace internal {
-
-template <typename Edge> class _base_graph {
-  protected:
-    int N;
-    std::vector<std::vector<Edge>> G;
-    std::vector<Edge> E;
-
-  public:
-    _base_graph() {};
-    _base_graph(int n) : N(n), G(n) {};
-
-    /**
-     * @return ノードの数
-     */
-    int count_nodes() const { return N; }
-
-    /**
-     * @return 辺の数
-     */
-    int count_edges() const { return E.size(); }
-
-    /**
-     * @param n ノード番号
-     * @return ノード n からの隣接頂点のリストの const 参照
-     */
-    const std::vector<Edge> &operator[](int n) const { return G[n]; }
-
-    /**
-     * @return グラフ全体の辺のリストの const 参照
-     */
-    const std::vector<Edge> &edges() const { return E; }
-
-    void print() const {
-        std::cout << this->N << " " << this->E.size() << std::endl;
-        for (const Edge &e : this->E)
-            std::cout << e << std::endl;
-    }
-};
-}
+#include "base_graph.hpp"
 
 /**
  * @brief グラフを管理するクラス。
  * @tparam Weight int なら重みなし、そうでないなら重みつきグラフ
  * @tparam is_directed 有向グラフかとうか
  */
-template <typename Weight, bool is_directed> class graph: public internal::_base_graph<edge<Weight>> {
+template <typename Weight, bool is_directed>
+class graph : public internal::_base_graph<edge<Weight>> {
   private:
     union_find uf;
     mutable std::vector<bool> visited; // dfs / bfs のための領域
@@ -74,6 +32,13 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
   public:
     graph() {}
     graph(int n) : internal::_base_graph<edge<Weight>>(n), uf(n), visited(n) {}
+    graph(int n, int m)
+        : internal::_base_graph<edge<Weight>>(n, m), uf(n), visited(n) {}
+    graph(const graph &other) : graph(other.N) {
+        for (auto &e : other.E) {
+            add_edge(*e);
+        }
+    }
 
     /**
      * @brief ノードの数をn個まで増やす
@@ -109,17 +74,14 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
      * @attention 渡した辺の id は保持される
      */
     void add_edge(const edge<Weight> &e) {
-        forest_flag &= uf.merge(e.from, e.to);
+        forest_flag &= uf.merge(e.v[0], e.v[1]);
 
-        this->G[e.from].emplace_back(e);
-        if (!is_directed && e.from != e.to)
-            this->G[e.to].emplace_back(e.reverse());
+        this->E.emplace_back(std::make_unique<edge<Weight>>(e));
 
-        if constexpr (is_directed) {
-            this->E.emplace_back(e);
-        } else {
-            this->E.emplace_back(e.minmax());
-        }
+        this->G[e.v[0]].push_back(this->E.back().get());
+        if (!is_directed && e.v[0] != e.v[1])
+            this->G[e.v[1]].push_back(this->E.back().get());
+
         W += e.cost;
     }
 
@@ -167,7 +129,6 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
         return uf.group_containing_node(x);
     }
 
-
     /**
      * @brief グラフを連結なグラフに分けてリストにして返す
      * @example auto[Gs, gr, nd] = G.decompose();
@@ -188,10 +149,10 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
                 node_id[groups[i][j]] = j;
             }
         }
-        for (auto e : this->E) {
-            int id = group_id[e.from];
-            e.from = node_id[e.from];
-            e.to = node_id[e.to];
+        for (auto &e : this->E) {
+            int id = group_id[e->v[0]];
+            e->v[0] = node_id[e->v[0]];
+            e->v[1] = node_id[e->v[1]];
             Gs[id].add_edge(e);
         }
         return std::make_tuple(std::move(Gs), std::move(group_id),
@@ -208,9 +169,12 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
         matrix<Weight> ret(this->N, this->N, invalid);
         for (int i = 0; i < this->N; i++)
             ret(i, i) = 0;
-        for (int i = 0; i < this->N; i++)
-            for (auto &e : this->G[i])
-                ret(i, e.to) = e.cost;
+        for (auto &e : this->E) {
+            ret(e->v[0], e->v[1]) = e->cost;
+            if constexpr (!is_directed) {
+                ret(e->v[1], e->v[0]) = e->cost;
+            }
+        }
         return ret;
     }
 
@@ -224,10 +188,11 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
             int cu = q.front();
             q.pop();
             for (auto &e : this->G[cu]) {
-                if (dist[e.to] != WEIGHT_MAX)
+                int to = e->opp(cu);
+                if (dist[to] != WEIGHT_MAX)
                     continue;
-                dist[e.to] = dist[cu] + 1;
-                q.push(e.to);
+                dist[to] = dist[cu] + 1;
+                q.push(to);
             }
         }
     }
@@ -243,17 +208,17 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
             visited[cu] = true;
 
             for (auto &e : this->G[cu]) {
-                Weight alt = cur_dist + e.cost;
-                if (dist[e.to] <= alt)
+                int to = e->opp(cu);
+                Weight alt = cur_dist + e->cost;
+                if (dist[to] <= alt)
                     continue;
-                dist[e.to] = alt;
-                q.push({alt, e.to});
+                dist[to] = alt;
+                q.push({alt, to});
             }
         }
     }
 
   public:
-
     /**
      * @brief 最短距離を計算する
      * @param start_node 始点
@@ -273,45 +238,7 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
             // Dijkstra's algorithm
             Dijkstra_queue q;
             q.push({0, start_node});
-            this->reset_visited_flag(start_node);
-            run_Dijkstra(dist, q);
-        }
-
-        for (auto &x : dist)
-            if (x == WEIGHT_MAX)
-                x = invalid;
-        return dist;
-    }
-
-    /**
-     * @brief 最短距離を計算する
-     * @param start_nodes 始点のリスト
-     * @param invalid 到達不能な頂点に格納される値
-     * @return 各ノードまでの最短距離のリスト
-     */
-    std::vector<Weight> distances(const std::vector<int> &start_nodes,
-                                  Weight invalid) const {
-        std::vector<Weight> dist(this->N, WEIGHT_MAX);
-        for (auto &x : start_nodes)
-            dist[x] = 0;
-
-        if constexpr (std::is_same<Weight, int>::value) {
-            // BFS algorithm
-            std::queue<int> q;
-            for (auto &x : start_nodes)
-                q.push(x);
-            run_bfs(dist, q);
-        } else {
-            // Dijkstra's algorithm
-            Dijkstra_queue q;
-            std::set<int> st;
-            for (auto &x : start_nodes) {
-                q.push({0, x});
-                st.insert(uf.leader(x));
-            }
-            for (auto &x : st) {
-                this->reset_visited_flag(x);
-            }
+            reset_visited_flag(start_node);
             run_Dijkstra(dist, q);
         }
 
@@ -350,18 +277,19 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
             return {};
 
         auto R(this->reverse());
-        this->reset_visited_flag(end_node);
+        reset_visited_flag(end_node);
         visited[end_node] = true;
 
         int cu = end_node;
         std::vector<edge<Weight>> route;
         while (cu != start_node) {
-            for (auto e : R[cu]) {
-                if (visited[e.to])
+            for (auto &e : R[cu]) {
+                int to = e->opp(cu);
+                if (visited[to])
                     continue;
-                if (dist[cu] - e.cost == dist[e.to]) {
-                    visited[cu = e.to] = true;
-                    route.push_back(e.reverse());
+                if (dist[cu] - e->cost == dist[to]) {
+                    visited[cu = to] = true;
+                    route.push_back(e->reverse());
                     break;
                 }
             }
@@ -385,7 +313,7 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
         } else {
             graph ret(this->N);
             for (auto &e : this->E) {
-                ret.add_edge(e.reverse());
+                ret.add_edge(e->reverse());
             }
             return ret;
         }
@@ -396,11 +324,12 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
      */
     std::vector<int> preorder(int start) const {
         std::vector<int> result;
-        this->reset_visited_flag(start);
+        reset_visited_flag(start);
         visited[start] = true;
         auto dfs = [&](auto self, int cu) -> void {
             result.push_back(cu);
-            for (int to : this->G[cu]) {
+            for (auto &e : this->G[cu]) {
+                int to = e->opp(cu);
                 if (visited[to])
                     continue;
                 visited[to] = true;
@@ -416,10 +345,11 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
      */
     std::vector<int> inorder(int start) const {
         std::vector<int> result;
-        this->reset_visited_flag(start);
+        reset_visited_flag(start);
         visited[start] = true;
         auto dfs = [&](auto self, int cu) -> void {
-            for (int to : this->G[cu]) {
+            for (auto &e : this->G[cu]) {
+                int to = e->opp(cu);
                 if (visited[to])
                     continue;
                 visited[to] = true;
@@ -437,10 +367,11 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
      */
     std::vector<int> postorder(int start) const {
         std::vector<int> result;
-        this->reset_visited_flag(start);
+        reset_visited_flag(start);
         visited[start] = true;
         auto dfs = [&](auto self, int cu) -> void {
-            for (int to : this->G[cu]) {
+            for (auto &e : this->G[cu]) {
+                int to = e->opp(cu);
                 if (visited[to])
                     continue;
                 visited[to] = true;
@@ -455,8 +386,9 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
     std::vector<int> topological_sort() {
         static_assert(is_directed);
         std::vector<int> indeg(this->N, 0), sorted;
-        for (int to : this->E)
-            indeg[to]++;
+        for (auto &e : this->E) {
+            indeg[e->v[1]]++;
+        }
 
         std::queue<int> q;
         for (int i = 0; i < this->N; i++)
@@ -465,7 +397,8 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
         while (!q.empty()) {
             int cu = q.front();
             q.pop();
-            for (int to : this->G[cu]) {
+            for (auto e : this->G[cu]) {
+                int to = e->opp(cu);
                 if (!--indeg[to])
                     q.push(to);
             }
@@ -480,19 +413,24 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
     graph minimum_spanning_forest() const {
         static_assert(!is_directed);
         graph ret(this->N);
-        std::vector<edge<Weight>> tmp(this->edges());
-        std::sort(tmp.begin(), tmp.end(), [](const edge<Weight> &a, const edge<Weight> &b) {
-            if (a.cost == b.cost) {
-                if (a.from == b.from) {
-                    return a.to < b.to;
-                }
-                return a.from < b.from;
-            }
-            return a.cost < b.cost;
-        });
+        std::vector<edge<Weight>> tmp;
+        for (auto &e : this->E) {
+            tmp.emplace_back(*e);
+        }
+
+        std::sort(tmp.begin(), tmp.end(),
+                  [](const edge<Weight> &a, const edge<Weight> &b) {
+                      if (a.cost == b.cost) {
+                          if (a.v[0] == b.v[0]) {
+                              return a.v[1] < b.v[1];
+                          }
+                          return a.v[0] < b.v[0];
+                      }
+                      return a.cost < b.cost;
+                  });
 
         for (auto &e : tmp)
-            if (!ret.are_connected(e.from, e.to))
+            if (!ret.are_connected(e.v[0], e.v[1]))
                 ret.add_edge(e);
         return ret;
     }
@@ -511,16 +449,17 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
         bool is_apt = false;
         int cnt = 0;
         for (auto &e : this->G[idx]) {
-            if (!visited[e.to]) {
+            int to = e->opp(idx);
+            if (!visited[to]) {
                 ++cnt;
-                k = run_lowlink(e.to, k, idx, ord, low, brds, apts);
-                low[idx] = std::min(low[idx], low[e.to]);
-                is_apt |= ~par && low[e.to] >= ord[idx];
-                if (ord[idx] < low[e.to]) {
-                    brds.emplace_back(e.minmax());
+                k = run_lowlink(to, k, idx, ord, low, brds, apts);
+                low[idx] = std::min(low[idx], low[to]);
+                is_apt |= ~par && low[to] >= ord[idx];
+                if (ord[idx] < low[to]) {
+                    brds.emplace_back(*e);
                 }
-            } else if (e.to != par) {
-                low[idx] = std::min(low[idx], ord[e.to]);
+            } else if (to != par) {
+                low[idx] = std::min(low[idx], ord[to]);
             }
         }
         is_apt |= par == -1 && cnt > 1;
@@ -537,7 +476,7 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
         static_assert(!is_directed);
         std::vector<edge<Weight>> brds;
         std::vector<int> apts, ord(this->N, 0), low(this->N, 0);
-        this->reset_visited_flag();
+        reset_visited_flag();
         int k = 0;
         for (int i = 0; i < this->N; i++) {
             if (!visited[i])
@@ -545,63 +484,36 @@ template <typename Weight, bool is_directed> class graph: public internal::_base
         }
         return {brds, apts};
     }
-};
 
-template <typename Weight, typename Flow> class flow_graph: public internal::_base_graph<flow_edge<Weight, Flow>> {
-  public:
-    using internal::_base_graph<flow_edge<Weight, Flow>>::_base_graph;
+    // verify: https://atcoder.jp/contests/abc232/submissions/45715440
+    // 同型判定
+    bool operator==(const graph &other) const {
+        if (this->N != other.count_nodes())
+            return false;
+        if (this->count_edges() != other.count_edges())
+            return false;
+        if (this->count_connected_components() !=
+            other.count_connected_components())
+            return false;
 
-    /**
-     * @brief ノードの数をn個まで増やす
-     * @param n サイズ
-     * @attention 今のノード数より小さい数を渡したとき、変化なし
-     */
-    void expand(int n) {
-        if (n <= this->N)
-            return;
-        this->N = n;
-        this->G.resize(n);
-    }
+        matrix<Weight> adj1(to_adjajency()), adj2(other.to_adjajency());
 
-    /**
-     * @attention 辺の id は、(現在の辺の本数)番目 が振られる
-     */
-    void add_edge(int from, int to, Flow capacity) {
-        int id = (int)this->E.size();
-        flow_edge<Weight, Flow> e(from, to, capacity, capacity, id);
-        this->E.push_back(e);
-        this->G[from].push_back(e);
-        int idx = this->G[from].size() - 1;
-        this->G[to].push_back(e.reverse());
-        int r_idx = this->G[to].size() - 1;
-        this->G[from][idx].r_idx = r_idx;
-        this->G[to][r_idx].r_idx = idx;
-    }
-
-    Flow Ford_Fulkerson(int s, int t) {
-
-        Flow flow = 0;
-        while(true) {
-            std::vector<bool> vis(this->N, false);
-            auto dfs = [&](auto self, int cur, Flow f) -> Flow {
-                if (cur == t) return f;
-                vis[cur] = true;
-                for (auto &e: this->G[cur]) {
-                    if (vis[e.to] || e.residual == static_cast<Flow>(0)) continue;
-                    Flow tmp = self(self, e.to, std::min<Flow>(e.residual, f));
-                    if (tmp > static_cast<Flow>(0)) {
-                        e.residual -= tmp;
-                        this->G[e.to][e.r_idx].residual += tmp;
-                        return tmp;
+        std::vector<int> nodes_id(this->N);
+        std::iota(nodes_id.begin(), nodes_id.end(), 0);
+        do {
+            bool ok = true;
+            for (int i = 0; i < this->N; i++)
+                for (int j = 0; j < this->N; j++) {
+                    if (adj1(i, j) != adj2(nodes_id[i], nodes_id[j])) {
+                        ok = false;
+                        break;
                     }
                 }
-                return static_cast<Flow>(0);
-            };
-            Flow inc = dfs(dfs, s, std::numeric_limits<Flow>::max());
-            if (inc == 0) break;
-            flow += inc;
-        }
-        return flow;
+            if (ok)
+                return true;
+        } while (std::next_permutation(nodes_id.begin(), nodes_id.end()));
+        return false;
     }
 
+    bool operator!=(const graph &other) const { return !operator==(other); }
 };

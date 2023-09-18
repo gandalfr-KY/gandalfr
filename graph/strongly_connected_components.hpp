@@ -1,4 +1,5 @@
 #pragma once
+#include "graph.hpp"
 
 /* 強連結成分分解
  * groups() := 同一連結成分をまとめた二次元配列を返す
@@ -19,7 +20,7 @@ template <typename Weight> class strongly_connected_components {
             return;
         used[cu] = true;
         for (auto &e : G[cu])
-            dfs1(G, e.to, ord, used);
+            dfs1(G, e->v[1], ord, used);
         ord.push_back(cu);
     }
 
@@ -28,7 +29,7 @@ template <typename Weight> class strongly_connected_components {
             return;
         grp_id[cu] = id;
         for (auto &e : G[cu])
-            dfs2(G, e.to, id);
+            dfs2(G, e->v[1], id);
     }
 
   public:
@@ -55,11 +56,11 @@ template <typename Weight> class strongly_connected_components {
             grps[grp_id[i]].push_back(i);
 
         S.expand(grps.size());
-        for (auto e : G.edges()) {
-            e.from = grp_id[e.from];
-            e.to = grp_id[e.to];
-            if (e.from != e.to)
-                S.add_edge(e);
+        for (auto &e : G.edges()) {
+            e->v[0] = grp_id[e->v[0]];
+            e->v[1] = grp_id[e->v[1]];
+            if (e->v[0] != e->v[1])
+                S.add_edge(*e);
         }
     }
 

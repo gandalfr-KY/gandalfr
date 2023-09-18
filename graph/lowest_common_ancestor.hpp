@@ -1,6 +1,4 @@
 #pragma once
-#include <assert.h>
-
 #include "../data_structure/sparse_table.hpp"
 #include "graph.hpp"
 
@@ -20,10 +18,11 @@ template <typename Weight> class lowest_common_ancestor {
                     int &cnt) {
         idx[cu] = cnt;
         for (auto &e : G[cu]) {
-            if (e.to == pa)
+            int to = e->opp(cu);
+            if (to == pa)
                 continue;
             depth.push_back({dep, cu});
-            Euler_tour(G, e.to, cu, dep + 1, ++cnt);
+            Euler_tour(G, to, cu, dep + 1, ++cnt);
         }
         depth.push_back({dep, cu});
         cnt++;

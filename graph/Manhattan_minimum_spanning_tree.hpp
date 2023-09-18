@@ -48,18 +48,19 @@ template <typename Weight> class Manhattan_minimum_spanning_tree {
         }
 
         int cnt_id = 0;
-        sort(E.begin(), E.end(),  [](const edge<Weight> &a, const edge<Weight> &b) {
-            if (a.cost == b.cost) {
-                if (a.from == b.from) {
-                    return a.to < b.to;
-                }
-                return a.from < b.from;
-            }
-            return a.cost < b.cost;
-        });
-        
+        sort(E.begin(), E.end(),
+             [](const edge<Weight> &a, const edge<Weight> &b) {
+                 if (a.cost == b.cost) {
+                     if (a.v[0] == b.v[0]) {
+                         return a.v[1] < b.v[1];
+                     }
+                     return a.v[0] < b.v[0];
+                 }
+                 return a.cost < b.cost;
+             });
+
         for (auto &e : E)
-            if (!mst.are_connected(e.from, e.to)) {
+            if (!mst.are_connected(e.v[0], e.v[1])) {
                 e.id = cnt_id;
                 mst.add_edge(e);
                 cnt_id++;

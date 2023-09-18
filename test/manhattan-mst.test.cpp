@@ -22,7 +22,7 @@ int main(void){
  
     cout << mst.get_tree().weight() << endl;
     for(auto &e : mst.get_tree().edges()){
-        cout << e.from << " " << e.to << endl; 
+        cout << e->v[0] << " " << e->v[1] << endl; 
     }
 
 }

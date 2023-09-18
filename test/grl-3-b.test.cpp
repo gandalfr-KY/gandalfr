@@ -14,12 +14,16 @@ int main(void){
     rep(i,0,M){
         int a, b;
         cin >> a >> b;
-        G.add_edge(a, b);
+        G.add_edge(min(a, b), max(a, b));
     }
     
     auto ans = G.lowlink().first;
-    for(auto &e : ans) if(e.from > e.to) swap(e.from, e.to);
-    sort(all(ans));
+    sort(all(ans), [](const edge<int> &a, const edge<int> &b) {
+        if (a.v[0] == b.v[0]) {
+            return a.v[1] < b.v[1];
+        }
+        return a.v[0] < b.v[0];
+    });
     for(auto &e : ans) cout << e << endl;
 
 }

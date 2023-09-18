@@ -24,6 +24,6 @@ int main(void){
     ll ans = 0;
     for (auto e : E) ans += e.cost;
     cout << ans << " " << E.size() << endl;
-    for (auto e : E) cout << e.from << " " << e.to << endl;
+    for (auto e : E) cout << e.v[0] << " " << e.v[1] << endl;
 
 }

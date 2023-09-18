@@ -10,39 +10,15 @@
 #include "../math/matrix.hpp"
 #include "edge.hpp"
 
-template <typename Edge, typename Derived> class _base_graph {
+template <typename Edge> class _base_graph {
   protected:
     int N;
     std::vector<std::vector<Edge>> G;
     std::vector<Edge> E;
-    union_find uf;
-
-    mutable std::vector<bool> visited; // dfs / bfs のための領域
-
-    void reset_visited_flag(int node) const {
-        for (int x : uf.group_containing_node(node))
-            visited[x] = false;
-    }
-
-    void reset_visited_flag() const { visited.assign(N, false); }
 
   public:
-    _base_graph() : N(0){};
-    _base_graph(int n) : N(n), G(n), uf(n), visited(n){};
-
-    /**
-     * @brief ノードの数をn個まで増やす
-     * @param n サイズ
-     * @attention 今のノード数より小さい数を渡したとき、変化なし
-     */
-    void expand(int n) {
-        if (n <= N)
-            return;
-        N = n;
-        G.resize(n);
-        visited.resize(n);
-        uf.expand(n);
-    }
+    _base_graph() {};
+    _base_graph(int n) : N(n), G(n) {};
 
     /**
      * @return ノードの数
@@ -65,129 +41,6 @@ template <typename Edge, typename Derived> class _base_graph {
      */
     const std::vector<Edge> &edges() const { return E; }
 
-    /**
-     * @param x ノード番号
-     * @param y ノード番号
-     * @return x, y が連結かどうか
-     */
-    bool are_connected(int x, int y) const { return uf.same(x, y); }
-
-    /**
-     * @return 弱連結成分の数
-     */
-    int count_connected_components() const { return uf.count_groups(); }
-
-    /**
-     * @return 弱連結成分のリストのリスト
-     */
-    std::vector<std::vector<int>> weakly_connected_components() const {
-        return uf.all_groups();
-    }
-
-    /**
-     * @brief ノード x が含まれている弱連結成分のリストを返す
-     */
-    std::vector<int> component_containing_node(int x) {
-        return uf.group_containing_node(x);
-    }
-
-    /**
-     * @param e 辺
-     * @attention 渡した辺の id は保持される
-     */
-    virtual void add_edge(const Edge &e) = 0;
-
-    /**
-     * @brief グラフを連結なグラフに分けてリストにして返す
-     * @example auto[Gs, gr, nd] = G.decompose();
-     * @returns
-     * 1.グラフのリスト
-     * 2.各ノードがグラフのリストの何番目に属するか
-     * 3.各ノードがグラフのどのノードになっているか
-     */
-    std::tuple<std::vector<Derived>, std::vector<int>, std::vector<int>>
-    decompose() const {
-        std::vector<Derived> Gs(uf.count_groups());
-        std::vector<std::vector<int>> groups(uf.all_groups());
-        std::vector<int> group_id(N), node_id(N);
-        for (int i = 0; i < (int)groups.size(); i++) {
-            Gs[i].expand(groups[i].size());
-            for (int j = 0; j < (int)groups[i].size(); j++) {
-                group_id[groups[i][j]] = i;
-                node_id[groups[i][j]] = j;
-            }
-        }
-        for (auto e : E) {
-            int id = group_id[e.from];
-            e.from = node_id[e.from];
-            e.to = node_id[e.to];
-            Gs[id].add_edge(e);
-        }
-        return std::make_tuple(std::move(Gs), std::move(group_id),
-                               std::move(node_id));
-    }
-
-    /**
-     * @brief 行きがけ順に dfs
-     */
-    std::vector<int> preorder(int start) const {
-        std::vector<int> result;
-        reset_visited_flag(start);
-        visited[start] = true;
-        auto dfs = [&](auto self, int cu) -> void {
-            result.push_back(cu);
-            for (int to : G[cu]) {
-                if (visited[to])
-                    continue;
-                visited[to] = true;
-                self(self, to);
-            }
-        };
-        dfs(dfs, start);
-        return result;
-    }
-
-    /**
-     * @brief 通りがけ順に dfs
-     */
-    std::vector<int> inorder(int start) const {
-        std::vector<int> result;
-        reset_visited_flag(start);
-        visited[start] = true;
-        auto dfs = [&](auto self, int cu) -> void {
-            for (int to : G[cu]) {
-                if (visited[to])
-                    continue;
-                visited[to] = true;
-                result.push_back(cu);
-                self(self, to);
-            }
-            result.push_back(cu);
-        };
-        dfs(dfs, start);
-        return result;
-    }
-
-    /**
-     * @brief 帰りがけ順に dfs
-     */
-    std::vector<int> postorder(int start) const {
-        std::vector<int> result;
-        reset_visited_flag(start);
-        visited[start] = true;
-        auto dfs = [&](auto self, int cu) -> void {
-            for (int to : G[cu]) {
-                if (visited[to])
-                    continue;
-                visited[to] = true;
-                self(self, to);
-            }
-            result.push_back(cu);
-        };
-        dfs(dfs, start);
-        return result;
-    }
-
     void print() const {
         std::cout << this->N << " " << this->E.size() << std::endl;
         for (const Edge &e : this->E)
@@ -200,20 +53,43 @@ template <typename Edge, typename Derived> class _base_graph {
  * @tparam Weight int なら重みなし、そうでないなら重みつきグラフ
  * @tparam is_directed 有向グラフかとうか
  */
-template <typename Weight, bool is_directed> class graph: public _base_graph<edge<Weight>, graph<Weight, is_directed>> {
+template <typename Weight, bool is_directed> class graph: public _base_graph<edge<Weight>> {
   private:
+    union_find uf;
+    mutable std::vector<bool> visited; // dfs / bfs のための領域
     Weight W = 0;
-
     bool forest_flag = true;
-    const Weight WEIGHT_MAX = std::numeric_limits<Weight>::max();
+    static const Weight WEIGHT_MAX = std::numeric_limits<Weight>::max();
+
+    void reset_visited_flag(int node) const {
+        for (int x : uf.group_containing_node(node))
+            visited[x] = false;
+    }
+
+    void reset_visited_flag() const { visited.assign(this->N, false); }
 
   public:
-    using _base_graph<edge<Weight>, graph<Weight, is_directed>>:: _base_graph;
+    graph() {}
+    graph(int n) : _base_graph<edge<Weight>>(n), uf(n), visited(n) {}
+
+    /**
+     * @brief ノードの数をn個まで増やす
+     * @param n サイズ
+     * @attention 今のノード数より小さい数を渡したとき、変化なし
+     */
+    void expand(int n) {
+        if (n <= this->N)
+            return;
+        this->N = n;
+        this->G.resize(n);
+        visited.resize(n);
+        uf.expand(n);
+    }
 
     /**
      * @return 木か
      */
-    bool is_tree() const { return forest_flag && this->uf.count_groups() == 1; }
+    bool is_tree() const { return forest_flag && uf.count_groups() == 1; }
 
     /**
      * @return 森か
@@ -229,8 +105,8 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
      * @param e 辺
      * @attention 渡した辺の id は保持される
      */
-    void add_edge(const edge<Weight> &e) override {
-        forest_flag &= this->uf.merge(e.from, e.to);
+    void add_edge(const edge<Weight> &e) {
+        forest_flag &= uf.merge(e.from, e.to);
 
         this->G[e.from].emplace_back(e);
         if (!is_directed && e.from != e.to)
@@ -260,6 +136,63 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
     void add_edge(int from, int to) {
         static_assert(std::is_same<Weight, int>::value);
         add_edge({from, to, (int)this->E.size()});
+    }
+
+    /**
+     * @param x ノード番号
+     * @param y ノード番号
+     * @return x, y が連結かどうか
+     */
+    bool are_connected(int x, int y) const { return uf.same(x, y); }
+
+    /**
+     * @return 弱連結成分の数
+     */
+    int count_connected_components() const { return uf.count_groups(); }
+
+    /**
+     * @return 弱連結成分のリストのリスト
+     */
+    std::vector<std::vector<int>> weakly_connected_components() const {
+        return uf.all_groups();
+    }
+
+    /**
+     * @brief ノード x が含まれている弱連結成分のリストを返す
+     */
+    std::vector<int> component_containing_node(int x) {
+        return uf.group_containing_node(x);
+    }
+
+
+    /**
+     * @brief グラフを連結なグラフに分けてリストにして返す
+     * @example auto[Gs, gr, nd] = G.decompose();
+     * @returns
+     * 1.グラフのリスト
+     * 2.各ノードがグラフのリストの何番目に属するか
+     * 3.各ノードがグラフのどのノードになっているか
+     */
+    std::tuple<std::vector<graph>, std::vector<int>, std::vector<int>>
+    decompose() const {
+        std::vector<graph> Gs(uf.count_groups());
+        std::vector<std::vector<int>> groups(uf.all_groups());
+        std::vector<int> group_id(this->N), node_id(this->N);
+        for (int i = 0; i < (int)groups.size(); i++) {
+            Gs[i].expand(groups[i].size());
+            for (int j = 0; j < (int)groups[i].size(); j++) {
+                group_id[groups[i][j]] = i;
+                node_id[groups[i][j]] = j;
+            }
+        }
+        for (auto e : this->E) {
+            int id = group_id[e.from];
+            e.from = node_id[e.from];
+            e.to = node_id[e.to];
+            Gs[id].add_edge(e);
+        }
+        return std::make_tuple(std::move(Gs), std::move(group_id),
+                               std::move(node_id));
     }
 
     /**
@@ -302,9 +235,9 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
             int cu = q.top().second;
             q.pop();
 
-            if (this->visited[cu])
+            if (visited[cu])
                 continue;
-            this->visited[cu] = true;
+            visited[cu] = true;
 
             for (auto &e : this->G[cu]) {
                 Weight alt = cur_dist + e.cost;
@@ -371,7 +304,7 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
             std::set<int> st;
             for (auto &x : start_nodes) {
                 q.push({0, x});
-                st.insert(this->uf.leader(x));
+                st.insert(uf.leader(x));
             }
             for (auto &x : st) {
                 this->reset_visited_flag(x);
@@ -415,16 +348,16 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
 
         auto R(this->reverse());
         this->reset_visited_flag(end_node);
-        this->visited[end_node] = true;
+        visited[end_node] = true;
 
         int cu = end_node;
         std::vector<edge<Weight>> route;
         while (cu != start_node) {
             for (auto e : R[cu]) {
-                if (this->visited[e.to])
+                if (visited[e.to])
                     continue;
                 if (dist[cu] - e.cost == dist[e.to]) {
-                    this->visited[cu = e.to] = true;
+                    visited[cu = e.to] = true;
                     route.push_back(e.reverse());
                     break;
                 }
@@ -453,6 +386,67 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
             }
             return ret;
         }
+    }
+
+    /**
+     * @brief 行きがけ順に dfs
+     */
+    std::vector<int> preorder(int start) const {
+        std::vector<int> result;
+        this->reset_visited_flag(start);
+        visited[start] = true;
+        auto dfs = [&](auto self, int cu) -> void {
+            result.push_back(cu);
+            for (int to : this->G[cu]) {
+                if (visited[to])
+                    continue;
+                visited[to] = true;
+                self(self, to);
+            }
+        };
+        dfs(dfs, start);
+        return result;
+    }
+
+    /**
+     * @brief 通りがけ順に dfs
+     */
+    std::vector<int> inorder(int start) const {
+        std::vector<int> result;
+        this->reset_visited_flag(start);
+        visited[start] = true;
+        auto dfs = [&](auto self, int cu) -> void {
+            for (int to : this->G[cu]) {
+                if (visited[to])
+                    continue;
+                visited[to] = true;
+                result.push_back(cu);
+                self(self, to);
+            }
+            result.push_back(cu);
+        };
+        dfs(dfs, start);
+        return result;
+    }
+
+    /**
+     * @brief 帰りがけ順に dfs
+     */
+    std::vector<int> postorder(int start) const {
+        std::vector<int> result;
+        this->reset_visited_flag(start);
+        visited[start] = true;
+        auto dfs = [&](auto self, int cu) -> void {
+            for (int to : this->G[cu]) {
+                if (visited[to])
+                    continue;
+                visited[to] = true;
+                self(self, to);
+            }
+            result.push_back(cu);
+        };
+        dfs(dfs, start);
+        return result;
     }
 
     std::vector<int> topological_sort() {
@@ -484,7 +478,16 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
         static_assert(!is_directed);
         graph ret(this->N);
         std::vector<edge<Weight>> tmp(this->edges());
-        std::sort(tmp.begin(), tmp.end());
+        std::sort(tmp.begin(), tmp.end(), [](const edge<Weight> &a, const edge<Weight> &b) {
+            if (a.cost == b.cost) {
+                if (a.from == b.from) {
+                    return a.to < b.to;
+                }
+                return a.from < b.from;
+            }
+            return a.cost < b.cost;
+        });
+
         for (auto &e : tmp)
             if (!ret.are_connected(e.from, e.to))
                 ret.add_edge(e);
@@ -499,13 +502,13 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
     int run_lowlink(int idx, int k, int par, std::vector<int> &ord,
                     std::vector<int> &low, std::vector<edge<Weight>> &brds,
                     std::vector<int> &apts) {
-        this->visited[idx] = true;
+        visited[idx] = true;
         ord[idx] = k++;
         low[idx] = ord[idx];
         bool is_apt = false;
         int cnt = 0;
         for (auto &e : this->G[idx]) {
-            if (!this->visited[e.to]) {
+            if (!visited[e.to]) {
                 ++cnt;
                 k = run_lowlink(e.to, k, idx, ord, low, brds, apts);
                 low[idx] = std::min(low[idx], low[e.to]);
@@ -534,7 +537,7 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
         this->reset_visited_flag();
         int k = 0;
         for (int i = 0; i < this->N; i++) {
-            if (!this->visited[i])
+            if (!visited[i])
                 k = run_lowlink(i, k, -1, ord, low, brds, apts);
         }
         return {brds, apts};
@@ -547,24 +550,48 @@ template <typename Weight, bool is_directed> class graph: public _base_graph<edg
     }
 };
 
-template <typename Weight> class flow_graph: public _base_graph<flow_edge<Weight>, flow_graph<Weight>> {
+template <typename Weight, typename Flow> class flow_graph: public _base_graph<flow_edge<Weight, Flow>> {
+  public:
     /**
-     * @param e 辺
-     * @attention 渡した辺の id は保持される
+     * @brief ノードの数をn個まで増やす
+     * @param n サイズ
+     * @attention 今のノード数より小さい数を渡したとき、変化なし
      */
-    void add_edge(const flow_edge<Weight> &e) override {
-        this->uf.merge(e.from, e.to);
-        this->G[e.from].emplace_back(e);
+    void expand(int n) {
+        if (n <= this->N)
+            return;
+        this->N = n;
+        this->G.resize(n);
     }
 
     /**
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
-     * @attention WEIGHT が int だとエラー
      */
-    void add_edge(int from, int to, Weight capacity) {
+    void add_edge(int from, int to, Flow capacity) {
         int id = (int)this->E.size();
-        add_edge({from, to, capacity, 1, id, nullptr});
-        add_edge({to, from, 0, 1, id, nullptr});
+        flow_edge<Weight, Flow> e(from, to, capacity, capacity, id);
+        this->E.push_back(e);
+        this->G[from].push_back(e);
+        flow_edge<Weight, Flow> *ptr = &this->G[from].back();
+        this->G[to].push_back(e.reverse());
+        flow_edge<Weight, Flow> *r_ptr = &this->G[to].back();
+        r_ptr->r_ptr = ptr;
+        ptr->r_ptr = r_ptr;
+    }
+
+    /**
+     * @attention 辺の id は、(現在の辺の本数)番目 が振られる
+     */
+    void add_edge(int from, int to, Flow capacity, Weight cost) {
+        int id = (int)this->E.size();
+        flow_edge<Weight, Flow> e(from, to, capacity, capacity, cost, id);
+        this->E.push_back(e);
+        this->G[from].push_back(e);
+        flow_edge<Weight, Flow> *ptr = &this->G[from].back();
+        this->G[to].push_back(e.reverse());
+        flow_edge<Weight, Flow> *r_ptr = &this->G[to].back();
+        r_ptr->r_ptr = ptr;
+        ptr->r_ptr = r_ptr;
     }
 
 };

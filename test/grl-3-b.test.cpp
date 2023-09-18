@@ -19,7 +19,12 @@ int main(void){
     
     auto ans = G.lowlink().first;
     for(auto &e : ans) if(e.from > e.to) swap(e.from, e.to);
-    sort(all(ans));
+    sort(all(ans), [](const edge<int> &a, const edge<int> &b) {
+        if (a.from == b.from) {
+            return a.to < b.to;
+        }
+        return a.from < b.from;
+    });
     for(auto &e : ans) cout << e << endl;
 
 }

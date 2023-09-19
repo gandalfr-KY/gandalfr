@@ -101,7 +101,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
                         return f;
                     for (auto &e : this->G[cur]) {
                         int to = e->opp(cur);
-                        if (dist[to] != dist[cur] - 1)
+                        if (dist[to] != dist[cur] - 1 || e->is_full(to))
                             continue;
                         Flow tmp = self(self, to,
                                         std::min<Flow>(e->residual(to), f));

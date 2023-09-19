@@ -89,23 +89,12 @@ struct flow_edge : public internal::_base_edge<Weight> {
 
     // x から見て残余がゼロか？
     Flow is_full(int x) const {
-        if constexpr (std::is_integral<Flow>::value) {
-            if (x == this->v[0]) {
-                return res == 0;
-            } else if (x == this->v[1]) {
-                return cap - res == 0;
-            } else {
-                std::abort();
-            }
+        if (x == this->v[0]) {
+            return res == 0;
+        } else if (x == this->v[1]) {
+            return cap - res == 0;
         } else {
-            static double eps = 1e-10;
-            if (x == this->v[0]) {
-                return std::abs(res) < eps;
-            } else if (x == this->v[1]) {
-                return std::abs(cap - res) < eps;
-            } else {
-                std::abort();
-            }
+            std::abort();
         }
     }
 

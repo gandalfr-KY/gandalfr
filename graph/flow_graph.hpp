@@ -55,8 +55,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
                     return f;
                 vis[cur] = true;
                 for (auto &e : this->G[cur]) {
-                    if (vis[e->opp(cur)] ||
-                        e->residual(cur) == static_cast<Flow>(0))
+                    if (vis[e->opp(cur)] || e->is_full(cur))
                         continue;
                     Flow tmp = self(self, e->opp(cur),
                                     std::min<Flow>(e->residual(cur), f));
@@ -74,4 +73,52 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
         }
         return flow;
     }
+
+    Flow Dinic(int s, int t) {
+        const int invalid = std::numeric_limits<int>::max();
+        Flow flow = 0;
+        while (true) {
+            std::vector<int> dist(this->N, invalid);
+            dist[s] = 0;
+            std::queue<int> q;
+            q.push(s);
+            while(!q.empty()) {
+                int cur = q.front();
+                q.pop();
+                for (auto &e: this->G[cur]) {
+                    int to = e->opp(cur);
+                    if (dist[to] != invalid || e->is_full(cur))
+                        continue;
+                    dist[to] = dist[cur] + 1;
+                    q.push(to);
+                }
+            }
+            if (dist[t] == invalid) break;
+
+            while (true) {
+                auto dfs = [&](auto self, int cur, Flow f) -> Flow {
+                    if (cur == s)
+                        return f;
+                    for (auto &e : this->G[cur]) {
+                        int to = e->opp(cur);
+                        if (dist[to] != dist[cur] - 1)
+                            continue;
+                        Flow tmp = self(self, to,
+                                        std::min<Flow>(e->residual(to), f));
+                        if (tmp > static_cast<Flow>(0)) {
+                            e->add_flow(to, tmp);
+                            return tmp;
+                        }
+                    }
+                    return static_cast<Flow>(0);
+                };
+                Flow inc = dfs(dfs, t, std::numeric_limits<Flow>::max());
+                if (inc == 0)
+                    break;
+                flow += inc;
+            }
+        }
+        return flow;
+    }
+
 };

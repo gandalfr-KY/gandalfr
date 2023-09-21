@@ -46,14 +46,22 @@ template <class T> class matrix {
         for (int i = 0; i < H; i++)
             for (int j = 0; j < W; j++)
                 ret.table[j][i] = table[i][j];
-        *this = std::move(ret);
+        *this = ret;
     }
 
+    /**
+     * @brief 第 i 行に対して行単位で代入を行う
+     * @example A.row_assign(3, {1,2,3});
+     */
     void row_assign(int i, const std::valarray<T> &row) {
+        assert(0 <= i && i < H);
         assert(W == (int)row.size());
-        table[i] = std::move(row);
+        table[i] = row;
     }
 
+    /**
+     * @brief 第 i 行, 第 j 行を入れ替える
+     */
     void row_swap(int i, int j) {
         assert(0 <= i && i < H);
         assert(0 <= j && j < H);
@@ -93,7 +101,7 @@ template <class T> class matrix {
         return hist;
     }
 
-    int rank() {
+    int rank() const {
         auto U(*this);
         U.sweep_method();
         int r = 0;
@@ -158,7 +166,7 @@ template <class T> class matrix {
         return x;
     }
 
-    matrix<T> inverse() {
+    matrix<T> inverse() const {
         assert(H == W);
         matrix<T> INV(matrix<T>::E(H)), U(*this);
         auto hist = U.sweep_method();
@@ -217,8 +225,7 @@ template <class T> class matrix {
                 ret.table[i][j] = (table[i] * a_t.table[j]).sum();
             }
         }
-        *this = std::move(ret);
-        return *this;
+        return *this = ret;
     }
     matrix<T> &operator/=(const T &a) {
         this->table /= a;
@@ -245,25 +252,47 @@ template <class T> class matrix {
         return *this;
     }
 
-    matrix<T> operator+() { return *this; }
-    matrix<T> operator-() { return matrix<T>(*this) *= -1; }
-    matrix<T> operator+(const matrix<T> &a) { return matrix<T>(*this) += a; }
-    matrix<T> operator-(const matrix<T> &a) { return matrix<T>(*this) -= a; }
-    template <typename S> matrix<T> operator*(const S &a) {
+    matrix<T> operator+() const { return *this; }
+    matrix<T> operator-() const { return matrix<T>(*this) *= -1; }
+    matrix<T> operator+(const matrix<T> &a) const { return matrix<T>(*this) += a; }
+    matrix<T> operator-(const matrix<T> &a) const { return matrix<T>(*this) -= a; }
+    matrix<T> operator*(const T &a) {
         return matrix<T>(*this) *= a;
     }
-    matrix<T> operator/(const T &a) { return matrix<T>(*this) /= a; }
-    matrix<T> operator^(long long n) { return matrix<T>(*this) ^= n; }
+    matrix<T> operator*(const matrix<T> &a) const {
+        return matrix<T>(*this) *= a;
+    }
+    matrix<T> operator/(const T &a) const { return matrix<T>(*this) /= a; }
+    matrix<T> operator^(long long n) const { return matrix<T>(*this) ^= n; }
     friend std::istream &operator>>(std::istream &is, matrix<T> &mt) {
         for (auto &arr : mt.table)
             for (auto &x : arr)
                 is >> x;
         return is;
     }
+    const T &operator()(int h, int w) const {
+        assert(0 <= h && h < H && 0 <= w && w <= W);
+        return table[h][w];
+    }
     T &operator()(int h, int w) {
         assert(0 <= h && h < H && 0 <= w && w <= W);
         return table[h][w];
     }
+
+    template<typename S> bool operator==(const matrix<S> &other) {
+        if (size_H() != other.size_H() || size_W() != other.size_W())
+            return false;
+        for (int h = 0; h < H; ++h) {
+            for (int w = 0; w < W; ++w) {
+                if (table[h][w] != other.table[h][w]) return false;
+            }
+        }
+        return true;
+    }
+    template<typename S> bool operator!=(const matrix<S> &other) {
+        return !operator==(other);
+    }
+
 
     /**
      * @brief サイズ n の単位行列。
@@ -274,4 +303,5 @@ template <class T> class matrix {
             ret.table[i][i] = 1;
         return ret;
     }
+
 };

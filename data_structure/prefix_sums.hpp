@@ -2,61 +2,45 @@
 #include <functional>
 #include <vector>
 
+#include "operations.hpp"
+
 // [l, r) で区間和を得る
-template <class T> class prefix_sums {
+template <class T, typename Group> class prefix_sums {
   private:
     int n;
     std::vector<T> acm;
-    const std::function<T(T, T)> f;
-    const std::function<T(T, T)> f_inv;
-    T e;
 
   public:
-    prefix_sums(
-        const std::vector<T> &v,
-        const std::function<T(T, T)> &_f = [](T a, T b) { return a + b; },
-        const std::function<T(T, T)> &_f_inv = [](T a, T b) { return a - b; },
-        const T &_e = 0)
-        : n(v.size()), f(_f), f_inv(_f_inv), e(_e) {
+    prefix_sums(const std::vector<T> &v): n(v.size()) {
         acm.reserve(n + 1);
-        acm.push_back(e);
+        acm.push_back(Group::id());
         for (const T &x : v) {
-            acm.push_back(f(acm.back(), x));
+            acm.push_back(Group::op(acm.back(), x));
         }
     }
 
     T get(int l, int r) {
         assert(0 <= l && l <= r && r <= n);
         if (l == r)
-            return e;
-        return f_inv(acm[r], acm[l]);
+            return Group::id();
+        return Group::op(acm[r], Group::rev(acm[l]));
     }
-
-    const std::vector<T> &result() { return acm; }
 };
 
-template <class T> class prefix_sums_2d {
+// verify: https://atcoder.jp/contests/abc203/submissions/45759205
+template <typename T, typename Group> class prefix_sums_2d {
   public:
     int h, w;
     std::vector<std::vector<T>> acm;
-    const std::function<T(T, T)> f;
-    const std::function<T(T, T)> f_inv;
-    T e;
 
   public:
-    prefix_sums_2d(
-        const std::vector<std::vector<T>> &v,
-        const std::function<T(T, T)> &_f = [](T a, T b) { return a + b; },
-        const std::function<T(T, T)> &_f_inv = [](T a, T b) { return a - b; },
-        const T &_e = 0)
-        : h(v.size()), w(v[0].size()), f(_f), f_inv(_f_inv), e(_e),
-          acm(h + 1, std::vector<T>(w + 1, _e)) {
+    prefix_sums_2d(const std::vector<std::vector<T>> &v): h(v.size()), w(v[0].size()), acm(h + 1, std::vector<T>(w + 1, Group::id())) {
         for (int i = 1; i <= h; i++) {
             for (int j = 1; j <= w; j++) {
-                acm[i][j] = f(acm[i][j - 1], v[i - 1][j - 1]);
+                acm[i][j] = Group::op(acm[i][j - 1], v[i - 1][j - 1]);
             }
             for (int j = 1; j <= w; j++) {
-                acm[i][j] = f(acm[i][j], acm[i - 1][j]);
+                acm[i][j] = Group::op(acm[i][j], acm[i - 1][j]);
             }
         }
     }
@@ -65,13 +49,14 @@ template <class T> class prefix_sums_2d {
         assert(0 <= h_begin && h_begin <= h_end && h_end <= h);
         assert(0 <= w_begin && w_begin <= w_end && w_end <= w);
         if (h_begin == h_end || w_begin == w_end)
-            return e;
+            return Group::id();
         // acm[h_end][w_end] - acm[h_end][w_begin] - acm[h_begin][w_end] +
         // acm[h_begin][w_begin] みたいな感じ
-        return f(f_inv(f_inv(acm[h_end][w_end], acm[h_end][w_begin]),
-                       acm[h_begin][w_end]),
+        return Group::op(Group::op(Group::op(acm[h_end][w_end], Group::rev(acm[h_end][w_begin])),
+                       Group::rev(acm[h_begin][w_end])),
                  acm[h_begin][w_begin]);
     }
-
-    const std::vector<std::vector<T>> &result() { return acm; }
 };
+
+template <typename T> using RSQ_prefix_sums = prefix_sums<T, group::Plus<T>>;
+template <typename T> using RSQ_prefix_sums_2d = prefix_sums_2d<T, group::Plus<T>>;

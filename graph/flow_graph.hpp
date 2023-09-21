@@ -82,10 +82,10 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
             dist[s] = 0;
             std::queue<int> q;
             q.push(s);
-            while(!q.empty()) {
+            while (!q.empty()) {
                 int cur = q.front();
                 q.pop();
-                for (auto &e: this->G[cur]) {
+                for (auto &e : this->G[cur]) {
                     int to = e->opp(cur);
                     if (dist[to] != invalid || e->is_full(cur))
                         continue;
@@ -93,7 +93,8 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
                     q.push(to);
                 }
             }
-            if (dist[t] == invalid) break;
+            if (dist[t] == invalid)
+                break;
 
             while (true) {
                 auto dfs = [&](auto self, int cur, Flow f) -> Flow {
@@ -103,8 +104,8 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
                         int to = e->opp(cur);
                         if (dist[to] != dist[cur] - 1 || e->is_full(to))
                             continue;
-                        Flow tmp = self(self, to,
-                                        std::min<Flow>(e->residual(to), f));
+                        Flow tmp =
+                            self(self, to, std::min<Flow>(e->residual(to), f));
                         if (tmp > static_cast<Flow>(0)) {
                             e->add_flow(to, tmp);
                             return tmp;
@@ -120,5 +121,4 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
         }
         return flow;
     }
-
 };

@@ -20,8 +20,8 @@ long long inversion(const InputIterator &__begin, const InputIterator &__end) {
         *std::max_element(cmp.begin(), cmp.end()) + 1);
     long long ret = (long long)N * (N + 1) / 2;
     for (auto &x : cmp) {
-        bit.add(x, 1);
-        ret -= bit.get(x + 1);
+        bit[x] = bit[x] + 1;
+        ret -= bit(0, x + 1);
     }
     return ret;
 }

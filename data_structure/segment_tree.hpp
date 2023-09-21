@@ -8,13 +8,14 @@
 
 #include "operations.hpp"
 
-template <typename T, typename Monoid> class segment_tree {
+template <typename Monoid> class segment_tree {
   private:
     int n, vec_size;
-    std::vector<T> v;
+    using VType = typename Monoid::VType;
+    std::vector<VType> v;
 
     // pos 番目の値を val に更新
-    void update(int pos, T val) {
+    void update(int pos, VType val) {
         pos += n - 1;
         v[pos] = val;
         while (pos > 0) {
@@ -27,20 +28,18 @@ template <typename T, typename Monoid> class segment_tree {
         segment_tree &seg;
         int pos;
 
-    public:
-        RefWrapper(segment_tree &s, int p): seg(s), pos(p) {}
-        RefWrapper operator=(const T& value) {
+      public:
+        RefWrapper(segment_tree &s, int p) : seg(s), pos(p) {}
+        RefWrapper operator=(const VType &value) {
             seg.update(pos, value);
             return *this;
         }
-        operator T() const {
-            return seg.v[pos + seg.n - 1];
-        }
+        operator VType() const { return seg.v[pos + seg.n - 1]; }
     };
 
   public:
     // 要素の配列 vec で初期化
-    segment_tree(const std::vector<T> &vec): vec_size(vec.size()) {
+    segment_tree(const std::vector<VType> &vec) : vec_size(vec.size()) {
         n = 1;
         while (n < vec_size)
             n <<= 1;
@@ -53,7 +52,7 @@ template <typename T, typename Monoid> class segment_tree {
     }
 
     // 長さ siz の単位元の配列で初期化
-    segment_tree(int siz): vec_size(siz) {
+    segment_tree(int siz) : vec_size(siz) {
         n = 1;
         while (n < vec_size)
             n *= 2;
@@ -62,9 +61,9 @@ template <typename T, typename Monoid> class segment_tree {
 
     // [l, r) の演算結果を得る
     // l == r のとき、Monoid::id() を返す
-    T operator()(int l, int r) {
+    VType operator()(int l, int r) const {
         assert(0 <= l && l <= r && r <= vec_size);
-        T vl = Monoid::id(), vr = Monoid::id();
+        VType vl = Monoid::id(), vr = Monoid::id();
         for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
             if (l & 1)
                 vl = Monoid::op(vl, v[l - 1]), l++;
@@ -74,13 +73,7 @@ template <typename T, typename Monoid> class segment_tree {
         return Monoid::op(vl, vr);
     }
 
-    // pos 番目の値を得る
-    const T &operator[](int pos) const {
-        assert(0 <= pos && pos < vec_size);
-        return v[pos + n - 1];
-    }
-
-    // pos 番目の値を更新
+    // pos 番目の値を参照
     // 代入操作のみ受理
     RefWrapper operator[](int pos) {
         assert(0 <= pos && pos < vec_size);
@@ -89,11 +82,12 @@ template <typename T, typename Monoid> class segment_tree {
 
     friend std::ostream &operator<<(std::ostream &os, const segment_tree &seg) {
         for (int i = 0; i < seg.vec_size; i++)
-            os << seg.v[i + seg.n - 1] << (i + 1 != (int)seg.vec_size ? " " : "");
+            os << seg.v[i + seg.n - 1]
+               << (i + 1 != (int)seg.vec_size ? " " : "");
         return os;
     }
 };
 
-template <class T> using RSQ_segtree = segment_tree<T, monoid::Plus<T>>;
-template <class T> using RmQ_segtree = segment_tree<T, monoid::Min<T>>;
-template <class T> using RMQ_segtree = segment_tree<T, monoid::Max<T>>;
+template <class T> using RSQ_segtree = segment_tree<monoid::Plus<T>>;
+template <class T> using RmQ_segtree = segment_tree<monoid::Min<T>>;
+template <class T> using RMQ_segtree = segment_tree<monoid::Max<T>>;

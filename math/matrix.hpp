@@ -254,11 +254,13 @@ template <class T> class matrix {
 
     matrix<T> operator+() const { return *this; }
     matrix<T> operator-() const { return matrix<T>(*this) *= -1; }
-    matrix<T> operator+(const matrix<T> &a) const { return matrix<T>(*this) += a; }
-    matrix<T> operator-(const matrix<T> &a) const { return matrix<T>(*this) -= a; }
-    matrix<T> operator*(const T &a) {
-        return matrix<T>(*this) *= a;
+    matrix<T> operator+(const matrix<T> &a) const {
+        return matrix<T>(*this) += a;
     }
+    matrix<T> operator-(const matrix<T> &a) const {
+        return matrix<T>(*this) -= a;
+    }
+    matrix<T> operator*(const T &a) { return matrix<T>(*this) *= a; }
     matrix<T> operator*(const matrix<T> &a) const {
         return matrix<T>(*this) *= a;
     }
@@ -279,20 +281,20 @@ template <class T> class matrix {
         return table[h][w];
     }
 
-    template<typename S> bool operator==(const matrix<S> &other) {
+    template <typename S> bool operator==(const matrix<S> &other) {
         if (size_H() != other.size_H() || size_W() != other.size_W())
             return false;
         for (int h = 0; h < H; ++h) {
             for (int w = 0; w < W; ++w) {
-                if (table[h][w] != other.table[h][w]) return false;
+                if (table[h][w] != other.table[h][w])
+                    return false;
             }
         }
         return true;
     }
-    template<typename S> bool operator!=(const matrix<S> &other) {
+    template <typename S> bool operator!=(const matrix<S> &other) {
         return !operator==(other);
     }
-
 
     /**
      * @brief サイズ n の単位行列。
@@ -303,5 +305,4 @@ template <class T> class matrix {
             ret.table[i][i] = 1;
         return ret;
     }
-
 };

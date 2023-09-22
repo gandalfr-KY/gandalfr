@@ -13,7 +13,7 @@ int main(void){
     vector<ll> A(N);
     rep(i,0,N) cin >> A[i];
 
-    RSQ_segtree<ll> seg(A);
+    segment_tree<monoid::Plus<ll>> seg(A);
     rep(i,0,Q) {
         ll q, a, b;
         cin >> q >> a >> b;

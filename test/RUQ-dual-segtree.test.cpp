@@ -20,11 +20,11 @@ int main(void){
         if (q == 0) {
             int s, t, x;
             cin >> s >> t >> x;
-            seg.act(s, t + 1, {i + 1, x});
+            seg(s, t + 1, {i + 1, x});
         } else {
             int t;
             cin >> t;
-            cout << seg.get(t).second << endl;
+            cout << seg[t].second << endl;
         }
     }
 

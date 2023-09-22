@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <limits>
 
-#include "../math/matrix.hpp"
 #include "../math/enumeration_utility.hpp"
+#include "../math/matrix.hpp"
 
 /**
  * @brief モノイド
@@ -33,8 +33,8 @@ struct Group : public Monoid<T, Op, Id> {
  * @tparam T 作用される要素の型
  * @tparam F ある要素に対する作用素
  */
-template <typename S, S(*Op)(S, S), S (*Id)(), typename T, T (*F)(T, S)> struct MonoidAction :
-public Monoid<S, Op, Id> {
+template <typename S, S (*Op)(S, S), S (*Id)(), typename T, T (*F)(T, S)>
+struct MonoidAction : public Monoid<S, Op, Id> {
     using VType = T;
     using AType = S;
     static T f(T x, S y) { return F(x, y); }
@@ -134,8 +134,7 @@ template <typename T>
 using Mult =
     Group<T, internal::mult<T>, internal::mult_rev<T>, internal::one<T>>;
 template <typename T>
-using Xor =
-    Group<T, internal::_xor<T>, internal::id_f<T>, internal::zero<T>>;
+using Xor = Group<T, internal::_xor<T>, internal::id_f<T>, internal::zero<T>>;
 
 template <typename Matrix>
 using MatrixPlus =
@@ -146,19 +145,26 @@ using MatrixPlus =
 
 namespace monoid_action {
 template <typename T>
-using Chmin = MonoidAction<T, internal::min<T>, internal::maximum<T>, T, internal::min<T>>;
+using Chmin = MonoidAction<T, internal::min<T>, internal::maximum<T>, T,
+                           internal::min<T>>;
 template <typename T>
-using Chmax = MonoidAction<T, internal::max<T>, internal::minimum<T>, T, internal::max<T>>;
+using Chmax = MonoidAction<T, internal::max<T>, internal::minimum<T>, T,
+                           internal::max<T>>;
 template <typename T>
-using Mult = MonoidAction<T, internal::mult<T>, internal::one<T>, T, internal::mult<T>>;
+using Mult =
+    MonoidAction<T, internal::mult<T>, internal::one<T>, T, internal::mult<T>>;
 template <typename T>
-using Plus = MonoidAction<T, internal::plus<T>, internal::zero<T>, T, internal::plus<T>>;
+using Plus =
+    MonoidAction<T, internal::plus<T>, internal::zero<T>, T, internal::plus<T>>;
 template <typename T>
-using Pow = MonoidAction<long long, internal::mult<long long>, internal::one<long long>, T, power<T>>;
+using Pow = MonoidAction<long long, internal::mult<long long>,
+                         internal::one<long long>, T, power<T>>;
 template <typename Matrix>
 using MatrixPult = MonoidAction<Matrix, internal::matrix_plus<Matrix>,
-                          internal::empty_matrix<Matrix>, Matrix, internal::matrix_plus<Matrix>>;
+                                internal::empty_matrix<Matrix>, Matrix,
+                                internal::matrix_plus<Matrix>>;
 template <typename Matrix>
 using MatrixMult = MonoidAction<Matrix, internal::matrix_mult<Matrix>,
-                          internal::empty_matrix<Matrix>, Matrix, internal::matrix_mult<Matrix>>;
-};
+                                internal::empty_matrix<Matrix>, Matrix,
+                                internal::matrix_mult<Matrix>>;
+}; // namespace monoid_action

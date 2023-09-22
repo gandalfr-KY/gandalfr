@@ -22,7 +22,8 @@ template <typename MonoidAction> class dual_segment_tree {
 
   public:
     dual_segment_tree(int siz) : dual_segment_tree(std::vector<T>(siz)) {}
-    dual_segment_tree(const std::vector<T> &vec) : vec_size(vec.size()), vals(vec) {
+    dual_segment_tree(const std::vector<T> &vec)
+        : vec_size(vec.size()), vals(vec) {
         n = 1;
         while (n < vec_size)
             n *= 2;
@@ -30,7 +31,7 @@ template <typename MonoidAction> class dual_segment_tree {
     }
 
     // pos 番目の値を得る
-    T get(int pos) {
+    T operator[](int pos) const {
         T ret = vals[pos];
         pos += n - 1;
         while (ret = MonoidAction::f(ret, lazy[pos]), pos > 0) {
@@ -40,18 +41,19 @@ template <typename MonoidAction> class dual_segment_tree {
     }
 
     // [l, r) に MonoidAction::f を作用する
-    void act(int l, int r, S action) {
+    void operator()(int l, int r, S action) {
         assert(0 <= l && l <= r && r <= vec_size);
         if (l == r)
             return;
         act(l, r, 0, 0, n, action);
     }
 
-    void print() {
-        for (int i = 0; i < vec_size; i++) {
-            std::cout << get(i) << (i == vec_size - 1 ? "" : " ");
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const dual_segment_tree &seg) {
+        for (int i = 0; i < seg.vec_size; i++) {
+            os << seg[i] << (i == seg.vec_size - 1 ? "" : " ");
         }
-        std::cout << std::endl;
+        return os;
     }
 
   private:

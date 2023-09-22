@@ -19,11 +19,11 @@ int main(void){
         if (q == 0) {
             int s, t, x;
             cin >> s >> t >> x;
-            seg.act(s - 1, t, x);
+            seg(s - 1, t, x);
         } else {
             int t;
             cin >> t;
-            cout << seg.get(t - 1) << endl;
+            cout << seg[t - 1] << endl;
         }
     }
 

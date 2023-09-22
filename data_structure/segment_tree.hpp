@@ -6,6 +6,7 @@
 #include <numeric>
 #include <vector>
 
+#include "binary_indexed_tree.hpp"
 #include "operations.hpp"
 
 template <typename Monoid> class segment_tree {
@@ -88,6 +89,6 @@ template <typename Monoid> class segment_tree {
     }
 };
 
-template <class T> using RSQ_segtree = segment_tree<monoid::Plus<T>>;
+template <class T> using RSQ_segtree = binary_indexed_tree<T>;
 template <class T> using RmQ_segtree = segment_tree<monoid::Min<T>>;
 template <class T> using RMQ_segtree = segment_tree<monoid::Max<T>>;

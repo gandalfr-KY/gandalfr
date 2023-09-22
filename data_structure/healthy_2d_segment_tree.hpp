@@ -3,7 +3,7 @@
 #include <vector>
 
 /**
- * @see https://blog.hamayanhamayan.com/entry/2017/12/09/015937
+ * https://blog.hamayanhamayan.com/entry/2017/12/09/015937
  */
 template <typename V> class Healthy2DSegTree {
   private:

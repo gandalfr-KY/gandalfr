@@ -6,6 +6,8 @@
 #include <string>
 #include <utility>
 
+#include "atcoder/modint.hpp"
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
     for (int i = 0; i < (int)v.size(); i++)
@@ -52,6 +54,16 @@ std::ostream &operator<<(std::ostream &os, std::queue<T> &q) {
     q.pop();
     return os;
 }
+template <int m>
+std::ostream &operator<<(std::ostream &os, const atcoder::static_modint<m> &mi) {
+    os << mi.val();
+    return os;
+}
+template <int m>
+std::ostream &operator<<(std::ostream &os, const atcoder::dynamic_modint<m> &mi) {
+    os << mi.val();
+    return os;
+}
 
 template <typename T>
 std::istream &operator>>(std::istream &is, std::vector<T> &v) {
@@ -62,5 +74,19 @@ std::istream &operator>>(std::istream &is, std::vector<T> &v) {
 template <typename T1, typename T2>
 std::istream &operator>>(std::istream &is, std::pair<T1, T2> &p) {
     is >> p.first >> p.second;
+    return is;
+}
+template <int m>
+std::istream &operator>>(std::istream &is, atcoder::static_modint<m> &mi) {
+    long long n;
+    is >> n;
+    mi = n;
+    return is;
+}
+template <int m>
+std::istream &operator>>(std::istream &is, atcoder::dynamic_modint<m> &mi) {
+    long long n;
+    is >> n;
+    mi = n;
     return is;
 }

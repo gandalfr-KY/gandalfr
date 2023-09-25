@@ -75,7 +75,6 @@ template <class T> class matrix {
      */
     operations_history sweep_method() {
         operations_history hist;
-        T ret = 1;
         for (int h = 0, w = 0; h < H && w < W; w++) {
             if (table[h][w] == 0) {
                 for (int piv = h + 1; piv < H; piv++) {

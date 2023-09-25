@@ -4,8 +4,6 @@
 #include <iostream>
 #include <numeric>
 
-#include "mod_integer.hpp"
-
 namespace internal {
 
 __int128_t __gcd(__int128_t a, __int128_t b) {
@@ -26,6 +24,21 @@ inline void simplify(__int128_t &num, __int128_t &den) {
     num /= (den >= 0 ? d : -d);
     den /= (den >= 0 ? d : -d);
 }
+
+inline long long mod_inverse(long long a, int mod) {
+    assert(mod > 0);
+    long long b = mod, u = 1, v = 0;
+    while (b) {
+        long long t = a / b;
+        a -= t * b, std::swap(a, b);
+        u -= t * v, std::swap(u, v);
+    }
+    u %= mod;
+    if (u < 0)
+        u += mod;
+    return u;
+}
+
 }; // namespace internal
 
 // verify : https://atcoder.jp/contests/abc168/submissions/39533747
@@ -180,7 +193,7 @@ class fraction {
         long long ret = num % _mod;
         if (ret < 0)
             ret += _mod;
-        return (ret *= mod_inverse(den, _mod)) %= _mod;
+        return (ret *= internal::mod_inverse(den, _mod)) %= _mod;
     }
     bool is_infinity() const { return (den == 0); }
 

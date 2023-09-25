@@ -1,3 +1,4 @@
+#include "../atcoder/modint.hpp"
 #include "graph/lowest_common_ancestor.hpp"
 #include "graph/traveling_salesman.hpp"
 #include "graph/strongly_connected_components.hpp"
@@ -20,7 +21,6 @@
 #include "standard/vector_nd.hpp"
 #include "standard/longest_increasing_subsequence.hpp"
 #include "standard/compress.hpp"
-#include "standard/mod_integer.hpp"
 #include "standard/multi_iter.hpp"
 #include "standard/bisection.hpp"
 #include "other/stopwatch.hpp"
@@ -30,4 +30,4 @@
 #include "math/enumeration_utility.hpp"
 #include "math/Bezout_coefficients.hpp"
 #include "math/matrix.hpp"
-#include "math/polynomial.hpp"
+#include "math/formal_power_series.hpp"

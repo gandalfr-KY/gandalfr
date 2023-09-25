@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-#include "../standard/mod_integer.hpp"
+#include "../../atcoder/modint.hpp"
 
 template <class T> T power(T x, long long n) {
     T ret = static_cast<T>(1);
@@ -65,20 +65,20 @@ template <class T> class factorial {
         return fact[n];
     }
 };
-mint (*fact)(int) = factorial<mint>::get;
-_mint (*_fact)(int) = factorial<_mint>::get;
+atcoder::modint1000000007 (*fact1000000007)(int) = factorial<atcoder::modint1000000007>::get;
+atcoder::modint998244353 (*fact998244353)(int) = factorial<atcoder::modint998244353>::get;
 
 template <class T> T permutation(int n, int k) {
     assert(0 <= k && k <= n);
     return factorial<T>::get(n) / factorial<T>::get(n - k);
 }
-mint (*perm)(int, int) = permutation<mint>;
-_mint (*_perm)(int, int) = permutation<_mint>;
+atcoder::modint1000000007 (*perm1000000007)(int, int) = permutation<atcoder::modint1000000007>;
+atcoder::modint998244353 (*perm998244353)(int, int) = permutation<atcoder::modint998244353>;
 
 template <class T> static T combnation(int n, int k) {
     assert(0 <= k && k <= n);
     return factorial<T>::get(n) /
            (factorial<T>::get(k) * factorial<T>::get(n - k));
 }
-mint (*comb)(int, int) = combnation<mint>;
-_mint (*_comb)(int, int) = combnation<_mint>;
+atcoder::modint1000000007 (*comb1000000007)(int, int) = combnation<atcoder::modint1000000007>;
+atcoder::modint998244353 (*comb998244353)(int, int) = combnation<atcoder::modint998244353>;

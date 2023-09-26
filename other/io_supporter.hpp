@@ -54,15 +54,19 @@ std::ostream &operator<<(std::ostream &os, std::queue<T> &q) {
     q.pop();
     return os;
 }
+
+namespace atcoder {
 template <int m>
-std::ostream &operator<<(std::ostream &os, const atcoder::static_modint<m> &mi) {
+std::ostream &operator<<(std::ostream &os, const static_modint<m> &mi) {
     os << mi.val();
     return os;
 }
 template <int m>
-std::ostream &operator<<(std::ostream &os, const atcoder::dynamic_modint<m> &mi) {
+std::ostream &operator<<(std::ostream &os, const dynamic_modint<m> &mi) {
     os << mi.val();
     return os;
+}
+
 }
 
 template <typename T>
@@ -76,17 +80,20 @@ std::istream &operator>>(std::istream &is, std::pair<T1, T2> &p) {
     is >> p.first >> p.second;
     return is;
 }
+namespace atcoder {
 template <int m>
-std::istream &operator>>(std::istream &is, atcoder::static_modint<m> &mi) {
+std::istream &operator>>(std::istream &is, static_modint<m> &mi) {
     long long n;
     is >> n;
     mi = n;
     return is;
 }
 template <int m>
-std::istream &operator>>(std::istream &is, atcoder::dynamic_modint<m> &mi) {
+std::istream &operator>>(std::istream &is, dynamic_modint<m> &mi) {
     long long n;
     is >> n;
     mi = n;
     return is;
+}
+
 }

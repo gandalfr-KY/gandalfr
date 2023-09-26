@@ -20,7 +20,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
     mutable std::vector<bool> visited; // dfs / bfs のための領域
     Weight W = 0;
     bool forest_flag = true;
-    static const Weight WEIGHT_MAX = std::numeric_limits<Weight>::max();
+    static inline const Weight WEIGHT_MAX = std::numeric_limits<Weight>::max();
 
     void reset_visited_flag(int node) const {
         for (int x : uf.group_containing_node(node))

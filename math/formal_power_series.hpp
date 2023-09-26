@@ -1,3 +1,4 @@
+#pragma once
 #include <algorithm>
 #include <vector>
 
@@ -106,7 +107,7 @@ template<class T> struct FormalPowerSeries : public std::vector<T> {
     }
 
     // sparse
-    F &sparse_mult(std::vector<std::pair<int, T>> g) {
+    F &sparse_mult(const std::vector<std::pair<int, T>> &g) {
         int n = (*this).size();
         auto [d, c] = g.front();
         if (d == 0) g.erase(g.begin());
@@ -120,7 +121,7 @@ template<class T> struct FormalPowerSeries : public std::vector<T> {
         }
         return *this;
     }
-    F &sparse_div(std::vector<std::pair<int, T>> g) {
+    F &sparse_div(const std::vector<std::pair<int, T>> &g) {
         int n = (*this).size();
         auto [d, c] = g.front();
         assert(d == 0 && c != T(0));
@@ -132,6 +133,23 @@ template<class T> struct FormalPowerSeries : public std::vector<T> {
             (*this)[i] -= (*this)[i-j] * b;
         }
         (*this)[i] *= ic;
+        }
+        return *this;
+    }
+
+    F &operator^=(long long n) {
+        if (n == 0) {
+            std::fill(this->begin(), this->end(), T(0));
+            (*this)[0] = 1;
+            return *this;
+        }
+        F f(*this);
+        --n;
+        while (n > 0) {
+            if (n & 1)
+                *this *= f;
+            f = f * f;
+            n >>= 1;
         }
         return *this;
     }
@@ -156,14 +174,16 @@ template<class T> struct FormalPowerSeries : public std::vector<T> {
         return res;
     }
 
-    F operator*(const T &g) const { return F(*this) *= g; }
-    F operator/(const T &g) const { return F(*this) /= g; }
-    F operator+(const F &g) const { return F(*this) += g; }
-    F operator-(const F &g) const { return F(*this) -= g; }
-    F operator<<(const int d) const { return F(*this) <<= d; }
-    F operator>>(const int d) const { return F(*this) >>= d; }
-    F operator*(const F &g) const { return F(*this) *= g; }
-    F operator/(const F &g) const { return F(*this) /= g; }
-    F operator*(std::vector<std::pair<int, T>> g) const { return F(*this) *= g; }
-    F operator/(std::vector<std::pair<int, T>> g) const { return F(*this) /= g; }
+    friend F operator*(const T &g, const F &f) { return F(f) *= g; }
+    friend F operator/(const T &g, const F &f) { return F(f) /= g; }
+    friend F operator+(const F &f1, const F &f2) { return F(f1) += f2; }
+    friend F operator-(const F &f1, const F &f2) { return F(f1) -= f2; }
+    friend F operator<<(const F &f, const int d) { return F(f) <<= d; }
+    friend F operator>>(const F &f, const int d) { return F(f) >>= d; }
+    friend F operator*(const F &f1, const F &f2) { return F(f1) *= f2; }
+    friend F operator/(const F &f1, const F &f2) { return F(f1) /= f2; }
+    friend F operator*(const F &f, const std::vector<std::pair<int, T>> &g) { return F(f) *= g; }
+    friend F operator/(const F &f, const std::vector<std::pair<int, T>> &g) { return F(f) /= g; }
+    friend F operator^(const F &f, long long g) { return F(f) ^= g; }
+
 };

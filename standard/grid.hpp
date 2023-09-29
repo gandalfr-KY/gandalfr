@@ -3,13 +3,20 @@
 #include <vector>
 
 struct grid {
+
+    static int H, W;
+
+    static void set_table_size(int _H, int _W) {
+        H = _H, W = _W;
+    }
+
     long long h, w;
 
-    bool is_valid(int H, int W) const {
+    bool is_valid() const {
         return (0 <= h && h < H && 0 <= w && w < W);
     }
-    bool is_valid(int bH, int eH, int bW, int eW) const {
-        return (bH <= h && h < eH && bW <= w && w < eW);
+    bool is_edge_cell() {
+        return (h == 0 || h == H - 1 || w == 0 || w == W - 1);
     }
 
     grid operator+(const grid &other) const {
@@ -59,6 +66,13 @@ struct grid {
      * | 7 2 6 |
      */
     static const std::vector<grid> around;
+
+    std::vector<grid> around_cells() {
+        std::vector<grid> ret(9);
+        for (int i = 0; i < 9; ++i) ret[i] = *this + around[i];
+        return ret;
+    }
+
 };
 
 const std::vector<grid> grid::around = {{0, 0},  {0, 1},   {1, 0},

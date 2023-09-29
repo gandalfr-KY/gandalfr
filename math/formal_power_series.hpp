@@ -53,7 +53,7 @@ template<class T> struct FormalPowerSeries : public std::vector<T> {
         if (d == -1) d = n;
         assert(d > 0);
         F res{(*this)[0].inv()};
-        while (res.size() < d) {
+        while ((int)res.size() < d) {
         int m = size(res);
         F f(begin(*this), begin(*this) + std::min(n, 2*m));
         F r(res);

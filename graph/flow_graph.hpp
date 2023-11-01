@@ -2,10 +2,10 @@
 
 #include "base_graph.hpp"
 
-template <typename Weight, typename Flow>
-class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
+template <typename Cost, typename Flow>
+class flow_graph : public internal::_base_graph<flow_edge<Cost, Flow>> {
   public:
-    using internal::_base_graph<flow_edge<Weight, Flow>>::_base_graph;
+    using internal::_base_graph<flow_edge<Cost, Flow>>::_base_graph;
     flow_graph(const flow_graph &other) : flow_graph(other.N) {
         for (auto &e : other.E) {
             add_edge(*e);
@@ -27,8 +27,8 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
     /**
      * @attention 辺の id は保持される
      */
-    void add_edge(const flow_edge<Weight, Flow> &e) {
-        this->E.emplace_back(std::make_unique<flow_edge<Weight, Flow>>(e));
+    void add_edge(const flow_edge<Cost, Flow> &e) {
+        this->E.emplace_back(std::make_unique<flow_edge<Cost, Flow>>(e));
         this->G[e.v[0]].push_back(this->E.back().get());
         this->G[e.v[1]].push_back(this->E.back().get());
     }
@@ -38,8 +38,19 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
      */
     void add_edge(int from, int to, Flow capacity) {
         int id = (int)this->E.size();
-        flow_edge<Weight, Flow> e(from, to, capacity, capacity, id);
-        this->E.emplace_back(std::make_unique<flow_edge<Weight, Flow>>(e));
+        flow_edge<Cost, Flow> e(from, to, capacity, capacity, id);
+        this->E.emplace_back(std::make_unique<flow_edge<Cost, Flow>>(e));
+        this->G[from].push_back(this->E.back().get());
+        this->G[to].push_back(this->E.back().get());
+    }
+
+    /**
+     * @attention 辺の id は、(現在の辺の本数)番目 が振られる
+     */
+    void add_edge(int from, int to, Cost cost, Flow capacity) {
+        int id = (int)this->E.size();
+        flow_edge<Cost, Flow> e(from, to, capacity, capacity, cost, id);
+        this->E.emplace_back(std::make_unique<flow_edge<Cost, Flow>>(e));
         this->G[from].push_back(this->E.back().get());
         this->G[to].push_back(this->E.back().get());
     }
@@ -120,5 +131,61 @@ class flow_graph : public internal::_base_graph<flow_edge<Weight, Flow>> {
             }
         }
         return flow;
+    }
+
+    /**
+     * @brief 最小費用流 O(FEV)
+     */
+    Flow primal_dual(int s, int t, Flow F) {
+        const Cost invalid = std::numeric_limits<Cost>::max();
+        Cost cst = 0;
+        while (F) {
+            // コストを重みとした残余グラフ上で最短路を計算
+            std::vector<int> prev_path(this->N, -1);
+            std::vector<Cost> min_cost(this->N, invalid);
+            min_cost[s] = 0;
+            for (int i = 0; i < this->N; ++i) {
+                for (int j = 0; j < this->E.size(); ++j) {
+                    auto e = &(this->E[j]);
+                    int src = (*e)->v[0], dst = (*e)->v[1];
+                    for (int k = 0; k < 2; ++k) {
+                        if (min_cost[src] != invalid && !(*e)->is_full(src)) {
+                            Cost alt = min_cost[src] + (*e)->get_cost(src);
+                            if (min_cost[dst] > alt) {
+                                min_cost[dst] = alt;
+                                prev_path[dst] = j;
+                            }
+                        }
+                        std::swap(src, dst);
+                    }
+                }
+            }
+            if (min_cost[t] == invalid) return -1;
+
+            // 流量を計算
+            Flow f = F;
+            Cost sum = 0;
+            int cur = t;
+            while (cur != s) {
+                auto e = &(this->E[prev_path[cur]]);
+                int src = (*e)->v[(*e)->v[0] == cur];
+                f = std::min(f, (*e)->residual(src));
+                cur = src;
+            }
+            
+            // グラフとコストの更新
+            cur = t;
+            while (cur != s) {
+                auto e = &(this->E[prev_path[cur]]);
+                int src = (*e)->v[(*e)->v[0] == cur];
+                (*e)->add_flow(src, f);
+                sum += (*e)->get_cost(src);
+                cur = src;
+            }
+            F -= f;
+            cst += f * sum;
+        }
+
+        return cst;
     }
 };

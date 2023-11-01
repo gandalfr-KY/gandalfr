@@ -62,14 +62,29 @@ template <> struct edge<int> : public internal::_base_edge<int> {
     }
 };
 
-template <class Weight, class Flow>
-struct flow_edge : public internal::_base_edge<Weight> {
-    Weight res, cap;
+template <class Cost, class Flow>
+struct flow_edge : public internal::_base_edge<Cost> {
+  private:
+    Flow res, cap;
+    using internal::_base_edge<Cost>::cost;
 
+  public:
+    flow_edge() {}
     flow_edge(int from, int to, Flow res, Flow cap, int id)
-        : internal::_base_edge<Weight>(from, to, 1, id), res(res), cap(cap) {}
-    flow_edge(int from, int to, Flow res, Flow cap, Weight cost, int id)
-        : internal::_base_edge<Weight>(from, to, cost, id), res(res), cap(cap) {
+        : internal::_base_edge<Cost>(from, to, 1, id), res(res), cap(cap) {}
+    flow_edge(int from, int to, Flow res, Flow cap, Cost cost, int id)
+        : internal::_base_edge<Cost>(from, to, cost, id), res(res), cap(cap) {
+    }
+
+    // x から見たコスト
+    Cost get_cost(int x) {
+        if (x == this->v[0]) {
+            return this->cost;
+        } else if (x == this->v[1]) {
+            return -this->cost;
+        } else {
+            std::abort();
+        }
     }
 
     flow_edge reverse() const {

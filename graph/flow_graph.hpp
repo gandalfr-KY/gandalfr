@@ -145,6 +145,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
             std::vector<Cost> min_cost(this->N, invalid);
             min_cost[s] = 0;
             for (int i = 0; i < this->N; ++i) {
+                bool changed = false;
                 for (int j = 0; j < (int)this->E.size(); ++j) {
                     auto e = &(this->E[j]);
                     int src = (*e)->v[0], dst = (*e)->v[1];
@@ -154,11 +155,13 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
                             if (min_cost[dst] > alt) {
                                 min_cost[dst] = alt;
                                 prev_path[dst] = j;
+                                changed = true;
                             }
                         }
                         std::swap(src, dst);
                     }
                 }
+                if (!changed) break;
             }
             if (min_cost[t] == invalid) return -1;
 

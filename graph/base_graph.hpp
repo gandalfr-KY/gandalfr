@@ -62,7 +62,7 @@ template <> struct edge<int> : public internal::_base_edge<int> {
     }
 };
 
-template <class Cost, class Flow>
+template <class Flow, class Cost>
 struct flow_edge : public internal::_base_edge<Cost> {
   private:
     Flow res, cap;

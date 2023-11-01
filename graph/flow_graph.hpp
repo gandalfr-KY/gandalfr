@@ -3,9 +3,9 @@
 #include "base_graph.hpp"
 
 template <typename Cost, typename Flow>
-class flow_graph : public internal::_base_graph<flow_edge<Cost, Flow>> {
+class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
   public:
-    using internal::_base_graph<flow_edge<Cost, Flow>>::_base_graph;
+    using internal::_base_graph<flow_edge<Flow, Cost>>::_base_graph;
     flow_graph(const flow_graph &other) : flow_graph(other.N) {
         for (auto &e : other.E) {
             add_edge(*e);
@@ -27,8 +27,8 @@ class flow_graph : public internal::_base_graph<flow_edge<Cost, Flow>> {
     /**
      * @attention 辺の id は保持される
      */
-    void add_edge(const flow_edge<Cost, Flow> &e) {
-        this->E.emplace_back(std::make_unique<flow_edge<Cost, Flow>>(e));
+    void add_edge(const flow_edge<Flow, Cost> &e) {
+        this->E.emplace_back(std::make_unique<flow_edge<Flow, Cost>>(e));
         this->G[e.v[0]].push_back(this->E.back().get());
         this->G[e.v[1]].push_back(this->E.back().get());
     }
@@ -38,8 +38,8 @@ class flow_graph : public internal::_base_graph<flow_edge<Cost, Flow>> {
      */
     void add_edge(int from, int to, Flow capacity) {
         int id = (int)this->E.size();
-        flow_edge<Cost, Flow> e(from, to, capacity, capacity, id);
-        this->E.emplace_back(std::make_unique<flow_edge<Cost, Flow>>(e));
+        flow_edge<Flow, Cost> e(from, to, capacity, capacity, id);
+        this->E.emplace_back(std::make_unique<flow_edge<Flow, Cost>>(e));
         this->G[from].push_back(this->E.back().get());
         this->G[to].push_back(this->E.back().get());
     }
@@ -47,10 +47,10 @@ class flow_graph : public internal::_base_graph<flow_edge<Cost, Flow>> {
     /**
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
      */
-    void add_edge(int from, int to, Cost cost, Flow capacity) {
+    void add_edge(int from, int to, Flow capacity, Cost cost) {
         int id = (int)this->E.size();
-        flow_edge<Cost, Flow> e(from, to, capacity, capacity, cost, id);
-        this->E.emplace_back(std::make_unique<flow_edge<Cost, Flow>>(e));
+        flow_edge<Flow, Cost> e(from, to, capacity, capacity, cost, id);
+        this->E.emplace_back(std::make_unique<flow_edge<Flow, Cost>>(e));
         this->G[from].push_back(this->E.back().get());
         this->G[to].push_back(this->E.back().get());
     }
@@ -136,7 +136,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Cost, Flow>> {
     /**
      * @brief 最小費用流 O(FEV)
      */
-    Flow primal_dual(int s, int t, Flow F) {
+    Cost primal_dual(int s, int t, Flow F) {
         const Cost invalid = std::numeric_limits<Cost>::max();
         Cost cst = 0;
         while (F) {
@@ -145,7 +145,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Cost, Flow>> {
             std::vector<Cost> min_cost(this->N, invalid);
             min_cost[s] = 0;
             for (int i = 0; i < this->N; ++i) {
-                for (int j = 0; j < this->E.size(); ++j) {
+                for (int j = 0; j < (int)this->E.size(); ++j) {
                     auto e = &(this->E[j]);
                     int src = (*e)->v[0], dst = (*e)->v[1];
                     for (int k = 0; k < 2; ++k) {

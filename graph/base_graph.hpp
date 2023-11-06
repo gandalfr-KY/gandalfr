@@ -10,9 +10,14 @@ template <class Weight> struct _base_edge {
     int v[2];
     Weight cost;
     int id;
-    _base_edge() {}
+    _base_edge() { v[0] = -1; }
     _base_edge(int from, int to, Weight cost, int id)
         : v{from, to}, cost(cost), id(id) {}
+
+    // デフォルトコンストラクタで初期化された直後は false
+    bool is_valid() {
+        return v[0] == -1;
+    }
 
     // x から見た反対側の端点を返す
     int opp(int x) {

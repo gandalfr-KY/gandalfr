@@ -183,7 +183,8 @@ class graph : public internal::_base_graph<edge<Weight>> {
     using Dijkstra_queue =
         std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;
 
-    void run_bfs(std::vector<int> &dist, std::queue<int> &q) const {
+    std::vector<edge<Weight>> run_bfs(std::vector<int> &dist, std::queue<int> &q) const {
+        std::vector<edge<Weight>> prev_edge(this->N);
         while (!q.empty()) {
             int cu = q.front();
             q.pop();
@@ -191,13 +192,19 @@ class graph : public internal::_base_graph<edge<Weight>> {
                 int to = e->opp(cu);
                 if (dist[to] != WEIGHT_MAX)
                     continue;
+                if (cu == e->v[0])
+                    prev_edge[to] = *e;
+                else
+                    prev_edge[to]= e->reverse();
                 dist[to] = dist[cu] + 1;
                 q.push(to);
             }
         }
+        return prev_edge;
     }
 
-    void run_Dijkstra(std::vector<Weight> &dist, Dijkstra_queue &q) const {
+    std::vector<edge<Weight>> run_Dijkstra(std::vector<Weight> &dist, Dijkstra_queue &q) const {
+        std::vector<edge<Weight>> prev_edge(this->N);
         while (!q.empty()) {
             Weight cur_dist = q.top().first;
             int cu = q.top().second;
@@ -212,10 +219,15 @@ class graph : public internal::_base_graph<edge<Weight>> {
                 Weight alt = cur_dist + e->cost;
                 if (dist[to] <= alt)
                     continue;
+                if (cu == e->v[0])
+                    prev_edge[to] = *e;
+                else
+                    prev_edge[to]= e->reverse();
                 dist[to] = alt;
                 q.push({alt, to});
             }
         }
+        return prev_edge;
     }
 
   public:
@@ -269,33 +281,33 @@ class graph : public internal::_base_graph<edge<Weight>> {
      * @attention 到達可能でないとき、空の配列で返る
      */
     std::vector<edge<Weight>> shortest_path(int start_node, int end_node) {
-        if (start_node == end_node)
-            return {};
+        std::vector<edge<Weight>> prev_path;
+        std::vector<Weight> dist(this->N, WEIGHT_MAX);
+        dist[start_node] = 0;
+        
+        if constexpr (std::is_same<Weight, int>::value) {
+            // BFS algorithm
+            std::queue<int> q;
+            q.push(start_node);
+            prev_path = run_bfs(dist, q);
+        } else {
+            // Dijkstra's algorithm
+            Dijkstra_queue q;
+            q.push({0, start_node});
+            reset_visited_flag(start_node);
+            prev_path = run_Dijkstra(dist, q);
+        }
 
-        auto dist = distances(start_node, WEIGHT_MAX);
         if (dist[end_node] == WEIGHT_MAX)
             return {};
-
-        auto R(this->reverse());
-        reset_visited_flag(end_node);
-        visited[end_node] = true;
 
         int cu = end_node;
         std::vector<edge<Weight>> route;
         while (cu != start_node) {
-            for (auto &e : R[cu]) {
-                int to = e->opp(cu);
-                if (visited[to])
-                    continue;
-                if (dist[cu] - e->cost == dist[to]) {
-                    visited[cu = to] = true;
-                    route.push_back(e->reverse());
-                    break;
-                }
-            }
+            route.push_back(prev_path[cu]);
+            cu = prev_path[cu].v[0];
         }
-        std::reverse(route.begin(), route.end());
-        return route;
+        return {route.rbegin(), route.rend()};
     }
 
     Weight diameter() const {

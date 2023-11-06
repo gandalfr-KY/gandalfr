@@ -183,8 +183,8 @@ class graph : public internal::_base_graph<edge<Weight>> {
     using Dijkstra_queue =
         std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;
 
-    std::vector<edge<Weight>> run_bfs(std::vector<int> &dist, std::queue<int> &q) const {
-        std::vector<edge<Weight>> prev_edge(this->N);
+    std::vector<edge<Weight>*> run_bfs(std::vector<int> &dist, std::queue<int> &q) const {
+        std::vector<edge<Weight>*> prev_edge(this->N);
         while (!q.empty()) {
             int cu = q.front();
             q.pop();
@@ -192,10 +192,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
                 int to = e->opp(cu);
                 if (dist[to] != WEIGHT_MAX)
                     continue;
-                if (cu == e->v[0])
-                    prev_edge[to] = *e;
-                else
-                    prev_edge[to]= e->reverse();
+                prev_edge[to] = e;
                 dist[to] = dist[cu] + 1;
                 q.push(to);
             }
@@ -203,8 +200,8 @@ class graph : public internal::_base_graph<edge<Weight>> {
         return prev_edge;
     }
 
-    std::vector<edge<Weight>> run_Dijkstra(std::vector<Weight> &dist, Dijkstra_queue &q) const {
-        std::vector<edge<Weight>> prev_edge(this->N);
+    std::vector<edge<Weight>*> run_Dijkstra(std::vector<Weight> &dist, Dijkstra_queue &q) const {
+        std::vector<edge<Weight>*> prev_edge(this->N);
         while (!q.empty()) {
             Weight cur_dist = q.top().first;
             int cu = q.top().second;
@@ -219,10 +216,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
                 Weight alt = cur_dist + e->cost;
                 if (dist[to] <= alt)
                     continue;
-                if (cu == e->v[0])
-                    prev_edge[to] = *e;
-                else
-                    prev_edge[to]= e->reverse();
+                prev_edge[to] = e;
                 dist[to] = alt;
                 q.push({alt, to});
             }
@@ -281,7 +275,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
      * @attention 到達可能でないとき、空の配列で返る
      */
     std::vector<edge<Weight>> shortest_path(int start_node, int end_node) {
-        std::vector<edge<Weight>> prev_path;
+        std::vector<edge<Weight>*> prev_path;
         std::vector<Weight> dist(this->N, WEIGHT_MAX);
         dist[start_node] = 0;
         
@@ -304,8 +298,13 @@ class graph : public internal::_base_graph<edge<Weight>> {
         int cu = end_node;
         std::vector<edge<Weight>> route;
         while (cu != start_node) {
-            route.push_back(prev_path[cu]);
-            cu = prev_path[cu].v[0];
+            auto e = prev_path[cu];
+            if (cu == e->v[0]) {
+                route.push_back(e->reverse());
+            } else {
+                route.push_back(*e);
+            }
+            cu = e->opp(cu);
         }
         return {route.rbegin(), route.rend()};
     }

@@ -7,7 +7,7 @@
 
 namespace internal {
 template <class Weight> struct _base_edge {
-    int v[2];
+    int v[2]; //  有向グラフのとき、v[0] が src, v[1] が dst であることを保証する
     Weight cost;
     int id;
     _base_edge() { v[0] = -1; }
@@ -20,6 +20,7 @@ template <class Weight> struct _base_edge {
     }
 
     // x から見た反対側の端点を返す
+    // 無向グラフのときの dst の取得はこれを使う
     int opp(int x) {
         if (x == v[0]) {
             return v[1];
@@ -168,9 +169,9 @@ template <typename Edge> class _base_graph {
      */
     const std::vector<std::unique_ptr<Edge>> &edges() const { return E; }
     /**
-     * @return idx 番目に張られた辺の const 参照
+     * @return idx 番目に張られた辺のポインタの const 参照
      */
-    const std::vector<std::unique_ptr<Edge>> &get_edge(int idx) const {
+    const std::unique_ptr<Edge> &get_edge(int idx) const {
         return E[idx];
     }
 

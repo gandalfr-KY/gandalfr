@@ -84,7 +84,8 @@ template <int m> static atcoder::static_modint<m> combnation(int n, int k) {
 atcoder::modint1000000007 (*comb1000000007)(int, int) = combnation<1000000007>;
 atcoder::modint998244353 (*comb998244353)(int, int) = combnation<998244353>;
 
-template <int m> static FormalPowerSeries<atcoder::static_modint<m>> Bernoulli_number(int n) {
+template <int m>
+static FormalPowerSeries<atcoder::static_modint<m>> Bernoulli_number(int n) {
     assert(0 <= n);
     FormalPowerSeries<atcoder::static_modint<m>> F(n, 0);
     F[0] = 1;
@@ -97,4 +98,5 @@ template <int m> static FormalPowerSeries<atcoder::static_modint<m>> Bernoulli_n
     }
     return F;
 }
-FormalPowerSeries<atcoder::modint998244353> (*Bernoulli998244353)(int) = Bernoulli_number<998244353>;
+FormalPowerSeries<atcoder::modint998244353> (*Bernoulli998244353)(int) =
+    Bernoulli_number<998244353>;

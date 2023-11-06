@@ -435,6 +435,35 @@ class graph : public internal::_base_graph<edge<Weight>> {
         return ret;
     }
 
+    bool is_bibartite() {
+        std::vector<int> col(this->N, -1);
+        auto bfs = [&](int start) -> bool {
+            std::queue<int> q;
+            q.push(start);
+            col[start] = 0;
+            while (!q.empty()) {
+                int cur = q.front();
+                q.pop();
+                for (auto &e : this->G[cur]) {
+                    int to = e->opp(cur);
+                    if (col[to] == -1) {
+                        col[to] = (col[cur] == 0);
+                        q.push(to);
+                    } else if (col[cur] == col[to]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+        for (int i = 0; i < this->N; ++i) {
+            if (col[i] == -1 && !bfs(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
   private:
     /**
      * @see https://ei1333.github.io/luzhiled/snippets/graph/lowlink.html

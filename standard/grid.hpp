@@ -15,9 +15,7 @@ struct grid {
     grid operator+(const grid &other) const {
         return {h + other.h, w + other.w};
     }
-    grid operator*(long long x) const {
-        return {h * x, w * x};
-    }
+    grid operator*(long long x) const { return {h * x, w * x}; }
 
     grid &operator+=(const grid &other) {
         h += other.h;
@@ -29,34 +27,22 @@ struct grid {
         w *= x;
         return *this;
     }
-    
-    grid operator+() const {
-        return *this;
-    }
-    grid operator-() const {
-        return {-h, -w};
-    }
+
+    grid operator+() const { return *this; }
+    grid operator-() const { return {-h, -w}; }
 
     bool operator<(const grid &other) const {
         if (h == other.h)
             return w < other.w;
         return h < other.h;
     }
-    bool operator<=(const grid &other) const {
-        return !(*this > other);
-    }
-    bool operator>(const grid &other) const {
-        return other < *this;
-    }
-    bool operator>=(const grid &other) const {
-        return !(*this < other);
-    }
+    bool operator<=(const grid &other) const { return !(*this > other); }
+    bool operator>(const grid &other) const { return other < *this; }
+    bool operator>=(const grid &other) const { return !(*this < other); }
     bool operator==(const grid &other) const {
         return (h == other.h && w == other.w);
     }
-    bool operator!=(const grid &other) const {
-        return !(*this == other);
-    }
+    bool operator!=(const grid &other) const { return !(*this == other); }
 
     friend std::istream &operator>>(std::istream &is, grid &g) {
         is >> g.h >> g.w;

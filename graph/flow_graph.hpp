@@ -161,9 +161,11 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
                         std::swap(src, dst);
                     }
                 }
-                if (!changed) break;
+                if (!changed)
+                    break;
             }
-            if (min_cost[t] == invalid) return -1;
+            if (min_cost[t] == invalid)
+                return -1;
 
             // 流量を計算
             Flow f = F;
@@ -175,7 +177,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
                 f = std::min(f, (*e)->residual(src));
                 cur = src;
             }
-            
+
             // グラフとコストの更新
             cur = t;
             while (cur != s) {

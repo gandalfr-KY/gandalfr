@@ -73,8 +73,7 @@ struct flow_edge : public internal::_base_edge<Cost> {
     flow_edge(int from, int to, Flow res, Flow cap, int id)
         : internal::_base_edge<Cost>(from, to, 1, id), res(res), cap(cap) {}
     flow_edge(int from, int to, Flow res, Flow cap, Cost cost, int id)
-        : internal::_base_edge<Cost>(from, to, cost, id), res(res), cap(cap) {
-    }
+        : internal::_base_edge<Cost>(from, to, cost, id), res(res), cap(cap) {}
 
     // x から見たコスト
     Cost get_cost(int x) {
@@ -163,6 +162,12 @@ template <typename Edge> class _base_graph {
      * @return グラフ全体の辺のポインタのリストの const 参照
      */
     const std::vector<std::unique_ptr<Edge>> &edges() const { return E; }
+    /**
+     * @return idx 番目に張られた辺の const 参照
+     */
+    const std::vector<std::unique_ptr<Edge>> &get_edge(int idx) const {
+        return E[idx];
+    }
 
     void print() const {
         std::cout << this->N << " " << this->E.size() << std::endl;

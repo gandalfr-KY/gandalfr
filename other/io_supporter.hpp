@@ -42,16 +42,19 @@ std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p) {
     return os;
 }
 template <typename T>
-std::ostream &operator<<(std::ostream &os, std::queue<T> &q) {
-    int sz = q.size();
-    while (--sz) {
-        os << q.front() << ' ';
-        q.push(q.front());
+std::ostream &operator<<(std::ostream &os, std::queue<T> q) {
+    while (!q.empty()) {
+        os << q.front();
         q.pop();
     }
-    os << q.front();
-    q.push(q.front());
-    q.pop();
+    return os;
+}
+template <typename _Tp, typename _Sequence, typename _Compare>
+std::ostream &operator<<(std::ostream &os, std::priority_queue<_Tp, _Sequence, _Compare> q) {
+    while (!q.empty()) {
+        os << q.top();
+        q.pop();
+    }
     return os;
 }
 
@@ -67,7 +70,7 @@ std::ostream &operator<<(std::ostream &os, const dynamic_modint<m> &mi) {
     return os;
 }
 
-}
+} // namespace atcoder
 
 template <typename T>
 std::istream &operator>>(std::istream &is, std::vector<T> &v) {
@@ -96,4 +99,4 @@ std::istream &operator>>(std::istream &is, dynamic_modint<m> &mi) {
     return is;
 }
 
-}
+} // namespace atcoder

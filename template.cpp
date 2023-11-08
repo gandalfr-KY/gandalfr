@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "gandalfr/all"
+#include "gandalfr/basic"
 using namespace std;
 using ll = long long;
 const int INF = 1001001001;
@@ -10,6 +10,7 @@ const ll _MOD = 998244353;
 #define rrep(i, j, n) for(ll i = (ll)(n-1); i >= (ll)(j); i--)
 #define all(a) (a).begin(),(a).end()
 #define LF cout << endl
+#define debug(a) std::cerr << #a << ": " << a << std::endl
 template<typename T1, typename T2> inline bool chmax(T1 &a, T2 b) { return a < b && (a = b, true); }
 template<typename T1, typename T2> inline bool chmin(T1 &a, T2 b) { return a > b && (a = b, true); }
 void Yes(bool ok){ std::cout << (ok ? "Yes" : "No") << std::endl; }

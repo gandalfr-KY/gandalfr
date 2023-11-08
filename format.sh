@@ -5,7 +5,7 @@ START_DIR="."
 EXTENSION=".hpp"
 
 format_file() {
-    echo "Formatting $1"
+    echo "#include \"$1\""
     clang-format -i $1
 
     if [[ "$(tail -c1 $1)" != $'\n' ]]

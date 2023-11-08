@@ -183,8 +183,9 @@ class graph : public internal::_base_graph<edge<Weight>> {
     using Dijkstra_queue =
         std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;
 
-    std::vector<edge<Weight>*> run_bfs(std::vector<int> &dist, std::queue<int> &q) const {
-        std::vector<edge<Weight>*> prev_edge(this->N);
+    std::vector<edge<Weight> *> run_bfs(std::vector<int> &dist,
+                                        std::queue<int> &q) const {
+        std::vector<edge<Weight> *> prev_edge(this->N);
         while (!q.empty()) {
             int cu = q.front();
             q.pop();
@@ -200,8 +201,9 @@ class graph : public internal::_base_graph<edge<Weight>> {
         return prev_edge;
     }
 
-    std::vector<edge<Weight>*> run_Dijkstra(std::vector<Weight> &dist, Dijkstra_queue &q) const {
-        std::vector<edge<Weight>*> prev_edge(this->N);
+    std::vector<edge<Weight> *> run_Dijkstra(std::vector<Weight> &dist,
+                                             Dijkstra_queue &q) const {
+        std::vector<edge<Weight> *> prev_edge(this->N);
         while (!q.empty()) {
             Weight cur_dist = q.top().first;
             int cu = q.top().second;
@@ -275,10 +277,10 @@ class graph : public internal::_base_graph<edge<Weight>> {
      * @attention 到達可能でないとき、空の配列で返る
      */
     std::vector<edge<Weight>> shortest_path(int start_node, int end_node) {
-        std::vector<edge<Weight>*> prev_path;
+        std::vector<edge<Weight> *> prev_path;
         std::vector<Weight> dist(this->N, WEIGHT_MAX);
         dist[start_node] = 0;
-        
+
         if constexpr (std::is_same<Weight, int>::value) {
             // BFS algorithm
             std::queue<int> q;

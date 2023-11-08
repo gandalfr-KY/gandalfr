@@ -50,7 +50,8 @@ std::ostream &operator<<(std::ostream &os, std::queue<T> q) {
     return os;
 }
 template <typename _Tp, typename _Sequence, typename _Compare>
-std::ostream &operator<<(std::ostream &os, std::priority_queue<_Tp, _Sequence, _Compare> q) {
+std::ostream &operator<<(std::ostream &os,
+                         std::priority_queue<_Tp, _Sequence, _Compare> q) {
     while (!q.empty()) {
         os << q.top();
         q.pop();

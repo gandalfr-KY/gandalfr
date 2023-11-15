@@ -17,7 +17,7 @@ template <typename Weight> class Manhattan_minimum_spanning_tree {
   public:
     Manhattan_minimum_spanning_tree(std::vector<Weight> &xs,
                                     std::vector<Weight> &ys)
-        : mst(xs.size()) {
+        : mst(xs.size(), xs.size() - 1) {
         int N = xs.size();
         std::vector<edge<Weight>> E;
         std::vector<int> idx(N);

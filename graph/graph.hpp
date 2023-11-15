@@ -20,7 +20,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
     mutable std::vector<bool> visited; // dfs / bfs のための領域
     Weight W = 0;
     bool forest_flag = true;
-    static inline const Weight WEIGHT_MAX = std::numeric_limits<Weight>::max();
+    bool does_have_minus_edge = false;
 
     void reset_visited_flag(int node) const {
         for (int x : uf.group_containing_node(node))
@@ -30,28 +30,34 @@ class graph : public internal::_base_graph<edge<Weight>> {
     void reset_visited_flag() const { visited.assign(this->N, false); }
 
   public:
+    static inline const Weight EDGE_MAX = std::numeric_limits<Weight>::max();
+    static inline const Weight EDGE_LOWEST = std::numeric_limits<Weight>::lowest();
+
     graph() {}
-    graph(int n) : internal::_base_graph<edge<Weight>>(n), uf(n), visited(n) {}
     graph(int n, int m)
         : internal::_base_graph<edge<Weight>>(n, m), uf(n), visited(n) {}
-    graph(const graph &other) : graph(other.N) {
+    graph(const graph &other) : graph(other.N, other.num_edges()) {
         for (auto &e : other.E) {
-            add_edge(*e);
+            add_edge(e);
         }
     }
 
     /**
-     * @brief ノードの数をn個まで増やす
+     * @brief ノードの数を V 個、辺の本数を E 本に拡張する
      * @param n サイズ
-     * @attention 今のノード数より小さい数を渡したとき、変化なし
+     * @attention 今のノードの数や辺の本数より小さい数を渡したとき、変化なし
      */
-    void expand(int n) {
-        if (n <= this->N)
-            return;
-        this->N = n;
-        this->G.resize(n);
-        visited.resize(n);
-        uf.expand(n);
+    void expand(int n, int m) override {
+        if (n > this->N) {
+            this->N = n;
+            this->G.resize(n);
+            visited.resize(n);
+            uf.expand(n);
+        }
+        if (m > (int)this->E.capacity()) {
+            this->E.reserve(m);
+            // TODO 拡張後 G を再構成する必要あり
+        }
     }
 
     /**
@@ -74,14 +80,19 @@ class graph : public internal::_base_graph<edge<Weight>> {
      * @attention 渡した辺の id は保持される
      */
     void add_edge(const edge<Weight> &e) {
+        assert(this->E.size() < this->E.capacity());
         forest_flag &= uf.merge(e.v[0], e.v[1]);
+        does_have_minus_edge |= (e.cost < 0);
+        
+        this->E.push_back(e);
+        edge<Weight>& new_edge = this->E.back();
 
-        this->E.emplace_back(std::make_unique<edge<Weight>>(e));
-
-        this->G[e.v[0]].push_back(this->E.back().get());
-        if (!is_directed && e.v[0] != e.v[1])
-            this->G[e.v[1]].push_back(this->E.back().get());
-
+        this->G[e.v[0]].push_back(&new_edge);
+        if constexpr (!is_directed) {
+            if (e.v[0] != e.v[1]) {
+                this->G[e.v[1]].push_back(&new_edge);
+            }
+        }
         W += e.cost;
     }
 
@@ -113,7 +124,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
     /**
      * @return 弱連結成分の数
      */
-    int count_connected_components() const { return uf.count_groups(); }
+    int num_connected_components() const { return uf.count_groups(); }
 
     /**
      * @return 弱連結成分のリストのリスト
@@ -141,18 +152,25 @@ class graph : public internal::_base_graph<edge<Weight>> {
     decompose() const {
         std::vector<graph> Gs(uf.count_groups());
         std::vector<std::vector<int>> groups(uf.all_groups());
-        std::vector<int> group_id(this->N), node_id(this->N);
+        std::vector<int> group_id(this->N), node_id(this->N), cnt_edges(uf.count_groups(), 0);
+
         for (int i = 0; i < (int)groups.size(); i++) {
-            Gs[i].expand(groups[i].size());
             for (int j = 0; j < (int)groups[i].size(); j++) {
                 group_id[groups[i][j]] = i;
                 node_id[groups[i][j]] = j;
             }
         }
         for (auto &e : this->E) {
-            int id = group_id[e->v[0]];
-            e->v[0] = node_id[e->v[0]];
-            e->v[1] = node_id[e->v[1]];
+            ++cnt_edges[group_id[e.v[0]]];
+        }
+        for (int i = 0; i < (int)Gs.size(); ++i) {
+            Gs[i].expand(groups[i].size(), cnt_edges[i]);
+        }
+
+        for (auto e : this->E) {
+            int id = group_id[e.v[0]];
+            e.v[0] = node_id[e.v[0]];
+            e.v[1] = node_id[e.v[1]];
             Gs[id].add_edge(e);
         }
         return std::make_tuple(std::move(Gs), std::move(group_id),
@@ -165,14 +183,14 @@ class graph : public internal::_base_graph<edge<Weight>> {
      * @attention 自己ループが含まれていない限り、対角成分は 0
      * @attention 多重辺を持たないと仮定
      */
-    matrix<Weight> to_adjajency(Weight invalid = 0) const {
+    matrix<Weight> to_adjajency(Weight invalid) const {
         matrix<Weight> ret(this->N, this->N, invalid);
         for (int i = 0; i < this->N; i++)
             ret(i, i) = 0;
         for (auto &e : this->E) {
-            ret(e->v[0], e->v[1]) = e->cost;
+            ret(e.v[0], e.v[1]) = e.cost;
             if constexpr (!is_directed) {
-                ret(e->v[1], e->v[0]) = e->cost;
+                ret(e.v[1], e.v[0]) = e.cost;
             }
         }
         return ret;
@@ -183,27 +201,54 @@ class graph : public internal::_base_graph<edge<Weight>> {
     using Dijkstra_queue =
         std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;
 
-    std::vector<edge<Weight> *> run_bfs(std::vector<int> &dist,
+    void run_bfs(std::vector<const edge<Weight> *> &prev_edge, std::vector<int> &dist,
                                         std::queue<int> &q) const {
-        std::vector<edge<Weight> *> prev_edge(this->N);
         while (!q.empty()) {
             int cu = q.front();
             q.pop();
             for (auto &e : this->G[cu]) {
                 int to = e->opp(cu);
-                if (dist[to] != WEIGHT_MAX)
+                if (dist[to] != EDGE_MAX)
                     continue;
                 prev_edge[to] = e;
                 dist[to] = dist[cu] + 1;
                 q.push(to);
             }
         }
-        return prev_edge;
     }
 
-    std::vector<edge<Weight> *> run_Dijkstra(std::vector<Weight> &dist,
+    // verify : https://atcoder.jp/contests/abc137/submissions/47602884
+    bool run_BellmanFord(std::vector<const edge<Weight> *> &prev_edge, std::vector<Weight> &dist) const {
+        bool has_negative_cycle = false;
+        for (int i = 0; i < 2 * this->N; ++i) {
+            bool changed = false;
+            for (auto &e : this->E) {
+                auto upd = [&](int s, int t) {
+                    if (dist[s] != EDGE_MAX) {
+                        Weight alt = (dist[s] == EDGE_LOWEST ? EDGE_LOWEST : dist[s] + e.cost);
+                        if (dist[t] > alt) {
+                            dist[t] = (i < this->N ? alt : EDGE_LOWEST);
+                            prev_edge[t] = &e;
+                            changed = true;
+                        }
+                    }        
+                };
+                upd(e.v[0], e.v[1]);
+                if constexpr (!is_directed) {
+                    upd(e.v[1], e.v[0]);
+                }
+            }
+            if (!changed) {
+                break;
+            } else if (i == this->N - 1) {
+                has_negative_cycle = true;
+            }
+        }
+        return has_negative_cycle;
+    }
+
+    void run_Dijkstra(std::vector<const edge<Weight> *> &prev_edge, std::vector<Weight> &dist,
                                              Dijkstra_queue &q) const {
-        std::vector<edge<Weight> *> prev_edge(this->N);
         while (!q.empty()) {
             Weight cur_dist = q.top().first;
             int cu = q.top().second;
@@ -223,7 +268,6 @@ class graph : public internal::_base_graph<edge<Weight>> {
                 q.push({alt, to});
             }
         }
-        return prev_edge;
     }
 
   public:
@@ -232,42 +276,43 @@ class graph : public internal::_base_graph<edge<Weight>> {
      * @param start_node 始点
      * @param invalid 到達不能な頂点に格納される値
      * @return 各ノードまでの最短距離のリスト
+     * @attention 負閉路に影響を受ける頂点は EDGE_LOWEST が代入される
      */
     std::vector<Weight> distances(int start_node, Weight invalid) const {
-        std::vector<Weight> dist(this->N, WEIGHT_MAX);
+        std::vector<Weight> dist(this->N, EDGE_MAX);
         dist[start_node] = 0;
-
+        std::vector<const edge<Weight> *> prev_edge(this->N, nullptr);
         if constexpr (std::is_same<Weight, int>::value) {
-            // BFS algorithm
             std::queue<int> q;
             q.push(start_node);
-            run_bfs(dist, q);
+            run_bfs(prev_edge, dist, q);
+        } else if (does_have_minus_edge) {
+            run_BellmanFord(prev_edge, dist);
         } else {
-            // Dijkstra's algorithm
             Dijkstra_queue q;
             q.push({0, start_node});
             reset_visited_flag(start_node);
-            run_Dijkstra(dist, q);
+            run_Dijkstra(prev_edge, dist, q);
         }
 
         for (auto &x : dist)
-            if (x == WEIGHT_MAX)
+            if (x == EDGE_MAX)
                 x = invalid;
         return dist;
     }
 
     matrix<Weight> distances_from_all_nodes(Weight invalid = -1) {
-        auto mt(to_adjajency(WEIGHT_MAX));
+        auto mt(to_adjajency(EDGE_MAX));
 
         for (int k = 0; k < this->N; k++)         // 経由する頂点
             for (int i = 0; i < this->N; i++)     // 始点
                 for (int j = 0; j < this->N; j++) // 終点
-                    if (mt(i, k) != WEIGHT_MAX && mt(k, j) != WEIGHT_MAX)
+                    if (mt(i, k) != EDGE_MAX && mt(k, j) != EDGE_MAX)
                         mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k, j));
 
         for (int i = 0; i < this->N; ++i)
             for (int j = 0; j < this->N; ++j)
-                if (mt(i, j) == WEIGHT_MAX)
+                if (mt(i, j) == EDGE_MAX)
                     mt(i, j) = invalid;
         return mt;
     }
@@ -275,32 +320,34 @@ class graph : public internal::_base_graph<edge<Weight>> {
     /**
      * @brief 復元付き最短経路
      * @attention 到達可能でないとき、空の配列で返る
+     * @attention 負閉路があるとき正しい動作を保証しない
      */
     std::vector<edge<Weight>> shortest_path(int start_node, int end_node) {
-        std::vector<edge<Weight> *> prev_path;
-        std::vector<Weight> dist(this->N, WEIGHT_MAX);
+        std::vector<const edge<Weight> *> prev_path;
+        std::vector<Weight> dist(this->N, EDGE_MAX);
         dist[start_node] = 0;
+        std::vector<const edge<Weight> *> prev_edge(this->N, nullptr);
 
         if constexpr (std::is_same<Weight, int>::value) {
-            // BFS algorithm
             std::queue<int> q;
             q.push(start_node);
-            prev_path = run_bfs(dist, q);
+            run_bfs(prev_edge, dist, q);
+        } else if (does_have_minus_edge) {
+            assert(!run_BellmanFord(prev_edge, dist));
         } else {
-            // Dijkstra's algorithm
             Dijkstra_queue q;
             q.push({0, start_node});
             reset_visited_flag(start_node);
-            prev_path = run_Dijkstra(dist, q);
+            run_Dijkstra(prev_edge, dist, q);
         }
 
-        if (dist[end_node] == WEIGHT_MAX)
+        if (dist[end_node] == EDGE_MAX)
             return {};
 
         int cu = end_node;
         std::vector<edge<Weight>> route;
         while (cu != start_node) {
-            auto e = prev_path[cu];
+            auto e = prev_edge[cu];
             if (cu == e->v[0]) {
                 route.push_back(e->reverse());
             } else {
@@ -326,7 +373,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
         } else {
             graph ret(this->N);
             for (auto &e : this->E) {
-                ret.add_edge(e->reverse());
+                ret.add_edge(e.reverse());
             }
             return ret;
         }
@@ -400,7 +447,7 @@ class graph : public internal::_base_graph<edge<Weight>> {
         static_assert(is_directed);
         std::vector<int> indeg(this->N, 0), sorted;
         for (auto &e : this->E) {
-            indeg[e->v[1]]++;
+            indeg[e.v[1]]++;
         }
 
         std::queue<int> q;
@@ -425,26 +472,26 @@ class graph : public internal::_base_graph<edge<Weight>> {
      */
     graph minimum_spanning_forest() const {
         static_assert(!is_directed);
-        graph ret(this->N);
-        std::vector<edge<Weight>> tmp;
-        for (auto &e : this->E) {
-            tmp.emplace_back(*e);
-        }
+        graph ret(this->N, this->N - 1);
+        std::vector<int> idx(this->E.size());
+        std::iota(idx.begin(), idx.end(), 0);
 
-        std::sort(tmp.begin(), tmp.end(),
-                  [](const edge<Weight> &a, const edge<Weight> &b) {
-                      if (a.cost == b.cost) {
-                          if (a.v[0] == b.v[0]) {
-                              return a.v[1] < b.v[1];
-                          }
-                          return a.v[0] < b.v[0];
-                      }
-                      return a.cost < b.cost;
+        std::sort(idx.begin(), idx.end(),
+                  [&](int i, int j) {
+                    auto a = &this->E[i], b = &this->E[j];
+                    if (a->cost == b->cost) {
+                        if (a->v[0] == b->v[0]) {
+                            return a->v[1] < b->v[1];
+                        }
+                        return a->v[0] < b->v[0];
+                    }
+                    return a->cost < b->cost;
                   });
 
-        for (auto &e : tmp)
-            if (!ret.are_connected(e.v[0], e.v[1]))
-                ret.add_edge(e);
+        for (int i : idx) {
+            if (!ret.are_connected(this->E[i].v[0], this->E[i].v[1]))
+                ret.add_edge(this->E[i]);
+        }
         return ret;
     }
 
@@ -530,9 +577,9 @@ class graph : public internal::_base_graph<edge<Weight>> {
     // verify: https://atcoder.jp/contests/abc232/submissions/45715440
     // 同型判定
     bool operator==(const graph &other) const {
-        if (this->N != other.count_nodes())
+        if (this->N != other.num_nodes())
             return false;
-        if (this->count_edges() != other.count_edges())
+        if (this->num_edges() != other.num_edges())
             return false;
         if (this->count_connected_components() !=
             other.count_connected_components())
@@ -559,3 +606,4 @@ class graph : public internal::_base_graph<edge<Weight>> {
 
     bool operator!=(const graph &other) const { return !operator==(other); }
 };
+

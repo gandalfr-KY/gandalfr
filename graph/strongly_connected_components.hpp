@@ -34,8 +34,8 @@ template <typename Weight> class strongly_connected_components {
 
   public:
     strongly_connected_components(const graph<Weight, true> &G)
-        : grp_id(G.count_nodes(), -1) {
-        int N = G.count_nodes();
+        : grp_id(G.num_nodes(), -1) {
+        int N = G.num_nodes();
         std::vector<bool> used(N, false);
         std::vector<int> ord;
         graph<Weight, true> R(G.reverse());
@@ -56,11 +56,11 @@ template <typename Weight> class strongly_connected_components {
             grps[grp_id[i]].push_back(i);
 
         S.expand(grps.size());
-        for (auto &e : G.edges()) {
-            e->v[0] = grp_id[e->v[0]];
-            e->v[1] = grp_id[e->v[1]];
-            if (e->v[0] != e->v[1])
-                S.add_edge(*e);
+        for (auto &e : G.get_edges()) {
+            e.v[0] = grp_id[e.v[0]];
+            e.v[1] = grp_id[e.v[1]];
+            if (e.v[0] != e.v[1])
+                S.add_edge(e);
         }
     }
 

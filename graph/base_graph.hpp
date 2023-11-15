@@ -16,11 +16,11 @@ template <class Weight> struct _base_edge {
         : v{from, to}, cost(cost), id(id) {}
 
     // デフォルトコンストラクタで初期化された直後は false
-    bool is_valid() { return v[0] == -1; }
+    bool is_valid() const { return v[0] == -1; }
 
     // x から見た反対側の端点を返す
     // 無向グラフのときの dst の取得はこれを使う
-    int opp(int x) {
+    int opp(int x) const {
         if (x == v[0]) {
             return v[1];
         } else if (x == v[1]) {
@@ -140,22 +140,23 @@ template <typename Edge> class _base_graph {
   protected:
     int N;
     std::vector<std::vector<Edge *>> G;
-    std::vector<std::unique_ptr<Edge>> E;
+    std::vector<Edge> E;
 
   public:
     _base_graph(){};
-    _base_graph(int n) : N(n), G(n){};
     _base_graph(int n, int m) : N(n), G(n) { E.reserve(m); };
+
+    virtual void expand(int n, int m) = 0;
 
     /**
      * @return ノードの数
      */
-    int count_nodes() const { return N; }
+    int num_nodes() const { return N; }
 
     /**
      * @return 辺の数
      */
-    int count_edges() const { return E.size(); }
+    int num_edges() const { return E.size(); }
 
     /**
      * @param n ノード番号
@@ -164,18 +165,19 @@ template <typename Edge> class _base_graph {
     const std::vector<Edge *> &operator[](int n) const { return G[n]; }
 
     /**
-     * @return グラフ全体の辺のポインタのリストの const 参照
+     * @return グラフ全体の辺のリストの const 参照
      */
-    const std::vector<std::unique_ptr<Edge>> &edges() const { return E; }
+    const std::vector<Edge> &get_edges() const { return E; }
     /**
-     * @return idx 番目に張られた辺のポインタの const 参照
+     * @return idx 番目に張られた辺の const 参照
      */
-    const std::unique_ptr<Edge> &get_edge(int idx) const { return E[idx]; }
+    const Edge &get_edge(int idx) const { return E[idx]; }
 
     void print() const {
         std::cout << this->N << " " << this->E.size() << std::endl;
         for (auto &e : this->E)
-            std::cout << *e << std::endl;
+            std::cout << e << std::endl;
     }
 };
 } // namespace internal
+

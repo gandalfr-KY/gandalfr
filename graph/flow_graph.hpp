@@ -8,7 +8,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
     using internal::_base_graph<flow_edge<Flow, Cost>>::_base_graph;
     flow_graph(const flow_graph &other) : flow_graph(other.N) {
         for (auto &e : other.E) {
-            add_edge(*e);
+            add_edge(e);
         }
     }
 
@@ -17,42 +17,40 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
      * @param n サイズ
      * @attention 今のノード数より小さい数を渡したとき、変化なし
      */
-    void expand(int n) {
-        if (n <= this->N)
-            return;
-        this->N = n;
-        this->G.resize(n);
+    void expand(int n, int m) override {
+        if (n > this->N) {
+            this->N = n;
+            this->G.resize(n);
+        }
+        if (m > (int)this->E.capacity()) {
+            this->E.reserve(m);
+            // TODO 拡張後 G を再構成する必要あり
+        }
     }
 
     /**
      * @attention 辺の id は保持される
      */
     void add_edge(const flow_edge<Flow, Cost> &e) {
-        this->E.emplace_back(std::make_unique<flow_edge<Flow, Cost>>(e));
-        this->G[e.v[0]].push_back(this->E.back().get());
-        this->G[e.v[1]].push_back(this->E.back().get());
+        assert(this->E.size() < this->E.capacity());
+        this->E.push_back(e);
+        flow_edge<Flow, Cost>& new_edge = this->E.back();
+        this->G[e.v[0]].push_back(&new_edge);
+        this->G[e.v[1]].push_back(&new_edge);
     }
 
     /**
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
      */
     void add_edge(int from, int to, Flow capacity) {
-        int id = (int)this->E.size();
-        flow_edge<Flow, Cost> e(from, to, capacity, capacity, id);
-        this->E.emplace_back(std::make_unique<flow_edge<Flow, Cost>>(e));
-        this->G[from].push_back(this->E.back().get());
-        this->G[to].push_back(this->E.back().get());
+        add_edge(flow_edge<Flow, Cost>(from, to, capacity, capacity, (int)this->E.size()));
     }
 
     /**
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
      */
     void add_edge(int from, int to, Flow capacity, Cost cost) {
-        int id = (int)this->E.size();
-        flow_edge<Flow, Cost> e(from, to, capacity, capacity, cost, id);
-        this->E.emplace_back(std::make_unique<flow_edge<Flow, Cost>>(e));
-        this->G[from].push_back(this->E.back().get());
-        this->G[to].push_back(this->E.back().get());
+        add_edge(flow_edge<Flow, Cost>(from, to, capacity, capacity, cost, (int)this->E.size()));
     }
 
     Flow Ford_Fulkerson(int s, int t) {

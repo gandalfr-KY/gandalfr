@@ -180,4 +180,3 @@ template <typename Edge> class _base_graph {
     }
 };
 } // namespace internal
-

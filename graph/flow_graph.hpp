@@ -34,7 +34,7 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
     void add_edge(const flow_edge<Flow, Cost> &e) {
         assert(this->E.size() < this->E.capacity());
         this->E.push_back(e);
-        flow_edge<Flow, Cost>& new_edge = this->E.back();
+        flow_edge<Flow, Cost> &new_edge = this->E.back();
         this->G[e.v[0]].push_back(&new_edge);
         this->G[e.v[1]].push_back(&new_edge);
     }
@@ -43,14 +43,16 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
      */
     void add_edge(int from, int to, Flow capacity) {
-        add_edge(flow_edge<Flow, Cost>(from, to, capacity, capacity, (int)this->E.size()));
+        add_edge(flow_edge<Flow, Cost>(from, to, capacity, capacity,
+                                       (int)this->E.size()));
     }
 
     /**
      * @attention 辺の id は、(現在の辺の本数)番目 が振られる
      */
     void add_edge(int from, int to, Flow capacity, Cost cost) {
-        add_edge(flow_edge<Flow, Cost>(from, to, capacity, capacity, cost, (int)this->E.size()));
+        add_edge(flow_edge<Flow, Cost>(from, to, capacity, capacity, cost,
+                                       (int)this->E.size()));
     }
 
     Flow Ford_Fulkerson(int s, int t) {

@@ -31,7 +31,8 @@ class graph : public internal::_base_graph<edge<Weight>> {
 
   public:
     static inline const Weight EDGE_MAX = std::numeric_limits<Weight>::max();
-    static inline const Weight EDGE_LOWEST = std::numeric_limits<Weight>::lowest();
+    static inline const Weight EDGE_LOWEST =
+        std::numeric_limits<Weight>::lowest();
 
     graph() {}
     graph(int n, int m)
@@ -83,9 +84,9 @@ class graph : public internal::_base_graph<edge<Weight>> {
         assert(this->E.size() < this->E.capacity());
         forest_flag &= uf.merge(e.v[0], e.v[1]);
         does_have_minus_edge |= (e.cost < 0);
-        
+
         this->E.push_back(e);
-        edge<Weight>& new_edge = this->E.back();
+        edge<Weight> &new_edge = this->E.back();
 
         this->G[e.v[0]].push_back(&new_edge);
         if constexpr (!is_directed) {
@@ -152,7 +153,8 @@ class graph : public internal::_base_graph<edge<Weight>> {
     decompose() const {
         std::vector<graph> Gs(uf.count_groups());
         std::vector<std::vector<int>> groups(uf.all_groups());
-        std::vector<int> group_id(this->N), node_id(this->N), cnt_edges(uf.count_groups(), 0);
+        std::vector<int> group_id(this->N), node_id(this->N),
+            cnt_edges(uf.count_groups(), 0);
 
         for (int i = 0; i < (int)groups.size(); i++) {
             for (int j = 0; j < (int)groups[i].size(); j++) {
@@ -201,8 +203,8 @@ class graph : public internal::_base_graph<edge<Weight>> {
     using Dijkstra_queue =
         std::priority_queue<PAIR, std::vector<PAIR>, std::greater<PAIR>>;
 
-    void run_bfs(std::vector<const edge<Weight> *> &prev_edge, std::vector<int> &dist,
-                                        std::queue<int> &q) const {
+    void run_bfs(std::vector<const edge<Weight> *> &prev_edge,
+                 std::vector<int> &dist, std::queue<int> &q) const {
         while (!q.empty()) {
             int cu = q.front();
             q.pop();
@@ -218,20 +220,23 @@ class graph : public internal::_base_graph<edge<Weight>> {
     }
 
     // verify : https://atcoder.jp/contests/abc137/submissions/47602884
-    bool run_BellmanFord(std::vector<const edge<Weight> *> &prev_edge, std::vector<Weight> &dist) const {
+    bool run_BellmanFord(std::vector<const edge<Weight> *> &prev_edge,
+                         std::vector<Weight> &dist) const {
         bool has_negative_cycle = false;
         for (int i = 0; i < 2 * this->N; ++i) {
             bool changed = false;
             for (auto &e : this->E) {
                 auto upd = [&](int s, int t) {
                     if (dist[s] != EDGE_MAX) {
-                        Weight alt = (dist[s] == EDGE_LOWEST ? EDGE_LOWEST : dist[s] + e.cost);
+                        Weight alt =
+                            (dist[s] == EDGE_LOWEST ? EDGE_LOWEST
+                                                    : dist[s] + e.cost);
                         if (dist[t] > alt) {
                             dist[t] = (i < this->N ? alt : EDGE_LOWEST);
                             prev_edge[t] = &e;
                             changed = true;
                         }
-                    }        
+                    }
                 };
                 upd(e.v[0], e.v[1]);
                 if constexpr (!is_directed) {
@@ -247,8 +252,8 @@ class graph : public internal::_base_graph<edge<Weight>> {
         return has_negative_cycle;
     }
 
-    void run_Dijkstra(std::vector<const edge<Weight> *> &prev_edge, std::vector<Weight> &dist,
-                                             Dijkstra_queue &q) const {
+    void run_Dijkstra(std::vector<const edge<Weight> *> &prev_edge,
+                      std::vector<Weight> &dist, Dijkstra_queue &q) const {
         while (!q.empty()) {
             Weight cur_dist = q.top().first;
             int cu = q.top().second;
@@ -476,17 +481,16 @@ class graph : public internal::_base_graph<edge<Weight>> {
         std::vector<int> idx(this->E.size());
         std::iota(idx.begin(), idx.end(), 0);
 
-        std::sort(idx.begin(), idx.end(),
-                  [&](int i, int j) {
-                    auto a = &this->E[i], b = &this->E[j];
-                    if (a->cost == b->cost) {
-                        if (a->v[0] == b->v[0]) {
-                            return a->v[1] < b->v[1];
-                        }
-                        return a->v[0] < b->v[0];
-                    }
-                    return a->cost < b->cost;
-                  });
+        std::sort(idx.begin(), idx.end(), [&](int i, int j) {
+            auto a = &this->E[i], b = &this->E[j];
+            if (a->cost == b->cost) {
+                if (a->v[0] == b->v[0]) {
+                    return a->v[1] < b->v[1];
+                }
+                return a->v[0] < b->v[0];
+            }
+            return a->cost < b->cost;
+        });
 
         for (int i : idx) {
             if (!ret.are_connected(this->E[i].v[0], this->E[i].v[1]))
@@ -606,4 +610,3 @@ class graph : public internal::_base_graph<edge<Weight>> {
 
     bool operator!=(const graph &other) const { return !operator==(other); }
 };
-

@@ -1,63 +1,59 @@
 #pragma once
-#include <iostream>
-#include <vector>
 
-struct grid {
-    long long h, w;
+#include "vector_nd.hpp"
 
-    bool is_valid(int H, int W) const {
-        return (0 <= h && h < H && 0 <= w && w < W);
-    }
-    bool is_valid(int bH, int eH, int bW, int eW) const {
-        return (bH <= h && h < eH && bW <= w && w < eW);
-    }
+namespace gandalfr {
 
-    grid operator+(const grid &other) const {
-        return {h + other.h, w + other.w};
-    }
-    grid operator*(long long x) const { return {h * x, w * x}; }
-
-    grid &operator+=(const grid &other) {
-        h += other.h;
-        w += other.w;
-        return *this;
-    }
-    grid &operator*=(long long x) {
-        h *= x;
-        w *= x;
-        return *this;
+struct gpoint : public vector_nd<f64, 2> {
+    static inline f64 _H, _W;
+    static void set_size(f64 H, f64 W) {
+        _H = H;
+        _W = W;
     }
 
-    grid operator+() const { return *this; }
-    grid operator-() const { return {-h, -w}; }
+    gpoint() = default;
+    gpoint(f64 _h, f64 _w) {
+        h() = _h;
+        w() = _w;
+    }
+    gpoint(const vector_nd<f64, 2>& other) {
+        h() = other.v[0];
+        w() = other.v[1];
+    }
 
-    bool operator<(const grid &other) const {
-        if (h == other.h)
-            return w < other.w;
-        return h < other.h;
+    f64& h() {
+        return v[0];
     }
-    bool operator<=(const grid &other) const { return !(*this > other); }
-    bool operator>(const grid &other) const { return other < *this; }
-    bool operator>=(const grid &other) const { return !(*this < other); }
-    bool operator==(const grid &other) const {
-        return (h == other.h && w == other.w);
+    const f64& h() const {
+        return v[0];
     }
-    bool operator!=(const grid &other) const { return !(*this == other); }
 
-    friend std::istream &operator>>(std::istream &is, grid &g) {
-        is >> g.h >> g.w;
-        return is;
+    f64& w() {
+        return v[1];
     }
-    friend std::ostream &operator<<(std::ostream &os, const grid &g) {
-        os << g.h << " " << g.w;
-        return os;
+    const f64& w() const {
+        return v[1];
+    }
+
+    f64 to_idx() {
+        return h() * _W + w();
+    }
+
+    bool is_valid() const {
+        return (0 <= h() && h() < _H && 0 <= w() && w() < _W);
     }
 };
 
+gpoint to_gpoint(f64 id) {
+    auto [h, w] = std::ldiv(id, gpoint::_W);
+    return gpoint(h, w);
+}
+
 /*
- * | 8 4 5 |
- * | 3 0 1 |
- * | 7 2 6 |
- */
-const std::vector<grid> around = {{0, 0},  {0, 1}, {1, 0},   {0, -1}, {-1, 0},
-                                  {-1, 1}, {1, 1}, {-1, -1}, {1, -1}};
+* | 8 4 5 |
+* | 3 0 1 |
+* | 7 2 6 |
+*/
+const std::vector<gpoint> GAROUND = {{0, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, 0},
+                                    {-1, 1}, {1, 1}, {-1, -1}, {1, -1}};
+}

@@ -1,75 +1,99 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
+#include <cmath>
+#include <cassert>
+#include <iterator>
 
-template <class T, int dim> struct vector_nd {
-    T v[dim];
+#include "../types.hpp"
 
-    vector_nd() = default;
+namespace gandalfr {
 
-    double norm() const {
-        double sum = 0.0;
-        for (int i = 0; i < dim; ++i) {
-            double value = static_cast<double>(v[i]);
-            sum += value * value;
-        }
-        return std::sqrt(sum);
+template <class T, f32 _dim> struct vector_nd {
+    ENSURE_ARITHMETIC_TYPE(T)
+
+    static constexpr f32 dim() {
+        return _dim;
     }
 
-    T norm2() const {
+    T v[_dim];
+
+    double norm() const {
+        return std::sqrt(norm_sq());
+    }
+
+    T norm_sq() const {
         T sum = 0;
-        for (int i = 0; i < dim; ++i) {
+        for (f32 i = 0; i < _dim; ++i) {
             sum += v[i] * v[i];
         }
         return sum;
     }
 
-    vector_nd &operator+=(const vector_nd &other) {
-        for (int i = 0; i < dim; ++i) {
-            v[i] += other.v[i];
-        }
-        return *this;
-    }
-    vector_nd &operator-=(const vector_nd &other) {
-        for (int i = 0; i < dim; ++i) {
-            v[i] -= other.v[i];
-        }
-        return *this;
-    }
-    vector_nd &operator*=(const T scalar) {
-        for (int i = 0; i < dim; ++i) {
-            v[i] *= scalar;
-        }
-        return *this;
-    }
-    vector_nd &operator/=(const T scalar) {
-        for (int i = 0; i < dim; ++i) {
-            v[i] /= scalar;
-        }
-        return *this;
-    }
-    vector_nd operator+(const vector_nd &other) const {
-        return (vector_nd) * this += other;
-    }
-    vector_nd operator-(const vector_nd &other) const {
-        return (vector_nd) * this -= other;
-    }
-    vector_nd operator*(const T scalar) const {
-        return (vector_nd) * this *= scalar;
-    }
-    vector_nd operator/(const T scalar) const {
-        return (vector_nd) * this /= scalar;
-    }
-
     T dot(const vector_nd &other) const {
         T sum = T();
-        for (int i = 0; i < dim; ++i) {
+        for (f32 i = 0; i < _dim; ++i) {
             sum += v[i] * other.v[i];
         }
         return sum;
     }
 
+    std::vector<T> to_stdvec() {
+        return {std::begin(v), std::end(v)};
+    }
+
+    void load(const std::vector<T>& src) {
+        std::copy(src.begin(), src.end(), v);
+    }
+
+    vector_nd operator+() const {
+        return *this;
+    }
+    vector_nd operator-() const {
+        vector_nd v(*this);
+        for (f32 i = 0; i < _dim; ++i) v[i] *= -1;
+        return v;
+    }
+    vector_nd &operator+=(const vector_nd &other) {
+        for (f32 i = 0; i < _dim; ++i) {
+            v[i] += other.v[i];
+        }
+        return *this;
+    }
+    vector_nd &operator-=(const vector_nd &other) {
+        for (f32 i = 0; i < _dim; ++i) {
+            v[i] -= other.v[i];
+        }
+        return *this;
+    }
+    vector_nd &operator*=(const T scalar) {
+        for (f32 i = 0; i < _dim; ++i) {
+            v[i] *= scalar;
+        }
+        return *this;
+    }
+    vector_nd &operator/=(const T scalar) {
+        for (f32 i = 0; i < _dim; ++i) {
+            v[i] /= scalar;
+        }
+        return *this;
+    }
+    vector_nd operator+(const vector_nd &other) const {
+        return static_cast<vector_nd>(*this) += other;
+    }
+    vector_nd operator-(const vector_nd &other) const {
+        return static_cast<vector_nd>(*this) -= other;
+    }
+    vector_nd operator*(const T scalar) const {
+        return static_cast<vector_nd>(*this) *= scalar;
+    }
+    vector_nd operator/(const T scalar) const {
+        return static_cast<vector_nd>(*this) /= scalar;
+    }
+
     bool operator==(const vector_nd &other) const {
-        for (int i = 0; i < dim; ++i) {
+        for (f32 i = 0; i < _dim; ++i) {
             if (v[i] != other.v[i])
                 return false;
         }
@@ -79,19 +103,29 @@ template <class T, int dim> struct vector_nd {
         return std::rel_ops::operator!=(*this, other);
     }
 
+    T& operator[](f32 index) {
+        return v[index];
+    }
+    const T& operator[](f32 index) const {
+        return v[index];
+    }
+
     friend std::ostream &operator<<(std::ostream &os, const vector_nd &c) {
-        for (int i = 0; i < dim; ++i) {
-            os << c.v[i] << (i < dim - 1 ? " " : "");
+        for (f32 i = 0; i < _dim; ++i) {
+            os << c.v[i] << (i < _dim - 1 ? " " : "");
         }
         return os;
     }
     friend std::istream &operator>>(std::istream &is, vector_nd &c) {
-        for (int i = 0; i < dim; ++i) {
+        for (f32 i = 0; i < _dim; ++i) {
             is >> c.v[i];
         }
         return is;
     }
+
 };
 
-template <class T> using v2d = vector_nd<T, 2>;
-template <class T> using v3d = vector_nd<T, 3>;
+using point2d = vector_nd<double, 2>;
+using point3d = vector_nd<double, 3>;
+
+}

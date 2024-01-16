@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iterator>
 #include <type_traits>
+#include <vector>
 
 /**
  * @brief コンテナの要素を半開区間で指定し、座標圧縮する

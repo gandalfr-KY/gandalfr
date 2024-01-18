@@ -3,11 +3,13 @@
 
 #include "../graph/graph.hpp"
 
+namespace gandalfr {
+
 template <int id> struct random_utility {
     static inline std::mt19937 mt;
 
     static void set_seed(int seed) {
-        mt.seed(seed); // mtにseedを設定
+        mt.seed(seed);
     }
 
     static long long random_int(long long min_value, long long max_value) {
@@ -30,5 +32,5 @@ template <int id> struct random_utility {
         return g;
     }
 };
-
 using rnd = random_utility<-1>;
+}

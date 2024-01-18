@@ -3,10 +3,15 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <utility>
 #include <cassert> 
 #include <cmath> 
 #include <exception> 
 #include <chrono> 
+
+#include "../types.hpp" 
+
+namespace gandalfr {
 
 const double EPS = 1e-9;
 
@@ -27,13 +32,13 @@ public:
 
 using TestCase = void(*)();
 
-std::map<std::string, TestCase> test_registry;
+std::map<std::pair<std::string, std::string>, TestCase> test_registry;
 
 #define TEST(test_suite, test_name) \
     void test_name(); \
     struct test_name##_Reg { \
         test_name##_Reg() { \
-            test_registry[#test_suite "." #test_name] = &test_name; \
+            test_registry[{#test_suite, #test_name}] = &test_name; \
         } \
     } test_name##_reg; \
     void test_name()
@@ -43,19 +48,36 @@ std::map<std::string, TestCase> test_registry;
 #define NEAR(a, b, eps) if (std::abs(a - b) > eps) throw TestException("NEAR failed.", __FILE__, __LINE__)
 
 void RunAllTests() {
+    std::string prev_suite = test_registry.begin()->first.first;
+    i32 num_tests = 0, num_correct = 0;
+
+    std::cout << "Running suite: " << prev_suite << std::endl;
     for (const auto& [test_name, proc] : test_registry) {
-        std::cout << "Running test: " << test_name << std::endl;
+        auto& [suite, name] = test_name;
+        if (prev_suite != suite) {
+            prev_suite = suite;
+            std::cout << "Result: " << num_correct << "/" << num_tests << std::endl;
+            std::cout << std::endl;
+            std::cout << "Running suite: " << suite << std::endl;
+            num_tests = num_correct = 0;
+        }
+        std::string testNameWithPadding = suite + '.' + name;
+        testNameWithPadding.resize(35, ' ');
+        std::cout << "  " << testNameWithPadding << "  ";
         try {
             auto start = std::chrono::high_resolution_clock::now();
             proc();
             auto end = std::chrono::high_resolution_clock::now();
             auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-            std::cout << "✅ Test passed!" << std::endl;
-            std::cout << "     Time: " << elapsed << " ms" << std::endl;
-        } catch(TestException& e) {
-            std::cerr << "❌ Test failed: " << e.what() << std::endl;
-            std::cerr << "     File: " << e.file << std::endl; 
-            std::cerr << "     Line: " << e.line << std::endl; 
+            std::cout << "✅ " << elapsed << " ms" << std::endl;
+            ++num_correct;
+        } catch (TestException& e) {
+            std::cerr << "❌" << std::endl;
+            std::cerr << "    File: " << e.file << std::endl;
+            std::cerr << "    Line: " << e.line << std::endl;
         }
+        ++num_tests;
     }
+    std::cout << "Result: " << num_correct << "/" << num_tests << std::endl;
+}
 }

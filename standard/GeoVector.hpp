@@ -12,7 +12,7 @@ namespace gandalfr {
 
 namespace internal {
 
-template <class Derived, class T, f32 _dim> struct BaseArray {
+template <class Derived, class T, i32 _dim> struct BaseArray {
     ENSURE_ARITHMETIC_TYPE(T)
 
     BaseArray() = default;
@@ -21,7 +21,7 @@ template <class Derived, class T, f32 _dim> struct BaseArray {
         std::copy(init.begin(), init.end(), v);
     }
 
-    static constexpr f32 dim() {
+    static constexpr i32 dim() {
         return _dim;
     }
 
@@ -35,21 +35,21 @@ template <class Derived, class T, f32 _dim> struct BaseArray {
         std::copy(src.begin(), src.end(), v);
     }
 
-    T& operator[](f32 index) {
+    T& operator[](i32 index) {
         return v[index];
     }
-    const T& operator[](f32 index) const {
+    const T& operator[](i32 index) const {
         return v[index];
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Derived &c) {
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             os << c.v[i] << (i < _dim - 1 ? " " : "");
         }
         return os;
     }
     friend std::istream &operator>>(std::istream &is, Derived &c) {
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             is >> c.v[i];
         }
         return is;
@@ -57,7 +57,7 @@ template <class Derived, class T, f32 _dim> struct BaseArray {
 };
 }
 
-template <class T, f32 _dim> struct GeoVector : public internal::BaseArray<GeoVector<T, _dim>, T, _dim> {
+template <class T, i32 _dim> struct GeoVector : public internal::BaseArray<GeoVector<T, _dim>, T, _dim> {
     using internal::BaseArray<GeoVector<T, _dim>, T, _dim>::BaseArray;
 
     double norm() const {
@@ -66,7 +66,7 @@ template <class T, f32 _dim> struct GeoVector : public internal::BaseArray<GeoVe
 
     T normSq() const {
         T sum = 0;
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             sum += this->v[i] * this->v[i];
         }
         return sum;
@@ -74,7 +74,7 @@ template <class T, f32 _dim> struct GeoVector : public internal::BaseArray<GeoVe
 
     T dot(const GeoVector &other) const {
         T sum = T();
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             sum += this->v[i] * other.v[i];
         }
         return sum;
@@ -85,29 +85,29 @@ template <class T, f32 _dim> struct GeoVector : public internal::BaseArray<GeoVe
     }
     GeoVector operator-() const {
         GeoVector gv(*this);
-        for (f32 i = 0; i < _dim; ++i) gv.v[i] *= -1;
+        for (i32 i = 0; i < _dim; ++i) gv.v[i] *= -1;
         return gv;
     }
     GeoVector &operator+=(const GeoVector &other) {
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             this->v[i] += other.v[i];
         }
         return *this;
     }
     GeoVector &operator-=(const GeoVector &other) {
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             this->v[i] -= other.v[i];
         }
         return *this;
     }
     GeoVector &operator*=(const T scalar) {
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             this->v[i] *= scalar;
         }
         return *this;
     }
     GeoVector &operator/=(const T scalar) {
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             this->v[i] /= scalar;
         }
         return *this;
@@ -126,7 +126,7 @@ template <class T, f32 _dim> struct GeoVector : public internal::BaseArray<GeoVe
     }
 
     bool operator==(const GeoVector &other) const {
-        for (f32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i) {
             if (this->v[i] != other.v[i])
                 return false;
         }
@@ -140,30 +140,30 @@ template <class T, f32 _dim> struct GeoVector : public internal::BaseArray<GeoVe
 using Point2d = GeoVector<double, 2>;
 using Point3d = GeoVector<double, 3>;
 
-struct PointGrid : public internal::BaseArray<PointGrid, f64, 2> {
-    using internal::BaseArray<PointGrid, f64, 2>::BaseArray;
+struct PointGrid : public internal::BaseArray<PointGrid, i64, 2> {
+    using internal::BaseArray<PointGrid, i64, 2>::BaseArray;
     
-    static inline f64 _H, _W;
-    static void set_size(f64 H, f64 W) {
+    static inline i64 _H, _W;
+    static void set_size(i64 H, i64 W) {
         _H = H;
         _W = W;
     }
     
-    f64& h() {
+    i64& h() {
         return this->v[0];
     }
-    const f64& h() const {
+    const i64& h() const {
         return this->v[0];
     }
 
-    f64& w() {
+    i64& w() {
         return this->v[1];
     }
-    const f64& w() const {
+    const i64& w() const {
         return this->v[1];
     }
 
-    f64 toIdx() {
+    i64 toIdx() {
         return h() * _W + w();
     }
 
@@ -220,12 +220,12 @@ struct PointGrid : public internal::BaseArray<PointGrid, f64, 2> {
         this->v[1] -= other.v[1];
         return *this;
     }
-    PointGrid &operator*=(const f64 scalar) {
+    PointGrid &operator*=(const i64 scalar) {
         this->v[0] *= scalar;
         this->v[1] *= scalar;
         return *this;
     }
-    PointGrid &operator/=(const f64 scalar) {
+    PointGrid &operator/=(const i64 scalar) {
         this->v[0] /= scalar;
         this->v[1] /= scalar;
         return *this;
@@ -236,10 +236,10 @@ struct PointGrid : public internal::BaseArray<PointGrid, f64, 2> {
     PointGrid operator-(const PointGrid &other) const {
         return static_cast<PointGrid>(*this) -= other;
     }
-    PointGrid operator*(const f64 scalar) const {
+    PointGrid operator*(const i64 scalar) const {
         return static_cast<PointGrid>(*this) *= scalar;
     }
-    PointGrid operator/(const f64 scalar) const {
+    PointGrid operator/(const i64 scalar) const {
         return static_cast<PointGrid>(*this) /= scalar;
     }
 
@@ -251,7 +251,7 @@ struct PointGrid : public internal::BaseArray<PointGrid, f64, 2> {
     }
 };
 
-PointGrid toPointGrid(f64 id) {
+PointGrid toPointGrid(i64 id) {
     auto [h, w] = std::ldiv(id, PointGrid::_W);
     return {h, w};
 }

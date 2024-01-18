@@ -1,23 +1,24 @@
 #include <queue>
 
 #include "testenv.hpp"
+#include "../other/random.hpp"
 #include "../standard/GeoVector.hpp"
-#include "../standard/compress.hpp"
+#include "../standard/utility.hpp"
 
 using namespace gandalfr;
 
 TEST(VECTOR_ND, OPERATOR) {
-    const f32 dim = 5;
-    GeoVector<f32, dim> vec1 = GeoVector<f32, dim>{0, 1, 2, 3, 4};
-    GeoVector<f32, dim> vec2 = {4, 2, 3, 4, 0};
-    GeoVector<f32, dim> vec3(vec1);
+    const i32 dim = 5;
+    GeoVector<i32, dim> vec1 = GeoVector<i32, dim>{0, 1, 2, 3, 4};
+    GeoVector<i32, dim> vec2 = {4, 2, 3, 4, 0};
+    GeoVector<i32, dim> vec3(vec1);
 
-    for (f32 i = 0; i < dim; ++i) {
+    for (i32 i = 0; i < dim; ++i) {
         EQ(vec1[i], i);
     }
 
     auto pls(+vec1), mns(-vec1);
-    for (f32 i = 0; i < dim; ++i) {
+    for (i32 i = 0; i < dim; ++i) {
         EQ(vec1[i], pls[i]);
         EQ(-vec1[i], mns[i]);
     }
@@ -26,7 +27,7 @@ TEST(VECTOR_ND, OPERATOR) {
     auto sub(vec1 - vec2);
     auto mlt(vec1 * 5);
     auto div(vec1 / 2);
-    for (f32 i = 0; i < dim; ++i) {
+    for (i32 i = 0; i < dim; ++i) {
         EQ(add[i], vec1[i] + vec2[i]);
         EQ(sub[i], vec1[i] - vec2[i]);
         EQ(mlt[i], vec1[i] * 5);
@@ -46,10 +47,10 @@ TEST(VECTOR_ND, GEOMETRIC) {
 }
 
 TEST(VECTOR_ND, CONVERT_WITH_STDVEC) {
-    const f32 dim = 5;
-    std::vector<f32> stdvec(dim);
-    for (f32 i = 0; i < dim; ++i) stdvec[i] = i;
-    GeoVector<f32, dim> vec;
+    const i32 dim = 5;
+    std::vector<i32> stdvec(dim);
+    for (i32 i = 0; i < dim; ++i) stdvec[i] = i;
+    GeoVector<i32, dim> vec;
     vec.load(stdvec);
     EQ(stdvec, vec.to_stdvec());
 }
@@ -70,7 +71,7 @@ TEST(GRID, CHECK_AROUND) {
 }
 
 TEST(GRID, SOLVE_MAZE) {
-    const f32 H = 5, W = 6, X = -1;
+    const i32 H = 5, W = 6, X = -1;
     std::vector<std::string> T{
         ".##..#",
         "....##",
@@ -78,7 +79,7 @@ TEST(GRID, SOLVE_MAZE) {
         "..####",
         "#....."
     };
-    std::vector<std::vector<f8>> ANS{
+    std::vector<std::vector<i8>> ANS{
         {0,X,X,5,6,X},
         {1,2,3,4,X,X},
         {2,X,X,5,6,7},
@@ -89,12 +90,12 @@ TEST(GRID, SOLVE_MAZE) {
     PointGrid::set_size(H, W);
     std::queue<PointGrid> q;
     q.push({0, 0});
-    std::vector<std::vector<f8>> dist(H, std::vector<f8>(W, X));
+    std::vector<std::vector<i8>> dist(H, std::vector<i8>(W, X));
     dist[0][0] = 0;
     while (!q.empty()) {
         PointGrid cur = q.front();
         q.pop();
-        for (f32 i = 1; i <= 4; ++i) {
+        for (i32 i = 1; i <= 4; ++i) {
             auto d = GAROUND[i];
             PointGrid nxt = cur + d;
             if (!nxt.isValid()) continue;
@@ -109,10 +110,44 @@ TEST(GRID, SOLVE_MAZE) {
 }
 
 TEST(UTIL, COMPRESS) {
-    std::vector<f32> vec{2, 4, 5, 4, 3, 10, -1};
-    std::vector<f32> ans{1, 3, 4, 3, 2, 5, 0};
+    std::vector<i32> vec{2, 4, 5, 4, 3, 10, -1};
+    std::vector<i32> ans{1, 3, 4, 3, 2, 5, 0};
     EQ(compress(vec), ans);
 }
+
+TEST(UTIL, INVERSION) {
+    const i32 len = 5, rep = 10;
+    std::vector<i32> rnd_vec(5);
+    for (i32& x : rnd_vec) x = rnd::random_int(-10, 10);
+    auto num_swap = [](std::vector<i32> v) {
+        i32 ret = 0;
+        const i32 N = v.size();
+        for(i32 i = 0; i < N; ++i) {
+            for (i32 j = 0; j < N - 1; ++j) {
+                if (v[j] > v[j + 1]) {
+                    std::swap(v[j], v[j + 1]);
+                    ++ret;
+                }
+            }
+        }
+        return ret;
+    };
+
+    for (int r = 0; r < rep; ++r) {
+        for (i32 i = 0; i < len; ++i) {
+            rnd_vec[i] = rnd::random_int(-10, 10);
+        }
+        EQ(inversion(rnd_vec), num_swap(rnd_vec));
+    }
+}
+
+TEST(UTIL, INVERSION_WITH_TWO_ARRAY) {
+    std::vector<i32> vec1{10, 2, 5, 0, 9};
+    std::vector<i32> vec2{10, 0, 9, 5, 2};
+    EQ(inversion(vec1, vec2), 5);
+}
+
+
 
 int main() {
     RunAllTests();

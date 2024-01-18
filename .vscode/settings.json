@@ -87,6 +87,9 @@
         "span": "cpp",
         "stop_token": "cpp",
         "syncstream": "cpp",
-        "__nullptr": "cpp"
+        "__nullptr": "cpp",
+        "expected": "cpp",
+        "spanstream": "cpp",
+        "stacktrace": "cpp"
     }
 }

@@ -1,60 +1,51 @@
 #pragma once
-#include <assert.h>
 
+#include <cassert>
 #include <iostream>
 #include <numeric>
 
+#include "atcoder/modint.hpp"
+#include "../types.hpp"
+
+namespace gandalfr {
+
 namespace internal {
 
-__int128_t __gcd(__int128_t a, __int128_t b) {
-    if (a % b == 0)
-        return b;
-    return __gcd(b, a % b);
-}
-
 // 絶対値の GCD を返す。片方が 0 ならもう一方の絶対値。
-__int128_t gcd(__int128_t a, __int128_t b) {
-    if (b == 0)
+i128 gcd(i128 a, i128 b) {
+    if (b == 0) {
         return (a >= 0 ? a : -a);
-    return internal::__gcd((a >= 0 ? a : -a), (b >= 0 ? b : -b));
+    }
+    auto rec = [](auto self, const i128& a, const i128& b) -> i128 {
+        return a % b == 0 ? b : self(self, b, a % b);
+    };
+    return rec(rec, a >= 0 ? a : -a, b >= 0 ? b : -b);
 }
 
-inline void simplify(__int128_t &num, __int128_t &den) {
-    __int128_t d = internal::gcd(num, den);
+inline void simplify(i128 &num, i128 &den) {
+    i128 d = internal::gcd(num, den);
     num /= (den >= 0 ? d : -d);
     den /= (den >= 0 ? d : -d);
 }
 
-inline long long mod_inverse(long long a, int mod) {
-    assert(mod > 0);
-    long long b = mod, u = 1, v = 0;
-    while (b) {
-        long long t = a / b;
-        a -= t * b, std::swap(a, b);
-        u -= t * v, std::swap(u, v);
-    }
-    u %= mod;
-    if (u < 0)
-        u += mod;
-    return u;
-}
+} // namespace internal
 
-}; // namespace internal
-
-// verify : https://atcoder.jp/contests/abc168/submissions/39533747
-// 演算結果の分子・分母がともに 64bit 整数の範囲でのみ動作を保証
-class fraction {
+/**
+ * verify : https://atcoder.jp/contests/abc168/submissions/39533747
+ * 演算結果の分子・分母がともに 64bit 整数の範囲でのみ動作を保証
+ */
+class Fraction {
   private:
-    long long num, den;
+    i64 num, den;
 
-    friend fraction operator+(const fraction &a) { return a; }
-    friend fraction operator-(const fraction &a) {
-        fraction ret;
+    friend Fraction operator+(const Fraction &a) { return a; }
+    friend Fraction operator-(const Fraction &a) {
+        Fraction ret;
         ret.raw_assign(-a.num, a.den);
         return ret;
     }
 
-    friend fraction operator+(const fraction &a, const fraction &b) {
+    friend Fraction operator+(const Fraction &a, const Fraction &b) {
         assert(!(a.is_infinity() && b.is_infinity() &&
                  a.num * b.num == -1)); // 不定形はダメ
         if (a.is_infinity()) {
@@ -62,11 +53,11 @@ class fraction {
         } else if (b.is_infinity()) {
             return b;
         } else {
-            return {(__int128_t)a.num * b.den + (__int128_t)b.num * a.den,
-                    (__int128_t)a.den * b.den};
+            return {(i128)a.num * b.den + (i128)b.num * a.den,
+                    (i128)a.den * b.den};
         }
     }
-    friend fraction operator-(const fraction &a, const fraction &b) {
+    friend Fraction operator-(const Fraction &a, const Fraction &b) {
         assert(!(a.is_infinity() && b.is_infinity() &&
                  a.num * b.num == 1)); // 不定形はダメ
         if (a.is_infinity()) {
@@ -74,81 +65,81 @@ class fraction {
         } else if (b.is_infinity()) {
             return -b;
         } else {
-            return {(__int128_t)a.num * b.den - (__int128_t)b.num * a.den,
-                    (__int128_t)a.den * b.den};
+            return {(i128)a.num * b.den - (i128)b.num * a.den,
+                    (i128)a.den * b.den};
         }
     }
-    friend fraction operator*(const fraction &a, const fraction &b) {
+    friend Fraction operator*(const Fraction &a, const Fraction &b) {
         assert(a.num != 0 || b.den != 0);
         assert(a.den != 0 || b.num != 0);
-        long long gcd_tmp1 = std::gcd(a.num, b.den),
+        i64 gcd_tmp1 = std::gcd(a.num, b.den),
                   gcd_tmp2 = std::gcd(b.num, a.den);
-        fraction ret;
+        Fraction ret;
         ret.raw_assign((a.num / gcd_tmp1) * (b.num / gcd_tmp2),
                        (a.den / gcd_tmp2) * (b.den / gcd_tmp1));
         return ret;
     }
-    friend fraction operator/(const fraction &a, const fraction &b) {
+    friend Fraction operator/(const Fraction &a, const Fraction &b) {
         assert(a.num != 0 || b.num != 0);
         assert(a.den != 0 || b.den != 0);
-        long long gcd_tmp1 = std::gcd(a.num, b.num),
+        i64 gcd_tmp1 = std::gcd(a.num, b.num),
                   gcd_tmp2 = std::gcd(b.den, a.den);
-        fraction ret;
+        Fraction ret;
         ret.raw_assign(
             (b.num >= 0 ? 1 : -1) * (a.num / gcd_tmp1) * (b.den / gcd_tmp2),
             (b.num >= 0 ? 1 : -1) * (a.den / gcd_tmp2) * (b.num / gcd_tmp1));
         return ret;
     }
 
-    friend bool operator==(const fraction &a, const fraction &b) {
+    friend bool operator==(const Fraction &a, const Fraction &b) {
         return a.num == b.num && a.den == b.den;
     }
-    friend bool operator!=(const fraction &a, const fraction &b) {
+    friend bool operator!=(const Fraction &a, const Fraction &b) {
         return a.num != b.num || a.den != b.den;
     }
 
-    friend int compare_to(const fraction &a, const fraction &b) {
+    friend i32 compare_to(const Fraction &a, const Fraction &b) {
         if ((a.num >= 0) ^ (b.num >= 0))
             return a.num > b.num ? 1 : -1;
-        __int128_t lhs = (__int128_t)a.num * b.den;
-        __int128_t rhs = (__int128_t)b.num * a.den;
+        i128 lhs = (i128)a.num * b.den;
+        i128 rhs = (i128)b.num * a.den;
         if (lhs == rhs)
             return 0;
         return lhs > rhs ? 1 : -1;
     }
 
-    friend bool operator>(const fraction &a, const fraction &b) {
+    friend bool operator>(const Fraction &a, const Fraction &b) {
         return compare_to(a, b) > 0;
     }
-    friend bool operator>=(const fraction &a, const fraction &b) {
+    friend bool operator>=(const Fraction &a, const Fraction &b) {
         return compare_to(a, b) >= 0;
     }
-    friend bool operator<(const fraction &a, const fraction &b) {
+    friend bool operator<(const Fraction &a, const Fraction &b) {
         return compare_to(a, b) < 0;
     }
-    friend bool operator<=(const fraction &a, const fraction &b) {
+    friend bool operator<=(const Fraction &a, const Fraction &b) {
         return compare_to(a, b) <= 0;
     }
 
   public:
-    fraction(long long n) : num(n), den(1) {}
-    fraction(__int128_t numerator, __int128_t denominator) {
+    Fraction(i64 n) : num(n), den(1) {}
+    Fraction(i128 numerator, i128 denominator) {
         internal::simplify(numerator, denominator);
         num = numerator, den = denominator;
     }
-    fraction() : num(0), den(1) {}
+    Fraction() : num(0), den(1) {}
 
-    fraction &operator=(const fraction &a) = default;
-    fraction &operator+=(const fraction &a) { return *this = *this + a; }
-    fraction &operator-=(const fraction &a) { return *this = *this - a; }
-    fraction &operator*=(const fraction &a) { return *this = *this * a; }
-    fraction &operator/=(const fraction &a) { return *this = *this / a; }
+    Fraction &operator=(const Fraction &a) = default;
+    Fraction &operator+=(const Fraction &a) { return *this = *this + a; }
+    Fraction &operator-=(const Fraction &a) { return *this = *this - a; }
+    Fraction &operator*=(const Fraction &a) { return *this = *this * a; }
+    Fraction &operator/=(const Fraction &a) { return *this = *this / a; }
 
-    friend std::istream &operator>>(std::istream &is, fraction &a) {
+    friend std::istream &operator>>(std::istream &is, Fraction &a) {
         std::string buf;
         is >> buf;
-        __int128_t num_tmp = 0, den_tmp = 0;
-        int i = (buf[0] == '-'), sz = buf.size();
+        i128 num_tmp = 0, den_tmp = 0;
+        i32 i = (buf[0] == '-'), sz = buf.size();
         for (; i < sz && buf[i] != '/'; i++)
             num_tmp = num_tmp * 10 + buf[i] - '0';
         if (i == sz)
@@ -162,7 +153,7 @@ class fraction {
         a.num = num_tmp, a.den = den_tmp;
         return is;
     }
-    friend std::ostream &operator<<(std::ostream &os, const fraction &a) {
+    friend std::ostream &operator<<(std::ostream &os, const Fraction &a) {
         if (a.den == 0)
             os << (a.num >= 0 ? "inf" : "-inf");
         else if (a.den == 1)
@@ -173,30 +164,30 @@ class fraction {
     }
 
     // 約分を省略して代入する
-    fraction &raw_assign(long long _num, long long _den) {
+    Fraction &raw_assign(i64 _num, i64 _den) {
         num = _num, den = _den;
         return *this;
     }
-    long long numerator() const { return num; }
-    long long denomitnator() const { return den; }
-    long long floor() const { return num / den; }
-    long long ceil() const { return ((__int128_t)num + den - 1) / den; }
+    i64 numerator() const { return num; }
+    i64 denomitnator() const { return den; }
+    i64 floor() const { return num / den; }
+    i64 ceil() const { return ((i128)num + den - 1) / den; }
     double real() const { return (double)num / den; }
-    fraction abs() const { return (*this >= 0 ? *this : -*this); }
-    fraction inverse() const {
-        fraction ret;
+    Fraction abs() const { return (*this >= 0 ? *this : -*this); }
+    Fraction inverse() const {
+        Fraction ret;
         ret.raw_assign((num >= 0 ? den : -den), (num >= 0 ? num : -num));
         return ret;
     }
-    int mod(int _mod) const {
-        assert(_mod > 0);
-        long long ret = num % _mod;
-        if (ret < 0)
-            ret += _mod;
-        return (ret *= internal::mod_inverse(den, _mod)) %= _mod;
+    template <int m>
+    i32 mod() const {
+        atcoder::static_modint<m> ret(num);
+        ret /= den;
+        return ret.val;
     }
     bool is_infinity() const { return (den == 0); }
 
-    static const fraction M_INF, INF;
+    static const Fraction M_INF, INF;
 };
-const fraction fraction::M_INF(-1, 0), fraction::INF(1, 0);
+const Fraction Fraction::M_INF(-1, 0), Fraction::INF(1, 0);
+}

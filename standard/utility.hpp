@@ -103,4 +103,27 @@ i64 inversion(std::vector<T> a, std::vector<T> b) {
     }
     return inversion(a);
 }
+
+/**
+ * 最長部分増加列のの長さを求める
+ * strict ? 狭義増加 : 広義増加
+ */
+template <typename T>
+i32 LIS(const std::vector<T>& v, bool strict = false) {
+    std::vector<T> dp;
+    auto dp_it = dp.begin();
+    for (auto x : v) {
+        if (strict) {
+            dp_it = std::lower_bound(dp.begin(), dp.end(), x);
+        } else {
+            dp_it = std::upper_bound(dp.begin(), dp.end(), x);
+        }
+        if (dp_it == dp.end()) {
+            dp.push_back(x);
+        } else {
+            *dp_it = x;
+        }
+    }
+    return dp.size();
+}
 }

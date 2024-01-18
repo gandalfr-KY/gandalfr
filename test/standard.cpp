@@ -4,6 +4,7 @@
 #include "../other/random.hpp"
 #include "../standard/GeoVector.hpp"
 #include "../standard/utility.hpp"
+#include "../standard/fraction.hpp"
 
 using namespace gandalfr;
 
@@ -145,6 +146,15 @@ TEST(UTIL, INVERSION_WITH_TWO_ARRAY) {
     std::vector<i32> vec1{10, 2, 5, 0, 9};
     std::vector<i32> vec2{10, 0, 9, 5, 2};
     EQ(inversion(vec1, vec2), 5);
+}
+
+TEST(UTIL, LIS) {
+    std::vector<i32> vec1{5, 1, 3, 3, 2, 4};
+    EQ(LIS(vec1, true), 3);
+    EQ(LIS(vec1), 4);
+    std::vector<i32> vec2{1, 1, 1};
+    EQ(LIS(vec2, true), 1);
+    EQ(LIS(vec2), 3);
 }
 
 

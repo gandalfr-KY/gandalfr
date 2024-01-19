@@ -1,10 +1,10 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <cmath>
 #include <cassert>
+#include <cmath>
+#include <iostream>
 #include <iterator>
+#include <vector>
 
 #include "../types.hpp"
 
@@ -21,26 +21,18 @@ template <class Derived, class T, i32 _dim> struct BaseArray {
         std::copy(init.begin(), init.end(), v);
     }
 
-    static constexpr i32 dim() {
-        return _dim;
-    }
+    static constexpr i32 dim() { return _dim; }
 
     T v[_dim];
 
-    std::vector<T> to_stdvec() {
-        return {std::begin(v), std::end(v)};
-    }
+    std::vector<T> to_stdvec() { return {std::begin(v), std::end(v)}; }
 
-    void load(const std::vector<T>& src) {
+    void load(const std::vector<T> &src) {
         std::copy(src.begin(), src.end(), v);
     }
 
-    T& operator[](i32 index) {
-        return v[index];
-    }
-    const T& operator[](i32 index) const {
-        return v[index];
-    }
+    T &operator[](i32 index) { return v[index]; }
+    const T &operator[](i32 index) const { return v[index]; }
 
     friend std::ostream &operator<<(std::ostream &os, const Derived &c) {
         for (i32 i = 0; i < _dim; ++i) {
@@ -55,14 +47,13 @@ template <class Derived, class T, i32 _dim> struct BaseArray {
         return is;
     }
 };
-}
+} // namespace internal
 
-template <class T, i32 _dim> struct GeoVector : public internal::BaseArray<GeoVector<T, _dim>, T, _dim> {
+template <class T, i32 _dim>
+struct GeoVector : public internal::BaseArray<GeoVector<T, _dim>, T, _dim> {
     using internal::BaseArray<GeoVector<T, _dim>, T, _dim>::BaseArray;
 
-    double norm() const {
-        return std::sqrt(normSq());
-    }
+    double norm() const { return std::sqrt(normSq()); }
 
     T normSq() const {
         T sum = 0;
@@ -80,12 +71,11 @@ template <class T, i32 _dim> struct GeoVector : public internal::BaseArray<GeoVe
         return sum;
     }
 
-    GeoVector operator+() const {
-        return *this;
-    }
+    GeoVector operator+() const { return *this; }
     GeoVector operator-() const {
         GeoVector gv(*this);
-        for (i32 i = 0; i < _dim; ++i) gv.v[i] *= -1;
+        for (i32 i = 0; i < _dim; ++i)
+            gv.v[i] *= -1;
         return gv;
     }
     GeoVector &operator+=(const GeoVector &other) {
@@ -126,15 +116,12 @@ template <class T, i32 _dim> struct GeoVector : public internal::BaseArray<GeoVe
     }
 
     bool operator==(const GeoVector &other) const {
-        for (i32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < _dim; ++i)
             if (this->v[i] != other.v[i])
                 return false;
-        }
         return true;
     }
-    bool operator!=(const GeoVector &other) const {
-        return !operator==(other);
-    }
+    bool operator!=(const GeoVector &other) const { return !operator==(other); }
 };
 
 using Point2d = GeoVector<double, 2>;
@@ -142,30 +129,20 @@ using Point3d = GeoVector<double, 3>;
 
 struct PointGrid : public internal::BaseArray<PointGrid, i64, 2> {
     using internal::BaseArray<PointGrid, i64, 2>::BaseArray;
-    
+
     static inline i64 _H, _W;
     static void set_size(i64 H, i64 W) {
         _H = H;
         _W = W;
     }
-    
-    i64& h() {
-        return this->v[0];
-    }
-    const i64& h() const {
-        return this->v[0];
-    }
 
-    i64& w() {
-        return this->v[1];
-    }
-    const i64& w() const {
-        return this->v[1];
-    }
+    i64 &h() { return this->v[0]; }
+    const i64 &h() const { return this->v[0]; }
 
-    i64 toIdx() {
-        return h() * _W + w();
-    }
+    i64 &w() { return this->v[1]; }
+    const i64 &w() const { return this->v[1]; }
+
+    i64 toIdx() { return h() * _W + w(); }
 
     bool isValid() const {
         return (0 <= h() && h() < _H && 0 <= w() && w() < _W);
@@ -204,12 +181,8 @@ struct PointGrid : public internal::BaseArray<PointGrid, i64, 2> {
         return false;
     }
 
-    PointGrid operator+() const {
-        return *this;
-    }
-    PointGrid operator-() const {
-        return {-this->v[0], -this->v[1]};
-    }
+    PointGrid operator+() const { return *this; }
+    PointGrid operator-() const { return {-this->v[0], -this->v[1]}; }
     PointGrid &operator+=(const PointGrid &other) {
         this->v[0] += other.v[0];
         this->v[1] += other.v[1];
@@ -246,9 +219,7 @@ struct PointGrid : public internal::BaseArray<PointGrid, i64, 2> {
     bool operator==(const PointGrid &other) const {
         return (v[0] == other.v[0] && v[1] == other.v[1]);
     }
-    bool operator!=(const PointGrid &other) const {
-        return !operator==(other);
-    }
+    bool operator!=(const PointGrid &other) const { return !operator==(other); }
 };
 
 PointGrid toPointGrid(i64 id) {
@@ -261,6 +232,7 @@ PointGrid toPointGrid(i64 id) {
  * | 3 0 1 |
  * | 7 2 6 |
  */
-const std::vector<PointGrid> GAROUND = {{0, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, 0},
-                                    {-1, 1}, {1, 1}, {-1, -1}, {1, -1}};
-}
+const std::vector<PointGrid> GAROUND = {{0, 0},  {0, 1},   {1, 0},
+                                        {0, -1}, {-1, 0},  {-1, 1},
+                                        {1, 1},  {-1, -1}, {1, -1}};
+} // namespace gandalfr

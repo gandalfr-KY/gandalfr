@@ -4,7 +4,7 @@
 #include "../other/random.hpp"
 #include "../standard/GeoVector.hpp"
 #include "../standard/utility.hpp"
-#include "../standard/fraction.hpp"
+#include "../standard/Fraction.hpp"
 
 using namespace gandalfr;
 
@@ -118,8 +118,8 @@ TEST(UTIL, COMPRESS) {
 
 TEST(UTIL, INVERSION) {
     const i32 len = 5, rep = 10;
-    std::vector<i32> rnd_vec(5);
-    for (i32& x : rnd_vec) x = rnd::random_int(-10, 10);
+    std::vector<i32> RandUtil_vec(5);
+    for (i32& x : RandUtil_vec) x = RandUtil::random_int(-10, 10);
     auto num_swap = [](std::vector<i32> v) {
         i32 ret = 0;
         const i32 N = v.size();
@@ -136,9 +136,9 @@ TEST(UTIL, INVERSION) {
 
     for (int r = 0; r < rep; ++r) {
         for (i32 i = 0; i < len; ++i) {
-            rnd_vec[i] = rnd::random_int(-10, 10);
+            RandUtil_vec[i] = RandUtil::random_int(-10, 10);
         }
-        EQ(inversion(rnd_vec), num_swap(rnd_vec));
+        EQ(inversion(RandUtil_vec), num_swap(RandUtil_vec));
     }
 }
 
@@ -157,6 +157,50 @@ TEST(UTIL, LIS) {
     EQ(LIS(vec2), 3);
 }
 
+TEST(FRACTION, OPERATOR) {
+    Fraction a(1, 2), b(-1, 3), c(4, -2);
+    EQ(-a, Fraction(-1, 2));
+    EQ(a + b, Fraction(1, 6));
+    EQ(a - b, Fraction(5, 6));
+    EQ(a * c + 1, 0);
+    EQ(a / b + c, Fraction(-7, 2));
+    a += 2 * b;
+    EQ(a, Fraction(-1, 6));
+    b -= a;
+    EQ(b, Fraction(-1, 6));
+    a *= b + 1;
+    EQ(a, Fraction(-5, 36));
+    a /= Fraction(10, -36);
+    EQ(a, Fraction(1, 2));
+}
+
+TEST(FRACTION, INFINITY) {
+    Fraction inf(1, 0), minf(-1, 0);
+    EQ(inf - INT64_MAX, inf);
+    EQ(inf / 0, inf);
+    EQ(minf / 0, minf);
+    EQ(1 / inf, 0);
+    try {
+        inf + minf;
+        EQ(true, false);
+    } catch (IndeterminateOperationException& e) {
+    }
+    try {
+        inf - inf;
+        EQ(true, false);
+    } catch (IndeterminateOperationException& e) {
+    }
+    try {
+        inf * 0;
+        EQ(true, false);
+    } catch (IndeterminateOperationException& e) {
+    }
+    try {
+        inf / minf;
+        EQ(true, false);
+    } catch (IndeterminateOperationException& e) {
+    }
+}
 
 
 int main() {

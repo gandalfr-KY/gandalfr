@@ -8,9 +8,7 @@ namespace gandalfr {
 template <int id> struct random_utility {
     static inline std::mt19937 mt;
 
-    static void set_seed(int seed) {
-        mt.seed(seed);
-    }
+    static void set_seed(int seed) { mt.seed(seed); }
 
     static long long random_int(long long min_value, long long max_value) {
         std::uniform_int_distribution<long long> distribution(min_value,
@@ -33,4 +31,4 @@ template <int id> struct random_utility {
     }
 };
 using rnd = random_utility<-1>;
-}
+} // namespace gandalfr

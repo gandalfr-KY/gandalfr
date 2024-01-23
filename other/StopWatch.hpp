@@ -1,25 +1,25 @@
 #pragma once
 #include <chrono>
 
-/* reset() := タイマーを0にリセット
- * get_milliseconnds() := ミリ秒を返す
- * get_seconnds() := 秒を返す
- */
-class {
+namespace gandalfr {
+
+class StopWatch {
   private:
     std::chrono::system_clock::time_point start, end;
 
   public:
+    // タイマーを0にリセット
     void reset() { start = std::chrono::system_clock::now(); }
-    long long get_millisecconds() {
+    long long getMillisecconds() {
         end = std::chrono::system_clock::now();
         return std::chrono::duration_cast<std::chrono::milliseconds>(end -
                                                                      start)
             .count();
     }
-    long long get_secconds() {
+    long long getSecconds() {
         end = std::chrono::system_clock::now();
         return std::chrono::duration_cast<std::chrono::seconds>(end - start)
             .count();
     }
-} static stopwatch;
+};
+} // namespace gandalfr

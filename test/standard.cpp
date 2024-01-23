@@ -1,10 +1,12 @@
 #include <queue>
 
 #include "testenv.hpp"
-#include "../other/random.hpp"
+#include "../other/io.hpp"
+#include "../other/RandomUtility.hpp"
 #include "../standard/GeoVector.hpp"
 #include "../standard/utility.hpp"
 #include "../standard/Fraction.hpp"
+#include "../standard/RollingHash.hpp"
 
 using namespace gandalfr;
 
@@ -118,8 +120,8 @@ TEST(UTIL, COMPRESS) {
 
 TEST(UTIL, INVERSION) {
     const i32 len = 5, rep = 10;
-    std::vector<i32> RandUtil_vec(5);
-    for (i32& x : RandUtil_vec) x = RandUtil::random_int(-10, 10);
+    std::vector<i32> rnd_vec(5);
+    for (i32& x : rnd_vec) x = RandUtil::random_int(-10, 10);
     auto num_swap = [](std::vector<i32> v) {
         i32 ret = 0;
         const i32 N = v.size();
@@ -136,9 +138,9 @@ TEST(UTIL, INVERSION) {
 
     for (int r = 0; r < rep; ++r) {
         for (i32 i = 0; i < len; ++i) {
-            RandUtil_vec[i] = RandUtil::random_int(-10, 10);
+            rnd_vec[i] = RandUtil::random_int(-10, 10);
         }
-        EQ(inversion(RandUtil_vec), num_swap(RandUtil_vec));
+        EQ(inversion(rnd_vec), num_swap(rnd_vec));
     }
 }
 
@@ -200,6 +202,11 @@ TEST(FRACTION, INFINITY) {
         EQ(true, false);
     } catch (IndeterminateOperationException& e) {
     }
+}
+
+TEST(ROLLING_HASH, TEST) {
+    RollingHash<100> rh("abcde");
+    std::cout << rh.get(1, 3) << std::endl;
 }
 
 

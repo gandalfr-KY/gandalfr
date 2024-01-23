@@ -223,7 +223,7 @@ struct PointGrid : public internal::BaseArray<PointGrid, i64, 2> {
 };
 
 PointGrid toPointGrid(i64 id) {
-    auto [h, w] = std::ldiv(id, PointGrid::_W);
+    auto [h, w] = std::lldiv(id, PointGrid::_W);
     return {h, w};
 }
 

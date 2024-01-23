@@ -6,7 +6,7 @@
 #include <numeric>
 
 #include "../types.hpp"
-#include "atcoder/modint.hpp"
+#include "Mint.hpp"
 
 namespace gandalfr {
 
@@ -24,7 +24,7 @@ inline i128 gcd128(i128 a, i128 b) {
     return abs128(b == 0 ? a : gcd128_impl(a, b));
 }
 
-inline void simplify(i128 &num, i128 &den) {
+inline void simplify128(i128 &num, i128 &den) {
     i128 d = gcd128(num, den);
     if (den < 0)
         d = -d;
@@ -71,7 +71,7 @@ class Fraction {
 
     Fraction(i64 n) : num(n), den(1) {}
     Fraction(i128 numerator, i128 denominator) {
-        internal::simplify(numerator, denominator);
+        internal::simplify128(numerator, denominator);
         num = numerator, den = denominator;
     }
     Fraction() : num(0), den(1) {}
@@ -178,7 +178,7 @@ class Fraction {
         return ret;
     }
     template <int m> i32 mod() const {
-        atcoder::static_modint<m> ret(num);
+        Mint<m> ret(num);
         ret /= den;
         return ret.val;
     }

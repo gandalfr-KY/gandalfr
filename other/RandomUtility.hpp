@@ -5,7 +5,7 @@
 
 namespace gandalfr {
 
-template <int id> struct random_utility {
+template <int id> struct RandomUtility {
     static inline std::mt19937 mt;
 
     static void set_seed(int seed) { mt.seed(seed); }
@@ -30,5 +30,5 @@ template <int id> struct random_utility {
         return g;
     }
 };
-using rnd = random_utility<-1>;
+using RandUtil = RandomUtility<-1>;
 } // namespace gandalfr

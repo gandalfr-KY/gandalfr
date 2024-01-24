@@ -3,8 +3,6 @@
 #include <cstdint>
 #include <math.h>
 
-#define ENSURE_ARITHMETIC_TYPE(A) static_assert(std::is_arithmetic<A>::value);
-
 namespace gandalfr {
 
 using i8 = int8_t;

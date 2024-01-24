@@ -3,65 +3,109 @@
 #include <string>
 #include <vector>
 
+#include "../math/utility.hpp"
 #include "../types.hpp"
 
 namespace gandalfr {
 
-/**
- * @brief rolling_hashアルゴリズムで文字列を管理するクラス。
- * @attention 複数のインスタンスを生成しても、基数は共有される。
- */
-template <u64 b = 1809535154732661841LL> class RollingHash {
-  private:
-    static constexpr u64 m = (1LL << 61) - 1;
-    std::vector<unsigned long long> hashes, bases;
+namespace impl {
+
+// r := p の原始根
+// return r^k s.t. r^k > MAX_ELM and gcd(p - 1, k) = 1
+// https://trap.jp/post/1036/
+template <i32 p, i32 MAX_ELM> constexpr i32 determinBase() {
+    constexpr i32 r = atcoder::internal::primitive_root<p>;
+    i64 b = r;
+    for (i32 k = 1;
+         b <= MAX_ELM || atcoder::internal::inv_gcd(p - 1, k).first != 1;
+         k += 2) {
+        b = b * r % p;
+        b = b * r % p;
+    }
+    return b;
+}
+
+} // namespace impl
+
+struct RHCode {
+    static constexpr i32 P1 = 998244353;
+    static constexpr i32 P2 = 1000000007;
+    static constexpr i32 P3 = 1000000009;
+    static constexpr i32 B1 = 100;
+    static constexpr i32 B2 = impl::determinBase<P2, UMAX8>();
+    static constexpr i32 B3 = impl::determinBase<P3, UMAX8>();
+
+    i32 sz = 0;
+    Mint<P1> code1{0};
+    Mint<P2> code2{0};
+    Mint<P3> code3{0};
+
+    RHCode() = default;
+    RHCode(const RHCode &other) = default;
+    RHCode(const std::string &str) : sz(str.size()) {
+        for (i32 i = 0; i < sz; ++i) {
+            code1 += modpows<P1, B1>(sz - i - 1) * str[i];
+            code2 += modpows<P2, B2>(sz - i - 1) * str[i];
+            code3 += modpows<P3, B3>(sz - i - 1) * str[i];
+        }
+    }
+    RHCode(i8 c) : sz(1), code1(c), code2(c), code3(c) {}
+
+    RHCode &operator+=(const RHCode &other) {
+        code1 = code1 * modpows<P1, B1>(other.sz) + other.code1;
+        code2 = code2 * modpows<P2, B2>(other.sz) + other.code2;
+        code3 = code3 * modpows<P3, B3>(other.sz) + other.code3;
+        sz += other.sz;
+        return *this;
+    }
+    RHCode operator+(const RHCode &other) const {
+        return static_cast<RHCode>(*this) += other;
+    }
+    bool operator==(const RHCode &other) const {
+        return sz == other.sz && code1 == other.code1 && code2 == other.code2 &&
+               code3 == other.code3;
+    }
+    bool operator!=(const RHCode &other) const { return !operator==(other); }
+};
+
+class RollingHash {
+  public:
+    std::vector<RHCode> hs;
 
   public:
-    RollingHash(const std::string &s)
-        : hashes(s.size() + 1, 0), bases(s.size() + 1, 0) {
-        bases[0] = 1;
-        for (int i = 0; i < (int)s.size(); i++) {
-            bases[i + 1] = ((u128)bases[i] * b) % m;
-            hashes[i + 1] = ((u128)bases[i] * s[i] + hashes[i]) % m;
+    RollingHash() = default;
+    RollingHash(const std::string &s) : hs(s.size() + 1) {
+        for (u32 i = 0; i < s.size(); i++) {
+            hs[i + 1] = hs[i] + RHCode(s[i]);
         }
-        std::cout << std::endl;
-        for (auto bs : bases) {
-            std::cout << bs << " ";
-        }
-        std::cout << std::endl;
-        for (auto hs : hashes) {
-            std::cout << hs << " ";
-        }
-        std::cout << std::endl;
     }
 
-    /**
-     * @brief 半開区間を指定
-     * @return string[l, r) のハッシュ値
-     */
-    unsigned long long get(int l, int r) { return (hashes[r] - hashes[l]); }
+    i32 size() const { return hs.back().sz; }
 
-    /**
-     * @brief r_hash == get(_l, _r) なるハッシュ値を、string([_l, _r) + [l, r))
-     * のハッシュ値に更新。
-     */
-    void concat(unsigned long long &r_hash, int l, int r) {
-        r_hash = ((u128)r_hash * bases[r - l] + get(l, r)) % m;
+    RollingHash &operator+=(const RollingHash &other) {
+        RHCode bc = hs.back();
+        hs.reserve(size() + other.size());
+        for (i32 i = 1; i <= other.size(); ++i) {
+            hs.push_back(bc + other.hs[i]);
+        }
+        return *this;
     }
 
-    /**
-     * @return string[l1, r1), string[l2, r2) の最長共通接頭辞の長さ
-     */
-    int longest_common_prefix(int l1, int r1, int l2, int r2) {
-        int ok = 0, ng = std::min(r1 - l1, r2 - l2) + 1;
-        while (std::abs(ok - ng) > 1) {
-            int mid = (ok + ng) / 2;
-            if (get(l1, l1 + mid) == get(l2, l2 + mid))
-                ok = mid;
-            else
-                ng = mid;
-        }
-        return ok;
+    RollingHash operator+(const RollingHash &other) const {
+        return static_cast<RollingHash>(*this) += other;
+    }
+
+    // [l, r)
+    RHCode getCode(i32 l, i32 r) const {
+        RHCode ret;
+        ret.code1 =
+            hs[r].code1 - hs[l].code1 * modpows<RHCode::P1, RHCode::B1>(r - l);
+        ret.code2 =
+            hs[r].code2 - hs[l].code2 * modpows<RHCode::P2, RHCode::B2>(r - l);
+        ret.code3 =
+            hs[r].code3 - hs[l].code3 * modpows<RHCode::P3, RHCode::B3>(r - l);
+        ret.sz = r - l;
+        return ret;
     }
 };
 } // namespace gandalfr

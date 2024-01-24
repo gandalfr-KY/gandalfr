@@ -10,11 +10,9 @@
 
 namespace gandalfr {
 
-namespace internal {
+namespace impl {
 
 template <class Derived, class T, i32 _dim> struct BaseArray {
-    ENSURE_ARITHMETIC_TYPE(T)
-
     BaseArray() = default;
     BaseArray(std::initializer_list<T> init) {
         assert(init.size() <= _dim);
@@ -47,11 +45,11 @@ template <class Derived, class T, i32 _dim> struct BaseArray {
         return is;
     }
 };
-} // namespace internal
+} // namespace impl
 
 template <class T, i32 _dim>
-struct GeoVector : public internal::BaseArray<GeoVector<T, _dim>, T, _dim> {
-    using internal::BaseArray<GeoVector<T, _dim>, T, _dim>::BaseArray;
+struct GeoVector : public impl::BaseArray<GeoVector<T, _dim>, T, _dim> {
+    using impl::BaseArray<GeoVector<T, _dim>, T, _dim>::BaseArray;
 
     double norm() const { return std::sqrt(normSq()); }
 
@@ -127,8 +125,8 @@ struct GeoVector : public internal::BaseArray<GeoVector<T, _dim>, T, _dim> {
 using Point2d = GeoVector<double, 2>;
 using Point3d = GeoVector<double, 3>;
 
-struct PointGrid : public internal::BaseArray<PointGrid, i64, 2> {
-    using internal::BaseArray<PointGrid, i64, 2>::BaseArray;
+struct PointGrid : public impl::BaseArray<PointGrid, i64, 2> {
+    using impl::BaseArray<PointGrid, i64, 2>::BaseArray;
 
     static inline i64 _H, _W;
     static void set_size(i64 H, i64 W) {

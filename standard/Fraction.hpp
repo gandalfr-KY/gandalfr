@@ -10,7 +10,7 @@
 
 namespace gandalfr {
 
-namespace internal {
+namespace impl {
 
 inline i128 abs128(i128 x) { return x >= 0 ? x : -x; }
 
@@ -33,7 +33,7 @@ inline void simplify128(i128 &num, i128 &den) {
 
 inline bool isSameSign(i64 a, i64 b) { return (a ^ b) >= 0; }
 
-} // namespace internal
+} // namespace impl
 
 class IndeterminateOperationException : public std::exception {
   private:
@@ -59,7 +59,7 @@ class Fraction {
     i64 num, den;
 
     friend i32 compare_to(const Fraction &a, const Fraction &b) {
-        if (!internal::isSameSign(a.num, b.num))
+        if (!impl::isSameSign(a.num, b.num))
             return a.num >= 0 ? 1 : -1;
         if (a.num == b.num && a.den == b.den)
             return 0;
@@ -71,7 +71,7 @@ class Fraction {
 
     Fraction(i64 n) : num(n), den(1) {}
     Fraction(i128 numerator, i128 denominator) {
-        internal::simplify128(numerator, denominator);
+        impl::simplify128(numerator, denominator);
         num = numerator, den = denominator;
     }
     Fraction() : num(0), den(1) {}
@@ -84,14 +84,14 @@ class Fraction {
     }
 
     Fraction &operator+=(const Fraction &a) {
-        if (isInf() && a.isInf() && !internal::isSameSign(num, a.num)) {
+        if (isInf() && a.isInf() && !impl::isSameSign(num, a.num)) {
             throw IndeterminateOperationException();
         }
         return *this = Fraction((i128)num * a.den + (i128)a.num * den,
                                 (i128)den * a.den);
     }
     Fraction &operator-=(const Fraction &a) {
-        if (isInf() && a.isInf() && internal::isSameSign(num, a.num)) {
+        if (isInf() && a.isInf() && impl::isSameSign(num, a.num)) {
             throw IndeterminateOperationException();
         }
         return *this = Fraction((i128)num * a.den - (i128)a.num * den,

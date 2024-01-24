@@ -205,8 +205,17 @@ TEST(FRACTION, INFINITY) {
 }
 
 TEST(ROLLING_HASH, TEST) {
-    RollingHash<100> rh("abcde");
-    std::cout << rh.get(1, 3) << std::endl;
+    std::string str = "ABBABABAABABABABBA";
+    std::string sb = "ABA";
+    RollingHash STR(str);
+    RHCode SUBSTR(sb);
+    for (i32 i = 0; i < str.size() - sb.size() + 1; ++i) {
+        if (str.substr(i, 3) == sb) {
+            EQ(STR.getCode(i, i + 3), SUBSTR);
+        } else {
+            NEQ(STR.getCode(i, i + 3), SUBSTR);
+        }
+    }
 }
 
 

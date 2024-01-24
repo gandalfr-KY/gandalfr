@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "enumeration_utility.hpp"
+#include "utility.hpp"
 
 /**
  * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000

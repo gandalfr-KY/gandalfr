@@ -1,8 +1,6 @@
 #pragma once
 #include <random>
 
-#include "../graph/graph.hpp"
-
 namespace gandalfr {
 
 template <int id> struct RandomUtility {
@@ -22,13 +20,6 @@ template <int id> struct RandomUtility {
         return distribution(mt);
     }
 
-    static graph<int, false> generate_tree(int V) {
-        graph<int, false> g(V);
-        for (int i = 1; i < V; ++i) {
-            g.add_edge(random_int(0, i - 1), i);
-        }
-        return g;
-    }
 };
 using RandUtil = RandomUtility<-1>;
 } // namespace gandalfr

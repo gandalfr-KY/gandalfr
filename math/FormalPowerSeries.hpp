@@ -5,6 +5,8 @@
 #include "atcoder/convolution.hpp"
 #include "atcoder/modint.hpp"
 
+namespace gandalfr {
+
 // https://web.archive.org/web/20220813112322/https://opt-cp.com/fps-implementation/#toc2
 template <class T> struct FormalPowerSeries : public std::vector<T> {
     using std::vector<T>::vector;
@@ -218,3 +220,4 @@ template <class T> struct FormalPowerSeries : public std::vector<T> {
     }
     friend F operator^(const F &f, long long g) { return F(f) ^= g; }
 };
+} // namespace gandalfr

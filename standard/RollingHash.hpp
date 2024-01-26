@@ -31,7 +31,7 @@ struct RHCode {
     static constexpr i32 P1 = 998244353;
     static constexpr i32 P2 = 1000000007;
     static constexpr i32 P3 = 1000000009;
-    static constexpr i32 B1 = 100;
+    static constexpr i32 B1 = impl::determinBase<P1, UMAX8>();
     static constexpr i32 B2 = impl::determinBase<P2, UMAX8>();
     static constexpr i32 B3 = impl::determinBase<P3, UMAX8>();
 
@@ -44,17 +44,17 @@ struct RHCode {
     RHCode(const RHCode &other) = default;
     RHCode(const std::string &str) : sz(str.size()) {
         for (i32 i = 0; i < sz; ++i) {
-            code1 += modpows<P1, B1>(sz - i - 1) * str[i];
-            code2 += modpows<P2, B2>(sz - i - 1) * str[i];
-            code3 += modpows<P3, B3>(sz - i - 1) * str[i];
+            code1 += powMod<P1, B1>(sz - i - 1) * str[i];
+            code2 += powMod<P2, B2>(sz - i - 1) * str[i];
+            code3 += powMod<P3, B3>(sz - i - 1) * str[i];
         }
     }
     RHCode(i8 c) : sz(1), code1(c), code2(c), code3(c) {}
 
     RHCode &operator+=(const RHCode &other) {
-        code1 = code1 * modpows<P1, B1>(other.sz) + other.code1;
-        code2 = code2 * modpows<P2, B2>(other.sz) + other.code2;
-        code3 = code3 * modpows<P3, B3>(other.sz) + other.code3;
+        code1 = code1 * powMod<P1, B1>(other.sz) + other.code1;
+        code2 = code2 * powMod<P2, B2>(other.sz) + other.code2;
+        code3 = code3 * powMod<P3, B3>(other.sz) + other.code3;
         sz += other.sz;
         return *this;
     }
@@ -99,11 +99,11 @@ class RollingHash {
     RHCode getCode(i32 l, i32 r) const {
         RHCode ret;
         ret.code1 =
-            hs[r].code1 - hs[l].code1 * modpows<RHCode::P1, RHCode::B1>(r - l);
+            hs[r].code1 - hs[l].code1 * powMod<RHCode::P1, RHCode::B1>(r - l);
         ret.code2 =
-            hs[r].code2 - hs[l].code2 * modpows<RHCode::P2, RHCode::B2>(r - l);
+            hs[r].code2 - hs[l].code2 * powMod<RHCode::P2, RHCode::B2>(r - l);
         ret.code3 =
-            hs[r].code3 - hs[l].code3 * modpows<RHCode::P3, RHCode::B3>(r - l);
+            hs[r].code3 - hs[l].code3 * powMod<RHCode::P3, RHCode::B3>(r - l);
         ret.sz = r - l;
         return ret;
     }

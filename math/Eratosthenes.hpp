@@ -4,7 +4,10 @@
 
 #include <vector>
 
+#include "atcoder/math.hpp"
 #include "utility.hpp"
+
+namespace gandalfr {
 
 /**
  * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000
@@ -18,7 +21,7 @@ bool MillerRabin(long long N, const std::vector<long long> &A) {
     for (auto a : A) {
         if (N <= a)
             return true;
-        long long t, x = power(a, d, N);
+        long long t, x = atcoder::pow_mod(a, d, N);
         if (x != 1) {
             for (t = 0; t < s; ++t) {
                 if (x == N - 1)
@@ -184,3 +187,4 @@ class Eratosthenes {
 
     static int kth_prime(int k) { return primes.at(k); }
 };
+} // namespace gandalfr

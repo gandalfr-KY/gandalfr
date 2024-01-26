@@ -12,16 +12,14 @@ namespace gandalfr {
 
 namespace impl {
 
-template <class Derived, class T, i32 _dim> struct BaseArray {
+template <class T, i32 dim> struct BaseArray {
     BaseArray() = default;
     BaseArray(std::initializer_list<T> init) {
-        assert(init.size() <= _dim);
+        assert(init.size() <= dim);
         std::copy(init.begin(), init.end(), v);
     }
 
-    static constexpr i32 dim() { return _dim; }
-
-    T v[_dim];
+    T v[dim];
 
     std::vector<T> to_stdvec() { return {std::begin(v), std::end(v)}; }
 
@@ -32,30 +30,32 @@ template <class Derived, class T, i32 _dim> struct BaseArray {
     T &operator[](i32 index) { return v[index]; }
     const T &operator[](i32 index) const { return v[index]; }
 
-    friend std::ostream &operator<<(std::ostream &os, const Derived &c) {
-        for (i32 i = 0; i < _dim; ++i) {
-            os << c.v[i] << (i < _dim - 1 ? " " : "");
+    std::ostream &operator<<(std::ostream &os) {
+        for (i32 i = 0; i < dim; ++i) {
+            os << v[i] << (i < dim - 1 ? " " : "");
         }
         return os;
     }
-    friend std::istream &operator>>(std::istream &is, Derived &c) {
-        for (i32 i = 0; i < _dim; ++i) {
-            is >> c.v[i];
+    std::istream &operator>>(std::istream &is) {
+        for (i32 i = 0; i < dim; ++i) {
+            is >> v[i];
         }
         return is;
     }
 };
 } // namespace impl
 
-template <class T, i32 _dim>
-struct GeoVector : public impl::BaseArray<GeoVector<T, _dim>, T, _dim> {
-    using impl::BaseArray<GeoVector<T, _dim>, T, _dim>::BaseArray;
+template <class T, i32 dim>
+struct GeoVector : public impl::BaseArray<T, dim> {
+    using impl::BaseArray<T, dim>::BaseArray;
+    using impl::BaseArray<T, dim>::operator<<;
+    using impl::BaseArray<T, dim>::operator>>;
 
     double norm() const { return std::sqrt(normSq()); }
 
     T normSq() const {
         T sum = 0;
-        for (i32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < dim; ++i) {
             sum += this->v[i] * this->v[i];
         }
         return sum;
@@ -63,7 +63,7 @@ struct GeoVector : public impl::BaseArray<GeoVector<T, _dim>, T, _dim> {
 
     T dot(const GeoVector &other) const {
         T sum = T();
-        for (i32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < dim; ++i) {
             sum += this->v[i] * other.v[i];
         }
         return sum;
@@ -72,30 +72,30 @@ struct GeoVector : public impl::BaseArray<GeoVector<T, _dim>, T, _dim> {
     GeoVector operator+() const { return *this; }
     GeoVector operator-() const {
         GeoVector gv(*this);
-        for (i32 i = 0; i < _dim; ++i)
+        for (i32 i = 0; i < dim; ++i)
             gv.v[i] *= -1;
         return gv;
     }
     GeoVector &operator+=(const GeoVector &other) {
-        for (i32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < dim; ++i) {
             this->v[i] += other.v[i];
         }
         return *this;
     }
     GeoVector &operator-=(const GeoVector &other) {
-        for (i32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < dim; ++i) {
             this->v[i] -= other.v[i];
         }
         return *this;
     }
     GeoVector &operator*=(const T scalar) {
-        for (i32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < dim; ++i) {
             this->v[i] *= scalar;
         }
         return *this;
     }
     GeoVector &operator/=(const T scalar) {
-        for (i32 i = 0; i < _dim; ++i) {
+        for (i32 i = 0; i < dim; ++i) {
             this->v[i] /= scalar;
         }
         return *this;
@@ -114,7 +114,7 @@ struct GeoVector : public impl::BaseArray<GeoVector<T, _dim>, T, _dim> {
     }
 
     bool operator==(const GeoVector &other) const {
-        for (i32 i = 0; i < _dim; ++i)
+        for (i32 i = 0; i < dim; ++i)
             if (this->v[i] != other.v[i])
                 return false;
         return true;
@@ -125,8 +125,10 @@ struct GeoVector : public impl::BaseArray<GeoVector<T, _dim>, T, _dim> {
 using Point2d = GeoVector<double, 2>;
 using Point3d = GeoVector<double, 3>;
 
-struct PointGrid : public impl::BaseArray<PointGrid, i64, 2> {
-    using impl::BaseArray<PointGrid, i64, 2>::BaseArray;
+struct PointGrid : public impl::BaseArray<i64, 2> {
+    using impl::BaseArray<i64, 2>::BaseArray;
+    using impl::BaseArray<i64, 2>::operator<<;
+    using impl::BaseArray<i64, 2>::operator>>;
 
     static inline i64 _H, _W;
     static void set_size(i64 H, i64 W) {

@@ -6,8 +6,6 @@
 #include <string>
 #include <utility>
 
-#include "atcoder/modint.hpp"
-
 ///////////////////// output /////////////////////
 
 template <typename T>

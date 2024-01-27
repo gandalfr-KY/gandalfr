@@ -43,8 +43,8 @@ template <class T> class Matrix {
     static Matrix nullMatrix() {
         return Matrix(0, 0);
     }
-    static bool isNull(const Matrix& mat) {
-        return mat == Matrix(0, 0);
+    bool isNull() {
+        return *this == Matrix(0, 0);
     }
     static Matrix E(i32 N) {
         Matrix ret(N, N);
@@ -99,24 +99,23 @@ template <class T> class Matrix {
 
     /**
      * @attention O(n^3)
-     * @attention 枢軸選びをしていないので double では誤差が出るかも。
      */
     std::vector<RowtransOp> sweep_method() {
         std::vector<RowtransOp> hist;
         i32 h = 0, w = 0;
         while (h < H && w < W) {
-            i32 piv = h + 1;
+            i32 piv = h;
             while (piv < H && table[piv][w] == 0) {
                 ++piv;
             }
             if (piv < H) { 
-                hist.emplace_back({SWAP, h, piv, 0});
+                hist.emplace_back(RowtransOp{SWAP, h, piv, 0});
                 row_swap(h, piv);
                 T inv = 1 / table[h][w];
-                hist.emplace_back({SCALE, -1, w, inv});
+                hist.emplace_back(RowtransOp{SCALE, -1, w, inv});
                 table[h] *= inv;
                 for (i32 j = h + 1; j < H; j++) {
-                    hist.emplace_back({ADD, h, j, -table[j][w]});
+                    hist.emplace_back(RowtransOp{ADD, h, j, -table[j][w]});
                     table[j] -= table[h] * table[j][w];
                 }
                 ++h;
@@ -141,12 +140,12 @@ template <class T> class Matrix {
         return r;
     }
 
-    T determinant() const {
+    T det() const {
         if (H != W) {
             throw InvalidOperationException();
         }
         Matrix U(*this);
-        T det = 1;
+        T d = 1;
         auto hist = U.sweep_method();
         if (U.table[H - 1][H - 1] == 0) {
             return 0;
@@ -154,17 +153,17 @@ template <class T> class Matrix {
         for (auto &[op, tar, res, scl] : hist) {
             switch (op) {
             case SCALE:
-                det /= scl;
+                d /= scl;
                 break;
             case SWAP:
-                det *= -1;
+                d *= -1;
                 break;
             }
         }
-        return det;
+        return d;
     }
 
-    Matrix inverse() const {
+    Matrix inv() const {
         if (H != W) {
             throw InvalidOperationException();
         }
@@ -206,14 +205,14 @@ template <class T> class Matrix {
     }
 
     Matrix &operator+=(const Matrix &a) {
-        if (H != a.size_H() || W != a.size_W()) {
+        if (H != a.H || W != a.W) {
             throw InvalidOperationException();
         }
         this->table += a.table;
         return *this;
     }
     Matrix &operator-=(const Matrix &a) {
-        if (H != a.size_H() || W != a.size_W()) {
+        if (H != a.H || W != a.W) {
             throw InvalidOperationException();
         }
         this->table -= a.table;
@@ -224,7 +223,7 @@ template <class T> class Matrix {
         return *this;
     }
     Matrix &operator*=(const Matrix &a) {
-        if (W != a.size_H()) {
+        if (W != a.H) {
             throw InvalidOperationException();
         }
         Matrix a_t(a), ret(H, a.W);
@@ -279,7 +278,7 @@ template <class T> class Matrix {
     }
 
     bool operator==(const Matrix& other) {
-        if (H != other.size_H() || W != other.size_W())
+        if (H != other.H || W != other.W)
             return false;
         for (i32 h = 0; h < H; ++h) {
             for (i32 w = 0; w < W; ++w) {

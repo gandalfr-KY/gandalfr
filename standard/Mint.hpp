@@ -11,6 +11,14 @@ using Mint107 = atcoder::modint1000000007;
 template <int m> using Mint = atcoder::static_modint<m>;
 template <int id> using DMint = atcoder::dynamic_modint<id>;
 
+template <int m> std::ostream &operator<<(std::ostream &os, const Mint998 &mi) {
+    os << mi.val();
+    return os;
+}
+template <int m> std::ostream &operator<<(std::ostream &os, const Mint107 &mi) {
+    os << mi.val();
+    return os;
+}
 template <int m> std::ostream &operator<<(std::ostream &os, const Mint<m> &mi) {
     os << mi.val();
     return os;
@@ -21,6 +29,18 @@ std::ostream &operator<<(std::ostream &os, const DMint<id> &mi) {
     return os;
 }
 
+template <int m> std::istream &operator>>(std::istream &is, Mint998 &mi) {
+    long long n;
+    is >> n;
+    mi = n;
+    return is;
+}
+template <int m> std::istream &operator>>(std::istream &is, Mint107 &mi) {
+    long long n;
+    is >> n;
+    mi = n;
+    return is;
+}
 template <int m> std::istream &operator>>(std::istream &is, Mint<m> &mi) {
     long long n;
     is >> n;

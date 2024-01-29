@@ -3,6 +3,10 @@
 #include <iostream>
 #include <set>
 
+#include "gandalfr/types.hpp"
+
+namespace gandalfr {
+
 template <typename _Key, typename _Compare = std ::less<_Key>,
           typename _Alloc = std ::allocator<_Key>>
 class my_multiset : public std::multiset<_Key, _Compare, _Alloc> {
@@ -17,8 +21,8 @@ class my_multiset : public std::multiset<_Key, _Compare, _Alloc> {
             return true;
         }
     }
-    int erase_all(const _Key &__x) {
-        int ret = this->count(__x);
+    i32 erase_all(const _Key &__x) {
+        i32 ret = this->count(__x);
         if (ret == 0) {
             return 0;
         } else {
@@ -58,3 +62,4 @@ class my_set : public std::set<_Key, _Compare, _Alloc> {
         return os;
     }
 };
+} // namespace gandalfr

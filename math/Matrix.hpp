@@ -25,7 +25,6 @@ class InvalidOperationException : public std::exception {
     virtual ~InvalidOperationException() noexcept {}
 };
 
-
 template <class T> class Matrix {
   private:
     using vArr = std::valarray<T>;
@@ -39,13 +38,8 @@ template <class T> class Matrix {
     };
 
   public:
-
-    static Matrix nullMatrix() {
-        return Matrix(0, 0);
-    }
-    bool isNull() {
-        return *this == Matrix(0, 0);
-    }
+    static Matrix nullMatrix() { return Matrix(0, 0); }
+    bool isNull() { return *this == Matrix(0, 0); }
     static Matrix E(i32 N) {
         Matrix ret(N, N);
         for (i32 i = 0; i < N; i++)
@@ -83,19 +77,13 @@ template <class T> class Matrix {
         *this = ret;
     }
 
-    vArr& operator[](i32 h) {
-        return table[h];
-    }
-    const vArr& operator[](i32 h) const {
-        return table[h];
-    }
+    vArr &operator[](i32 h) { return table[h]; }
+    const vArr &operator[](i32 h) const { return table[h]; }
 
     /**
      * @brief 第 i 行, 第 j 行を入れ替える
      */
-    void row_swap(i32 i, i32 j) {
-        table[i].swap(table[j]);
-    }
+    void row_swap(i32 i, i32 j) { table[i].swap(table[j]); }
 
     /**
      * @attention O(n^3)
@@ -108,7 +96,7 @@ template <class T> class Matrix {
             while (piv < H && table[piv][w] == 0) {
                 ++piv;
             }
-            if (piv < H) { 
+            if (piv < H) {
                 hist.emplace_back(RowtransOp{SWAP, h, piv, 0});
                 row_swap(h, piv);
                 T inv = 1 / table[h][w];
@@ -242,16 +230,10 @@ template <class T> class Matrix {
 
     Matrix operator+() const { return *this; }
     Matrix operator-() const { return Matrix(*this) *= -1; }
-    Matrix operator+(const Matrix &a) const {
-        return Matrix(*this) += a;
-    }
-    Matrix operator-(const Matrix &a) const {
-        return Matrix(*this) -= a;
-    }
+    Matrix operator+(const Matrix &a) const { return Matrix(*this) += a; }
+    Matrix operator-(const Matrix &a) const { return Matrix(*this) -= a; }
     Matrix operator*(const T &a) { return Matrix(*this) *= a; }
-    Matrix operator*(const Matrix &a) const {
-        return Matrix(*this) *= a;
-    }
+    Matrix operator*(const Matrix &a) const { return Matrix(*this) *= a; }
     Matrix operator/(const T &a) const { return Matrix(*this) /= a; }
 
     Matrix power(i64 n) const {
@@ -277,7 +259,7 @@ template <class T> class Matrix {
         return is;
     }
 
-    bool operator==(const Matrix& other) {
+    bool operator==(const Matrix &other) {
         if (H != other.H || W != other.W)
             return false;
         for (i32 h = 0; h < H; ++h) {
@@ -289,8 +271,6 @@ template <class T> class Matrix {
         }
         return true;
     }
-    bool operator!=(const Matrix& other) {
-        return !operator==(other);
-    }
+    bool operator!=(const Matrix &other) { return !operator==(other); }
 };
-}
+} // namespace gandalfr

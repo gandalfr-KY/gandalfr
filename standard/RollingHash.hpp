@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "../math/utility.hpp"
-#include "../types.hpp"
+#include "gandalfr/math/utility.hpp"
+#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 

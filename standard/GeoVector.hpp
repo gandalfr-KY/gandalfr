@@ -6,7 +6,7 @@
 #include <iterator>
 #include <vector>
 
-#include "../types.hpp"
+#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 
@@ -45,8 +45,7 @@ template <class T, i32 dim> struct BaseArray {
 };
 } // namespace impl
 
-template <class T, i32 dim>
-struct GeoVector : public impl::BaseArray<T, dim> {
+template <class T, i32 dim> struct GeoVector : public impl::BaseArray<T, dim> {
     using impl::BaseArray<T, dim>::BaseArray;
     using impl::BaseArray<T, dim>::operator<<;
     using impl::BaseArray<T, dim>::operator>>;

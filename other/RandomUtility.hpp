@@ -19,7 +19,6 @@ template <int id> struct RandomUtility {
                                                             max_value);
         return distribution(mt);
     }
-
 };
 using RandUtil = RandomUtility<-1>;
 } // namespace gandalfr

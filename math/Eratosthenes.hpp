@@ -9,11 +9,13 @@
 
 namespace gandalfr {
 
+namespace impl {
+
 /**
  * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000
  */
-bool MillerRabin(long long N, const std::vector<long long> &A) {
-    long long s = 0, d = N - 1;
+bool MillerRabin(i64 N, const std::vector<i64> &A) {
+    i64 s = 0, d = N - 1;
     while (d % 2 == 0) {
         ++s;
         d >>= 1;
@@ -21,7 +23,7 @@ bool MillerRabin(long long N, const std::vector<long long> &A) {
     for (auto a : A) {
         if (N <= a)
             return true;
-        long long t, x = atcoder::pow_mod(a, d, N);
+        i64 t, x = atcoder::pow_mod(a, d, N);
         if (x != 1) {
             for (t = 0; t < s; ++t) {
                 if (x == N - 1)
@@ -34,30 +36,29 @@ bool MillerRabin(long long N, const std::vector<long long> &A) {
     }
     return true;
 }
+}
 
-/**
- * @brief 素数判定や列挙をサポートするクラス
- * @brief 素数篩を固定サイズで構築、それをもとに素数列挙などを行う
- * @attention 構築サイズが (2^23) でおよそ 0.5s
- */
-class Eratosthenes {
+
+// 素数篩を固定サイズで構築する。篩のサイズが (2^23) でおよそ 0.5sかかる
+// set_seive_size を最初に呼ぶとサイズを変更できる
+class Seive {
   protected:
-    static inline int seive_size = (1 << 23);
+    static inline i32 seive_size = (1 << 23);
     static inline std::vector<bool> sieve;
-    static inline std::vector<int> primes{2, 3}, movius, min_factor;
+    static inline std::vector<i32> primes{2, 3}, movius, min_factor;
 
-    static void make_table() {
+    static void makeTable() {
         sieve.assign(seive_size, true);
         sieve[0] = sieve[1] = false;
         movius.assign(seive_size, 1);
         min_factor.assign(seive_size, 1);
-        for (int i = 2; i <= seive_size; ++i) {
+        for (i32 i = 2; i <= seive_size; ++i) {
             if (!sieve[i])
                 continue;
             movius[i] = -1;
             min_factor[i] = i;
             primes.push_back(i);
-            for (int j = i * 2; j < seive_size; j += i) {
+            for (i32 j = i * 2; j < seive_size; j += i) {
                 sieve[j] = false;
                 movius[j] = ((j / i) % i == 0 ? 0 : -movius[j]);
                 if (min_factor[j] == 1)
@@ -66,8 +67,8 @@ class Eratosthenes {
         }
     }
 
-    static std::vector<std::pair<long long, int>> fast_factorize(long long n) {
-        std::vector<std::pair<long long, int>> ret;
+    static std::vector<std::pair<i64, i32>> fastFactorize(i64 n) {
+        std::vector<std::pair<i64, i32>> ret;
         while (n > 1) {
             if (ret.empty() || ret.back().first != min_factor[n]) {
                 ret.push_back({min_factor[n], 1});
@@ -79,9 +80,9 @@ class Eratosthenes {
         return ret;
     }
 
-    static std::vector<std::pair<long long, int>> naive_factorize(long long n) {
-        std::vector<std::pair<long long, int>> ret;
-        for (long long p : primes) {
+    static std::vector<std::pair<i64, i32>> naiveFactorize(i64 n) {
+        std::vector<std::pair<i64, i32>> ret;
+        for (i64 p : primes) {
             if (n == 1 || p * p > n)
                 break;
             while (n % p == 0) {
@@ -98,10 +99,10 @@ class Eratosthenes {
     }
 
   public:
-    Eratosthenes() = delete;
-    ~Eratosthenes() = delete;
+    Seive() = delete;
+    ~Seive() = delete;
 
-    static void set_sieve_size(int size) {
+    static void setInitSize(i32 size) {
         assert(sieve.empty());
         seive_size = size;
     }
@@ -109,9 +110,9 @@ class Eratosthenes {
     /**
      * @brief n が素数かを判定
      */
-    static bool is_prime(long long n) {
+    static bool isPrime(i64 n) {
         if (sieve.empty())
-            make_table();
+            makeTable();
         assert(1 <= n);
 
         if (n > 2 && (n & 1LL) == 0) {
@@ -119,9 +120,9 @@ class Eratosthenes {
         } else if (n < seive_size) {
             return sieve[n];
         } else if (n < 4759123141LL) {
-            return MillerRabin(n, {2, 7, 61});
+            return impl::MillerRabin(n, {2, 7, 61});
         } else {
-            return MillerRabin(
+            return impl::MillerRabin(
                 n, {2, 325, 9375, 28178, 450775, 9780504, 1795265022});
         }
     }
@@ -131,21 +132,21 @@ class Eratosthenes {
      * @return factorize(p1^e1 * p2^e2 * ...) => {{p1, e1}, {p2, e2], ...},
      * @return factorize(1) => {}
      */
-    static std::vector<std::pair<long long, int>> factorize(long long n) {
+    static std::vector<std::pair<i64, i32>> factorize(i64 n) {
         if (sieve.empty())
-            make_table();
+            makeTable();
         assert(1 <= n);
 
         if (n < seive_size) {
-            return fast_factorize(n);
+            return fastFactorize(n);
         } else {
-            return naive_factorize(n);
+            return naiveFactorize(n);
         }
     }
 
-    static int Movius(int n) {
+    static i32 movius(i32 n) {
         if (movius.empty())
-            make_table();
+            makeTable();
         assert(1 <= n);
         return movius.at(n);
     }
@@ -155,15 +156,15 @@ class Eratosthenes {
      * @attention if n < sieve_size : O(N^(1/loglogN))
      */
     template <bool sort = true>
-    static std::vector<long long> divisors(long long n) {
-        std::vector<long long> ds;
+    static std::vector<i64> divisors(i64 n) {
+        std::vector<i64> ds;
         auto facs(factorize(n));
-        auto rec = [&](auto self, long long d, int cu) -> void {
-            if (cu == (int)facs.size()) {
+        auto rec = [&](auto self, i64 d, i32 cu) -> void {
+            if (cu == (i32)facs.size()) {
                 ds.push_back(d);
                 return;
             }
-            for (int e = 0; e <= facs[cu].second; ++e) {
+            for (i32 e = 0; e <= facs[cu].second; ++e) {
                 self(self, d, cu + 1);
                 d *= facs[cu].first;
             }
@@ -178,13 +179,13 @@ class Eratosthenes {
     /**
      * @brief オイラーのトーシェント関数
      */
-    static long long totient(long long n) {
-        long long ret = 1;
+    static i64 totient(i64 n) {
+        i64 ret = 1;
         for (auto [b, e] : factorize(n))
             ret *= power(b, e - 1) * (b - 1);
         return ret;
     }
 
-    static int kth_prime(int k) { return primes.at(k); }
+    static i32 nthPrime(i32 n) { return primes.at(n); }
 };
 } // namespace gandalfr

@@ -4,10 +4,12 @@
 
 #include "gandalfr/types.hpp"
 
+namespace gandalfr {
+
 // op  := 二項演算
 // inv := ある要素に対する逆元
 // id  := 単位元
-template <class S, S (*op)(S, S), S (*inv)(S), S (*id)()> class PrefixSums {
+template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums {
   private:
     i32 n;
     std::vector<S> acm;
@@ -24,7 +26,7 @@ template <class S, S (*op)(S, S), S (*inv)(S), S (*id)()> class PrefixSums {
     S get(i32 l, i32 r) {
         assert(0 <= l && l <= r && r <= n);
         if (l == r)
-            return id();
+            return e();
         return op(acm[r], inv(acm[l]));
     }
 };
@@ -33,7 +35,7 @@ template <class S, S (*op)(S, S), S (*inv)(S), S (*id)()> class PrefixSums {
 // inv := ある要素に対する逆元
 // id  := 単位元
 // verify: https://atcoder.jp/contests/abc203/submissions/45759205
-template <class S, S (*op)(S, S), S (*inv)(S), S (*id)()> class PrefixSums2d {
+template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums2d {
   public:
     i32 h, w;
     std::vector<std::vector<S>> acm;
@@ -55,9 +57,10 @@ template <class S, S (*op)(S, S), S (*inv)(S), S (*id)()> class PrefixSums2d {
         assert(0 <= h_begin && h_begin <= h_end && h_end <= h);
         assert(0 <= w_begin && w_begin <= w_end && w_end <= w);
         if (h_begin == h_end || w_begin == w_end)
-            return id();
+            return e();
         return op(op(op(acm[h_end][w_end], inv(acm[h_end][w_begin])),
                      inv(acm[h_begin][w_end])),
                   acm[h_begin][w_begin]);
     }
 };
+} // namespace gandalfr

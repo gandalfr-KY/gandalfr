@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base_graph.hpp"
+#include "BaseGraph.hpp"
 
 template <typename Cost, typename Flow>
 class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
@@ -9,22 +9,6 @@ class flow_graph : public internal::_base_graph<flow_edge<Flow, Cost>> {
     flow_graph(const flow_graph &other) : flow_graph(other.N) {
         for (auto &e : other.E) {
             add_edge(e);
-        }
-    }
-
-    /**
-     * @brief ノードの数をn個まで増やす
-     * @param n サイズ
-     * @attention 今のノード数より小さい数を渡したとき、変化なし
-     */
-    void expand(int n, int m) override {
-        if (n > this->N) {
-            this->N = n;
-            this->G.resize(n);
-        }
-        if (m > (int)this->E.capacity()) {
-            this->E.reserve(m);
-            // TODO 拡張後 G を再構成する必要あり
         }
     }
 

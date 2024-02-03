@@ -30,25 +30,11 @@ template <class T, i32 dim> struct BaseArray {
     T &operator[](i32 index) { return v[index]; }
     const T &operator[](i32 index) const { return v[index]; }
 
-    std::ostream &operator<<(std::ostream &os) {
-        for (i32 i = 0; i < dim; ++i) {
-            os << v[i] << (i < dim - 1 ? " " : "");
-        }
-        return os;
-    }
-    std::istream &operator>>(std::istream &is) {
-        for (i32 i = 0; i < dim; ++i) {
-            is >> v[i];
-        }
-        return is;
-    }
 };
 } // namespace impl
 
 template <class T, i32 dim> struct GeoVector : public impl::BaseArray<T, dim> {
     using impl::BaseArray<T, dim>::BaseArray;
-    using impl::BaseArray<T, dim>::operator<<;
-    using impl::BaseArray<T, dim>::operator>>;
 
     double norm() const { return std::sqrt(normSq()); }
 
@@ -119,6 +105,20 @@ template <class T, i32 dim> struct GeoVector : public impl::BaseArray<T, dim> {
         return true;
     }
     bool operator!=(const GeoVector &other) const { return !operator==(other); }
+
+    friend std::ostream &operator<<(std::ostream &os, const GeoVector &a) {
+        for (i32 i = 0; i < dim; ++i) {
+            os << a.v[i] << (i < dim - 1 ? " " : "");
+        }
+        return os;
+    }
+    friend std::istream &operator>>(std::istream &is, GeoVector &a) {
+        for (i32 i = 0; i < dim; ++i) {
+            is >> a.v[i];
+        }
+        return is;
+    }
+
 };
 
 using Point2d = GeoVector<double, 2>;
@@ -126,8 +126,6 @@ using Point3d = GeoVector<double, 3>;
 
 struct PointGrid : public impl::BaseArray<i64, 2> {
     using impl::BaseArray<i64, 2>::BaseArray;
-    using impl::BaseArray<i64, 2>::operator<<;
-    using impl::BaseArray<i64, 2>::operator>>;
 
     static inline i64 _H, _W;
     static void set_size(i64 H, i64 W) {
@@ -219,6 +217,22 @@ struct PointGrid : public impl::BaseArray<i64, 2> {
         return (v[0] == other.v[0] && v[1] == other.v[1]);
     }
     bool operator!=(const PointGrid &other) const { return !operator==(other); }
+
+    friend std::ostream &operator<<(std::ostream &os, const PointGrid &a) {
+        os << a.v[0] << ' ' << a.v[1];
+        return os;
+    }
+    friend std::istream &operator>>(std::istream &is, PointGrid &a) {
+        is >> a.v[0] >> a.v[1];
+        return is;
+    }
+
+    bool operator<(const PointGrid& other) const {
+        if (h() == other.h()) {
+            return w() < other.w();
+        } else {return h() < other.h();}
+    }
+
 };
 
 PointGrid toPointGrid(i64 id) {
@@ -234,4 +248,7 @@ PointGrid toPointGrid(i64 id) {
 const std::vector<PointGrid> GAROUND = {{0, 0},  {0, 1},   {1, 0},
                                         {0, -1}, {-1, 0},  {-1, 1},
                                         {1, 1},  {-1, -1}, {1, -1}};
+
+using grd = PointGrid;
+
 } // namespace gandalfr

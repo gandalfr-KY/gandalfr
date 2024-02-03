@@ -6,7 +6,7 @@
 #include <valarray>
 #include <vector>
 
-#include "../types.hpp"
+#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 

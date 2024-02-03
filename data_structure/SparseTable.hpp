@@ -9,20 +9,25 @@ namespace gandalfr {
 /**
  * @brief 結合則・冪等性を満たす演算の更新無し区間クエリ処理
  */
-template <class S, S (*op)(S, S), S (*id)(S)> class SparseTable {
+template <class S, S (*op)(S, S), S (*e)()> class SparseTable {
   private:
     std::vector<std::vector<S>> table;
     std::vector<i32> log_table; // log_table[n] := 2^k < n である最大の k
 
   public:
+    SparseTable() = default;
+    SparseTable(const std::vector<S> &vec) {
+        init(vec);
+    }
+
     // 要素の配列 vec で初期化
     void init(const std::vector<S> &vec) {
         table = {vec};
         log_table.clear();
 
-        for (i32 i = 0; (1 << i) < (i32)table[i].size(); i++) {
+        for (u32 i = 0; (1UL << i) < table[i].size(); i++) {
             table.push_back({});
-            for (i32 j = 0; j + (1 << i) < (i32)table[i].size(); j++) {
+            for (u32 j = 0; j + (1 << i) < table[i].size(); j++) {
                 table[i + 1].push_back(op(table[i][j], table[i][j + (1 << i)]));
             }
         }
@@ -35,7 +40,7 @@ template <class S, S (*op)(S, S), S (*id)(S)> class SparseTable {
 
     S get(i32 l, i32 r) {
         if (l == r)
-            return id();
+            return e();
         i32 k = log_table[r - l];
         return op(table[k][l], table[k][r - (1 << k)]);
     }

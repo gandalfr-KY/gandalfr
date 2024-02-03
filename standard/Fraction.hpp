@@ -79,7 +79,7 @@ class Fraction {
     Fraction operator+() const { return *this; }
     Fraction operator-() const {
         Fraction ret;
-        ret.raw_assign(-num, den);
+        ret.rawAssign(-num, den);
         return ret;
     }
 
@@ -165,15 +165,15 @@ class Fraction {
         return os;
     }
 
-    void raw_assign(i64 _num, i64 _den) { num = _num, den = _den; }
-    i64 &numer() { return num; }
-    i64 &denom() { return den; }
+    void rawAssign(i64 _num, i64 _den) { num = _num, den = _den; }
+    i64 numer() const { return num; }
+    i64 denom() const { return den; }
     Fraction inverse() const {
         Fraction ret;
         if (num >= 0) {
-            ret.raw_assign(den, num);
+            ret.rawAssign(den, num);
         } else {
-            ret.raw_assign(-den, -num);
+            ret.rawAssign(-den, -num);
         }
         return ret;
     }

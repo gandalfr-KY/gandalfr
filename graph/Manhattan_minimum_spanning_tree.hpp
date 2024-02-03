@@ -2,7 +2,9 @@
 #include <map>
 #include <numeric>
 
-#include "graph.hpp"
+#include "gandalfr/graph/Graph.hpp"
+
+namespace gandalfr {
 
 /**
  * @see https://hitonanode.github.io/cplib-cpp/graph/manhattan_mst.hpp
@@ -10,9 +12,12 @@
  * @param xs 各ノードの x 座標
  * @param ys 各ノードの y 座標
  */
-template <typename Weight> class Manhattan_minimum_spanning_tree {
+template <typename is_weighted> class Manhattan_minimum_spanning_tree {
   private:
-    graph<Weight, false> mst;
+    using Edge_t = Edge<is_weighted>;
+    using Cost = typename Edge<is_weighted>::Cost;
+    using Graph_t = Graph<is_weighted, UNDIRECTED>;
+    Graph_t mst;
 
   public:
     Manhattan_minimum_spanning_tree(std::vector<Weight> &xs,
@@ -69,3 +74,4 @@ template <typename Weight> class Manhattan_minimum_spanning_tree {
 
     const graph<Weight, false> &get_tree() { return mst; }
 };
+}

@@ -1,12 +1,14 @@
+#define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/ITP1_1_A"
+
 #include <queue>
 
 #include "testenv.hpp"
-#include "../other/io.hpp"
-#include "../other/RandomUtility.hpp"
-#include "../standard/GeoVector.hpp"
-#include "../standard/utility.hpp"
-#include "../standard/Fraction.hpp"
-#include "../standard/RollingHash.hpp"
+#include "gandalfr/other/io.hpp"
+#include "gandalfr/other/RandomUtility.hpp"
+#include "gandalfr/standard/GeoVector.hpp"
+#include "gandalfr/standard/utility.hpp"
+#include "gandalfr/standard/Fraction.hpp"
+#include "gandalfr/standard/RollingHash.hpp"
 
 using namespace gandalfr;
 
@@ -121,7 +123,7 @@ TEST(UTIL, COMPRESS) {
 TEST(UTIL, INVERSION) {
     const i32 len = 5, rep = 10;
     std::vector<i32> rnd_vec(5);
-    for (i32& x : rnd_vec) x = RandUtil::random_int(-10, 10);
+    for (i32& x : rnd_vec) x = RandUtil::randDouble(-10, 10);
     auto num_swap = [](std::vector<i32> v) {
         i32 ret = 0;
         const i32 N = v.size();
@@ -138,7 +140,7 @@ TEST(UTIL, INVERSION) {
 
     for (int r = 0; r < rep; ++r) {
         for (i32 i = 0; i < len; ++i) {
-            rnd_vec[i] = RandUtil::random_int(-10, 10);
+            rnd_vec[i] = RandUtil::randInt(-10, 10);
         }
         EQ(inversion(rnd_vec), num_swap(rnd_vec));
     }
@@ -176,7 +178,7 @@ TEST(FRACTION, OPERATOR) {
     EQ(a, Fraction(1, 2));
 }
 
-TEST(FRACTION, INFINITY) {
+TEST(FRACTION, INFTY) {
     Fraction inf(1, 0), minf(-1, 0);
     EQ(inf - INT64_MAX, inf);
     EQ(inf / 0, inf);
@@ -209,7 +211,7 @@ TEST(ROLLING_HASH, TEST) {
     std::string sb = "ABA";
     RollingHash STR(str);
     RHCode SUBSTR(sb);
-    for (i32 i = 0; i < str.size() - sb.size() + 1; ++i) {
+    for (u32 i = 0; i < str.size() - sb.size() + 1; ++i) {
         if (str.substr(i, 3) == sb) {
             EQ(STR.getCode(i, i + 3), SUBSTR);
         } else {
@@ -218,8 +220,7 @@ TEST(ROLLING_HASH, TEST) {
     }
 }
 
-
 int main() {
-    RunAllTests();
+    RunAllTests<false>();
     return 0;
 }

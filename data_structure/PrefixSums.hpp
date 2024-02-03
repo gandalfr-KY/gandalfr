@@ -17,7 +17,7 @@ template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums {
   public:
     PrefixSums(const std::vector<S> &v) : n(v.size()) {
         acm.reserve(n + 1);
-        acm.push_back(id());
+        acm.push_back(e());
         for (const S &x : v) {
             acm.push_back(op(acm.back(), x));
         }
@@ -42,7 +42,7 @@ template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums2d {
 
   public:
     PrefixSums2d(const std::vector<std::vector<S>> &v)
-        : h(v.size()), w(v[0].size()), acm(h + 1, std::vector<S>(w + 1, id())) {
+        : h(v.size()), w(v[0].size()), acm(h + 1, std::vector<S>(w + 1, e())) {
         for (i32 i = 1; i <= h; i++) {
             for (i32 j = 1; j <= w; j++) {
                 acm[i][j] = op(acm[i][j - 1], v[i - 1][j - 1]);

@@ -1,11 +1,13 @@
+#define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/ITP1_1_A"
+
 #include <queue>
 
 #include "testenv.hpp"
-#include "../types.hpp"
-#include "../other/io.hpp"
-#include "../other/RandomUtility.hpp"
-#include "../math/utility.hpp"
-#include "../math/Matrix.hpp"
+#include "gandalfr/types.hpp"
+#include "gandalfr/other/io.hpp"
+#include "gandalfr/other/RandomUtility.hpp"
+#include "gandalfr/math/utility.hpp"
+#include "gandalfr/math/Matrix.hpp"
 
 using namespace gandalfr;
 
@@ -16,8 +18,13 @@ TEST(UTIL, CONBINATORICS) {
     }
     // 7C4
     EQ(7 * 6 * 5 * 4 / (4 * 3 * 2 * 1), comb998(7, 4));
+    EQ(1, comb998(723948, 0));
+    EQ(1, comb998(12298, 12298));
+    EQ(comb998(223298, 12298), comb998(223298, 223298 - 12298));
     // 15P4
     EQ(15 * 14 * 13 * 12, perm998(15, 4));
+    EQ(perm998(23456, 23456), fact998(23456));
+    EQ(1, perm998(1324, 0));
     // 4H6
     EQ(9 * 8 * 7 * 6 * 5 * 4 / (6 * 5 * 4 * 3 * 2 * 1), homo998(4, 6));
 }
@@ -81,6 +88,6 @@ TEST(MATRIX, OPERATOR) {
 }
 
 int main() {
-    RunAllTests();
+    RunAllTests<false>();
     return 0;
 }

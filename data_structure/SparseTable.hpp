@@ -16,9 +16,7 @@ template <class S, S (*op)(S, S), S (*e)()> class SparseTable {
 
   public:
     SparseTable() = default;
-    SparseTable(const std::vector<S> &vec) {
-        init(vec);
-    }
+    SparseTable(const std::vector<S> &vec) { init(vec); }
 
     // 要素の配列 vec で初期化
     void init(const std::vector<S> &vec) {

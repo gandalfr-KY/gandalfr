@@ -1,7 +1,7 @@
 #pragma once
-#include <algorithm>
 #include "gandalfr/data_structure/SparseTable.hpp"
 #include "gandalfr/graph/Graph.hpp"
+#include <algorithm>
 
 namespace gandalfr {
 
@@ -14,22 +14,17 @@ template <bool is_weighted> class LCA {
     using Cost = typename Edge<is_weighted>::Cost;
     using Pair = std::pair<i32, i32>;
     using Graph_t = Graph<is_weighted, UNDIRECTED>;
-    
-    static Pair min(Pair a, Pair b) {
-        return a.first < b.first ? a : b;
-    }
-    static constexpr Pair e() {
-        return {0, 0};
-    }
 
-    const Graph_t* G = nullptr;
+    static Pair min(Pair a, Pair b) { return a.first < b.first ? a : b; }
+    static constexpr Pair e() { return {0, 0}; }
+
+    const Graph_t *G = nullptr;
     std::vector<i32> idx;
     std::vector<Pair> depth;
     SparseTable<Pair, LCA::min, LCA::e> sps;
     std::vector<Cost> dist;
-    
-    void EulerTour(i32 cu, i32 pa, i32 dep,
-                    i32 &cnt) {
+
+    void EulerTour(i32 cu, i32 pa, i32 dep, i32 &cnt) {
         idx[cu] = cnt;
         for (auto &e : (*G)[cu]) {
             i32 to = e->dst(cu);
@@ -44,11 +39,9 @@ template <bool is_weighted> class LCA {
 
   public:
     LCA() = default;
-    LCA(const Graph_t& graph) {
-        init(graph);
-    }
+    LCA(const Graph_t &graph) { init(graph); }
 
-    void init(const Graph_t& graph) {
+    void init(const Graph_t &graph) {
         G = &graph;
         idx.resize(graph.numNodes());
         dist = graph.distances(0, -1);
@@ -68,4 +61,4 @@ template <bool is_weighted> class LCA {
         return dist[u] + dist[v] - 2 * dist[getAncestor(u, v)];
     }
 };
-}
+} // namespace gandalfr

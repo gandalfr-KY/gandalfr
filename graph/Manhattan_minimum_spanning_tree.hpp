@@ -74,4 +74,4 @@ template <typename is_weighted> class Manhattan_minimum_spanning_tree {
 
     const graph<Weight, false> &get_tree() { return mst; }
 };
-}
+} // namespace gandalfr

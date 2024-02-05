@@ -27,9 +27,9 @@ int main(void){
         auto path = G.shortestPath(s, t);
         int Y = path.size();
         cout << X << " " << Y << endl;
-        for (auto &e : path) {
+        for (auto& e : path) {
             cout << e.v0 << " " << e.v1 << endl;
-        } 
+        }
     }
 
 }

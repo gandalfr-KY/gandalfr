@@ -29,7 +29,6 @@ template <class T, i32 dim> struct BaseArray {
 
     T &operator[](i32 index) { return v[index]; }
     const T &operator[](i32 index) const { return v[index]; }
-
 };
 } // namespace impl
 
@@ -118,7 +117,6 @@ template <class T, i32 dim> struct GeoVector : public impl::BaseArray<T, dim> {
         }
         return is;
     }
-
 };
 
 using Point2d = GeoVector<double, 2>;
@@ -217,6 +215,18 @@ struct PointGrid : public impl::BaseArray<i64, 2> {
         return (v[0] == other.v[0] && v[1] == other.v[1]);
     }
     bool operator!=(const PointGrid &other) const { return !operator==(other); }
+    bool operator<(const PointGrid &other) const {
+        if (h() == other.h()) {
+            return w() < other.w();
+        } else {
+            return h() < other.h();
+        }
+    }
+    bool operator<=(const PointGrid &other) const {
+        return operator<(other) || operator==(other);
+    }
+    bool operator>(const PointGrid &other) const { return !operator<=(other); }
+    bool operator>=(const PointGrid &other) const { return !operator<(other); }
 
     friend std::ostream &operator<<(std::ostream &os, const PointGrid &a) {
         os << a.v[0] << ' ' << a.v[1];
@@ -226,13 +236,6 @@ struct PointGrid : public impl::BaseArray<i64, 2> {
         is >> a.v[0] >> a.v[1];
         return is;
     }
-
-    bool operator<(const PointGrid& other) const {
-        if (h() == other.h()) {
-            return w() < other.w();
-        } else {return h() < other.h();}
-    }
-
 };
 
 PointGrid toPointGrid(i64 id) {
@@ -249,6 +252,6 @@ const std::vector<PointGrid> GAROUND = {{0, 0},  {0, 1},   {1, 0},
                                         {0, -1}, {-1, 0},  {-1, 1},
                                         {1, 1},  {-1, -1}, {1, -1}};
 
-using grd = PointGrid;
+using grid = PointGrid;
 
 } // namespace gandalfr

@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "gandalfr/math/Matrix.hpp"
+#include "gandalfr/data_structure/UnionFind.hpp"
 #include "gandalfr/types.hpp"
 
 namespace gandalfr {
@@ -91,11 +92,12 @@ template <> struct Edge<UNWEIGHTED> {
  */
 template <bool is_weighted, bool is_directed> class Graph {
   private:
-    using Edge_ptr = std::shared_ptr<Edge<is_weighted>>;
-    using Cost = typename Edge<is_weighted>::Cost;
+    using Edge_t = Edge<is_weighted>;
+    using Edge_ptr = std::shared_ptr<Edge_t>;
+    using Cost = typename Edge_t::Cost;
     using Pair = std::pair<Cost, i32>;
 
-    i32 N;
+    i32 N = 0;
     std::vector<std::vector<Edge_ptr>> G;
     std::vector<Edge_ptr> E;
     Cost cost_sum = 0;
@@ -104,12 +106,21 @@ template <bool is_weighted, bool is_directed> class Graph {
 
   public:
     Graph() {}
+    explicit Graph(i32 n) : N(n), G(n) {}
     Graph(i32 n, i32 m) : N(n), G(n) { E.reserve(m); }
-    Graph(const Graph &other) : Graph(other.N, other.num_edges()) {
+    Graph(const Graph &other) : Graph(other.N, other.numEdges()) {
         for (auto &e : other.E) {
-            add_edge(*e);
+            addEdge(*e);
         }
     }
+
+    void resize(i32 n) {
+        assert(n >= N);
+        N = n;
+        G.resize(n);
+    }
+
+    void reserve(i32 m) { E.reserve(m); }
 
     /**
      * @return ノードの数
@@ -125,10 +136,7 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @param n ノード番号
      * @return ノード n からの隣接頂点のリストの const 参照
      */
-    const std::vector<Edge_ptr> &
-    operator[](i32 n) const {
-        return G[n];
-    }
+    const std::vector<Edge_ptr> &operator[](i32 n) const { return G[n]; }
 
     /**
      * @return グラフ全体の辺のリストの const 参照
@@ -154,9 +162,8 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @param e 辺
      * @attention 渡した辺の id は保持される
      */
-    void addEdge(const Edge<is_weighted>& e) {
-        assert(E.size() < E.capacity());
-        auto shared_ptr_to_edge = std::make_shared<Edge<is_weighted>>(e);
+    void addEdge(const Edge_t &e) {
+        auto shared_ptr_to_edge = std::make_shared<Edge_t>(e);
         E.push_back(shared_ptr_to_edge);
         G[e.v0].push_back(shared_ptr_to_edge);
         if constexpr (!is_directed) {
@@ -194,11 +201,11 @@ template <bool is_weighted, bool is_directed> class Graph {
     Matrix<Cost> toMatrix(Cost invalid) const {
         Matrix<Cost> ret(N, N, invalid);
         for (i32 i = 0; i < N; i++)
-            ret(i, i) = 0;
+            ret[i][i] = 0;
         for (auto &e : E) {
-            ret(e.v0, e.v1) = e.cost;
+            ret[e->v0][e->v1] = e->cost;
             if constexpr (!is_directed) {
-                ret(e.v1, e.v0) = e.cost;
+                ret[e->v1][e->v0] = e->cost;
             }
         }
         return ret;
@@ -206,7 +213,7 @@ template <bool is_weighted, bool is_directed> class Graph {
 
   private:
     std::vector<Edge_ptr> run_Dijkstra(std::vector<Cost> &dist,
-                                                      i32 start_node) const {
+                                       i32 start_node) const {
         std::priority_queue<Pair, std::vector<Pair>, std::greater<Pair>> q;
         q.push({0, start_node});
         std::vector<Edge_ptr> prev_edge(N, nullptr);
@@ -234,7 +241,7 @@ template <bool is_weighted, bool is_directed> class Graph {
     }
 
     std::vector<Edge_ptr> run_bfs(std::vector<i32> &dist,
-                                                 i32 start_node) const {
+                                  i32 start_node) const {
         std::queue<i32> q;
         q.push(start_node);
         std::vector<Edge_ptr> prev_edge(N, nullptr);
@@ -281,7 +288,7 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @attention 到達可能でないとき、空の配列で返る
      * @attention 負閉路があるとき正しい動作を保証しない
      */
-    std::vector<Edge<is_weighted>> shortestPath(i32 start_node, i32 end_node) const {
+    std::vector<Edge_t> shortestPath(i32 start_node, i32 end_node) const {
         std::vector<Cost> dist(N, CMAX);
         dist[start_node] = 0;
         std::vector<Edge_ptr> prev_edge(N, nullptr);
@@ -296,7 +303,7 @@ template <bool is_weighted, bool is_directed> class Graph {
             return {};
 
         i32 cu = end_node;
-        std::vector<Edge<is_weighted>> route;
+        std::vector<Edge_t> route;
         while (cu != start_node) {
             auto e = prev_edge[cu];
             if (cu == e->v0) {
@@ -316,23 +323,23 @@ template <bool is_weighted, bool is_directed> class Graph {
         for (i32 k = 0; k < N; k++)         // 経由する頂点
             for (i32 i = 0; i < N; i++)     // 始点
                 for (i32 j = 0; j < N; j++) // 終点
-                    if (mt(i, k) != CMAX && mt(k, j) != CMAX)
-                        mt(i, j) = std::min(mt(i, j), mt(i, k) + mt(k, j));
+                    if (mt[i][k] != CMAX && mt[k][j] != CMAX)
+                        mt[i][j] = std::min(mt[i][j], mt[i][k] + mt[k][j]);
 
         for (i32 i = 0; i < N; ++i)
             for (i32 j = 0; j < N; ++j)
-                if (mt(i, j) == CMAX)
-                    mt(i, j) = invalid;
+                if (mt[i][j] == CMAX)
+                    mt[i][j] = invalid;
         return mt;
     }
 
-    Graph reverse() const {
+    Graph rev() const {
         if constexpr (!is_directed) {
             return *this;
         } else {
-            Graph ret(N);
+            Graph ret(N, E.size());
             for (auto &e : E) {
-                ret.add_edge(e.reverse());
+                ret.addEdge(e->rev());
             }
             return ret;
         }
@@ -402,32 +409,27 @@ template <bool is_weighted, bool is_directed> class Graph {
     //         return result;
     //     }
 
-    //     /**
-    //      * @return 最小全域森
-    //      */
-    //     Graph minimum_spanning_forest() const {
-    //         static_assert(!is_directed);
-    //         Graph ret(N, N - 1);
-    //         std::vector<i32> idx(E.size());
-    //         std::iota(idx.begin(), idx.end(), 0);
+    /**
+     * @return 最小全域森
+     */
+    Graph MST() const {
+        static_assert(is_weighted && !is_directed);
+        Graph ret(N, N - 1);
+        std::vector<i32> idx(E.size());
+        std::iota(idx.begin(), idx.end(), 0);
+        std::sort(idx.begin(), idx.end(), [&](i32 i, i32 j) {
+            return E[i]->cost < E[j]->cost;
+        });
 
-    //         std::sort(idx.begin(), idx.end(), [&](i32 i, i32 j) {
-    //             auto a = &E[i], b = &E[j];
-    //             if (a->cost == b->cost) {
-    //                 if (a->v[0] == b->v[0]) {
-    //                     return a->v[1] < b->v[1];
-    //                 }
-    //                 return a->v[0] < b->v[0];
-    //             }
-    //             return a->cost < b->cost;
-    //         });
-
-    //         for (i32 i : idx) {
-    //             if (!ret.are_connected(E[i].v[0], E[i].v[1]))
-    //                 ret.add_edge(E[i]);
-    //         }
-    //         return ret;
-    //     }
+        UnionFind uf(N);
+        for (i32 i : idx) {
+            if (!uf.isSame(E[i]->v0, E[i]->v1)) {
+                uf.unite(E[i]->v0, E[i]->v1);
+                ret.addEdge(*E[i]);
+            }
+        }
+        return ret;
+    }
 
     //     bool is_bibartite() {
     //         std::vector<i32> col(N, -1);

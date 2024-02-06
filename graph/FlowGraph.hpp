@@ -96,7 +96,7 @@ class FlowGraph {
     using Edge_ptr = std::shared_ptr<FlowEdge>;
     using Cost = typename FlowEdge::Cost;
     using Flow = typename FlowEdge::Flow;
-    i32 N;
+    i32 N = 0;
     std::vector<std::vector<Edge_ptr>> G;
     std::vector<Edge_ptr> E;
 
@@ -115,9 +115,7 @@ class FlowGraph {
      * @param n ノード番号
      * @return ノード n からの隣接頂点のリストの const 参照
      */
-    const std::vector<Edge_ptr> &operator[](i32 n) const {
-        return G[n];
-    }
+    const std::vector<Edge_ptr> &operator[](i32 n) const { return G[n]; }
 
     /**
      * @return グラフ全体の辺のリストの const 参照
@@ -129,6 +127,7 @@ class FlowGraph {
     const Edge_ptr &getEdge(i32 idx) const { return E[idx]; }
 
     FlowGraph() {}
+    explicit FlowGraph(i32 n) : N(n), G(n) {}
     FlowGraph(i32 n, i32 m) : N(n), G(n) { E.reserve(m); }
     FlowGraph(const FlowGraph &other) : FlowGraph(other.N, other.numEdges()) {
         for (auto &e : other.E) {
@@ -136,11 +135,18 @@ class FlowGraph {
         }
     }
 
+    void resize(i32 n) {
+        assert(n >= N);
+        N = n;
+        G.resize(n);
+    }
+
+    void reserve(i32 m) { E.reserve(m); }
+
     /**
      * @attention 辺の id は保持される
      */
     void addEdge(const FlowEdge &e) {
-        assert(E.size() < E.capacity());
         auto shared_ptr_to_edge = std::make_shared<FlowEdge>(e);
         E.push_back(shared_ptr_to_edge);
         G[e.v0].push_back(shared_ptr_to_edge);
@@ -264,7 +270,7 @@ class FlowGraph {
             for (i32 i = 0; i < this->N; ++i) {
                 bool changed = false;
                 for (u32 j = 0; j < this->E.size(); ++j) {
-                    auto& e = this->E[j];
+                    auto &e = this->E[j];
                     i32 src = e->v0, dst = e->v1;
                     for (i32 k = 0; k < 2; ++k) {
                         if (min_cost[src] != INVALID && !e->isFull(src)) {
@@ -298,7 +304,7 @@ class FlowGraph {
             // グラフとコストの更新
             cur = t;
             while (cur != s) {
-                auto& e = this->E[prev_path[cur]];
+                auto &e = this->E[prev_path[cur]];
                 i32 src = e->dst(cur);
                 e->addFlow(src, f);
                 sum += e->getCost(src);

@@ -24,7 +24,7 @@ int main(void){
         }
     }
 
-    LCA lca(G);
+    LCA lca(G, 0);
     int q;
     cin >> q;
     while(q--){

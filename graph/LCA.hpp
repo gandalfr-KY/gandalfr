@@ -33,20 +33,20 @@ template <bool is_weighted> class LCA {
             depth.emplace_back(Pair{dep, cu});
             EulerTour(to, cu, dep + 1, ++cnt);
         }
-        depth.push_back({dep, cu});
+        depth.emplace_back(Pair{dep, cu});
         cnt++;
     }
 
   public:
     LCA() = default;
-    LCA(const Graph_t &graph) { init(graph); }
+    LCA(const Graph_t &graph, i32 root) { init(graph, root); }
 
-    void init(const Graph_t &graph) {
+    void init(const Graph_t &graph, i32 root) {
         G = &graph;
         idx.resize(graph.numNodes());
-        dist = graph.distances(0, -1);
+        dist = graph.distances(root, -1);
         i32 cnt = 0;
-        EulerTour(0, -1, 0, cnt);
+        EulerTour(root, -1, 0, cnt);
         sps.init(depth);
     }
 

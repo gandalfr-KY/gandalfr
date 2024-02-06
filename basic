@@ -6,6 +6,7 @@
 #include "./graph/FlowGraph.hpp"
 #include "./graph/Graph.hpp"
 #include "./graph/LCA.hpp"
+#include "./graph/ManhattanMST.hpp"
 #include "./graph/SCC.hpp"
 #include "./math/FormalPowerSeries.hpp"
 #include "./math/Matrix.hpp"

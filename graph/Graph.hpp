@@ -8,8 +8,8 @@
 #include <utility>
 #include <vector>
 
-#include "gandalfr/math/Matrix.hpp"
 #include "gandalfr/data_structure/UnionFind.hpp"
+#include "gandalfr/math/Matrix.hpp"
 #include "gandalfr/types.hpp"
 
 namespace gandalfr {
@@ -417,9 +417,8 @@ template <bool is_weighted, bool is_directed> class Graph {
         Graph ret(N, N - 1);
         std::vector<i32> idx(E.size());
         std::iota(idx.begin(), idx.end(), 0);
-        std::sort(idx.begin(), idx.end(), [&](i32 i, i32 j) {
-            return E[i]->cost < E[j]->cost;
-        });
+        std::sort(idx.begin(), idx.end(),
+                  [&](i32 i, i32 j) { return E[i]->cost < E[j]->cost; });
 
         UnionFind uf(N);
         for (i32 i : idx) {

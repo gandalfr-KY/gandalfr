@@ -7,7 +7,8 @@
 namespace gandalfr {
 
 /**
- * @see https://github.com/hitonanode/cplib-cpp/blob/master/graph/manhattan_mst.hpp
+ * @see
+ * https://github.com/hitonanode/cplib-cpp/blob/master/graph/manhattan_mst.hpp
  * @brief マンハッタン距離で最小重み全域木を構成する。
  * @param xs 各ノードの x 座標
  * @param ys 各ノードの y 座標
@@ -39,7 +40,10 @@ class ManhattanMST {
                         i32 j = it->second;
                         if (xs[i] - xs[j] < ys[i] - ys[j])
                             break;
-                        E.emplace_back(Edge_t{i, j, std::abs(xs[i] - xs[j]) + std::abs(ys[i] - ys[j]), -1});
+                        E.emplace_back(Edge_t{i, j,
+                                              std::abs(xs[i] - xs[j]) +
+                                                  std::abs(ys[i] - ys[j]),
+                                              -1});
                     }
                     sweep[-ys[i]] = i;
                 }
@@ -52,7 +56,7 @@ class ManhattanMST {
 
         mst.resize(xs.size());
         mst.reserve(xs.size() - 1);
-        std::sort(E.begin(), E.end(), [](const Edge_t& a, const Edge_t& b) {
+        std::sort(E.begin(), E.end(), [](const Edge_t &a, const Edge_t &b) {
             return a.cost < b.cost;
         });
         UnionFind uf(N);

@@ -11,6 +11,7 @@
 #include "./math/FormalPowerSeries.hpp"
 #include "./math/Matrix.hpp"
 #include "./math/utility.hpp"
+#include "./other/bit.hpp"
 #include "./other/io.hpp"
 #include "./other/RandomUtility.hpp"
 #include "./other/StopWatch.hpp"

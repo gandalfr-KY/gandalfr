@@ -87,6 +87,34 @@ TEST(MATRIX, OPERATOR) {
     EQ(E.power(3), E_cubed);
 }
 
+TEST(MATRIX, FACTROIZE_OSAK) {
+    int rp = 100;
+    Seive::makeTable(1000000);
+    while (rp--) {
+        auto n = RandUtil::randInt(0, 1000000);
+        auto fs = Seive::factorize(n);
+        int n2 = 1;
+        for (auto f : fs) {
+            n2 *= power(f.factor, f.exponent);
+        }
+        EQ(n, n2);
+    }
+}
+
+TEST(MATRIX, FACTROIZE_NAIVE) {
+    int rp = 100;
+    Seive::makeTable(1000000);
+    while (rp--) {
+        auto n = RandUtil::randInt(0, 100000000);
+        auto fs = Seive::factorize(n);
+        int n2 = 1;
+        for (auto f : fs) {
+            n2 *= power(f.factor, f.exponent);
+        }
+        EQ(n, n2);
+    }
+}
+
 int main() {
     RunAllTests<false>();
     return 0;

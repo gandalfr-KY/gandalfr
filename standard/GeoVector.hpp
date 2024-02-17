@@ -160,7 +160,7 @@ struct PointGrid : public impl::BaseArray<i64, 2> {
         return false;
     }
     bool goLeft() {
-        PointGrid nxt = *this + PointGrid{-1, 0};
+        PointGrid nxt = *this + PointGrid{0, -1};
         if (nxt.isValid()) {
             *this = nxt;
             return true;
@@ -168,7 +168,7 @@ struct PointGrid : public impl::BaseArray<i64, 2> {
         return false;
     }
     bool goRight() {
-        PointGrid nxt = *this + PointGrid{1, 0};
+        PointGrid nxt = *this + PointGrid{0, 1};
         if (nxt.isValid()) {
             *this = nxt;
             return true;

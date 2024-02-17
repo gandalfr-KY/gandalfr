@@ -150,7 +150,7 @@ template <bool is_weighted, bool is_directed> class Graph {
     void print() const {
         std::cout << N << " " << E.size() << std::endl;
         for (auto &e : E)
-            std::cout << e << std::endl;
+            std::cout << *e << std::endl;
     }
 
     /**

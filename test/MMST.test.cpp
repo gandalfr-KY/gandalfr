@@ -13,7 +13,7 @@ int main(void){
  
     int N;
     cin >> N;
-    vector<ll> X(N), Y(N);
+    vector<i64> X(N), Y(N);
     rep(i,0,N){
         cin >> X[i] >> Y[i];
     }

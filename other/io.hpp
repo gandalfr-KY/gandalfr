@@ -1,60 +1,85 @@
 #pragma once
 #include <deque>
 #include <iostream>
+#include <map>
 #include <queue>
 #include <set>
-#include <string>
+#include <unordered_map>
 #include <utility>
-
-///////////////////// output /////////////////////
+#include <vector>
 
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
-    for (int i = 0; i < (int)v.size(); i++)
-        os << v[i] << (i + 1 != (int)v.size() ? " " : "");
+    for (size_t i = 0; i < v.size(); ++i) {
+        os << v[i] << (i + 1 != v.size() ? " " : "");
+    }
     return os;
 }
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::set<T> &st) {
-    for (const T &x : st) {
-        std::cout << x << " ";
+    for (auto it = st.begin(); it != st.end(); ++it) {
+        os << *it << (std::next(it) != st.end() ? " " : "");
     }
     return os;
 }
 
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::multiset<T> &st) {
-    for (const T &x : st) {
-        std::cout << x << " ";
+    for (auto it = st.begin(); it != st.end(); ++it) {
+        os << *it << (std::next(it) != st.end() ? " " : "");
     }
     return os;
 }
+
 template <typename T1, typename T2>
 std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p) {
     os << p.first << ' ' << p.second;
     return os;
 }
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, std::queue<T> q) {
     while (!q.empty()) {
-        os << q.front();
+        os << q.front() << (q.size() > 1 ? " " : "");
         q.pop();
     }
     return os;
 }
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::deque<T> &dq) {
-    for (const T &x : dq) {
-        std::cout << x << " ";
+    for (size_t i = 0; i < dq.size(); ++i) {
+        os << dq[i] << (i + 1 != dq.size() ? " " : "");
     }
     return os;
 }
+
 template <typename Tp, typename Sequence, typename Compare>
 std::ostream &operator<<(std::ostream &os,
                          std::priority_queue<Tp, Sequence, Compare> q) {
     while (!q.empty()) {
-        os << q.top();
+        os << q.top() << (q.size() > 1 ? " " : "");
         q.pop();
+    }
+    return os;
+}
+
+template <typename Key, typename T>
+std::ostream &operator<<(std::ostream &os, const std::map<Key, T> &m) {
+    for (auto it = m.begin(); it != m.end(); ++it) {
+        os << "(" << it->first << ", " << it->second << ")"
+           << (std::next(it) != m.end() ? " " : "");
+    }
+    return os;
+}
+
+template <typename Key, typename T>
+std::ostream &operator<<(std::ostream &os,
+                         const std::unordered_map<Key, T> &um) {
+    for (auto it = um.begin(); it != um.end(); ++it) {
+        os << "(" << it->first << ", " << it->second << ")"
+           << (std::next(it) != um.end() ? " " : "");
     }
     return os;
 }

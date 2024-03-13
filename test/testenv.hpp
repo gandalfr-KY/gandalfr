@@ -9,7 +9,7 @@
 #include <string>
 #include <utility>
 
-#include "gandalfr//types.hpp"
+#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 
@@ -95,8 +95,10 @@ template <bool enableCout = true> void RunAllTests() {
         for (const auto &[test_name, proc] : test_registry) {
             try {
                 proc();
-            } catch (...) {
-                std::cerr << "❌" << std::endl;
+            } catch (TestException &e) {
+                std::cout << "❌" << std::endl;
+                std::cerr << "    File: " << e.file << std::endl;
+                std::cerr << "    Line: " << e.line << std::endl;
             }
         }
         std::cout << "Hello World" << std::endl;

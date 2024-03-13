@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <compare>
 #include <exception>
 #include <iostream>
 #include <numeric>
@@ -58,14 +59,6 @@ class Fraction {
   private:
     i64 num, den;
 
-    friend i32 compare_to(const Fraction &a, const Fraction &b) {
-        if (!impl::isSameSign(a.num, b.num))
-            return a.num >= 0 ? 1 : -1;
-        if (a.num == b.num && a.den == b.den)
-            return 0;
-        return (i128)a.num * b.den > (i128)b.num * a.den ? 1 : -1;
-    }
-
   public:
     static const Fraction M_INF, INF;
 
@@ -121,24 +114,19 @@ class Fraction {
         return Fraction(a) /= b;
     }
 
-    friend bool operator==(const Fraction &a, const Fraction &b) {
-        return compare_to(a, b) == 0;
+    friend std::strong_ordering operator<=>(const Fraction &a,
+                                            const Fraction &b) {
+        if (!impl::isSameSign(a.num, b.num))
+            return a.num >= 0 ? std::strong_ordering::greater
+                              : std::strong_ordering::less;
+        if (a == b)
+            return std::strong_ordering::equal;
+        return (i128)a.num * b.den > (i128)b.num * a.den
+                   ? std::strong_ordering::greater
+                   : std::strong_ordering::less;
     }
-    friend bool operator!=(const Fraction &a, const Fraction &b) {
-        return compare_to(a, b) != 0;
-    }
-    friend bool operator>(const Fraction &a, const Fraction &b) {
-        return compare_to(a, b) > 0;
-    }
-    friend bool operator>=(const Fraction &a, const Fraction &b) {
-        return compare_to(a, b) >= 0;
-    }
-    friend bool operator<(const Fraction &a, const Fraction &b) {
-        return compare_to(a, b) < 0;
-    }
-    friend bool operator<=(const Fraction &a, const Fraction &b) {
-        return compare_to(a, b) <= 0;
-    }
+
+    friend bool operator==(const Fraction &a, const Fraction &b) = default;
 
     friend std::istream &operator>>(std::istream &is, Fraction &a) {
         std::string buf;

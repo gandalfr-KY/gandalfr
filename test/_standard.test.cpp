@@ -5,18 +5,19 @@
 #include "testenv.hpp"
 #include "gandalfr/other/io.hpp"
 #include "gandalfr/other/RandomUtility.hpp"
-#include "gandalfr/standard/GeoVector.hpp"
+#include "gandalfr/standard/Vector.hpp"
 #include "gandalfr/standard/utility.hpp"
 #include "gandalfr/standard/Fraction.hpp"
 #include "gandalfr/standard/RollingHash.hpp"
+#include "gandalfr/standard/Grid.hpp"
 
 using namespace gandalfr;
 
 TEST(VECTOR_ND, OPERATOR) {
     const i32 dim = 5;
-    GeoVector<i32, dim> vec1 = GeoVector<i32, dim>{0, 1, 2, 3, 4};
-    GeoVector<i32, dim> vec2 = {4, 2, 3, 4, 0};
-    GeoVector<i32, dim> vec3(vec1);
+    Vector<i32, dim> vec1 = Vector<i32, dim>{0, 1, 2, 3, 4};
+    Vector<i32, dim> vec2 = {4, 2, 3, 4, 0};
+    Vector<i32, dim> vec3(vec1);
 
     for (i32 i = 0; i < dim; ++i) {
         EQ(vec1[i], i);
@@ -44,8 +45,8 @@ TEST(VECTOR_ND, OPERATOR) {
 }
 
 TEST(VECTOR_ND, GEOMETRIC) {
-    Point3d vec1 = {1, 2, 1};
-    Point3d vec2 = {3, -2, 1};
+    Vector3d vec1 = {1, 2, 1};
+    Vector3d vec2 = {3, -2, 1};
     NEAR(vec1.dot(vec2), 0, EPS);
     NEAR(vec1.normSq(), 6, EPS);
     NEAR(vec1.norm(), 2.44948974278, EPS);
@@ -55,23 +56,22 @@ TEST(VECTOR_ND, CONVERT_WITH_STDVEC) {
     const i32 dim = 5;
     std::vector<i32> stdvec(dim);
     for (i32 i = 0; i < dim; ++i) stdvec[i] = i;
-    GeoVector<i32, dim> vec;
+    Vector<i32, dim> vec;
     vec.load(stdvec);
-    EQ(stdvec, vec.to_stdvec());
+    EQ(stdvec, vec.toStdvec());
 }
 
 TEST(GRID, CHECK_AROUND) {
-    PointGrid::set_size(5, 6);
-    PointGrid g{1, 0};
-    EQ(g.toIdx(), 6);
-    EQ(toPointGrid(6), g);
+    Grid::setSize(5, 6);
+    Grid g{1, 0};
+    EQ(g.getIdx(), 6);
+    EQ(Grid(6), g);
 
     std::vector<bool> v;
-    for (const PointGrid& d : GAROUND) {
-        PointGrid nx = g + d;
+    for (const Grid& nx : g.getAround()) {
         v.push_back(nx.isValid());
     }
-    std::vector<bool> ans = {1, 1, 1, 0, 1, 1, 1, 0, 0};
+    std::vector<bool> ans = {1, 1, 0, 1, 1, 1, 0, 0};
     EQ(v, ans);
 }
 
@@ -84,7 +84,7 @@ TEST(GRID, SOLVE_MAZE) {
         "..####",
         "#....."
     };
-    std::vector<std::vector<i8>> ANS{
+    std::vector<std::vector<i32>> ANS{
         {0,X,X,5,6,X},
         {1,2,3,4,X,X},
         {2,X,X,5,6,7},
@@ -92,21 +92,22 @@ TEST(GRID, SOLVE_MAZE) {
         {X,5,6,7,8,9}
     };
 
-    PointGrid::set_size(H, W);
-    std::queue<PointGrid> q;
+    Grid::setSize(H, W);
+    std::queue<Grid> q;
     q.push({0, 0});
-    std::vector<std::vector<i8>> dist(H, std::vector<i8>(W, X));
+    std::vector<std::vector<i32>> dist(H, std::vector<i32>(W, X));
     dist[0][0] = 0;
     while (!q.empty()) {
-        PointGrid cur = q.front();
+        Grid cur = q.front();
         q.pop();
-        for (i32 i = 1; i <= 4; ++i) {
-            auto d = GAROUND[i];
-            PointGrid nxt = cur + d;
+        auto around = cur.getAround();
+        for (i32 i = 0; i < 4; ++i) {
+            Grid nxt = around[i];
+            auto [nxh, nxw] = nxt;
             if (!nxt.isValid()) continue;
-            if (T[nxt.h()][nxt.w()] == '#') continue;
-            if (dist[nxt.h()][nxt.w()] == X) {
-                dist[nxt.h()][nxt.w()] = dist[cur.h()][cur.w()] + 1;
+            if (T[nxh][nxw] == '#') continue;
+            if (dist[nxh][nxw] == X) {
+                dist[nxh][nxw] = dist[cur.h][cur.w] + 1;
                 q.push(nxt);
             }
         }

@@ -5,16 +5,16 @@
 
 namespace gandalfr {
 
-using i8 = signed char;
-using i16 = signed short int;
-using i32 = signed int;
-using i64 = signed long long int;
+using i8 = __int8_t;
+using i16 = __int16_t;
+using i32 = __int32_t;
+using i64 = __int64_t;
 using i128 = __int128_t;
 
-using u8 = unsigned char;
-using u16 = unsigned short int;
-using u32 = unsigned int;
-using u64 = unsigned long long int;
+using u8 = __uint8_t;
+using u16 = __uint16_t;
+using u32 = __uint32_t;
+using u64 = __uint64_t;
 using u128 = __uint128_t;
 
 constexpr i8 IMAX8 = INT8_MAX;

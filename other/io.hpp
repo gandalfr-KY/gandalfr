@@ -34,7 +34,7 @@ std::ostream &operator<<(std::ostream &os, const std::multiset<T> &st) {
 
 template <typename T1, typename T2>
 std::ostream &operator<<(std::ostream &os, const std::pair<T1, T2> &p) {
-    os << p.first << ' ' << p.second;
+    os << '(' << p.first << ", " << p.second << ')';
     return os;
 }
 
@@ -68,8 +68,7 @@ std::ostream &operator<<(std::ostream &os,
 template <typename Key, typename T>
 std::ostream &operator<<(std::ostream &os, const std::map<Key, T> &m) {
     for (auto it = m.begin(); it != m.end(); ++it) {
-        os << "(" << it->first << ", " << it->second << ")"
-           << (std::next(it) != m.end() ? " " : "");
+        os << *it << (std::next(it) != m.end() ? " " : "");
     }
     return os;
 }
@@ -78,8 +77,7 @@ template <typename Key, typename T>
 std::ostream &operator<<(std::ostream &os,
                          const std::unordered_map<Key, T> &um) {
     for (auto it = um.begin(); it != um.end(); ++it) {
-        os << "(" << it->first << ", " << it->second << ")"
-           << (std::next(it) != um.end() ? " " : "");
+        os << *it << (std::next(it) != um.end() ? " " : "");
     }
     return os;
 }

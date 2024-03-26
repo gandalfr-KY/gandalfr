@@ -101,7 +101,7 @@ struct Factor {
     i32 exponent;
 };
 
-namespace impl {
+namespace internal {
 
 /**
  * @see https://drken1215.hatenablog.com/entry/2023/05/23/233000
@@ -128,7 +128,7 @@ bool MillerRabin(i64 N, const std::vector<i64> &A) {
     }
     return true;
 }
-} // namespace impl
+} // namespace internal
 
 // 素数篩を固定サイズで構築する。篩のサイズが (2^23) でおよそ 0.5sかかる
 class Seive {
@@ -212,9 +212,9 @@ class Seive {
         } else if (n < size()) {
             return min_factor[n] == n;
         } else if (n < 4759123141) {
-            return impl::MillerRabin(n, {2, 7, 61});
+            return internal::MillerRabin(n, {2, 7, 61});
         } else {
-            return impl::MillerRabin(
+            return internal::MillerRabin(
                 n, {2, 325, 9375, 28178, 450775, 9780504, 1795265022});
         }
     }

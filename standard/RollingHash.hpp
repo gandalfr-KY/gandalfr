@@ -8,7 +8,7 @@
 
 namespace gandalfr {
 
-namespace impl {
+namespace internal {
 
 // r := p の原始根
 // return r^k s.t. r^k > MAX_ELM and gcd(p - 1, k) = 1
@@ -25,15 +25,15 @@ template <i32 p, i32 MAX_ELM> constexpr i32 determinBase() {
     return b;
 }
 
-} // namespace impl
+} // namespace internal
 
 struct RHCode {
     static constexpr i32 P1 = 998244353;
     static constexpr i32 P2 = 1000000007;
     static constexpr i32 P3 = 1000000009;
-    static constexpr i32 B1 = impl::determinBase<P1, UMAX8>();
-    static constexpr i32 B2 = impl::determinBase<P2, UMAX8>();
-    static constexpr i32 B3 = impl::determinBase<P3, UMAX8>();
+    static constexpr i32 B1 = internal::determinBase<P1, UMAX8>();
+    static constexpr i32 B2 = internal::determinBase<P2, UMAX8>();
+    static constexpr i32 B3 = internal::determinBase<P3, UMAX8>();
 
     i32 sz = 0;
     Mint<P1> code1{0};

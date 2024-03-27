@@ -57,7 +57,7 @@ template <> struct Edge<UNWEIGHTED> {
     using Cost = i32;
 
     i32 v0, v1;
-    const Cost cost = 1;
+    static const Cost cost = 1;
     i32 id;
 
     Edge() = default;
@@ -212,8 +212,8 @@ template <bool is_weighted, bool is_directed> class Graph {
     }
 
   private:
-    std::vector<Edge_ptr> run_Dijkstra(std::vector<Cost> &dist,
-                                       i32 start_node) const {
+    std::vector<Edge_ptr> Dijkstra_impl(std::vector<Cost> &dist,
+                                        i32 start_node) const {
         std::priority_queue<Pair, std::vector<Pair>, std::greater<Pair>> q;
         q.push({0, start_node});
         std::vector<Edge_ptr> prev_edge(N, nullptr);
@@ -240,8 +240,8 @@ template <bool is_weighted, bool is_directed> class Graph {
         return prev_edge;
     }
 
-    std::vector<Edge_ptr> run_bfs(std::vector<i32> &dist,
-                                  i32 start_node) const {
+    std::vector<Edge_ptr> bfs_impl(std::vector<i32> &dist,
+                                   i32 start_node) const {
         std::queue<i32> q;
         q.push(start_node);
         std::vector<Edge_ptr> prev_edge(N, nullptr);
@@ -272,9 +272,9 @@ template <bool is_weighted, bool is_directed> class Graph {
         dist[start_node] = 0;
 
         if constexpr (is_weighted) {
-            run_Dijkstra(dist, start_node);
+            Dijkstra_impl(dist, start_node);
         } else {
-            run_bfs(dist, start_node);
+            bfs_impl(dist, start_node);
         }
 
         for (auto &x : dist)
@@ -294,9 +294,9 @@ template <bool is_weighted, bool is_directed> class Graph {
         std::vector<Edge_ptr> prev_edge(N, nullptr);
 
         if constexpr (is_weighted) {
-            prev_edge = run_Dijkstra(dist, start_node);
+            prev_edge = Dijkstra_impl(dist, start_node);
         } else {
-            prev_edge = run_bfs(dist, start_node);
+            prev_edge = bfs_impl(dist, start_node);
         }
 
         if (dist[end_node] == CMAX)

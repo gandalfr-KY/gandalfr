@@ -1,3 +1,4 @@
+#include "./data_structure/BinaryTrie.hpp"
 #include "./data_structure/LazySegtree.hpp"
 #include "./data_structure/PrefixSums.hpp"
 #include "./data_structure/Segtree.hpp"

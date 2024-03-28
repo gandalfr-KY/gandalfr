@@ -21,9 +21,9 @@ class TestException : public std::exception {
 
   public:
     const char *file;
-    int line;
+    i32 line;
 
-    TestException(const std::string &message, const char *file, int line)
+    TestException(const std::string &message, const char *file, i32 line)
         : msg(message), file(file), line(line) {}
 
     const char *what() const noexcept override { return msg.c_str(); }

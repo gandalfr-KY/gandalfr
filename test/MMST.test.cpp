@@ -3,15 +3,11 @@
 #include "gandalfr/other/io.hpp"
 #include "gandalfr/graph/ManhattanMST.hpp"
 using namespace std;
-using ll = long long;
-#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
-#define all(a) (a).begin(),(a).end()
-
 using namespace gandalfr;
 
 int main(void){
  
-    int N;
+    i32 N;
     cin >> N;
     vector<i64> X(N), Y(N);
     rep(i,0,N){

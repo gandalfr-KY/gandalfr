@@ -11,11 +11,11 @@ using namespace gandalfr;
 
 int main(void){
     
-    int N, M, s, t;
+    i32 N, M, s, t;
     cin >> N >> M >> s >> t;
     Graph<WEIGHTED, DIRECTED> G(N, M);
     rep(i,0,M) {
-        int a, b, c;
+        i32 a, b, c;
         cin >> a >> b >> c;
         G.addEdge(a, b, c);
     }
@@ -25,7 +25,7 @@ int main(void){
         cout << -1 << endl;
     } else {
         auto path = G.shortestPath(s, t);
-        int Y = path.size();
+        i32 Y = path.size();
         cout << X << " " << Y << endl;
         for (auto& e : path) {
             cout << e.v0 << " " << e.v1 << endl;

@@ -21,16 +21,13 @@ template <class S, S (*op)(S, S), S (*e)()> class SparseTable {
     // 要素の配列 vec で初期化
     void init(const std::vector<S> &vec) {
         table = {vec};
-        log_table.clear();
-
         for (u32 i = 0; (1UL << i) < table[i].size(); i++) {
             table.push_back({});
             for (u32 j = 0; j + (1 << i) < table[i].size(); j++) {
                 table[i + 1].push_back(op(table[i][j], table[i][j + (1 << i)]));
             }
         }
-
-        log_table.resize(vec.size() + 1, 0);
+        log_table.assign(vec.size() + 1, 0);
         for (i32 i = 2; i <= (i32)vec.size(); i++) {
             log_table[i] = log_table[i >> 1] + 1;
         }

@@ -36,7 +36,7 @@ template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums {
 // id  := 単位元
 // verify: https://atcoder.jp/contests/abc203/submissions/45759205
 template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums2d {
-  public:
+  private:
     i32 h, w;
     std::vector<std::vector<S>> acm;
 

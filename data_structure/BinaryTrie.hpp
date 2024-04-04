@@ -8,11 +8,11 @@
 
 namespace gandalfr {
 
-template <u32 bitWidth> class BinaryTrie {
-    static_assert(bitWidth <= 64, "bitWidth must be 64 or less");
+template <u32 bit_width> class BinaryTrie {
+    static_assert(bit_width <= 64, "bit_width must be 64 or less");
     struct BinaryTrieNode {
         std::shared_ptr<BinaryTrieNode> children[2] = {nullptr, nullptr};
-        u32 level, subCnt = 0;
+        u32 level, sub_cnt = 0;
         u64 xval = 0;
 
         BinaryTrieNode(u32 lvl) : level(lvl) {}
@@ -34,96 +34,96 @@ template <u32 bitWidth> class BinaryTrie {
         }
     };
     using NodePtr = std::shared_ptr<BinaryTrieNode>;
-    NodePtr rootPtr = std::make_shared<BinaryTrieNode>(bitWidth);
+    NodePtr root_ptr = std::make_shared<BinaryTrieNode>(bit_width);
 
     NodePtr getNodePtr(u64 n) const {
-        NodePtr curPtr = rootPtr;
-        while (!curPtr->isLeaf()) {
-            curPtr->affectXor();
-            NodePtr &nxtPtr = curPtr->children[curPtr->getBit(n)];
-            if (!nxtPtr) {
+        NodePtr cur_ptr = root_ptr;
+        while (!cur_ptr->isLeaf()) {
+            cur_ptr->affectXor();
+            NodePtr &nxt_ptr = cur_ptr->children[cur_ptr->getBit(n)];
+            if (!nxt_ptr) {
                 return nullptr;
             }
-            curPtr = nxtPtr;
+            cur_ptr = nxt_ptr;
         }
-        return curPtr;
+        return cur_ptr;
     }
 
   public:
     void insert(u64 n) {
-        NodePtr curPtr = rootPtr;
-        while (!curPtr->isLeaf()) {
-            curPtr->affectXor();
-            curPtr->subCnt += 1;
-            NodePtr &nxtPtr = curPtr->children[curPtr->getBit(n)];
-            if (!nxtPtr) {
-                nxtPtr = std::make_shared<BinaryTrieNode>(curPtr->level - 1);
+        NodePtr cur_ptr = root_ptr;
+        while (!cur_ptr->isLeaf()) {
+            cur_ptr->affectXor();
+            cur_ptr->sub_cnt += 1;
+            NodePtr &nxt_ptr = cur_ptr->children[cur_ptr->getBit(n)];
+            if (!nxt_ptr) {
+                nxt_ptr = std::make_shared<BinaryTrieNode>(cur_ptr->level - 1);
             }
-            curPtr = nxtPtr;
+            cur_ptr = nxt_ptr;
         }
-        assert(curPtr->isLeaf());
-        curPtr->subCnt += 1;
+        assert(cur_ptr->isLeaf());
+        cur_ptr->sub_cnt += 1;
     }
 
-    u32 size() const { return rootPtr->subCnt; }
+    u32 size() const { return root_ptr->sub_cnt; }
 
     u32 count(u64 n) const {
         NodePtr ptr = getNodePtr(n);
-        return (ptr ? ptr->subCnt : 0);
+        return (ptr ? ptr->sub_cnt : 0);
     }
 
     void erase(u64 n) const {
         u32 cnt = count(n);
         if (cnt == 0)
             return;
-        NodePtr curPtr = rootPtr;
+        NodePtr cur_ptr = root_ptr;
         while (true) {
-            curPtr->affectXor();
-            curPtr->subCnt -= cnt;
-            NodePtr &nxtPtr = curPtr->children[curPtr->getBit(n)];
-            if (nxtPtr->subCnt == cnt) {
-                nxtPtr = nullptr;
+            cur_ptr->affectXor();
+            cur_ptr->sub_cnt -= cnt;
+            NodePtr &nxt_ptr = cur_ptr->children[cur_ptr->getBit(n)];
+            if (nxt_ptr->sub_cnt == cnt) {
+                nxt_ptr = nullptr;
                 return;
             }
-            curPtr = nxtPtr;
+            cur_ptr = nxt_ptr;
         }
     }
 
     void eraseOne(u64 n) const {
         if (count(n) == 0)
             return;
-        NodePtr curPtr = rootPtr;
-        while (!curPtr->isLeaf()) {
-            curPtr->affectXor();
-            curPtr->subCnt -= 1;
-            NodePtr &nxtPtr = curPtr->children[curPtr->getBit(n)];
-            if (nxtPtr->subCnt == 1) {
-                nxtPtr = nullptr;
+        NodePtr cur_ptr = root_ptr;
+        while (!cur_ptr->isLeaf()) {
+            cur_ptr->affectXor();
+            cur_ptr->sub_cnt -= 1;
+            NodePtr &nxt_ptr = cur_ptr->children[cur_ptr->getBit(n)];
+            if (nxt_ptr->sub_cnt == 1) {
+                nxt_ptr = nullptr;
                 return;
             }
-            curPtr = nxtPtr;
+            cur_ptr = nxt_ptr;
         }
-        curPtr->subCnt -= 1;
+        cur_ptr->sub_cnt -= 1;
     }
 
     // n: 0-indexed
     u64 nthElement(u32 n) const {
         assert(n < size());
         u64 ret = 0;
-        NodePtr curPtr = rootPtr;
-        while (!curPtr->isLeaf()) {
-            curPtr->affectXor();
+        NodePtr cur_ptr = root_ptr;
+        while (!cur_ptr->isLeaf()) {
+            cur_ptr->affectXor();
             ret <<= 1;
-            u32 state = curPtr->stateOfChildren();
-            NodePtr &zPtr = curPtr->children[0];
-            NodePtr &oPtr = curPtr->children[1];
+            u32 state = cur_ptr->stateOfChildren();
+            NodePtr &z_ptr = cur_ptr->children[0];
+            NodePtr &o_ptr = cur_ptr->children[1];
             assert(state > 0);
-            if (state == 1 || (state == 3 && n < zPtr->subCnt)) {
-                curPtr = zPtr;
+            if (state == 1 || (state == 3 && n < z_ptr->sub_cnt)) {
+                cur_ptr = z_ptr;
             } else {
-                n -= (state & 1 ? zPtr->subCnt : 0);
+                n -= (state & 1 ? z_ptr->sub_cnt : 0);
                 ret |= 1;
-                curPtr = oPtr;
+                cur_ptr = o_ptr;
             }
         }
         return ret;
@@ -132,19 +132,19 @@ template <u32 bitWidth> class BinaryTrie {
     // https://atcoder.jp/contests/abc312/submissions/51738375
     u32 lowerBound(u64 n) const {
         u32 ret = 0;
-        NodePtr curPtr = rootPtr;
-        while (!curPtr->isLeaf()) {
-            curPtr->affectXor();
-            bool b = curPtr->getBit(n);
-            NodePtr &nxtPtr = curPtr->children[b];
-            NodePtr &zPtr = curPtr->children[0];
-            if (b && zPtr) {
-                ret += zPtr->subCnt;
+        NodePtr cur_ptr = root_ptr;
+        while (!cur_ptr->isLeaf()) {
+            cur_ptr->affectXor();
+            bool b = cur_ptr->getBit(n);
+            NodePtr &nxt_ptr = cur_ptr->children[b];
+            NodePtr &z_ptr = cur_ptr->children[0];
+            if (b && z_ptr) {
+                ret += z_ptr->sub_cnt;
             }
-            if (!nxtPtr) {
+            if (!nxt_ptr) {
                 break;
             }
-            curPtr = nxtPtr;
+            cur_ptr = nxt_ptr;
         }
         return ret;
     }
@@ -153,8 +153,8 @@ template <u32 bitWidth> class BinaryTrie {
         return (n < UMAX64 ? lowerBound(n + 1) : size());
     }
 
-    void applyXor(u64 n) { rootPtr->xval ^= n; }
+    void applyXor(u64 n) { root_ptr->xval ^= n; }
 
-    void clear() { rootPtr = std::make_shared<BinaryTrieNode>(bitWidth); }
+    void clear() { root_ptr = std::make_shared<BinaryTrieNode>(bit_width); }
 };
 } // namespace gandalfr

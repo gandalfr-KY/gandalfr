@@ -91,15 +91,16 @@ template <> struct Edge<UNWEIGHTED> {
  * @tparam is_directed 有向グラフかとうか
  */
 template <bool is_weighted, bool is_directed> class Graph {
-  private:
-    using Edge_t = Edge<is_weighted>;
-    using Edge_ptr = std::shared_ptr<Edge_t>;
-    using Cost = typename Edge_t::Cost;
+  public:
+    using EdgeType = Edge<is_weighted>;
+    using EdgePtr = std::shared_ptr<EdgeType>;
+    using Cost = typename EdgeType::Cost;
     using Pair = std::pair<Cost, i32>;
 
+  private:
     i32 N = 0;
-    std::vector<std::vector<Edge_ptr>> G;
-    std::vector<Edge_ptr> E;
+    std::vector<std::vector<EdgePtr>> G;
+    std::vector<EdgePtr> E;
     Cost cost_sum = 0;
     Cost CMAX = std::numeric_limits<Cost>::max(),
          CMIN = std::numeric_limits<Cost>::lowest();
@@ -136,16 +137,16 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @param n ノード番号
      * @return ノード n からの隣接頂点のリストの const 参照
      */
-    const std::vector<Edge_ptr> &operator[](i32 n) const { return G[n]; }
+    const std::vector<EdgePtr> &operator[](i32 n) const { return G[n]; }
 
     /**
      * @return グラフ全体の辺のリストの const 参照
      */
-    const std::vector<Edge_ptr> &getAllEdges() const { return E; }
+    const std::vector<EdgePtr> &getAllEdges() const { return E; }
     /**
      * @return idx 番目に張られた辺の const 参照
      */
-    const Edge_ptr &getEdge(i32 idx) const { return E[idx]; }
+    const EdgePtr &getEdge(i32 idx) const { return E[idx]; }
 
     void print() const {
         std::cout << N << " " << E.size() << std::endl;
@@ -162,8 +163,8 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @param e 辺
      * @attention 渡した辺の id は保持される
      */
-    void addEdge(const Edge_t &e) {
-        auto shared_ptr_to_edge = std::make_shared<Edge_t>(e);
+    void addEdge(const EdgeType &e) {
+        auto shared_ptr_to_edge = std::make_shared<EdgeType>(e);
         E.push_back(shared_ptr_to_edge);
         G[e.v0].push_back(shared_ptr_to_edge);
         if constexpr (!is_directed) {
@@ -212,11 +213,11 @@ template <bool is_weighted, bool is_directed> class Graph {
     }
 
   private:
-    std::vector<Edge_ptr> Dijkstra_impl(std::vector<Cost> &dist,
-                                        i32 start_node) const {
+    std::vector<EdgePtr> dijkstraImpl(std::vector<Cost> &dist,
+                                      i32 start_node) const {
         std::priority_queue<Pair, std::vector<Pair>, std::greater<Pair>> q;
         q.push({0, start_node});
-        std::vector<Edge_ptr> prev_edge(N, nullptr);
+        std::vector<EdgePtr> prev_edge(N, nullptr);
         std::vector<bool> visited(N, false);
         while (!q.empty()) {
             Cost cur_dist = q.top().first;
@@ -240,11 +241,10 @@ template <bool is_weighted, bool is_directed> class Graph {
         return prev_edge;
     }
 
-    std::vector<Edge_ptr> bfs_impl(std::vector<i32> &dist,
-                                   i32 start_node) const {
+    std::vector<EdgePtr> bfsImpl(std::vector<i32> &dist, i32 start_node) const {
         std::queue<i32> q;
         q.push(start_node);
-        std::vector<Edge_ptr> prev_edge(N, nullptr);
+        std::vector<EdgePtr> prev_edge(N, nullptr);
         while (!q.empty()) {
             i32 cu = q.front();
             q.pop();
@@ -272,9 +272,9 @@ template <bool is_weighted, bool is_directed> class Graph {
         dist[start_node] = 0;
 
         if constexpr (is_weighted) {
-            Dijkstra_impl(dist, start_node);
+            dijkstraImpl(dist, start_node);
         } else {
-            bfs_impl(dist, start_node);
+            bfsImpl(dist, start_node);
         }
 
         for (auto &x : dist)
@@ -288,22 +288,22 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @attention 到達可能でないとき、空の配列で返る
      * @attention 負閉路があるとき正しい動作を保証しない
      */
-    std::vector<Edge_t> shortestPath(i32 start_node, i32 end_node) const {
+    std::vector<EdgeType> shortestPath(i32 start_node, i32 end_node) const {
         std::vector<Cost> dist(N, CMAX);
         dist[start_node] = 0;
-        std::vector<Edge_ptr> prev_edge(N, nullptr);
+        std::vector<EdgePtr> prev_edge(N, nullptr);
 
         if constexpr (is_weighted) {
-            prev_edge = Dijkstra_impl(dist, start_node);
+            prev_edge = dijkstraImpl(dist, start_node);
         } else {
-            prev_edge = bfs_impl(dist, start_node);
+            prev_edge = bfsImpl(dist, start_node);
         }
 
         if (dist[end_node] == CMAX)
             return {};
 
         i32 cu = end_node;
-        std::vector<Edge_t> route;
+        std::vector<EdgeType> route;
         while (cu != start_node) {
             auto e = prev_edge[cu];
             if (cu == e->v0) {

@@ -39,8 +39,12 @@ constexpr double PI = M_PI;
 
 const i32 INF = 1001001001;
 const i64 INFLL = 1001001001001001001;
+// j <= i < n で for
 #define rep(i, j, n) for (i64 i = (i64)(j); i < (i64)(n); i++)
-#define rrep(i, j, n) for (i64 i = (i64)(n - 1); i >= (i64)(j); i--)
+// j <= i < n で for (逆順)
+#define revrep(i, j, n) for (i64 i = (i64)(n - 1); i >= (i64)(j); i--)
+// T の空でない部分集合の列挙
+#define subrep(S, T) for (i64 S = (i64)(T); S; S = (S - 1) & T)
 #define all(a) (a).begin(), (a).end()
 #define LF cout << endl
 template <typename T> void print_debug(T t) { std::cerr << t << std::endl; }

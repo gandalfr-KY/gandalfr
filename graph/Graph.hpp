@@ -345,69 +345,74 @@ template <bool is_weighted, bool is_directed> class Graph {
         }
     }
 
-    //     /**
-    //      * @brief 行きがけ順に dfs
-    //      */
-    //     std::vector<i32> preorder(i32 start) const {
-    //         std::vector<i32> result;
-    //         reset_visited_flag(start);
-    //         visited[start] = true;
-    //         auto dfs = [&](auto self, i32 cu) -> void {
-    //             result.push_back(cu);
-    //             for (auto &e : G[cu]) {
-    //                 i32 to = e->dst(cu);
-    //                 if (visited[to])
-    //                     continue;
-    //                 visited[to] = true;
-    //                 self(self, to);
-    //             }
-    //         };
-    //         dfs(dfs, start);
-    //         return result;
-    //     }
+  private:
+    void preorderImpl(i32 cu, std::vector<bool>& visited, std::vector<i32>& result) const {
+        result.push_back(cu);
+        for (auto &e : G[cu]) {
+            i32 to = e->dst(cu);
+            if (visited[to])
+                continue;
+            visited[to] = true;
+            preorderImpl(to, visited, result);
+        }
+    }
 
-    //     /**
-    //      * @brief 通りがけ順に dfs
-    //      */
-    //     std::vector<i32> inorder(i32 start) const {
-    //         std::vector<i32> result;
-    //         reset_visited_flag(start);
-    //         visited[start] = true;
-    //         auto dfs = [&](auto self, i32 cu) -> void {
-    //             for (auto &e : G[cu]) {
-    //                 i32 to = e->dst(cu);
-    //                 if (visited[to])
-    //                     continue;
-    //                 visited[to] = true;
-    //                 result.push_back(cu);
-    //                 self(self, to);
-    //             }
-    //             result.push_back(cu);
-    //         };
-    //         dfs(dfs, start);
-    //         return result;
-    //     }
+    void inorderImpl(i32 cu, std::vector<bool>& visited, std::vector<i32>& result) const {
+        for (auto &e : G[cu]) {
+            i32 to = e->dst(cu);
+            if (visited[to])
+                continue;
+            visited[to] = true;
+            result.push_back(cu);
+            inorderImpl(to, visited, result);
+        }
+        result.push_back(cu);
+    }
 
-    //     /**
-    //      * @brief 帰りがけ順に dfs
-    //      */
-    //     std::vector<i32> postorder(i32 start) const {
-    //         std::vector<i32> result;
-    //         reset_visited_flag(start);
-    //         visited[start] = true;
-    //         auto dfs = [&](auto self, i32 cu) -> void {
-    //             for (auto &e : G[cu]) {
-    //                 i32 to = e->dst(cu);
-    //                 if (visited[to])
-    //                     continue;
-    //                 visited[to] = true;
-    //                 self(self, to);
-    //             }
-    //             result.push_back(cu);
-    //         };
-    //         dfs(dfs, start);
-    //         return result;
-    //     }
+    void postorderImpl(i32 cu, std::vector<bool>& visited, std::vector<i32>& result) const {
+        for (auto &e : G[cu]) {
+            i32 to = e->dst(cu);
+            if (visited[to])
+                continue;
+            visited[to] = true;
+            postorderImpl(to, visited, result);
+        }
+        result.push_back(cu);
+    }
+
+  public:
+    /**
+     * @brief 行きがけ順に dfs
+     */
+    std::vector<i32> preorder(i32 start) const {
+        std::vector<i32> result;
+        std::vector<bool> visited(N, false);
+        visited[start] = true;
+        preorderImpl(start, visited, result);
+        return result;
+    }
+
+    /**
+     * @brief 通りがけ順に dfs
+     */
+    std::vector<i32> inorder(i32 start) const {
+        std::vector<i32> result;
+        std::vector<bool> visited(N, false);
+        visited[start] = true;
+        inorderImpl(start, visited, result);
+        return result;
+    }
+
+    /**
+     * @brief 帰りがけ順に dfs
+     */
+    std::vector<i32> postorder(i32 start) const {
+        std::vector<i32> result;
+        std::vector<bool> visited(N, false);
+        visited[start] = true;
+        postorderImpl(start, visited, result);
+        return result;
+    }
 
     /**
      * @return 最小全域森

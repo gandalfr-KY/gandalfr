@@ -346,7 +346,8 @@ template <bool is_weighted, bool is_directed> class Graph {
     }
 
   private:
-    void preorderImpl(i32 cu, std::vector<bool>& visited, std::vector<i32>& result) const {
+    void preorderImpl(i32 cu, std::vector<bool> &visited,
+                      std::vector<i32> &result) const {
         result.push_back(cu);
         for (auto &e : G[cu]) {
             i32 to = e->dst(cu);
@@ -357,7 +358,8 @@ template <bool is_weighted, bool is_directed> class Graph {
         }
     }
 
-    void inorderImpl(i32 cu, std::vector<bool>& visited, std::vector<i32>& result) const {
+    void inorderImpl(i32 cu, std::vector<bool> &visited,
+                     std::vector<i32> &result) const {
         for (auto &e : G[cu]) {
             i32 to = e->dst(cu);
             if (visited[to])
@@ -369,7 +371,8 @@ template <bool is_weighted, bool is_directed> class Graph {
         result.push_back(cu);
     }
 
-    void postorderImpl(i32 cu, std::vector<bool>& visited, std::vector<i32>& result) const {
+    void postorderImpl(i32 cu, std::vector<bool> &visited,
+                       std::vector<i32> &result) const {
         for (auto &e : G[cu]) {
             i32 to = e->dst(cu);
             if (visited[to])

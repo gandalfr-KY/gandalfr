@@ -5,8 +5,6 @@
 #include <utility>
 
 #include "gandalfr/types.hpp"
-#include <assert.h>
-#include <memory>
 
 namespace gandalfr {
 

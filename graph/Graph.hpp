@@ -102,7 +102,7 @@ template <bool is_weighted, bool is_directed> class Graph {
     std::vector<std::vector<EdgePtr>> G;
     std::vector<EdgePtr> E;
     Cost cost_sum = 0;
-    Cost CMAX = std::numeric_limits<Cost>::max(),
+    static constexpr Cost CMAX = std::numeric_limits<Cost>::max(),
          CMIN = std::numeric_limits<Cost>::lowest();
 
   public:
@@ -191,18 +191,6 @@ template <bool is_weighted, bool is_directed> class Graph {
     void addEdge(i32 from, i32 to) {
         static_assert(!is_weighted);
         addEdge({from, to, (i32)E.size()});
-    }
-    
-    Graph rev() const {
-        if constexpr (!is_directed) {
-            return *this;
-        } else {
-            Graph ret(N, E.size());
-            for (auto &e : E) {
-                ret.addEdge(e->rev());
-            }
-            return ret;
-        }
     }
 
     /**
@@ -345,6 +333,18 @@ template <bool is_weighted, bool is_directed> class Graph {
         return mt;
     }
 
+    Graph rev() const {
+        if constexpr (!is_directed) {
+            return *this;
+        } else {
+            Graph ret(N, E.size());
+            for (auto &e : E) {
+                ret.addEdge(e->rev());
+            }
+            return ret;
+        }
+    }
+
   private:
     void preorderImpl(i32 cu, std::vector<bool> &visited,
                       std::vector<i32> &result) const {
@@ -438,22 +438,33 @@ template <bool is_weighted, bool is_directed> class Graph {
         return ret;
     }
 
-    bool isBibartite() const {
-        static_assert(!is_directed);
-        std::vector<i32> col(N, -1);
-        for (i32 i = 0; i < N; ++i) {
-            if (col[i] == -1) {
-                col[i] = 0;
-                for (auto x : preorder(i)) {
-                    for (auto& e : G[x]) {
-                        i32 dst = e->dst(x);
-                        if (col[dst] == col[x]) return false;
-                        col[dst] = !col[x];
-                    }
-                }
-            }
-        }
-        return true;
-    }
+    //     bool is_bibartite() {
+    //         std::vector<i32> col(N, -1);
+    //         auto bfs = [&](i32 start) -> bool {
+    //             std::queue<i32> q;
+    //             q.push(start);
+    //             col[start] = 0;
+    //             while (!q.empty()) {
+    //                 i32 cur = q.front();
+    //                 q.pop();
+    //                 for (auto &e : G[cur]) {
+    //                     i32 to = e->dst(cur);
+    //                     if (col[to] == -1) {
+    //                         col[to] = (col[cur] == 0);
+    //                         q.push(to);
+    //                     } else if (col[cur] == col[to]) {
+    //                         return false;
+    //                     }
+    //                 }
+    //             }
+    //             return true;
+    //         };
+    //         for (i32 i = 0; i < N; ++i) {
+    //             if (col[i] == -1 && !bfs(i)) {
+    //                 return false;
+    //             }
+    //         }
+    //         return true;
+    //     }
 };
 } // namespace gandalfr

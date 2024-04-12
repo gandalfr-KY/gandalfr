@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <iterator>
+#include <numeric>
 #include <utility>
 #include <vector>
 
@@ -12,6 +13,12 @@
 namespace gandalfr {
 
 template <class T, i32 dim> struct Vector {
+    static constexpr Vector invalid() {
+        Vector ret;
+        std::fill(ret.v, ret.v + dim, std::numeric_limits<T>::max());
+        return ret;
+    }
+
     Vector() = default;
     Vector(std::initializer_list<T> init) {
         assert(init.size() <= dim);

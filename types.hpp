@@ -36,6 +36,7 @@ constexpr i64 MOD998 = 998244353;
 constexpr i64 MOD107 = 1000000007;
 
 constexpr double PI = M_PI;
+constexpr double eps = 1e-9;
 
 const i32 INF = 1001001001;
 const i64 INFLL = 1001001001001001001;
@@ -46,6 +47,7 @@ const i64 INFLL = 1001001001001001001;
 // T の空でない部分集合の列挙
 #define subrep(S, T) for (i64 S = (i64)(T); S; S = (S - 1) & T)
 #define all(a) (a).begin(), (a).end()
+#define rall(a) (a).rbegin(), (a).rend()
 #define LF cout << endl
 template <typename T> void print_debug(T t) { std::cerr << t << std::endl; }
 template <typename First, typename... Rest>

@@ -30,6 +30,4 @@ inline u64 singleBit(i32 p) { return 1ULL << p; }
 // 先頭 p ビットが 1
 inline u64 leadingBit(u32 p) { return singleBit(p) - 1; }
 
-u32 popCount(u64 b) { return __builtin_popcountll(b); }
-
 } // namespace gandalfr

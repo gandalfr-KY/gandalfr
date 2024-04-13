@@ -13,16 +13,19 @@ namespace gandalfr {
  * f: Func は f(x: T) の形で呼び出せ、返り値の型が bool
  * の関数であることを要請する
  */
-template <class T, class Func> void bisection(T &t, T &f, const Func &F) {
-    static_assert(std::is_integral_v<T> && std::is_signed_v<T>,
-                  "T must be a signed integral type.");
-    static_assert(std::is_invocable_r_v<bool, Func, T>,
-                  "Func must be invocable with T and return bool.");
-    assert(F(t) && !F(f));
+template <class Func>
+i64 bisection(i64 t, i64 f, const Func &F, bool enable_boundary_check = true) {
+    static_assert(std::is_invocable_r_v<bool, Func, i64>,
+                  "Func must be invocable with i64 and return bool.");
+    if (enable_boundary_check) {
+        assert(F(t));
+        assert(!F(f));
+    }
     while (std::abs(t - f) > 1) {
-        T mid = (t & f) + ((t ^ f) >> 1); // (t + f) / 2 without overflow
+        i64 mid = (t & f) + ((t ^ f) >> 1); // (t + f) / 2 without overflow
         (F(mid) ? t : f) = mid;
     }
+    return t;
 }
 
 /**
@@ -31,13 +34,18 @@ template <class T, class Func> void bisection(T &t, T &f, const Func &F) {
  * の関数であることを要請する 終了条件は |t - f| < eps
  */
 template <class Func>
-void bisection(double &t, double &f, const Func &F, double eps = 1e-9) {
+double bisection(double t, double f, const Func &F, double eps = 1e-9,
+                 bool enable_boundary_check = true) {
     static_assert(std::is_invocable_r_v<bool, Func, double>);
-    assert(F(t) && !F(f));
+    if (enable_boundary_check) {
+        assert(F(t));
+        assert(!F(f));
+    }
     while (std::abs(t - f) > eps) {
         double mid = (t + f) / 2;
         (F(mid) ? t : f) = mid;
     }
+    return t;
 }
 
 /**

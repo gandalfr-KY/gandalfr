@@ -31,9 +31,9 @@ struct RHCode {
     static constexpr i32 P1 = 998244353;
     static constexpr i32 P2 = 1000000007;
     static constexpr i32 P3 = 1000000009;
-    static constexpr i32 B1 = internal::determinBase<P1, UMAX8>();
-    static constexpr i32 B2 = internal::determinBase<P2, UMAX8>();
-    static constexpr i32 B3 = internal::determinBase<P3, UMAX8>();
+    static constexpr i32 B1 = internal::determinBase<P1, u8MAX>();
+    static constexpr i32 B2 = internal::determinBase<P2, u8MAX>();
+    static constexpr i32 B3 = internal::determinBase<P3, u8MAX>();
 
     i32 sz = 0;
     Mint<P1> code1{0};

@@ -8,6 +8,8 @@
 #include <utility>
 #include <vector>
 
+namespace gandalfr {
+
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
     for (size_t i = 0; i < v.size(); ++i) {
@@ -94,4 +96,21 @@ template <typename T1, typename T2>
 std::istream &operator>>(std::istream &is, std::pair<T1, T2> &p) {
     is >> p.first >> p.second;
     return is;
+}
+
+template<typename T>
+void print_debug(const T& t) { std::cerr << t << std::endl; }
+template <typename First, typename... Rest>
+void print_debug(First parm1, Rest... parm) {
+    std::cerr << parm1 << ", ", print_debug(parm...);
+}
+#define debug(...)                                                             \
+    std::cerr << #__VA_ARGS__ << ": ";                                         \
+    print_debug(__VA_ARGS__);
+template <typename T> inline bool chmax(T &a, const T &b) {
+    return a < b && (a = b, true);
+} // namespace gandalfr
+template <typename T> inline bool chmin(T &a, const T &b) {
+    return a > b && (a = b, true);
+}
 }

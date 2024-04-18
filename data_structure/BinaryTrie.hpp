@@ -150,7 +150,7 @@ template <u32 bit_width> class BinaryTrie {
     }
 
     u32 upperBound(u64 n) const {
-        return (n < UMAX64 ? lowerBound(n + 1) : size());
+        return (n < u64MAX ? lowerBound(n + 1) : size());
     }
 
     void applyXor(u64 n) { root_ptr->xval ^= n; }

@@ -47,6 +47,15 @@ template <class T> class Matrix {
         return ret;
     }
 
+    bool isZeroRow(i32 i) const {
+        for (i32 j = 0; j < W; ++j) {
+            if (table[i][j] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     Matrix() = default;
     Matrix(i32 _H, i32 _W, T val = 0)
         : H(_H), W(_W), table(vArr(val, _W), _H) {}
@@ -67,8 +76,8 @@ template <class T> class Matrix {
         H = _H, W = _W;
         table.resize(_H, vArr(val, _H));
     }
-    i32 size_H() const { return H; }
-    i32 size_W() const { return W; }
+    i32 sizeH() const { return H; }
+    i32 sizeW() const { return W; }
     void transpose() {
         Matrix ret(W, H);
         for (i32 i = 0; i < H; i++)
@@ -83,12 +92,12 @@ template <class T> class Matrix {
     /**
      * @brief 第 i 行, 第 j 行を入れ替える
      */
-    void row_swap(i32 i, i32 j) { table[i].swap(table[j]); }
+    void rowSwap(i32 i, i32 j) { table[i].swap(table[j]); }
 
     /**
      * @attention O(n^3)
      */
-    std::vector<RowtransOp> sweep_method() {
+    std::vector<RowtransOp> sweepMethod() {
         std::vector<RowtransOp> hist;
         i32 h = 0, w = 0;
         while (h < H && w < W) {
@@ -97,14 +106,18 @@ template <class T> class Matrix {
                 ++piv;
             }
             if (piv < H) {
-                hist.emplace_back(RowtransOp{SWAP, h, piv, 0});
-                row_swap(h, piv);
+                if (h != piv) {
+                    hist.emplace_back(RowtransOp{SWAP, h, piv, 0});
+                    rowSwap(h, piv);
+                }
                 T inv = 1 / table[h][w];
-                hist.emplace_back(RowtransOp{SCALE, -1, w, inv});
+                hist.emplace_back(RowtransOp{SCALE, -1, h, inv});
                 table[h] *= inv;
-                for (i32 j = h + 1; j < H; j++) {
-                    hist.emplace_back(RowtransOp{ADD, h, j, -table[j][w]});
-                    table[j] -= table[h] * table[j][w];
+                for (i32 i = 0; i < H; i++) {
+                    if (i != h) {
+                        hist.emplace_back(RowtransOp{ADD, h, i, -table[i][w]});
+                        table[i] -= table[h] * table[i][w];
+                    }
                 }
                 ++h;
             }
@@ -114,18 +127,18 @@ template <class T> class Matrix {
     }
 
     i32 rank() const {
-        auto U(*this);
-        U.sweep_method();
-        i32 r = 0;
-        for (i32 i = 0; i < H; ++i) {
-            for (i32 j = i; j < W; ++j) {
-                if (U.table[i][j] != 0) {
-                    r++;
-                    break;
-                }
+        Matrix U(*this);
+        U.sweepMethod();
+        i32 i = 0, j = 0;
+        while (i < H) {
+            while (j < W && U[i][j] != 1) {
+                ++j;
             }
+            if (j == W)
+                break;
+            ++i;
         }
-        return r;
+        return i;
     }
 
     T det() const {
@@ -134,7 +147,7 @@ template <class T> class Matrix {
         }
         Matrix U(*this);
         T d = 1;
-        auto hist = U.sweep_method();
+        auto hist = U.sweepMethod();
         if (U.table[H - 1][H - 1] == 0) {
             return 0;
         }
@@ -156,7 +169,7 @@ template <class T> class Matrix {
             throw InvalidOperationException();
         }
         Matrix INV(Matrix::E(H)), U(*this);
-        auto hist = U.sweep_method();
+        auto hist = U.sweepMethod();
         if (U.table[H - 1][H - 1] == 0) {
             return nullMatrix();
         }
@@ -183,6 +196,47 @@ template <class T> class Matrix {
         return INV;
     }
 
+    std::vector<T> solveLinearEquation(std::vector<T> eq) const {
+        if (H != eq.size()) {
+            throw InvalidOperationException();
+        }
+
+        Matrix U(*this);
+        auto hist = U.sweepMethod();
+        for (auto &[op, tar, res, scl] : hist) {
+            switch (op) {
+            case SCALE:
+                eq[res] *= scl;
+                break;
+            case SWAP:
+                std::swap(eq[tar], eq[res]);
+                break;
+            case ADD:
+                eq[res] += eq[tar] * scl;
+                break;
+            }
+        }
+
+        i32 rnk = 0, w = 0;
+        std::vector<T> X(W, 0);
+        while (rnk < H) {
+            while (w < W && U[rnk][w] != 1) {
+                ++w;
+            }
+            if (w == W)
+                break;
+            X[w] = eq[rnk];
+            ++rnk;
+        }
+
+        for (i32 i = rnk; i < H; ++i) {
+            if (eq[i] != 0) {
+                return {};
+            }
+        }
+        return X;
+    }
+
     void print() const {
         for (i32 i = 0; i < H; i++) {
             for (i32 j = 0; j < W; j++) {
@@ -193,13 +247,12 @@ template <class T> class Matrix {
     }
 
     Matrix &operator+=(const Matrix &a) {
-        if (H != a.H || W != a.W) {
-            throw InvalidOperationException();
-        }
+        if (H != a.H || W != a.W)
+            [[unlikely]] { throw InvalidOperationException(); }
         this->table += a.table;
         return *this;
     }
-    Matrix &operator-=(const Matrix &a) {
+    Matrix &operator-=(const Matrix &a) [[unlikely]] {
         if (H != a.H || W != a.W) {
             throw InvalidOperationException();
         }
@@ -210,7 +263,7 @@ template <class T> class Matrix {
         this->table *= a;
         return *this;
     }
-    Matrix &operator*=(const Matrix &a) {
+    Matrix &operator*=(const Matrix &a) [[unlikely]] {
         if (W != a.H) {
             throw InvalidOperationException();
         }

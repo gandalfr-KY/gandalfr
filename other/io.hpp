@@ -98,8 +98,9 @@ std::istream &operator>>(std::istream &is, std::pair<T1, T2> &p) {
     return is;
 }
 
-template<typename T>
-void print_debug(const T& t) { std::cerr << t << std::endl; }
+template <typename T> void print_debug(const T &t) {
+    std::cerr << t << std::endl;
+}
 template <typename First, typename... Rest>
 void print_debug(First parm1, Rest... parm) {
     std::cerr << parm1 << ", ", print_debug(parm...);
@@ -113,4 +114,4 @@ template <typename T> inline bool chmax(T &a, const T &b) {
 template <typename T> inline bool chmin(T &a, const T &b) {
     return a > b && (a = b, true);
 }
-}
+} // namespace gandalfr

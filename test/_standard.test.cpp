@@ -5,7 +5,7 @@
 #include "testenv.hpp"
 #include "gandalfr/other/io.hpp"
 #include "gandalfr/other/RandomUtility.hpp"
-#include "gandalfr/standard/Vector.hpp"
+#include "gandalfr/geometry/Vector.hpp"
 #include "gandalfr/standard/utility.hpp"
 #include "gandalfr/standard/Fraction.hpp"
 #include "gandalfr/standard/RollingHash.hpp"

@@ -137,6 +137,7 @@ template <class T> class Matrix {
             if (j == W)
                 break;
             ++i;
+            ++j;
         }
         return i;
     }
@@ -148,7 +149,7 @@ template <class T> class Matrix {
         Matrix U(*this);
         T d = 1;
         auto hist = U.sweepMethod();
-        if (U.table[H - 1][H - 1] == 0) {
+        if (U.table[H - 1][W - 1] == 0) {
             return 0;
         }
         for (auto &[op, tar, res, scl] : hist) {
@@ -188,16 +189,15 @@ template <class T> class Matrix {
             }
         }
 
-        for (i32 i = H - 1; i >= 0; --i) {
-            for (i32 j = 0; j < i; ++j) {
-                INV.table[j] -= INV.table[i] * U.table[j][i];
-            }
-        }
         return INV;
     }
 
+    /**
+     * 等式 Ax=eq を満たすxの解の一つを求める。
+     * 存在しなければ空の配列を返す。
+     */
     std::vector<T> solveLinearEquation(std::vector<T> eq) const {
-        if (H != eq.size()) {
+        if (H != (i32)eq.size()) {
             throw InvalidOperationException();
         }
 
@@ -227,6 +227,7 @@ template <class T> class Matrix {
                 break;
             X[w] = eq[rnk];
             ++rnk;
+            ++w;
         }
 
         for (i32 i = rnk; i < H; ++i) {
@@ -240,20 +241,20 @@ template <class T> class Matrix {
     void print() const {
         for (i32 i = 0; i < H; i++) {
             for (i32 j = 0; j < W; j++) {
-                std::cout << table[i][j] << (j == W - 1 ? "" : " ");
+                std::cout << table[i][j] << (j == W - 1 ? "\n" : " ");
             }
-            std::cout << std::endl;
         }
     }
 
     Matrix &operator+=(const Matrix &a) {
-        if (H != a.H || W != a.W)
-            [[unlikely]] { throw InvalidOperationException(); }
+        if (H != a.H || W != a.W) [[unlikely]] {
+            throw InvalidOperationException();
+        }
         this->table += a.table;
         return *this;
     }
-    Matrix &operator-=(const Matrix &a) [[unlikely]] {
-        if (H != a.H || W != a.W) {
+    Matrix &operator-=(const Matrix &a) {
+        if (H != a.H || W != a.W) [[unlikely]] {
             throw InvalidOperationException();
         }
         this->table -= a.table;
@@ -263,8 +264,8 @@ template <class T> class Matrix {
         this->table *= a;
         return *this;
     }
-    Matrix &operator*=(const Matrix &a) [[unlikely]] {
-        if (W != a.H) {
+    Matrix &operator*=(const Matrix &a) {
+        if (W != a.H) [[unlikely]] {
             throw InvalidOperationException();
         }
         Matrix a_t(a), ret(H, a.W);
@@ -290,7 +291,7 @@ template <class T> class Matrix {
     Matrix operator/(const T &a) const { return Matrix(*this) /= a; }
 
     Matrix power(i64 n) const {
-        if (H != W) {
+        if (H != W) [[unlikely]] {
             throw InvalidOperationException();
         }
         Matrix ret(E(H)), x(*this);

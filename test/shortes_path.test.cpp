@@ -4,8 +4,6 @@
 #include "gandalfr/graph/Graph.hpp"
 using namespace std;
 using ll = long long;
-#define rep(i, j, n) for(ll i = (ll)(j); i < (ll)(n); i++)
-#define all(a) (a).begin(),(a).end()
 
 using namespace gandalfr;
 

@@ -34,6 +34,8 @@ template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums {
             return e();
         return op(acm[r], inv(acm[l]));
     }
+
+    const std::vector<S> &getAccumulatedData() const { return acm; }
 };
 
 // op  := 二項演算
@@ -81,6 +83,10 @@ template <class S, S (*op)(S, S), S (*e)(), S (*inv)(S)> class PrefixSums2d {
         return op(op(op(acm[h_end][w_end], inv(acm[h_end][w_begin])),
                      inv(acm[h_begin][w_end])),
                   acm[h_begin][w_begin]);
+    }
+
+    const std::vector<std::vector<S>> &getAccumulatedData() const {
+        return acm;
     }
 };
 } // namespace gandalfr

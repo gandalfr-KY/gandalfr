@@ -19,9 +19,7 @@ constexpr bool UNWEIGHTED = false;
 constexpr bool DIRECTED = true;
 constexpr bool UNDIRECTED = false;
 
-template <bool is_weighted> struct Edge {
-    Edge() = delete;
-};
+template <bool is_weighted> struct Edge { Edge() = delete; };
 
 template <> struct Edge<WEIGHTED> {
 

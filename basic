@@ -18,6 +18,7 @@
 #include "./other/StopWatch.hpp"
 #include "./other/bit.hpp"
 #include "./other/io.hpp"
+#include "./standard/BSGS.hpp"
 #include "./standard/Fraction.hpp"
 #include "./standard/Grid.hpp"
 #include "./standard/HashMap.hpp"

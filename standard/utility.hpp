@@ -34,14 +34,14 @@ i64 bisection(i64 t, i64 f, const Func &F, bool enable_boundary_check = true) {
  * の関数であることを要請する 終了条件は |t - f| < eps
  */
 template <class Func>
-double bisection_double(double t, double f, const Func &F, double eps = 1e-9,
+double bisection_double(double t, double f, const Func &F, i32 num_loop = 100,
                         bool enable_boundary_check = true) {
     static_assert(std::is_invocable_r_v<bool, Func, double>);
     if (enable_boundary_check) {
         assert(F(t));
         assert(!F(f));
     }
-    while (std::abs(t - f) > eps) {
+    while (num_loop--) {
         double mid = (t + f) / 2;
         (F(mid) ? t : f) = mid;
     }

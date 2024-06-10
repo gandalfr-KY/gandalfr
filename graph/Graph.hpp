@@ -115,6 +115,18 @@ template <bool is_weighted, bool is_directed> class Graph {
         }
     }
 
+    Graph &operator=(const Graph &other) {
+        if (this != &other) {
+            N = other.N;
+            G.clear(), E.clear();
+            cost_sum = 0;
+            for (auto &e : other.E) {
+                addEdge(*e);
+            }
+        }
+        return *this;
+    }
+
     void resize(i32 n) {
         assert(n >= N);
         N = n;
@@ -461,7 +473,8 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @brief 連結成分ごとに分解
      * @return {分解後のグラフ、grp_id, nd_id}
      */
-    std::tuple<std::vector<Graph>, std::vector<i32>, std::vector<i32>> discomponent() const {
+    std::tuple<std::vector<Graph>, std::vector<i32>, std::vector<i32>>
+    discomponent() const {
         UnionFind uf(N);
         for (auto &e : E) {
             uf.unite(e->v0, e->v1);
@@ -480,7 +493,7 @@ template <bool is_weighted, bool is_directed> class Graph {
         std::vector<Graph> Gs(n_grps);
         for (i32 i = 0; i < n_grps; ++i) {
             Gs[i].resize(grps[i].size());
-        } 
+        }
         for (auto &e : E) {
             i32 id = grp_id[e->v0];
             i32 u = nd_id[e->v0];
@@ -489,6 +502,5 @@ template <bool is_weighted, bool is_directed> class Graph {
         }
         return {Gs, grp_id, nd_id};
     }
-
 };
 } // namespace gandalfr

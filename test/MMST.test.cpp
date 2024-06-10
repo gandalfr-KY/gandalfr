@@ -14,10 +14,10 @@ int main(void){
         cin >> X[i] >> Y[i];
     }
  
-    ManhattanMST mmst(X, Y);
+    auto mmst = manhattanMST(X, Y);
  
-    cout << mmst.getMST().weight() << endl;
-    for(auto &e : mmst.getMST().getAllEdges()){
+    cout << mmst.weight() << endl;
+    for(auto &e : mmst.getAllEdges()){
         cout << e->v0 << " " << e->v1 << endl; 
     }
  

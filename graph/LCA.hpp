@@ -10,28 +10,27 @@ namespace gandalfr {
  */
 template <bool is_weighted> class LCA {
   private:
-    using Edge_t = Edge<is_weighted>;
-    using Cost = typename Edge<is_weighted>::Cost;
+    using EdgeType = Edge<is_weighted>;
+    using Cost = typename EdgeType::Cost;
     using Pair = std::pair<i32, i32>;
-    using Graph_t = Graph<is_weighted, UNDIRECTED>;
+    using GraphType = Graph<is_weighted, UNDIRECTED>;
 
     static Pair min(Pair a, Pair b) { return a.first < b.first ? a : b; }
     static constexpr Pair e() { return {0, 0}; }
 
-    const Graph_t *G = nullptr;
     std::vector<i32> idx;
     std::vector<Pair> depth;
     SparseTable<Pair, LCA::min, LCA::e> sps;
     std::vector<Cost> dist;
 
-    void EulerTour(i32 cu, i32 pa, i32 dep, i32 &cnt) {
+    void EulerTour(const GraphType &G, i32 cu, i32 pa, i32 dep, i32 &cnt) {
         idx[cu] = cnt;
-        for (auto &e : (*G)[cu]) {
+        for (const auto &e : G[cu]) {
             i32 to = e->dst(cu);
             if (to == pa)
                 continue;
             depth.emplace_back(Pair{dep, cu});
-            EulerTour(to, cu, dep + 1, ++cnt);
+            EulerTour(G, to, cu, dep + 1, ++cnt);
         }
         depth.emplace_back(Pair{dep, cu});
         cnt++;
@@ -39,14 +38,13 @@ template <bool is_weighted> class LCA {
 
   public:
     LCA() = default;
-    LCA(const Graph_t &graph, i32 root) { init(graph, root); }
+    LCA(const GraphType &G, i32 root) { init(G, root); }
 
-    void init(const Graph_t &graph, i32 root) {
-        G = &graph;
-        idx.resize(graph.numNodes());
-        dist = graph.distances(root, -1);
+    void init(const GraphType &G, i32 root) {
+        idx.resize(G.numNodes());
+        dist = G.distances(root, -1);
         i32 cnt = 0;
-        EulerTour(root, -1, 0, cnt);
+        EulerTour(G, root, -1, 0, cnt);
         sps.init(depth);
     }
 

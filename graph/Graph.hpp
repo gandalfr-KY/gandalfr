@@ -109,20 +109,46 @@ template <bool is_weighted, bool is_directed> class Graph {
     Graph() {}
     explicit Graph(i32 n) : N(n), G(n) {}
     Graph(i32 n, i32 m) : N(n), G(n) { E.reserve(m); }
-    Graph(const Graph &other) : Graph(other.N, other.numEdges()) {
-        for (auto &e : other.E) {
-            addEdge(*e);
+    Graph(const Graph &other) : N(other.N), G(other.N), cost_sum(other.cost_sum) {
+        for (i32 i = 0; i < (i32)other.G.size(); ++i) {
+            for (const auto &e : other[i]) {
+                G[i].push_back(std::make_shared<EdgeType>(*e));
+            }
         }
+        for (const auto &e : other.E) {
+            E.push_back(std::make_shared<EdgeType>(*e));
+        }
+    }
+    Graph(Graph &&other) noexcept : N(other.N), G(std::move(other.G)), E(std::move(other.E)), cost_sum(other.cost_sum) {
+        other.N = 0;
+        other.cost_sum = 0;
     }
 
     Graph &operator=(const Graph &other) {
         if (this != &other) {
             N = other.N;
             G.clear(), E.clear();
-            cost_sum = 0;
-            for (auto &e : other.E) {
-                addEdge(*e);
+            G.resize(other.G.size());
+            cost_sum = other.cost_sum;
+            for (i32 i = 0; i < (i32)other.G.size(); ++i) {
+                for (const auto &e : other.G[i]) {
+                    G[i].push_back(std::make_shared<EdgeType>(*e));
+                }
             }
+            for (const auto &e : other.E) {
+                E.push_back(std::make_shared<EdgeType>(*e));
+            }
+        }
+        return *this;
+    }
+    Graph &operator=(Graph &&other) noexcept {
+        if (this != &other) {
+            N = other.N;
+            G = std::move(other.G);
+            E = std::move(other.E);
+            cost_sum = other.cost_sum;
+            other.N = 0;
+            other.cost_sum = 0;
         }
         return *this;
     }
@@ -502,5 +528,54 @@ template <bool is_weighted, bool is_directed> class Graph {
         }
         return {Gs, grp_id, nd_id};
     }
+
+  private:
+    void SCCForward(i32 cu, std::vector<i32>& ord, std::vector<bool>& used) const {
+        if (used[cu])
+            return;
+        used[cu] = true;
+        for (auto &e : G[cu])
+            SCCForward(e->v1, ord, used);
+        ord.push_back(cu);
+    }
+
+    void SCCBackward(const Graph& R, i32 cu, i32 id, std::vector<i32>& nd_id) const {
+        if (nd_id[cu] != -1)
+            return;
+        nd_id[cu] = id;
+        for (auto &e : R[cu])
+            SCCBackward(R, e->v1, id, nd_id);
+    }
+
+  public:
+    /**
+     * @brief 強連結成分ごとに分解
+     * @return {縮約後のグラフ、nd_id}
+     */
+    std::tuple<Graph, std::vector<i32>>
+    SCC() const {
+        std::vector<i32> nd_id(N, -1);
+        std::vector<bool> used(N, false);
+        std::vector<i32> ord;
+
+        for (i32 i = 0; i < N; i++) {
+            SCCForward(i, ord, used);
+        }
+        i32 id = 0;
+        auto R(rev());
+        for (i32 i = N - 1; i >= 0; i--) {
+            if (nd_id[ord[i]] == -1) {
+                SCCBackward(R, ord[i], id, nd_id);
+                id++;
+            }
+        }
+
+        Graph S(id, numEdges());
+        for (auto &e : E) {
+            S.addEdge({nd_id[e->v0], nd_id[e->v1], e->cost, e->id});
+        }
+        return {S, nd_id};
+    }
+
 };
 } // namespace gandalfr

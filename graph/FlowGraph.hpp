@@ -129,12 +129,48 @@ class FlowGraph {
     FlowGraph() {}
     explicit FlowGraph(i32 n) : N(n), G(n) {}
     FlowGraph(i32 n, i32 m) : N(n), G(n) { E.reserve(m); }
-    FlowGraph(const FlowGraph &other) : FlowGraph(other.N, other.numEdges()) {
-        for (auto &e : other.E) {
-            addEdge(*e);
+    FlowGraph(const FlowGraph &other) : N(other.N), G(other.N) {
+         for (i32 i = 0; i < (i32)other.G.size(); ++i) {
+            for (const auto &e : other[i]) {
+                G[i].push_back(std::make_shared<FlowEdge>(*e));
+            }
+        }
+        for (const auto &e : other.E) {
+            E.push_back(std::make_shared<FlowEdge>(*e));
         }
     }
 
+    FlowGraph(FlowGraph &&other) noexcept
+        : N(other.N), G(std::move(other.G)), E(std::move(other.E)) {
+        other.N = 0;
+    }
+
+    FlowGraph &operator=(const FlowGraph &other) {
+        if (this != &other) {
+            N = other.N;
+            G.clear(), E.clear();
+            G.resize(other.G.size());
+            for (i32 i = 0; i < (i32)other.G.size(); ++i) {
+                for (const auto &e : other.G[i]) {
+                    G[i].push_back(std::make_shared<FlowEdge>(*e));
+                }
+            }
+            for (const auto &e : other.E) {
+                E.push_back(std::make_shared<FlowEdge>(*e));
+            }
+        }
+        return *this;
+    }
+    FlowGraph &operator=(FlowGraph &&other) noexcept {
+        if (this != &other) {
+            N = other.N;
+            G = std::move(other.G);
+            E = std::move(other.E);
+            other.N = 0;
+        }
+        return *this;
+    }
+    
     void resize(i32 n) {
         assert(n >= N);
         N = n;
@@ -169,7 +205,7 @@ class FlowGraph {
     }
 
   private:
-    Flow implFordFulkerson(i32 src, Flow f, std::vector<bool> &vis,
+    Flow fordFulkersonImpl(i32 src, Flow f, std::vector<bool> &vis,
                            const i32 t) {
         if (src == t)
             return f;
@@ -178,7 +214,7 @@ class FlowGraph {
             i32 dst = e->dst(src);
             if (vis[dst] || e->isFull(src))
                 continue;
-            Flow tmp = implFordFulkerson(
+            Flow tmp = fordFulkersonImpl(
                 dst, std::min<Flow>(e->residual(src), f), vis, t);
             if (tmp > 0) {
                 e->addFlow(src, tmp);
@@ -194,7 +230,7 @@ class FlowGraph {
         while (true) {
             std::vector<bool> vis(this->N, false);
             Flow inc =
-                implFordFulkerson(s, std::numeric_limits<Flow>::max(), vis, t);
+                fordFulkersonImpl(s, std::numeric_limits<Flow>::max(), vis, t);
             if (inc == 0)
                 break;
             flow += inc;
@@ -203,7 +239,7 @@ class FlowGraph {
     }
 
   private:
-    Flow implDinic(i32 src, Flow f, const std::vector<i32> &dist, const i32 s) {
+    Flow dinicImpl(i32 src, Flow f, const std::vector<i32> &dist, const i32 s) {
         if (src == s)
             return f;
         for (auto &e : this->G[src]) {
@@ -211,7 +247,7 @@ class FlowGraph {
             if (dist[dst] != dist[src] - 1 || e->isFull(dst))
                 continue;
             Flow tmp =
-                implDinic(dst, std::min<Flow>(e->residual(dst), f), dist, s);
+                dinicImpl(dst, std::min<Flow>(e->residual(dst), f), dist, s);
             if (tmp > 0) {
                 e->addFlow(dst, tmp);
                 return tmp;
@@ -245,7 +281,7 @@ class FlowGraph {
 
             while (true) {
                 Flow inc =
-                    implDinic(t, std::numeric_limits<Flow>::max(), dist, s);
+                    dinicImpl(t, std::numeric_limits<Flow>::max(), dist, s);
                 if (inc == 0)
                     break;
                 flow += inc;

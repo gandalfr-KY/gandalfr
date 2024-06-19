@@ -3,8 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#include "../types.hpp"
 #include "atcoder/lazysegtree.hpp"
-#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 

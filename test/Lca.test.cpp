@@ -1,7 +1,7 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_5_C"
 #include <bits/stdc++.h>
 #include "gandalfr/other/io.hpp"
-#include "gandalfr/graph/LCA.hpp"
+#include "gandalfr/graph/Lca.hpp"
 using namespace std;
 using namespace gandalfr;
 
@@ -20,7 +20,7 @@ int main(void){
         }
     }
 
-    LCA lca(G, 0);
+    Lca lca(G, 0);
     i32 q;
     cin >> q;
     while(q--){

@@ -119,7 +119,7 @@ template <class T> i64 inversion(std::vector<T> a, std::vector<T> b) {
  * 最長部分増加列のの長さを求める
  * strict ? 狭義増加 : 広義増加
  */
-template <typename T> i32 LIS(const std::vector<T> &v, bool strict = false) {
+template <typename T> i32 lis(const std::vector<T> &v, bool strict = false) {
     std::vector<T> dp;
     auto dp_it = dp.begin();
     for (auto x : v) {

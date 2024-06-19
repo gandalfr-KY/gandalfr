@@ -8,9 +8,14 @@
 #include <utility>
 #include <vector>
 
-#include "gandalfr/data_structure/UnionFind.hpp"
-#include "gandalfr/math/Matrix.hpp"
-#include "gandalfr/types.hpp"
+#include "../math/Matrix.hpp"
+#include "../types.hpp"
+
+#define GRAPH_TEMPLATE template <bool is_weighted, bool is_directed>
+#define GRAPH_TYPE Graph<is_weighted, is_directed>
+#define GRAPH_EDGE_PTR typename GRAPH_TYPE::EdgePtr
+#define GRAPH_EDGE_TYPE typename GRAPH_TYPE::EdgeType
+#define GRAPH_COST_TYPE typename GRAPH_TYPE::Cost
 
 namespace gandalfr {
 
@@ -19,7 +24,9 @@ constexpr bool UNWEIGHTED = false;
 constexpr bool DIRECTED = true;
 constexpr bool UNDIRECTED = false;
 
-template <bool is_weighted> struct Edge { Edge() = delete; };
+template <bool is_weighted> struct Edge {
+    Edge() = delete;
+};
 
 template <> struct Edge<WEIGHTED> {
 
@@ -95,7 +102,6 @@ template <bool is_weighted, bool is_directed> class Graph {
     using EdgeType = Edge<is_weighted>;
     using EdgePtr = std::shared_ptr<EdgeType>;
     using Cost = typename EdgeType::Cost;
-    using Pair = std::pair<Cost, i32>;
 
   private:
     i32 N = 0;
@@ -109,7 +115,8 @@ template <bool is_weighted, bool is_directed> class Graph {
     Graph() {}
     explicit Graph(i32 n) : N(n), G(n) {}
     Graph(i32 n, i32 m) : N(n), G(n) { E.reserve(m); }
-    Graph(const Graph &other) : N(other.N), G(other.N), cost_sum(other.cost_sum) {
+    Graph(const Graph &other)
+        : N(other.N), G(other.N), cost_sum(other.cost_sum) {
         for (i32 i = 0; i < (i32)other.G.size(); ++i) {
             for (const auto &e : other[i]) {
                 G[i].push_back(std::make_shared<EdgeType>(*e));
@@ -119,7 +126,9 @@ template <bool is_weighted, bool is_directed> class Graph {
             E.push_back(std::make_shared<EdgeType>(*e));
         }
     }
-    Graph(Graph &&other) noexcept : N(other.N), G(std::move(other.G)), E(std::move(other.E)), cost_sum(other.cost_sum) {
+    Graph(Graph &&other) noexcept
+        : N(other.N), G(std::move(other.G)), E(std::move(other.E)),
+          cost_sum(other.cost_sum) {
         other.N = 0;
         other.cost_sum = 0;
     }
@@ -264,51 +273,8 @@ template <bool is_weighted, bool is_directed> class Graph {
 
   private:
     std::vector<EdgePtr> dijkstraImpl(std::vector<Cost> &dist,
-                                      i32 start_node) const {
-        std::priority_queue<Pair, std::vector<Pair>, std::greater<Pair>> q;
-        q.push({0, start_node});
-        std::vector<EdgePtr> prev_edge(N, nullptr);
-        std::vector<bool> visited(N, false);
-        while (!q.empty()) {
-            Cost cur_dist = q.top().first;
-            i32 cu = q.top().second;
-            q.pop();
-
-            if (visited[cu])
-                continue;
-            visited[cu] = true;
-
-            for (auto &e : G[cu]) {
-                i32 to = e->dst(cu);
-                Cost alt = cur_dist + e->cost;
-                if (dist[to] <= alt)
-                    continue;
-                prev_edge[to] = e;
-                dist[to] = alt;
-                q.push({alt, to});
-            }
-        }
-        return prev_edge;
-    }
-
-    std::vector<EdgePtr> bfsImpl(std::vector<i32> &dist, i32 start_node) const {
-        std::queue<i32> q;
-        q.push(start_node);
-        std::vector<EdgePtr> prev_edge(N, nullptr);
-        while (!q.empty()) {
-            i32 cu = q.front();
-            q.pop();
-            for (auto &e : G[cu]) {
-                i32 to = e->dst(cu);
-                if (dist[to] != CMAX)
-                    continue;
-                prev_edge[to] = e;
-                dist[to] = dist[cu] + 1;
-                q.push(to);
-            }
-        }
-        return prev_edge;
-    }
+                                      i32 start_node) const;
+    std::vector<EdgePtr> bfsImpl(std::vector<i32> &dist, i32 start_node) const;
 
   public:
     /**
@@ -316,266 +282,82 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @param start_node 始点
      * @param invalid 到達不能な頂点に格納される値
      * @return 各ノードまでの最短距離のリスト
+     * @note "shortestPath.hpp" をインクルードすること
      */
-    std::vector<Cost> distances(i32 start_node, Cost invalid) const {
-        std::vector<Cost> dist(N, CMAX);
-        dist[start_node] = 0;
-
-        if constexpr (is_weighted) {
-            dijkstraImpl(dist, start_node);
-        } else {
-            bfsImpl(dist, start_node);
-        }
-
-        for (auto &x : dist)
-            if (x == CMAX)
-                x = invalid;
-        return dist;
-    }
+    std::vector<Cost> distances(i32 start_node, Cost invalid) const;
 
     /**
      * @brief 復元付き最短経路
      * @attention 到達可能でないとき、空の配列で返る
      * @attention 負閉路があるとき正しい動作を保証しない
+     * @note "shortestPath.hpp" をインクルードすること
      */
-    std::vector<EdgeType> shortestPath(i32 start_node, i32 end_node) const {
-        std::vector<Cost> dist(N, CMAX);
-        dist[start_node] = 0;
-        std::vector<EdgePtr> prev_edge(N, nullptr);
+    std::vector<EdgeType> shortestPath(i32 start_node, i32 end_node) const;
 
-        if constexpr (is_weighted) {
-            prev_edge = dijkstraImpl(dist, start_node);
-        } else {
-            prev_edge = bfsImpl(dist, start_node);
-        }
-
-        if (dist[end_node] == CMAX)
-            return {};
-
-        i32 cu = end_node;
-        std::vector<EdgeType> route;
-        while (cu != start_node) {
-            auto e = prev_edge[cu];
-            if (cu == e->v0) {
-                route.push_back(e->rev());
-            } else {
-                route.push_back(*e);
-            }
-            cu = e->dst(cu);
-        }
-        return {route.rbegin(), route.rend()};
-    }
-
-    // O(N^3)
-    Matrix<Cost> distancesFromAllNodes(Cost invalid) const {
-        auto mt(toMatrix(CMAX));
-
-        for (i32 k = 0; k < N; k++)         // 経由する頂点
-            for (i32 i = 0; i < N; i++)     // 始点
-                for (i32 j = 0; j < N; j++) // 終点
-                    if (mt[i][k] != CMAX && mt[k][j] != CMAX)
-                        mt[i][j] = std::min(mt[i][j], mt[i][k] + mt[k][j]);
-
-        for (i32 i = 0; i < N; ++i)
-            for (i32 j = 0; j < N; ++j)
-                if (mt[i][j] == CMAX)
-                    mt[i][j] = invalid;
-        return mt;
-    }
+    /**
+     * @brief ワーシャルフロイド法 O(N^3)
+     * @note "shortestPath.hpp" をインクルードすること
+     */
+    Matrix<Cost> distancesFromAllNodes(Cost invalid) const;
 
   private:
     void preorderImpl(i32 cu, std::vector<bool> &visited,
-                      std::vector<i32> &result) const {
-        result.push_back(cu);
-        for (auto &e : G[cu]) {
-            i32 to = e->dst(cu);
-            if (visited[to])
-                continue;
-            visited[to] = true;
-            preorderImpl(to, visited, result);
-        }
-    }
+                      std::vector<i32> &result) const;
 
     void inorderImpl(i32 cu, std::vector<bool> &visited,
-                     std::vector<i32> &result) const {
-        for (auto &e : G[cu]) {
-            i32 to = e->dst(cu);
-            if (visited[to])
-                continue;
-            visited[to] = true;
-            result.push_back(cu);
-            inorderImpl(to, visited, result);
-        }
-        result.push_back(cu);
-    }
+                     std::vector<i32> &result) const;
 
     void postorderImpl(i32 cu, std::vector<bool> &visited,
-                       std::vector<i32> &result) const {
-        for (auto &e : G[cu]) {
-            i32 to = e->dst(cu);
-            if (visited[to])
-                continue;
-            visited[to] = true;
-            postorderImpl(to, visited, result);
-        }
-        result.push_back(cu);
-    }
+                       std::vector<i32> &result) const;
 
   public:
     /**
      * @brief 行きがけ順に dfs
+     * @note "dfs.hpp" をインクルードすること
      */
-    std::vector<i32> preorder(i32 start) const {
-        std::vector<i32> result;
-        std::vector<bool> visited(N, false);
-        visited[start] = true;
-        preorderImpl(start, visited, result);
-        return result;
-    }
+    std::vector<i32> preorder(i32 start) const;
 
     /**
      * @brief 通りがけ順に dfs
+     * @note "dfs.hpp" をインクルードすること
      */
-    std::vector<i32> inorder(i32 start) const {
-        std::vector<i32> result;
-        std::vector<bool> visited(N, false);
-        visited[start] = true;
-        inorderImpl(start, visited, result);
-        return result;
-    }
+    std::vector<i32> inorder(i32 start) const;
 
     /**
      * @brief 帰りがけ順に dfs
+     * @note "dfs.hpp" をインクルードすること
      */
-    std::vector<i32> postorder(i32 start) const {
-        std::vector<i32> result;
-        std::vector<bool> visited(N, false);
-        visited[start] = true;
-        postorderImpl(start, visited, result);
-        return result;
-    }
+    std::vector<i32> postorder(i32 start) const;
 
     /**
      * @return 最小全域森
      */
-    Graph MST() const {
-        static_assert(is_weighted && !is_directed);
-        Graph ret(N, N - 1);
-        std::vector<i32> idx(E.size());
-        std::iota(idx.begin(), idx.end(), 0);
-        std::sort(idx.begin(), idx.end(),
-                  [&](i32 i, i32 j) { return E[i]->cost < E[j]->cost; });
+    Graph mst() const;
 
-        UnionFind uf(N);
-        for (i32 i : idx) {
-            if (!uf.isSame(E[i]->v0, E[i]->v1)) {
-                uf.unite(E[i]->v0, E[i]->v1);
-                ret.addEdge(*E[i]);
-            }
-        }
-        return ret;
-    }
-
-    bool isBibartite() const {
-        static_assert(!is_directed);
-        std::vector<i32> col(N, -1);
-        for (i32 i = 0; i < N; ++i) {
-            if (col[i] == -1) {
-                col[i] = 0;
-                for (auto x : preorder(i)) {
-                    for (auto &e : G[x]) {
-                        i32 dst = e->dst(x);
-                        if (col[dst] == col[x])
-                            return false;
-                        col[dst] = !col[x];
-                    }
-                }
-            }
-        }
-        return true;
-    }
+    /**
+     * @return 二部グラフかどうか
+     */
+    bool isBibartite() const;
 
     /**
      * @brief 連結成分ごとに分解
      * @return {分解後のグラフ、grp_id, nd_id}
      */
     std::tuple<std::vector<Graph>, std::vector<i32>, std::vector<i32>>
-    discomponent() const {
-        UnionFind uf(N);
-        for (auto &e : E) {
-            uf.unite(e->v0, e->v1);
-        }
-        i32 n_grps = uf.numGroups();
-        auto grps = uf.getAllGroups();
-
-        std::vector<i32> grp_id(N), nd_id(N);
-        for (i32 i = 0; i < n_grps; ++i) {
-            for (i32 j = 0; j < (i32)grps[i].size(); ++j) {
-                grp_id[grps[i][j]] = i;
-                nd_id[grps[i][j]] = j;
-            }
-        }
-
-        std::vector<Graph> Gs(n_grps);
-        for (i32 i = 0; i < n_grps; ++i) {
-            Gs[i].resize(grps[i].size());
-        }
-        for (auto &e : E) {
-            i32 id = grp_id[e->v0];
-            i32 u = nd_id[e->v0];
-            i32 v = nd_id[e->v1];
-            Gs[id].addEdge(u, v);
-        }
-        return {Gs, grp_id, nd_id};
-    }
+    discomponent() const;
 
   private:
-    void SCCForward(i32 cu, std::vector<i32>& ord, std::vector<bool>& used) const {
-        if (used[cu])
-            return;
-        used[cu] = true;
-        for (auto &e : G[cu])
-            SCCForward(e->v1, ord, used);
-        ord.push_back(cu);
-    }
+    void sccForward(i32 cu, std::vector<i32> &ord,
+                    std::vector<bool> &used) const;
 
-    void SCCBackward(const Graph& R, i32 cu, i32 id, std::vector<i32>& nd_id) const {
-        if (nd_id[cu] != -1)
-            return;
-        nd_id[cu] = id;
-        for (auto &e : R[cu])
-            SCCBackward(R, e->v1, id, nd_id);
-    }
+    void sccBackward(const Graph &R, i32 cu, i32 id,
+                     std::vector<i32> &nd_id) const;
 
   public:
     /**
      * @brief 強連結成分ごとに分解
      * @return {縮約後のグラフ、nd_id}
      */
-    std::tuple<Graph, std::vector<i32>>
-    SCC() const {
-        std::vector<i32> nd_id(N, -1);
-        std::vector<bool> used(N, false);
-        std::vector<i32> ord;
-
-        for (i32 i = 0; i < N; i++) {
-            SCCForward(i, ord, used);
-        }
-        i32 id = 0;
-        auto R(rev());
-        for (i32 i = N - 1; i >= 0; i--) {
-            if (nd_id[ord[i]] == -1) {
-                SCCBackward(R, ord[i], id, nd_id);
-                id++;
-            }
-        }
-
-        Graph S(id, numEdges());
-        for (auto &e : E) {
-            S.addEdge({nd_id[e->v0], nd_id[e->v1], e->cost, e->id});
-        }
-        return {S, nd_id};
-    }
-
+    std::tuple<Graph, std::vector<i32>> scc() const;
 };
 } // namespace gandalfr

@@ -4,7 +4,7 @@
 #include <memory>
 #include <utility>
 
-#include "gandalfr/types.hpp"
+#include "../types.hpp"
 
 namespace gandalfr {
 

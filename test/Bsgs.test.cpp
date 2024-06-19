@@ -1,7 +1,7 @@
 #define IGNORE
 #define PROBLEM "https://judge.yosupo.jp/problem/inverse_matrix"
 #include <bits/stdc++.h>
-#include "gandalfr/standard/BSGS.hpp"
+#include "gandalfr/standard/Bsgs.hpp"
 using namespace std;
 using namespace gandalfr;
 
@@ -13,7 +13,7 @@ int main(void){
         i64 N, S, K;
         cin >> N >> S >> K;
 
-        BSGS<i64> bsgs(S, 0LL, N);
+        Bsgs<i64> bsgs(S, 0LL, N);
         auto f = [&](i64 x) {
             return (x + K) % N;
         };

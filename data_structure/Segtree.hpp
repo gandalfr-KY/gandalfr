@@ -5,8 +5,8 @@
 #include <iostream>
 #include <vector>
 
+#include "../types.hpp"
 #include "atcoder/segtree.hpp"
-#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 

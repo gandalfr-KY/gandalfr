@@ -3,7 +3,7 @@
 #include <functional>
 #include <map>
 
-#include "gandalfr/types.hpp"
+#include "../types.hpp"
 
 namespace gandalfr {
 /**
@@ -11,14 +11,14 @@ namespace gandalfr {
  * bは周期的で、周期は高々fでなければならない
  * g(x) := b^m(x)
  */
-template <typename S> class BSGS {
+template <typename S> class Bsgs {
   private:
     std::function<S(S)> baby, giant;
     S x, y;
     i64 t, m;
 
   public:
-    BSGS(S X, S Y, i64 T) : x(X), y(Y), t(T), m(std::ceil(std::sqrt(T))) {}
+    Bsgs(S X, S Y, i64 T) : x(X), y(Y), t(T), m(std::ceil(std::sqrt(T))) {}
     i64 getStepWidth() const { return m; }
     void setFunction(std::function<S(S)> b, std::function<S(S)> g) {
         baby = b;

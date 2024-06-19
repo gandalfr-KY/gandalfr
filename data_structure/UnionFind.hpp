@@ -4,7 +4,7 @@
 #include <numeric>
 #include <vector>
 
-#include "gandalfr/types.hpp"
+#include "../types.hpp"
 
 namespace gandalfr {
 

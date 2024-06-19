@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gandalfr/geometry/Vector.hpp"
+#include "Vector.hpp"
 
 namespace gandalfr {
 

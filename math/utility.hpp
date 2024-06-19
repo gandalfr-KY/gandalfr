@@ -2,9 +2,9 @@
 #include <array>
 #include <vector>
 
+#include "../standard/Mint.hpp"
+#include "../types.hpp"
 #include "atcoder/math.hpp"
-#include "gandalfr/standard/Mint.hpp"
-#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 

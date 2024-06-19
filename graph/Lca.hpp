@@ -1,6 +1,6 @@
 #pragma once
-#include "gandalfr/data_structure/SparseTable.hpp"
-#include "gandalfr/graph/Graph.hpp"
+#include "../data_structure/SparseTable.hpp"
+#include "shortestPath.hpp"
 #include <algorithm>
 
 namespace gandalfr {
@@ -8,7 +8,7 @@ namespace gandalfr {
 /**
  * @brief 無向単純木の最小共通祖先を求めるクラス
  */
-template <bool is_weighted> class LCA {
+template <bool is_weighted> class Lca {
   private:
     using EdgeType = Edge<is_weighted>;
     using Cost = typename EdgeType::Cost;
@@ -20,7 +20,7 @@ template <bool is_weighted> class LCA {
 
     std::vector<i32> idx;
     std::vector<Pair> depth;
-    SparseTable<Pair, LCA::min, LCA::e> sps;
+    SparseTable<Pair, Lca::min, Lca::e> sps;
     std::vector<Cost> dist;
 
     void EulerTour(const GraphType &G, i32 cu, i32 pa, i32 dep, i32 &cnt) {
@@ -37,8 +37,8 @@ template <bool is_weighted> class LCA {
     }
 
   public:
-    LCA() = default;
-    LCA(const GraphType &G, i32 root) { init(G, root); }
+    Lca() = default;
+    Lca(const GraphType &G, i32 root) { init(G, root); }
 
     void init(const GraphType &G, i32 root) {
         idx.resize(G.numNodes());

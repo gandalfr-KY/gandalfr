@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/manhattanmst"
 #include <bits/stdc++.h>
 #include "gandalfr/other/io.hpp"
-#include "gandalfr/graph/ManhattanMST.hpp"
+#include "gandalfr/graph/manhattanMst.hpp"
 using namespace std;
 using namespace gandalfr;
 
@@ -14,7 +14,7 @@ int main(void){
         cin >> X[i] >> Y[i];
     }
  
-    auto mmst = manhattanMST(X, Y);
+    auto mmst = manhattanMst(X, Y);
  
     cout << mmst.weight() << endl;
     for(auto &e : mmst.getAllEdges()){

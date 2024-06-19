@@ -6,7 +6,7 @@
 #include <memory>
 #include <queue>
 
-#include "gandalfr/types.hpp"
+#include "../types.hpp"
 
 namespace gandalfr {
 

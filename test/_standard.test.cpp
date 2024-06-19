@@ -155,11 +155,11 @@ TEST(UTIL, INVERSION_WITH_TWO_ARRAY) {
 
 TEST(UTIL, LIS) {
     std::vector<i32> vec1{5, 1, 3, 3, 2, 4};
-    EQ(LIS(vec1, true), 3);
-    EQ(LIS(vec1), 4);
+    EQ(lis(vec1, true), 3);
+    EQ(lis(vec1), 4);
     std::vector<i32> vec2{1, 1, 1};
-    EQ(LIS(vec2, true), 1);
-    EQ(LIS(vec2), 3);
+    EQ(lis(vec2, true), 1);
+    EQ(lis(vec2), 3);
 }
 
 TEST(FRACTION, OPERATOR) {

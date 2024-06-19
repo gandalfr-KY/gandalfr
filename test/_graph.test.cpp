@@ -4,7 +4,7 @@
 
 #include "testenv.hpp"
 #include "gandalfr/other/io.hpp"
-#include "gandalfr/graph/LCA.hpp"
+#include "gandalfr/graph/Lca.hpp"
 
 using namespace gandalfr;
 
@@ -20,7 +20,7 @@ TEST(GRAPH, LCA) {
     G.addEdge(5, 6);
     G.addEdge(5, 7);
 
-    LCA lca(G, 2);
+    Lca lca(G, 2);
     
     EQ(lca.getAncestor(1, 5), 2);
     EQ(lca.getAncestor(7, 9), 5);

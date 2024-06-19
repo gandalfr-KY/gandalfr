@@ -2,7 +2,8 @@
 #include <map>
 #include <numeric>
 
-#include "gandalfr/graph/Graph.hpp"
+#include "Graph.hpp"
+#include "../data_structure/UnionFind.hpp"
 
 namespace gandalfr {
 
@@ -13,7 +14,7 @@ namespace gandalfr {
  * @param xs 各ノードの x 座標
  * @param ys 各ノードの y 座標
  */
-Graph<true, false> manhattanMST(std::vector<i64> &xs, std::vector<i64> &ys) {
+Graph<true, false> manhattanMst(std::vector<i64> &xs, std::vector<i64> &ys) {
     i32 N = xs.size();
     std::vector<i32> idx(N);
     std::iota(idx.begin(), idx.end(), 0);

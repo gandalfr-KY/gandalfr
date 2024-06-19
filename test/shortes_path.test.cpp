@@ -1,7 +1,7 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/shortest_path"
 #include <bits/stdc++.h>
 #include "gandalfr/other/io.hpp"
-#include "gandalfr/graph/Graph.hpp"
+#include "gandalfr/graph/shortestPath.hpp"
 using namespace std;
 using ll = long long;
 

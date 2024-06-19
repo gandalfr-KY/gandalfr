@@ -1,7 +1,7 @@
 #define PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/GRL_2_A"
 #include <bits/stdc++.h>
 #include "gandalfr/other/io.hpp"
-#include "gandalfr/graph/Graph.hpp"
+#include "gandalfr/graph/mst.hpp"
 using namespace std;
 using namespace gandalfr;
 
@@ -16,6 +16,6 @@ int main(void){
         G.addEdge(a, b, c);
     }
 
-    cout << G.MST().weight() << endl;
+    cout << G.mst().weight() << endl;
       
 }

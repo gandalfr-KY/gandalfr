@@ -6,8 +6,8 @@
 #include <iostream>
 #include <numeric>
 
+#include "../types.hpp"
 #include "Mint.hpp"
-#include "gandalfr/types.hpp"
 
 namespace gandalfr {
 

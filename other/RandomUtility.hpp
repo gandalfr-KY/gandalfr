@@ -1,24 +1,34 @@
-#pragma once
-#include <random>
-
-namespace gandalfr {
-
-template <int id> struct RandomUtility {
-    static inline std::mt19937 mt;
-
-    static void setSeed(int seed) { mt.seed(seed); }
-
-    static long long randInt(long long min_value, long long max_value) {
-        std::uniform_int_distribution<long long> distribution(min_value,
-                                                              max_value);
-        return distribution(mt);
-    }
-
-    static double randDouble(double min_value, double max_value) {
-        std::uniform_real_distribution<double> distribution(min_value,
-                                                            max_value);
-        return distribution(mt);
-    }
-};
-using RandUtil = RandomUtility<-1>;
-} // namespace gandalfr
+#include "./data_structure/BinaryTrie.hpp"
+#include "./data_structure/LazySegtree.hpp"
+#include "./data_structure/PrefixSums.hpp"
+#include "./data_structure/Segtree.hpp"
+#include "./data_structure/SparseTable.hpp"
+#include "./data_structure/UnionFind.hpp"
+#include "./geometry/Vector.hpp"
+#include "./geometry/circumcenter.hpp"
+#include "./graph/FlowGraph.hpp"
+#include "./graph/Graph.hpp"
+#include "./graph/Lca.hpp"
+#include "./graph/dfs.hpp"
+#include "./graph/discomponent.hpp"
+#include "./graph/isBiparate.hpp"
+#include "./graph/manhattanMst.hpp"
+#include "./graph/mst.hpp"
+#include "./graph/scc.hpp"
+#include "./graph/shortestPath.hpp"
+#include "./math/FormalPowerSeries.hpp"
+#include "./math/Matrix.hpp"
+#include "./math/utility.hpp"
+#include "./other/RandomUtility.hpp"
+#include "./other/StopWatch.hpp"
+#include "./other/bit.hpp"
+#include "./other/io.hpp"
+#include "./standard/Bsgs.hpp"
+#include "./standard/Fraction.hpp"
+#include "./standard/Grid.hpp"
+#include "./standard/HashMap.hpp"
+#include "./standard/Mint.hpp"
+#include "./standard/RollingHash.hpp"
+#include "./standard/StaticPriorityQueue.hpp"
+#include "./standard/utility.hpp"
+#include "./types.hpp"

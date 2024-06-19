@@ -24,9 +24,7 @@ constexpr bool UNWEIGHTED = false;
 constexpr bool DIRECTED = true;
 constexpr bool UNDIRECTED = false;
 
-template <bool is_weighted> struct Edge {
-    Edge() = delete;
-};
+template <bool is_weighted> struct Edge { Edge() = delete; };
 
 template <> struct Edge<WEIGHTED> {
 
@@ -316,18 +314,33 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @note "dfs.hpp" をインクルードすること
      */
     std::vector<i32> preorder(i32 start) const;
+    /**
+     * @brief visited が false のノードを行きがけ順に dfs
+     * @note "dfs.hpp" をインクルードすること
+     */
+    std::vector<i32> preorder(i32 start, std::vector<bool> &visited) const;
 
     /**
      * @brief 通りがけ順に dfs
      * @note "dfs.hpp" をインクルードすること
      */
     std::vector<i32> inorder(i32 start) const;
+    /**
+     * @brief visited が false のノードを行きがけ順に dfs
+     * @note "dfs.hpp" をインクルードすること
+     */
+    std::vector<i32> inorder(i32 start, std::vector<bool> &visited) const;
 
     /**
      * @brief 帰りがけ順に dfs
      * @note "dfs.hpp" をインクルードすること
      */
     std::vector<i32> postorder(i32 start) const;
+    /**
+     * @brief visited が false のノードを行きがけ順に dfs
+     * @note "dfs.hpp" をインクルードすること
+     */
+    std::vector<i32> postorder(i32 start, std::vector<bool> &visited) const;
 
     /**
      * @return 最小全域森
@@ -337,7 +350,7 @@ template <bool is_weighted, bool is_directed> class Graph {
     /**
      * @return 二部グラフかどうか
      */
-    bool isBibartite() const;
+    bool isBipartite() const;
 
     /**
      * @brief 連結成分ごとに分解
@@ -346,14 +359,6 @@ template <bool is_weighted, bool is_directed> class Graph {
     std::tuple<std::vector<Graph>, std::vector<i32>, std::vector<i32>>
     discomponent() const;
 
-  private:
-    void sccForward(i32 cu, std::vector<i32> &ord,
-                    std::vector<bool> &used) const;
-
-    void sccBackward(const Graph &R, i32 cu, i32 id,
-                     std::vector<i32> &nd_id) const;
-
-  public:
     /**
      * @brief 強連結成分ごとに分解
      * @return {縮約後のグラフ、nd_id}

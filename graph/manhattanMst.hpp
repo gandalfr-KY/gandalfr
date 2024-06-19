@@ -2,8 +2,8 @@
 #include <map>
 #include <numeric>
 
-#include "Graph.hpp"
 #include "../data_structure/UnionFind.hpp"
+#include "Graph.hpp"
 
 namespace gandalfr {
 

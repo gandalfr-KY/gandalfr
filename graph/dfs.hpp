@@ -54,9 +54,29 @@ std::vector<i32> GRAPH_TYPE::preorder(i32 start) const {
 }
 
 GRAPH_TEMPLATE
+std::vector<i32> GRAPH_TYPE::preorder(i32 start,
+                                      std::vector<bool> &visited) const {
+    assert(!visited[start]);
+    std::vector<i32> result;
+    visited[start] = true;
+    preorderImpl(start, visited, result);
+    return result;
+}
+
+GRAPH_TEMPLATE
 std::vector<i32> GRAPH_TYPE::inorder(i32 start) const {
     std::vector<i32> result;
     std::vector<bool> visited(N, false);
+    visited[start] = true;
+    inorderImpl(start, visited, result);
+    return result;
+}
+
+GRAPH_TEMPLATE
+std::vector<i32> GRAPH_TYPE::inorder(i32 start,
+                                     std::vector<bool> &visited) const {
+    assert(!visited[start]);
+    std::vector<i32> result;
     visited[start] = true;
     inorderImpl(start, visited, result);
     return result;
@@ -70,4 +90,15 @@ std::vector<i32> GRAPH_TYPE::postorder(i32 start) const {
     postorderImpl(start, visited, result);
     return result;
 }
+
+GRAPH_TEMPLATE
+std::vector<i32> GRAPH_TYPE::postorder(i32 start,
+                                       std::vector<bool> &visited) const {
+    assert(!visited[start]);
+    std::vector<i32> result;
+    visited[start] = true;
+    postorderImpl(start, visited, result);
+    return result;
+}
+
 } // namespace gandalfr

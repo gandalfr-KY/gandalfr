@@ -1,29 +1,8 @@
 #pragma once
 
-#include "Graph.hpp"
+#include "dfs.hpp"
 
 namespace gandalfr {
-
-GRAPH_TEMPLATE
-void GRAPH_TYPE::sccForward(i32 cu, std::vector<i32> &ord,
-                            std::vector<bool> &used) const {
-    if (used[cu])
-        return;
-    used[cu] = true;
-    for (auto &e : G[cu])
-        sccForward(e->v1, ord, used);
-    ord.push_back(cu);
-}
-
-GRAPH_TEMPLATE
-void GRAPH_TYPE::sccBackward(const Graph &R, i32 cu, i32 id,
-                             std::vector<i32> &nd_id) const {
-    if (nd_id[cu] != -1)
-        return;
-    nd_id[cu] = id;
-    for (auto &e : R[cu])
-        sccBackward(R, e->v1, id, nd_id);
-}
 
 /**
  * @brief 強連結成分ごとに分解
@@ -31,20 +10,28 @@ void GRAPH_TYPE::sccBackward(const Graph &R, i32 cu, i32 id,
  */
 GRAPH_TEMPLATE
 std::tuple<GRAPH_TYPE, std::vector<i32>> GRAPH_TYPE::scc() const {
-    std::vector<i32> nd_id(N, -1);
+    std::vector<i32> nd_id(N, -1), ord;
     std::vector<bool> used(N, false);
-    std::vector<i32> ord;
 
     for (i32 i = 0; i < N; i++) {
-        sccForward(i, ord, used);
-    }
-    i32 id = 0;
-    auto R(rev());
-    for (i32 i = N - 1; i >= 0; i--) {
-        if (nd_id[ord[i]] == -1) {
-            sccBackward(R, ord[i], id, nd_id);
-            id++;
+        if (used[i]) {
+            continue;
         }
+        auto tmp = postorder(i, used);
+        ord.insert(ord.end(), tmp.begin(), tmp.end());
+    }
+
+    i32 id = 0;
+    used.assign(N, false);
+    auto R(rev());
+    for (auto x : std::vector(ord.rbegin(), ord.rend())) {
+        if (used[x]) {
+            continue;
+        }
+        for (auto y : R.preorder(x, used)) {
+            nd_id[y] = id;
+        }
+        ++id;
     }
     Graph S(id, numEdges());
     for (auto &e : E) {

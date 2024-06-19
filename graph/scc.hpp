@@ -4,10 +4,6 @@
 
 namespace gandalfr {
 
-/**
- * @brief 強連結成分ごとに分解
- * @return {縮約後のグラフ、nd_id}
- */
 GRAPH_TEMPLATE
 std::tuple<GRAPH_TYPE, std::vector<i32>> GRAPH_TYPE::scc() const {
     std::vector<i32> nd_id(N, -1), ord;

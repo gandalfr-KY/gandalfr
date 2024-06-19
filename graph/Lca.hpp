@@ -1,6 +1,7 @@
 #pragma once
 #include "../data_structure/SparseTable.hpp"
 #include "shortestPath.hpp"
+#include "dfs.hpp"
 #include <algorithm>
 
 namespace gandalfr {
@@ -23,19 +24,6 @@ template <bool is_weighted> class Lca {
     SparseTable<Pair, Lca::min, Lca::e> sps;
     std::vector<Cost> dist;
 
-    void EulerTour(const GraphType &G, i32 cu, i32 pa, i32 dep, i32 &cnt) {
-        idx[cu] = cnt;
-        for (const auto &e : G[cu]) {
-            i32 to = e->dst(cu);
-            if (to == pa)
-                continue;
-            depth.emplace_back(Pair{dep, cu});
-            EulerTour(G, to, cu, dep + 1, ++cnt);
-        }
-        depth.emplace_back(Pair{dep, cu});
-        cnt++;
-    }
-
   public:
     Lca() = default;
     Lca(const GraphType &G, i32 root) { init(G, root); }
@@ -43,8 +31,12 @@ template <bool is_weighted> class Lca {
     void init(const GraphType &G, i32 root) {
         idx.resize(G.numNodes());
         dist = G.distances(root, -1);
-        i32 cnt = 0;
-        EulerTour(G, root, -1, 0, cnt);
+        depth.clear();
+        auto ord = G.inorder(root);
+        for (u32 i = 0; i < ord.size(); ++i) {
+            depth.emplace_back(Pair{dist[ord[i]], ord[i]});
+            idx[ord[i]] = i;
+        }
         sps.init(depth);
     }
 

@@ -51,7 +51,8 @@ std::vector<GRAPH_EDGE_TYPE> GRAPH_TYPE::bridges() const {
 }
 
 GRAPH_TEMPLATE
-std::tuple<std::vector<i32>, std::vector<i32>> GRAPH_TYPE::articulationPoints() const {
+std::tuple<std::vector<i32>, std::vector<i32>>
+GRAPH_TYPE::articulationPoints() const {
     auto [ord, low, tree] = lowlink();
     std::vector<i32> res;
     std::vector<i32> sep;
@@ -59,15 +60,11 @@ std::tuple<std::vector<i32>, std::vector<i32>> GRAPH_TYPE::articulationPoints() 
     for (i32 src = 0; src < N; ++src) {
         i32 sp = 0;
         if (ord[src] == 0) {
-            if (tree[src].size() >= 2) {
-                sp = tree[src].size() - 1;
-            }
+            sp = tree[src].size() - 1;
         } else {
-            for (auto &e : tree[src]) {
-                if (ord[src] <= low[e->dst(src)]) {
-                    ++sp;
-                }
-            }
+            sp = std::count_if(
+                tree[src].begin(), tree[src].end(),
+                [&](const EdgePtr &e) { return ord[src] <= low[e->dst(src)]; });
         }
         if (sp) {
             res.push_back(src);

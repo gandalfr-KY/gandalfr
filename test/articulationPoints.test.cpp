@@ -18,8 +18,10 @@ int main(void){
     }
 
     auto [art, inc] = G.articulationPoints();
-    for (auto x : art) {
-        std::cout << x << std::endl;
+    rep(i,0,art.size()) {
+        if (inc[i] != -1) {
+            std::cout << art[i] << std::endl;
+        }
     }
 
 }

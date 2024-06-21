@@ -24,7 +24,9 @@ constexpr bool UNWEIGHTED = false;
 constexpr bool DIRECTED = true;
 constexpr bool UNDIRECTED = false;
 
-template <bool is_weighted> struct Edge { Edge() = delete; };
+template <bool is_weighted> struct Edge {
+    Edge() = delete;
+};
 
 template <> struct Edge<WEIGHTED> {
 
@@ -326,7 +328,7 @@ template <bool is_weighted, bool is_directed> class Graph {
      */
     std::vector<i32> inorder(i32 start) const;
     /**
-     * @brief visited が false のノードを通りがけ順に dfs
+     * @brief visited が false のノードを行きがけ順に dfs
      * @note "dfs.hpp" をインクルードすること
      */
     std::vector<i32> inorder(i32 start, std::vector<bool> &visited) const;
@@ -337,7 +339,7 @@ template <bool is_weighted, bool is_directed> class Graph {
      */
     std::vector<i32> postorder(i32 start) const;
     /**
-     * @brief visited が false のノードを帰りがけ順に dfs
+     * @brief visited が false のノードを行きがけ順に dfs
      * @note "dfs.hpp" をインクルードすること
      */
     std::vector<i32> postorder(i32 start, std::vector<bool> &visited) const;
@@ -365,10 +367,11 @@ template <bool is_weighted, bool is_directed> class Graph {
      */
     std::tuple<Graph, std::vector<i32>> scc() const;
 
-    // private:
+  private:
     void lowlinkImpl(i32 cu, i32 e_id, i32 &id, std::vector<i32> &ord,
                      std::vector<i32> &low,
                      Graph<is_weighted, DIRECTED> &tree) const;
+
     std::tuple<std::vector<i32>, std::vector<i32>, Graph<is_weighted, DIRECTED>>
     lowlink() const;
 
@@ -380,8 +383,8 @@ template <bool is_weighted, bool is_directed> class Graph {
 
     /**
      * @brief グラフの関節点を求める 単純連結でなくてもOK
-     * @return {関節点のリスト, 関節点iを除いた際の連結成分の増分}
-     * @note 成分の数が1のグラフは関節点として判定 増分は-1
+     * @return {関節点、関節点iを消した際の連結成分の増分}
+     * @attention 成分が1つのグラフは関節点とみなす。増分は-1
      */
     std::tuple<std::vector<i32>, std::vector<i32>> articulationPoints() const;
 };

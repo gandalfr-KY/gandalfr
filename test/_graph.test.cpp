@@ -34,17 +34,18 @@ TEST(GRAPH, BRIDGES) {
     G.addEdge(0, 1);
     G.addEdge(0, 2);
     G.addEdge(1, 2);
-    G.addEdge(1, 3); // 3
+    G.addEdge(1, 3);
     G.addEdge(3, 4); // 4
     G.addEdge(4, 5); // 5
     G.addEdge(6, 7);
     G.addEdge(6, 8);
     G.addEdge(7, 8);
     G.addEdge(8, 9); // 9
+    G.addEdge(3, 1); // duplicated
 
     std::vector<Edge<false>> expectedBridges = 
     {
-        Edge<false>(1, 3, 3), 
+        // Edge<false>(1, 3, 3), 
         Edge<false>(3, 4, 4), 
         Edge<false>(4, 5, 5), 
         Edge<false>(8, 9, 9)

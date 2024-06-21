@@ -368,7 +368,7 @@ template <bool is_weighted, bool is_directed> class Graph {
     std::tuple<Graph, std::vector<i32>> scc() const;
 
     // private:
-    void lowlinkImpl(i32 cu, i32 pa, i32 &id, std::vector<i32> &ord,
+    void lowlinkImpl(i32 cu, i32 e_id, i32 &id, std::vector<i32> &ord,
                      std::vector<i32> &low,
                      Graph<is_weighted, DIRECTED> &tree) const;
     std::tuple<std::vector<i32>, std::vector<i32>, Graph<is_weighted, DIRECTED>>
@@ -381,7 +381,7 @@ template <bool is_weighted, bool is_directed> class Graph {
     std::vector<EdgeType> bridges() const;
 
     /**
-     * @brief グラフの関節点を求める たぶん非連結でもOK 多重辺NG
+     * @brief グラフの関節点を求める たぶん非連結でもOK
      */
     std::vector<i32> articulationPoints() const;
 };

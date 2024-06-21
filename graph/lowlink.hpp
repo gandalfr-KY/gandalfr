@@ -5,17 +5,17 @@
 namespace gandalfr {
 
 GRAPH_TEMPLATE
-void GRAPH_TYPE::lowlinkImpl(i32 cu, i32 pa, i32 &id, std::vector<i32> &ord,
+void GRAPH_TYPE::lowlinkImpl(i32 cu, i32 e_id, i32 &id, std::vector<i32> &ord,
                              std::vector<i32> &low,
                              Graph<is_weighted, DIRECTED> &tree) const {
     ord[cu] = low[cu] = id++;
     for (auto &e : G[cu]) {
         i32 to = e->dst(cu);
-        if (to == pa)
+        if (e->id == e_id)
             continue;
         if (ord[to] == -1) {
             tree.addEdge({cu, to, e->cost, e->id});
-            lowlinkImpl(to, cu, id, ord, low, tree);
+            lowlinkImpl(to, e->id, id, ord, low, tree);
             chmin(low[cu], low[to]);
         } else {
             chmin(low[cu], ord[to]);
@@ -43,10 +43,7 @@ std::vector<GRAPH_EDGE_TYPE> GRAPH_TYPE::bridges() const {
     auto [ord, low, tree] = lowlink();
     std::vector<EdgeType> res;
     for (auto &e : tree.getAllEdges()) {
-        i32 src = e->v0, dst = e->v1;
-        if (ord[src] > ord[dst])
-            std::swap(src, dst);
-        if (ord[src] < low[dst]) {
+        if (ord[e->v0] < low[e->v1]) {
             res.push_back(*e);
         }
     }

@@ -17,7 +17,8 @@ int main(void){
         G.addEdge(a, b);
     }
 
-    for (auto x : G.articulationPoints()) {
+    auto [art, inc] = G.articulationPoints();
+    for (auto x : art) {
         std::cout << x << std::endl;
     }
 

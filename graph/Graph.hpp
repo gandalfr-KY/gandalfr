@@ -376,13 +376,14 @@ template <bool is_weighted, bool is_directed> class Graph {
 
   public:
     /**
-     * @brief グラフの橋を求める たぶん非連結でもOK
+     * @brief グラフの橋を求める 単純連結でなくてもOK
      */
     std::vector<EdgeType> bridges() const;
 
     /**
-     * @brief グラフの関節点を求める たぶん非連結でもOK
+     * @brief グラフの関節点を求める 単純連結でなくてもOK
+     * @return {関節点のリスト, 関節点iを除いた際の連結成分の増分}
      */
-    std::vector<i32> articulationPoints() const;
+    std::tuple<std::vector<i32>, std::vector<i32>> articulationPoints() const;
 };
 } // namespace gandalfr

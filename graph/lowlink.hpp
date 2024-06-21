@@ -11,7 +11,7 @@ void GRAPH_TYPE::lowlinkImpl(i32 cu, i32 e_id, i32 &id, std::vector<i32> &ord,
     ord[cu] = low[cu] = id++;
     for (auto &e : G[cu]) {
         i32 to = e->dst(cu);
-        if (e->id == e_id)
+        if (e->id == e_id) // 直前に使った辺を戻らない
             continue;
         if (ord[to] == -1) {
             tree.addEdge({cu, to, e->cost, e->id});
@@ -51,25 +51,30 @@ std::vector<GRAPH_EDGE_TYPE> GRAPH_TYPE::bridges() const {
 }
 
 GRAPH_TEMPLATE
-std::vector<i32> GRAPH_TYPE::articulationPoints() const {
+std::tuple<std::vector<i32>, std::vector<i32>> GRAPH_TYPE::articulationPoints() const {
     auto [ord, low, tree] = lowlink();
     std::vector<i32> res;
+    std::vector<i32> sep;
     std::vector<bool> visited(N, false);
     for (i32 src = 0; src < N; ++src) {
+        i32 sp = 0;
         if (ord[src] == 0) {
             if (tree[src].size() >= 2) {
-                res.push_back(src);
+                sp = tree[src].size() - 1;
             }
         } else {
             for (auto &e : tree[src]) {
                 if (ord[src] <= low[e->dst(src)]) {
-                    res.push_back(src);
-                    break;
+                    ++sp;
                 }
             }
         }
+        if (sp) {
+            res.push_back(src);
+            sep.push_back(sp);
+        }
     }
-    return res;
+    return {res, sep};
 }
 
 } // namespace gandalfr

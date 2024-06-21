@@ -31,9 +31,9 @@ Graph<true, false> manhattanMst(std::vector<i64> &xs, std::vector<i64> &ys) {
                     i32 j = it->second;
                     if (xs[i] - xs[j] < ys[i] - ys[j])
                         break;
-                    E.emplace_back(Edge<true>{
+                    E.emplace_back(
                         i, j, std::abs(xs[i] - xs[j]) + std::abs(ys[i] - ys[j]),
-                        -1});
+                        -1);
                 }
                 sweep[-ys[i]] = i;
             }

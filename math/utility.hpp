@@ -139,7 +139,7 @@ class Seive {
         std::vector<Factor> ret{{0, 0}};
         while (n > 1) {
             if (ret.back().factor != min_factor[n]) {
-                ret.emplace_back(Factor{min_factor[n], 1});
+                ret.emplace_back(min_factor[n], 1);
             } else {
                 ret.back().exponent++;
             }
@@ -155,7 +155,7 @@ class Seive {
                 break;
             while (n % p == 0) {
                 if (ret.back().factor != p)
-                    ret.emplace_back(Factor{p, 1});
+                    ret.emplace_back(p, 1);
                 else
                     ret.back().exponent++;
                 n /= p;

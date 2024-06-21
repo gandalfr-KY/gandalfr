@@ -50,5 +50,11 @@ const i64 INFLL = 1001001001001001001;
 #define rall(a) (a).rbegin(), (a).rend()
 #define LF cout << endl
 void Yes(bool ok) { std::cout << (ok ? "Yes" : "No") << std::endl; }
+template <typename T> inline bool chmax(T &a, const T &b) {
+    return a < b && (a = b, true);
+} // namespace gandalfr
+template <typename T> inline bool chmin(T &a, const T &b) {
+    return a > b && (a = b, true);
+}
 
 } // namespace gandalfr

@@ -108,10 +108,5 @@ void print_debug(First parm1, Rest... parm) {
 #define debug(...)                                                             \
     std::cerr << #__VA_ARGS__ << ": ";                                         \
     print_debug(__VA_ARGS__);
-template <typename T> inline bool chmax(T &a, const T &b) {
-    return a < b && (a = b, true);
-} // namespace gandalfr
-template <typename T> inline bool chmin(T &a, const T &b) {
-    return a > b && (a = b, true);
-}
+
 } // namespace gandalfr

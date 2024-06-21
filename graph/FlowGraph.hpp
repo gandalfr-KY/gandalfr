@@ -130,7 +130,7 @@ class FlowGraph {
     explicit FlowGraph(i32 n) : N(n), G(n) {}
     FlowGraph(i32 n, i32 m) : N(n), G(n) { E.reserve(m); }
     FlowGraph(const FlowGraph &other) : N(other.N), G(other.N) {
-         for (i32 i = 0; i < (i32)other.G.size(); ++i) {
+        for (i32 i = 0; i < (i32)other.G.size(); ++i) {
             for (const auto &e : other[i]) {
                 G[i].push_back(std::make_shared<FlowEdge>(*e));
             }
@@ -170,7 +170,7 @@ class FlowGraph {
         }
         return *this;
     }
-    
+
     void resize(i32 n) {
         assert(n >= N);
         N = n;

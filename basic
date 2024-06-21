@@ -12,6 +12,7 @@
 #include "./graph/dfs.hpp"
 #include "./graph/discomponent.hpp"
 #include "./graph/isBiparate.hpp"
+#include "./graph/lowlink.hpp"
 #include "./graph/manhattanMst.hpp"
 #include "./graph/mst.hpp"
 #include "./graph/scc.hpp"

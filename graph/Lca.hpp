@@ -1,7 +1,7 @@
 #pragma once
 #include "../data_structure/SparseTable.hpp"
-#include "shortestPath.hpp"
 #include "dfs.hpp"
+#include "shortestPath.hpp"
 #include <algorithm>
 
 namespace gandalfr {
@@ -34,7 +34,7 @@ template <bool is_weighted> class Lca {
         depth.clear();
         auto ord = G.inorder(root);
         for (u32 i = 0; i < ord.size(); ++i) {
-            depth.emplace_back(Pair{dist[ord[i]], ord[i]});
+            depth.emplace_back(dist[ord[i]], ord[i]);
             idx[ord[i]] = i;
         }
         sps.init(depth);

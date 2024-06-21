@@ -107,15 +107,15 @@ template <class T> class Matrix {
             }
             if (piv < H) {
                 if (h != piv) {
-                    hist.emplace_back(RowtransOp{SWAP, h, piv, 0});
+                    hist.emplace_back(SWAP, h, piv, 0);
                     rowSwap(h, piv);
                 }
                 T inv = 1 / table[h][w];
-                hist.emplace_back(RowtransOp{SCALE, -1, h, inv});
+                hist.emplace_back(SCALE, -1, h, inv);
                 table[h] *= inv;
                 for (i32 i = 0; i < H; i++) {
                     if (i != h) {
-                        hist.emplace_back(RowtransOp{ADD, h, i, -table[i][w]});
+                        hist.emplace_back(ADD, h, i, -table[i][w]);
                         table[i] -= table[h] * table[i][w];
                     }
                 }
@@ -247,14 +247,16 @@ template <class T> class Matrix {
     }
 
     Matrix &operator+=(const Matrix &a) {
-        if (H != a.H || W != a.W)
-            [[unlikely]] { throw InvalidOperationException(); }
+        if (H != a.H || W != a.W) [[unlikely]] {
+            throw InvalidOperationException();
+        }
         this->table += a.table;
         return *this;
     }
     Matrix &operator-=(const Matrix &a) {
-        if (H != a.H || W != a.W)
-            [[unlikely]] { throw InvalidOperationException(); }
+        if (H != a.H || W != a.W) [[unlikely]] {
+            throw InvalidOperationException();
+        }
         this->table -= a.table;
         return *this;
     }
@@ -263,8 +265,9 @@ template <class T> class Matrix {
         return *this;
     }
     Matrix &operator*=(const Matrix &a) {
-        if (W != a.H)
-            [[unlikely]] { throw InvalidOperationException(); }
+        if (W != a.H) [[unlikely]] {
+            throw InvalidOperationException();
+        }
         Matrix a_t(a), ret(H, a.W);
         a_t.transpose();
         for (i32 i = 0; i < H; i++) {
@@ -288,8 +291,9 @@ template <class T> class Matrix {
     Matrix operator/(const T &a) const { return Matrix(*this) /= a; }
 
     Matrix power(i64 n) const {
-        if (H != W)
-            [[unlikely]] { throw InvalidOperationException(); }
+        if (H != W) [[unlikely]] {
+            throw InvalidOperationException();
+        }
         Matrix ret(E(H)), x(*this);
         while (n > 0) {
             if (n & 1)

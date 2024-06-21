@@ -24,7 +24,9 @@ constexpr bool UNWEIGHTED = false;
 constexpr bool DIRECTED = true;
 constexpr bool UNDIRECTED = false;
 
-template <bool is_weighted> struct Edge { Edge() = delete; };
+template <bool is_weighted> struct Edge {
+    Edge() = delete;
+};
 
 template <> struct Edge<WEIGHTED> {
 
@@ -364,5 +366,23 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @return {縮約後のグラフ、nd_id}
      */
     std::tuple<Graph, std::vector<i32>> scc() const;
+
+    // private:
+    void lowlinkImpl(i32 cu, i32 pa, i32 &id, std::vector<i32> &ord,
+                     std::vector<i32> &low,
+                     Graph<is_weighted, DIRECTED> &tree) const;
+    std::tuple<std::vector<i32>, std::vector<i32>, Graph<is_weighted, DIRECTED>>
+    lowlink() const;
+
+  public:
+    /**
+     * @brief グラフの橋を求める たぶん非連結でもOK
+     */
+    std::vector<EdgeType> bridges() const;
+
+    /**
+     * @brief グラフの関節点を求める たぶん非連結でもOK 多重辺NG
+     */
+    std::vector<i32> articulationPoints() const;
 };
 } // namespace gandalfr

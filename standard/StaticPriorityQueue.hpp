@@ -18,8 +18,9 @@ class StaticPriorityQueue {
     bool empty() const { return elms == 0; }
     u32 size() const { return elms; }
     const T &top() const {
-        if (elms)
-            [[likely]] { return buff[0]; }
+        if (elms) [[likely]] {
+            return buff[0];
+        }
         throw std::runtime_error("The queue is empty.");
     }
     void push(const T &x) {
@@ -30,8 +31,9 @@ class StaticPriorityQueue {
         }
     }
     void pop() {
-        if (elms == 0)
-            [[unlikely]] { throw std::runtime_error("The queue is empty."); }
+        if (elms == 0) [[unlikely]] {
+            throw std::runtime_error("The queue is empty.");
+        }
         std::pop_heap(buff, buff + elms, Compare());
         --elms;
     }

@@ -8,10 +8,7 @@ namespace gandalfr {
 GRAPH_TEMPLATE
 std::tuple<std::vector<GRAPH_TYPE>, std::vector<i32>, std::vector<i32>>
 GRAPH_TYPE::discomponent() const {
-    UnionFind uf(N);
-    for (auto &e : E) {
-        uf.unite(e->v0, e->v1);
-    }
+    auto uf = buildUnionFind();
     i32 n_grps = uf.numGroups();
     auto grps = uf.getAllGroups();
 

@@ -8,6 +8,7 @@
 #include <utility>
 #include <vector>
 
+#include "../data_structure/UnionFind.hpp"
 #include "../math/Matrix.hpp"
 #include "../types.hpp"
 
@@ -271,6 +272,14 @@ template <bool is_weighted, bool is_directed> class Graph {
         return ret;
     }
 
+    UnionFind buildUnionFind() {
+        UnionFind uf(N);
+        for (auto &e : E) {
+            uf.unite(e->v0, e->v1);
+        }
+        return uf;
+    }
+
   private:
     std::vector<EdgePtr> dijkstraImpl(std::vector<Cost> &dist,
                                       i32 start_node) const;
@@ -383,9 +392,12 @@ template <bool is_weighted, bool is_directed> class Graph {
 
     /**
      * @brief グラフの関節点を求める 単純連結でなくてもOK
-     * @return {関節点、関節点iを消した際の連結成分の増分}
-     * @attention 成分が1つのグラフは関節点とみなす。増分は-1
+     * @return 関節点iを消した際の連結成分の増分
+     * @attention 成分が1つのグラフの増分は-1
      */
-    std::tuple<std::vector<i32>, std::vector<i32>> articulationPoints() const;
+    std::vector<i32> articulationPoints() const;
+
+    Graph<UNWEIGHTED, UNDIRECTED> blockCutTree() const;
+
 };
 } // namespace gandalfr

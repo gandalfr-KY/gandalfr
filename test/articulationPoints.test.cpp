@@ -17,10 +17,10 @@ int main(void){
         G.addEdge(a, b);
     }
 
-    auto [art, inc] = G.articulationPoints();
-    rep(i,0,art.size()) {
-        if (inc[i] != -1) {
-            std::cout << art[i] << std::endl;
+    auto inc = G.articulationPoints();
+    rep(i,0,N) {
+        if (inc[i] > 0) {
+            std::cout << i << std::endl;
         }
     }
 

@@ -65,10 +65,8 @@ TEST(GRAPH, BRIDGES) {
         EQ(tmp[i].id, expectedBridges[i].id);
     }
 
-    auto [art, inc] = G.articulationPoints();
-    std::vector<i32> expectedPoints{1, 3, 4, 8};
-    std::vector<i32> expectedIncs{1, 1, 1, 1};
-    EQ(art, expectedPoints);
+    auto inc = G.articulationPoints();
+    std::vector<i32> expectedIncs{0, 1, 0, 1, 1, 0, 0, 0, 1, 0};
     EQ(inc, expectedIncs);
 
 

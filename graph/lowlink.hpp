@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dfs.hpp"
+#include "../standard/HashMap.hpp"
 
 namespace gandalfr {
 
@@ -51,27 +52,41 @@ std::vector<GRAPH_EDGE_TYPE> GRAPH_TYPE::bridges() const {
 }
 
 GRAPH_TEMPLATE
-std::tuple<std::vector<i32>, std::vector<i32>>
+std::vector<i32>
 GRAPH_TYPE::articulationPoints() const {
     auto [ord, low, tree] = lowlink();
-    std::vector<i32> res;
-    std::vector<i32> sep;
-    std::vector<bool> visited(N, false);
+    std::vector<i32> sep(N, 0);
     for (i32 src = 0; src < N; ++src) {
-        i32 sp = 0;
         if (ord[src] == 0) {
-            sp = tree[src].size() - 1;
+            sep[src] = tree[src].size() - 1;
         } else {
-            sp = std::count_if(
+            sep[src] = std::count_if(
                 tree[src].begin(), tree[src].end(),
                 [&](const EdgePtr &e) { return ord[src] <= low[e->dst(src)]; });
         }
-        if (sp) {
-            res.push_back(src);
-            sep.push_back(sp);
-        }
     }
-    return {res, sep};
+    return sep;
 }
+
+// GRAPH_TEMPLATE
+// Graph<UNWEIGHTED, UNDIRECTED> GRAPH_TYPE::blockCutTree() const {
+//     auto inc = articulationPoints();
+//     HashMap<i32, i32> eid_idx;
+//     for (i32 i = 0; (i32)E.size(); ++i) eid_idx[E[i]->id] = i;
+//     UnionFind uf(E.size());
+//     for (i32 i = 0; (i32)E.size(); ++i) {
+//         for (auto x : {E[i]->v0, E[i]->v1}) {
+//             if (inc[x] > 0) continue; // 関節点なら接続しない
+//             for (auto &ne : G[x]) {
+//                 uf.unite(x, eid_idx[ne->id]);
+//             }
+//         }
+//     }
+//     std::vector<std::vector<i32>> groups(uf.numGroups());
+//     auto e_groups = uf.getAllGroups();
+//     for (i32 i = 0; (i32)e_groups.size(); ++i) {
+//         groups[i].push_back
+//     }
+// }
 
 } // namespace gandalfr

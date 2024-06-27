@@ -272,7 +272,7 @@ template <bool is_weighted, bool is_directed> class Graph {
         return ret;
     }
 
-    UnionFind buildUnionFind() {
+    UnionFind buildUnionFind() const {
         UnionFind uf(N);
         for (auto &e : E) {
             uf.unite(e->v0, e->v1);
@@ -398,6 +398,14 @@ template <bool is_weighted, bool is_directed> class Graph {
     std::vector<i32> articulationPoints() const;
 
     Graph<UNWEIGHTED, UNDIRECTED> blockCutTree() const;
+
+    /**
+     * @brief VirtualTree もとい AuxiliaryTree を構築
+     * @param gr_id 各頂点が属するグループの id 負の値なら無視
+     * @return {AuxiliaryTrees, 返った木の頂点の元の木におけるid}
+     * @attention 連結な木であることを要請
+     */
+    std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>, std::vector<std::vector<i32>>> auxiliaryTree(i32 root, const std::vector<i32> &group) const;
 
 };
 } // namespace gandalfr

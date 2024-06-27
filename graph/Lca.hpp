@@ -50,5 +50,9 @@ template <bool is_weighted> class Lca {
     Cost distance(i32 u, i32 v) {
         return dist[u] + dist[v] - 2 * dist[getAncestor(u, v)];
     }
+
+    Cost getDepth(i32 x) {
+        return dist[x];
+    }
 };
 } // namespace gandalfr

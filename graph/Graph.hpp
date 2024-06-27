@@ -405,7 +405,8 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @return {AuxiliaryTrees, 返った木の頂点の元の木におけるid}
      * @attention 連結な木であることを要請
      */
-    std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>, std::vector<std::vector<i32>>> auxiliaryTree(i32 root, const std::vector<i32> &group) const;
-
+    std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>,
+               std::vector<std::vector<i32>>>
+    auxiliaryTree(i32 root, const std::vector<i32> &group) const;
 };
 } // namespace gandalfr

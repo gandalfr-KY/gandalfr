@@ -1,13 +1,15 @@
 #pragma once
 
-#include <stack>
 #include "../standard/HashMap.hpp"
 #include "Lca.hpp"
+#include <stack>
 
 namespace gandalfr {
 
 GRAPH_TEMPLATE
-std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>, std::vector<std::vector<i32>>> GRAPH_TYPE::auxiliaryTree(i32 root, const std::vector<i32> &gr_id) const {
+std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>,
+           std::vector<std::vector<i32>>>
+GRAPH_TYPE::auxiliaryTree(i32 root, const std::vector<i32> &gr_id) const {
     static_assert(!is_directed);
     i32 num_group = *max_element(gr_id.begin(), gr_id.end()) + 1;
     Lca lca(*this, root);
@@ -30,7 +32,8 @@ std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>, std::vector<std::vector<i32
         return res;
     }(root));
     std::vector<Graph<WEIGHTED, UNDIRECTED>> Aux(num_group);
-    std::vector<std::vector<i32>> components(num_group), lcas(num_group), rev_id(num_group);
+    std::vector<std::vector<i32>> components(num_group), lcas(num_group),
+        rev_id(num_group);
     std::vector<HashMap<i32, i32>> nd_id_map(num_group);
 
     for (i32 gr = 0; gr < num_group; ++gr) {
@@ -39,7 +42,8 @@ std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>, std::vector<std::vector<i32
     }
     for (auto x : preorder(root)) {
         i32 gr = gr_id[x];
-        if (gr < 0) continue;
+        if (gr < 0)
+            continue;
         components[gr].push_back(x);
         i32 l = components[gr].size();
         i32 anc = lca.getAncestor(components[gr][l - 2], components[gr][l - 1]);
@@ -65,26 +69,30 @@ std::tuple<std::vector<Graph<WEIGHTED, UNDIRECTED>>, std::vector<std::vector<i32
                 while (depth[w] <= depth[stk.top()]) {
                     i32 p = stk.top();
                     stk.pop();
-                    if (stk.empty()) break;
+                    if (stk.empty())
+                        break;
                     i32 pp = stk.top();
                     if (depth[w] <= depth[pp] && pp != p) {
-                        Aux[gr].addEdge(nd_id_map[gr][pp], nd_id_map[gr][p], lca.distance(pp, p));
+                        Aux[gr].addEdge(nd_id_map[gr][pp], nd_id_map[gr][p],
+                                        lca.distance(pp, p));
                     } else if (w != p) {
-                        Aux[gr].addEdge(nd_id_map[gr][w], nd_id_map[gr][p], lca.distance(w, p));
+                        Aux[gr].addEdge(nd_id_map[gr][w], nd_id_map[gr][p],
+                                        lca.distance(w, p));
                     }
                 }
                 stk.push(w);
             }
-            stk.push(components[gr][i]);   
+            stk.push(components[gr][i]);
         }
         while (!stk.empty()) {
             i32 p = stk.top();
             stk.pop();
             if (!stk.empty() && stk.top() != p) {
-                Aux[gr].addEdge(nd_id_map[gr][stk.top()], nd_id_map[gr][p], lca.distance(stk.top(), p));
+                Aux[gr].addEdge(nd_id_map[gr][stk.top()], nd_id_map[gr][p],
+                                lca.distance(stk.top(), p));
             }
         }
     }
     return {Aux, rev_id};
 }
-}
+} // namespace gandalfr

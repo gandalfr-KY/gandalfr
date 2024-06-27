@@ -51,8 +51,6 @@ template <bool is_weighted> class Lca {
         return dist[u] + dist[v] - 2 * dist[getAncestor(u, v)];
     }
 
-    Cost getDepth(i32 x) {
-        return dist[x];
-    }
+    Cost getDepth(i32 x) { return dist[x]; }
 };
 } // namespace gandalfr

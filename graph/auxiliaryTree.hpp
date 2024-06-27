@@ -13,24 +13,6 @@ GRAPH_TYPE::auxiliaryTree(i32 root, const std::vector<i32> &gr_id) const {
     static_assert(!is_directed);
     i32 num_group = *max_element(gr_id.begin(), gr_id.end()) + 1;
     Lca lca(*this, root);
-    std::vector<i32> depth([this](i32 root) {
-        std::vector<i32> res(N, -1);
-        res[root] = 0;
-        std::queue<i32> q;
-        q.push(root);
-        while (!q.empty()) {
-            i32 cu = q.front();
-            q.pop();
-            for (auto &e : G[cu]) {
-                i32 dst = e->dst(cu);
-                if (res[dst] == -1) {
-                    res[dst] = res[cu] + 1;
-                    q.push(dst);
-                }
-            }
-        }
-        return res;
-    }(root));
     std::vector<Graph<WEIGHTED, UNDIRECTED>> Aux(num_group);
     std::vector<std::vector<i32>> components(num_group), lcas(num_group),
         rev_id(num_group);
@@ -66,13 +48,13 @@ GRAPH_TYPE::auxiliaryTree(i32 root, const std::vector<i32> &gr_id) const {
         for (i32 i = 0; i < components[gr].size(); ++i) {
             i32 w = lca.getAncestor(stk.top(), components[gr][i]);
             if (w != stk.top()) {
-                while (depth[w] <= depth[stk.top()]) {
+                while (lca.getDepth(w) <= lca.getDepth(stk.top())) {
                     i32 p = stk.top();
                     stk.pop();
                     if (stk.empty())
                         break;
                     i32 pp = stk.top();
-                    if (depth[w] <= depth[pp] && pp != p) {
+                    if (lca.getDepth(w) <= lca.getDepth(pp) && pp != p) {
                         Aux[gr].addEdge(nd_id_map[gr][pp], nd_id_map[gr][p],
                                         lca.distance(pp, p));
                     } else if (w != p) {

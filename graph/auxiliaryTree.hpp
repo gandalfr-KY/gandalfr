@@ -45,7 +45,7 @@ GRAPH_TYPE::auxiliaryTree(i32 root, const std::vector<i32> &gr_id) const {
         Aux[gr].reserve(nd_id_map[gr].size() - 1);
         std::stack<i32> stk;
         stk.push(root);
-        for (i32 i = 0; i < components[gr].size(); ++i) {
+        for (u32 i = 0; i < components[gr].size(); ++i) {
             i32 w = lca.getAncestor(stk.top(), components[gr][i]);
             if (w != stk.top()) {
                 while (lca.getDepth(w) <= lca.getDepth(stk.top())) {

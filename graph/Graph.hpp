@@ -26,69 +26,47 @@ constexpr bool DIRECTED = true;
 constexpr bool UNDIRECTED = false;
 
 template <bool is_weighted> struct Edge {
-    Edge() = delete;
-};
-
-template <> struct Edge<WEIGHTED> {
-
-    using Cost = i64;
+    using Cost = std::conditional_t<is_weighted, i64, i32>;
 
     i32 v0, v1;
     Cost cost;
     i32 id;
 
     Edge() = default;
+
     Edge(i32 src, i32 dst, Cost cost, i32 id)
-        : v0(src), v1(dst), cost(cost), id(id) {}
+        : v0(src), v1(dst), cost(cost), id(id) {
+        if constexpr (!is_weighted) {
+            assert(cost == 1);
+        }
+    }
 
-    Edge rev() const { return {this->v1, this->v0, this->cost, this->id}; }
+    Edge(i32 src, i32 dst, i32 id) : v0(src), v1(dst), cost(1), id(id) {
+        if constexpr (is_weighted) {
+            std::cerr << "Error: WEIGHTED edge must provide a cost."
+                      << std::endl;
+            std::abort();
+        }
+    }
+
+    Edge rev() const { return Edge(v1, v0, cost, id); }
 
     // x から見た反対側の端点
     // 無向グラフのときの dst の取得はこれを使う
     i32 dst(i32 x) const {
-        if (x == v0) {
+        if (x == v0)
             return v1;
-        } else if (x == v1) {
+        if (x == v1)
             return v0;
-        }
         std::abort();
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Edge &e) {
-        os << e.v0 << ' ' << e.v1 << ' ' << e.cost;
-        return os;
-    }
-};
-
-template <> struct Edge<UNWEIGHTED> {
-
-    using Cost = i32;
-
-    i32 v0, v1;
-    static const Cost cost = 1;
-    i32 id;
-
-    Edge() = default;
-    Edge(i32 src, i32 dst, i32 id) : v0(src), v1(dst), id(id) {}
-    Edge(i32 src, i32 dst, Cost cost, i32 id) : v0(src), v1(dst), id(id) {
-        assert(cost == 1);
-    }
-
-    Edge rev() const { return {this->v1, this->v0, this->id}; }
-
-    // x から見た反対側の端点
-    // 無向グラフのときの dst の取得はこれを使う
-    i32 dst(i32 x) const {
-        if (x == v0) {
-            return v1;
-        } else if (x == v1) {
-            return v0;
+        if constexpr (is_weighted) {
+            os << e.v0 << ' ' << e.v1 << ' ' << e.cost;
+        } else {
+            os << e.v0 << ' ' << e.v1;
         }
-        std::abort();
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Edge &e) {
-        os << e.v0 << ' ' << e.v1;
         return os;
     }
 };

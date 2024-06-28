@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../standard/HashMap.hpp"
 #include "dfs.hpp"
+#include "../standard/HashMap.hpp"
 
 namespace gandalfr {
 
@@ -52,7 +52,8 @@ std::vector<GRAPH_EDGE_TYPE> GRAPH_TYPE::bridges() const {
 }
 
 GRAPH_TEMPLATE
-std::vector<i32> GRAPH_TYPE::articulationPoints() const {
+std::vector<i32>
+GRAPH_TYPE::articulationPoints() const {
     auto [ord, low, tree] = lowlink();
     std::vector<i32> sep(N, 0);
     for (i32 src = 0; src < N; ++src) {

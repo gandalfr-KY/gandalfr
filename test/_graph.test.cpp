@@ -6,6 +6,7 @@
 #include "gandalfr/other/io.hpp"
 #include "gandalfr/graph/Lca.hpp"
 #include "gandalfr/graph/lowlink.hpp"
+#include "gandalfr/graph/auxiliaryTree.hpp"
 
 using namespace gandalfr;
 
@@ -69,6 +70,27 @@ TEST(GRAPH, BRIDGES) {
     std::vector<i32> expectedIncs{0, 1, 0, 1, 1, 0, 0, 0, 1, 0};
     EQ(inc, expectedIncs);
 
+}
+
+TEST(GRAPH, AUXILIARY_TREE) {
+
+    Graph<UNWEIGHTED, UNDIRECTED> G(13);
+    G.addEdge(0, 1);
+    G.addEdge(0, 2);
+    G.addEdge(2, 3);
+    G.addEdge(2, 9);
+    G.addEdge(3, 4);
+    G.addEdge(4, 5);
+    G.addEdge(4, 6);
+    G.addEdge(4, 7);
+    G.addEdge(7, 8);
+    G.addEdge(9, 10);
+    G.addEdge(9, 12);
+    G.addEdge(10, 11);
+    std::vector<i32> group{-1, 0, -1, -1, -1, 0, -1, -1, 0, -1, -1, 0, -1};
+    auto [Auxes, nd_id] = G.auxiliaryTree(0, group);
+    auto tmp = std::vector<i32>{0, 1, 5, 8, 4, 11, 2};
+    EQ(nd_id[0], tmp);
 
 }
 

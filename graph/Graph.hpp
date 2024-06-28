@@ -82,7 +82,7 @@ template <bool is_weighted, bool is_directed> class Graph {
     using EdgePtr = std::shared_ptr<EdgeType>;
     using Cost = typename EdgeType::Cost;
 
-  private:
+    // private:
     i32 N = 0;
     std::vector<std::vector<EdgePtr>> G;
     std::vector<EdgePtr> E;

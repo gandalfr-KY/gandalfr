@@ -67,25 +67,45 @@ std::vector<i32> GRAPH_TYPE::articulationPoints() const {
     return sep;
 }
 
-// GRAPH_TEMPLATE
-// Graph<UNWEIGHTED, UNDIRECTED> GRAPH_TYPE::blockCutTree() const {
-//     auto inc = articulationPoints();
-//     HashMap<i32, i32> eid_idx;
-//     for (i32 i = 0; (i32)E.size(); ++i) eid_idx[E[i]->id] = i;
-//     UnionFind uf(E.size());
-//     for (i32 i = 0; (i32)E.size(); ++i) {
-//         for (auto x : {E[i]->v0, E[i]->v1}) {
-//             if (inc[x] > 0) continue; // 関節点なら接続しない
-//             for (auto &ne : G[x]) {
-//                 uf.unite(x, eid_idx[ne->id]);
-//             }
-//         }
-//     }
-//     std::vector<std::vector<i32>> groups(uf.numGroups());
-//     auto e_groups = uf.getAllGroups();
-//     for (i32 i = 0; (i32)e_groups.size(); ++i) {
-//         groups[i].push_back
-//     }
-// }
+GRAPH_TEMPLATE
+std::vector<std::vector<GRAPH_EDGE_TYPE>>
+GRAPH_TYPE::biconnectedComponent() const {
+    auto [ord, low, tree] = lowlink();
+
+    // 参考：https://kntychance.hatenablog.jp/entry/2022/09/16/161858
+    i32 idx = 0;
+    std::queue<i32> sub_roots, nodes;
+    std::vector<std::vector<GRAPH_EDGE_TYPE>> result;
+
+    for (i32 i = 0; i < N; ++i) {
+        if (ord[i] != 0) continue;
+        for (auto e : tree[i]) {
+            result.push_back(std::vector<GRAPH_EDGE_TYPE>{*e});
+            sub_roots.push(e->v1);
+        }
+
+        while (!sub_roots.empty()) {
+            i32 root = sub_roots.front();
+            sub_roots.pop();
+
+            nodes.push(root);
+            while (!nodes.empty()) {
+                i32 cur = nodes.front();
+                nodes.pop();
+                for (auto e : tree[cur]) {
+                    if (low[e->v1] >= ord[cur]) {
+                        result.push_back(std::vector<GRAPH_EDGE_TYPE>{*e});
+                        sub_roots.push(e->v1);
+                    } else {
+                        result[idx].push_back(*e);
+                        nodes.push(e->v1);
+                    }
+                }
+            }
+            ++idx;
+        }
+    }
+    return result;
+}
 
 } // namespace gandalfr

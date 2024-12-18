@@ -21,9 +21,11 @@ i64 bisection(i64 t, i64 f, const Func &F, bool enable_boundary_check = true) {
         assert(F(t));
         assert(!F(f));
     }
+    i32 cnt = 0;
     while (std::abs(t - f) > 1) {
         i64 mid = (t & f) + ((t ^ f) >> 1); // (t + f) / 2 without overflow
         (F(mid) ? t : f) = mid;
+        if (++cnt > 80) exit(1);
     }
     return t;
 }

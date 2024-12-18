@@ -10,9 +10,9 @@ namespace gandalfr {
 
 template <u32 sz, typename T, typename Compare = std::less<T>>
 class StaticPriorityQueue {
-    static_assert(sz, "The size of the queue must be 1 or bigger.");
+    static_assert(sz > 0, "The size of the queue must be 1 or bigger.");
     u32 elms = 0;
-    T buff[sz + 1];
+    T buff[sz];
 
   public:
     bool empty() const { return elms == 0; }
@@ -24,10 +24,14 @@ class StaticPriorityQueue {
         throw std::runtime_error("The queue is empty.");
     }
     void push(const T &x) {
-        buff[elms++] = x;
-        std::push_heap(buff, buff + elms, Compare());
-        if (elms > sz) {
-            pop();
+        if (elms < sz) {
+            buff[elms++] = x;
+            std::push_heap(buff, buff + elms, Compare());
+        } else if (Compare()(x, buff[0])) {
+            // ヒープのトップ要素よりも優先度が高い場合、置き換える
+            std::pop_heap(buff, buff + elms, Compare());
+            buff[elms - 1] = x;
+            std::push_heap(buff, buff + elms, Compare());
         }
     }
     void pop() {
@@ -51,4 +55,5 @@ class StaticPriorityQueue {
         return os;
     }
 };
+
 } // namespace gandalfr

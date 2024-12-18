@@ -375,7 +375,7 @@ template <bool is_weighted, bool is_directed> class Graph {
      */
     std::vector<i32> articulationPoints() const;
 
-    Graph<UNWEIGHTED, UNDIRECTED> blockCutTree() const;
+    std::vector<std::vector<GRAPH_EDGE_TYPE>> biconnectedComponent() const;
 
     /**
      * @brief VirtualTree もとい AuxiliaryTree を構築

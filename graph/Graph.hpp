@@ -7,6 +7,7 @@
 #include <queue>
 #include <utility>
 #include <vector>
+#include <unordered_set>
 
 #include "../data_structure/UnionFind.hpp"
 #include "../math/Matrix.hpp"
@@ -375,7 +376,15 @@ template <bool is_weighted, bool is_directed> class Graph {
      */
     std::vector<i32> articulationPoints() const;
 
+    std::vector<std::vector<i32>> twoEdgeConnectedComponent() const;
     std::vector<std::vector<GRAPH_EDGE_TYPE>> biconnectedComponent() const;
+
+    /**
+     * @brief BlockCutTree の森を求める 単純連結でなくてもOK
+     * @return {BlockCutTree, cut_id, block_id
+     * @attention cut_id[i] == -1 ならば，頂点iは関節点ではない．block_id も同様
+     */
+    std::tuple<Graph<is_weighted, UNDIRECTED>, std::vector<i32>, std::vector<i32>> blockCutTree() const;
 
     /**
      * @brief VirtualTree もとい AuxiliaryTree を構築

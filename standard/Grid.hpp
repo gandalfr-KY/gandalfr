@@ -80,6 +80,16 @@ struct Grid {
 
     bool operator==(const Grid &other) const = default;
 
+    Grid& operator+=(const Grid &other) {
+        this->h += other.h;
+        this->w += other.w;
+        return *this;
+    }
+
+    Grid operator+(const Grid &other) {
+        return (Grid)*this += other;
+    }
+
     friend std::ostream &operator<<(std::ostream &os, const Grid &a) {
         os << a.h << ' ' << a.w;
         return os;

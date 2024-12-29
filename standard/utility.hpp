@@ -138,4 +138,25 @@ template <typename T> i32 lis(const std::vector<T> &v, bool strict = false) {
     }
     return dp.size();
 }
+
+/**
+ * @brief [0, N) までの要素から重複なしで ord.size()
+ * 個選ぶとき，辞書順で次の選び方に更新する
+ * @note 償却計算量: O(1)
+ */
+bool next_combination(std::vector<i32> &comb, i32 N) {
+    int K = comb.size();
+    int i = K - 1;
+    while (i >= 0 && comb[i] == N - K + i)
+        i--; // 探索位置をずらす要素を探す
+
+    if (i < 0)
+        return false;
+
+    comb[i]++;
+    for (int j = i + 1; j < K; ++j) {
+        comb[j] = comb[j - 1] + 1; // 繰上げ
+    }
+    return true;
+}
 } // namespace gandalfr

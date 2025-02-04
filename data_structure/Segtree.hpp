@@ -16,7 +16,7 @@ struct Segtree : public atcoder::segtree<S, op, e> {
     const S operator[](int x) const { return this->get(x); }
     void print(i32 l, i32 r) const {
         for (i32 i = l; i < r; ++i) {
-            std::cout << this->get(i) << (i == r - 1 ? " " : "");
+            std::cout << this->get(i) << (i != r - 1 ? " " : "");
         }
         std::cout << std::endl;
     }

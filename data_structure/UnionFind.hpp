@@ -42,7 +42,7 @@ class UnionFind {
     bool unite(i32 x, i32 y) {
         if ((x = leader(x)) == (y = leader(y)))
             return false;
-        if (-par[x] > -par[y]) // unite by size
+        if (-par[x] < -par[y]) // unite by size
             std::swap(x, y);
 
         par[x] += par[y];

@@ -4,6 +4,8 @@
 #include "./data_structure/Segtree.hpp"
 #include "./data_structure/SparseTable.hpp"
 #include "./data_structure/UnionFind.hpp"
+#include "./data_structure/PersistentArray.hpp"
+#include "./data_structure/PersistentUnionFind.hpp"
 #include "./geometry/Vector.hpp"
 #include "./geometry/circumcenter.hpp"
 #include "./graph/FlowGraph.hpp"

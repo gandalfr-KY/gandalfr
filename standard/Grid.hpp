@@ -87,7 +87,7 @@ struct Grid {
     }
 
     Grid operator+(const Grid &other) {
-        return (Grid)*this += other;
+        return Grid(*this) += other;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Grid &a) {

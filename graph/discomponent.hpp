@@ -24,11 +24,11 @@ GRAPH_TYPE::discomponent() const {
     for (i32 i = 0; i < n_grps; ++i) {
         Gs[i].resize(grps[i].size());
     }
-    for (auto &e : E) {
+    for (auto e : E) {
         i32 id = grp_id[e->v0];
-        i32 u = nd_id[e->v0];
-        i32 v = nd_id[e->v1];
-        Gs[id].addEdge(u, v);
+        e->v0 = nd_id[e->v0];
+        e->v1 = nd_id[e->v1];
+        Gs[id].addEdge(*e);
     }
     return {Gs, grp_id, nd_id};
 }

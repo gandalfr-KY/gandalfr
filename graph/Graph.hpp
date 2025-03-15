@@ -5,9 +5,9 @@
 #include <iostream>
 #include <memory>
 #include <queue>
+#include <unordered_set>
 #include <utility>
 #include <vector>
-#include <unordered_set>
 
 #include "../data_structure/UnionFind.hpp"
 #include "../math/Matrix.hpp"
@@ -298,6 +298,9 @@ template <bool is_weighted, bool is_directed> class Graph {
     void postorderImpl(i32 cu, std::vector<bool> &visited,
                        std::vector<i32> &result) const;
 
+    void parentsImpl(i32 cu, std::vector<bool> &visited,
+                     std::vector<i32> &result) const;
+
   public:
     /**
      * @brief 行きがけ順に dfs
@@ -331,6 +334,17 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @note "dfs.hpp" をインクルードすること
      */
     std::vector<i32> postorder(i32 start, std::vector<bool> &visited) const;
+
+    /**
+     * @brief dfs したときの親を返す
+     */
+    std::vector<i32> parents(i32 start) const;
+
+    /**
+     * @brief dfs したときの親を返す
+     */
+    std::vector<i32> parents(i32 start, std::vector<bool> &visited,
+                             std::vector<i32> &result) const;
 
     /**
      * @return 最小全域森
@@ -384,7 +398,9 @@ template <bool is_weighted, bool is_directed> class Graph {
      * @return {BlockCutTree, cut_id, block_id
      * @attention cut_id[i] == -1 ならば，頂点iは関節点ではない．block_id も同様
      */
-    std::tuple<Graph<is_weighted, UNDIRECTED>, std::vector<i32>, std::vector<i32>> blockCutTree() const;
+    std::tuple<Graph<is_weighted, UNDIRECTED>, std::vector<i32>,
+               std::vector<i32>>
+    blockCutTree() const;
 
     /**
      * @brief VirtualTree もとい AuxiliaryTree を構築
